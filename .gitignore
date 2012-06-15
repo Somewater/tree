@@ -1,0 +1,9 @@
+*.swf
+bin-debug/*.swf
+bin-release/*.swf
+.idea
+bin-debug/resources
+.actionScriptProperties
+.project
+.settings/
+*.iml
