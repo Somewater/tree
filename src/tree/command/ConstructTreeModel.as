@@ -64,9 +64,9 @@ package tree.command {
 
 					for each(var group:XML in person.relatives.*)
 					{
+						var type:int = Join.serverToType(int(String(group.@type)));
 						for each(var node:XML in group.*)
 						{
-							var type:int = Join.serverToType(int(String(group.@type)));
 							join = personModel.get(node.@uid)
 							if(join == null)
 							{
@@ -81,7 +81,7 @@ package tree.command {
 								// одновременно строим другую связь
 								join = new Join(model.persons);
 								join.owner = associate;
-								join.uid = associate.uid;
+								join.uid = personModel.uid;
 								join.type = Join.toAlter(type, personModel.male);
 								associate.add(join);
 							}

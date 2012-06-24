@@ -160,7 +160,7 @@ package tree.model {
 		}
 
 		public function toString():String {
-			return associate + ' is ' + _typeToString[type] + ' of ' + owner;
+			return owner + ' is ' + _typeToString[type] + ' of ' + associate;
 		}
 	}
 }
