@@ -1,5 +1,4 @@
 bin-debug/*.swf
-bin-debug/resources/*
 .idea
 .actionScriptProperties
 .project
