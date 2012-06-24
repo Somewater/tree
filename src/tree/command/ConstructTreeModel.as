@@ -82,7 +82,7 @@ package tree.command {
 								join = new Join(model.persons);
 								join.owner = associate;
 								join.uid = personModel.uid;
-								join.type = Join.toAlter(type, personModel.male);
+								join.type = Join.toAlter(type, associate.male);
 								associate.add(join);
 							}
 
