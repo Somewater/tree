@@ -31,7 +31,8 @@ package tree.command {
 			if(nodes)
 			{
 				debugTrace('Нарисовать ' +
-						(nodes.relative ? nodes.relativeJoin: nodes.current.person))
+						(nodes.relative ? nodes.current.person.get(nodes.relative.id)
+								: nodes.current.person))
 			}
 			else
 			{

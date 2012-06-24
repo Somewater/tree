@@ -70,8 +70,8 @@
 		
 		<node uid="12" name="Бывший мамин муж" sex="1" pos="1,92" open="1">
 			<relatives>
-				<group type="3">
-					<node uid="1" />
+				<group type="9">
+					<node uid="6" />
 				</group>
 			</relatives>
 		</node>
