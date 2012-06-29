@@ -2,9 +2,10 @@ package tree.model.base {
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
 
-	public class ModelCollection implements ICollection {
+	import tree.model.ModelBase;
 
-		protected var _changed:Signal;
+	public class ModelCollection extends ModelBase implements ICollection {
+
 		protected var _added:Signal;
 		protected var _removed:Signal;
 
@@ -15,7 +16,7 @@ package tree.model.base {
 			array = [];
 			hash = [];
 
-			_changed = new Signal(ICollection);
+			super();
 			_added = new Signal(IModel);
 			_removed = new Signal(IModel);
 		}
@@ -27,7 +28,7 @@ package tree.model.base {
 				hash[model.id] = model;
 
 				added.dispatch(model);
-				change.dispatch(this);
+				fireChange();
 			}
 		}
 
@@ -38,7 +39,7 @@ package tree.model.base {
 				delete hash[model.id];
 
 				removed.dispatch(model);
-				change.dispatch(this);
+				fireChange();
 			}
 		}
 
@@ -51,7 +52,7 @@ package tree.model.base {
 			{
 				array = [];
 				hash = [];
-				change.dispatch(this);
+				fireChange();
 			}
 		}
 
@@ -67,11 +68,7 @@ package tree.model.base {
 					hash[m.id] = m;
 					array.push(m);
 				}
-			change.dispatch(this);
-		}
-
-		public function get change():ISignal {
-			return _changed;
+			fireChange();
 		}
 
 		public function get added():ISignal {

@@ -9,22 +9,27 @@ package tree.common {
 	import org.osflash.signals.PrioritySignal;
 	import org.osflash.signals.Signal;
 
-	public class Bus extends PrioritySignal{
+	public class Bus extends NamedSignal{
 
-		public var sceneResize:IPrioritySignal;
+		public var sceneResize:IPrioritySignal;// callback(point:Point)
 		private var resizePoint:Point;
+
 
 		/**
 		 * Надо показать или скрыть лоадер. Передаются проценты загрузки  0..1,
 		 * <нет аргумента>    - если надо скрыть
 		 * <= 0 - если не надо показывать прогресс
 		 */
-		public var loaderProgress:IPrioritySignal;
+		public var loaderProgress:IPrioritySignal;// callback(progress:Number)
 
-		private var namedSignalListenersByName:Array = [];
+
+		/**
+		 * Сигналы от view Canvas
+		 */
+		public var canvas:INamedSignal;
 
 		public function Bus(stage:Stage) {
-			super(String);
+			super(null, '');
 
 			sceneResize = new BusSignal(this, 'sceneResize', Point);
 			resizePoint = new Point(stage.stageWidth, stage.stageHeight);
@@ -32,23 +37,7 @@ package tree.common {
 
 			loaderProgress = new BusSignal(this, 'loaderProgress');
 
-			addWithPriority(processNamedSignals, int.MAX_VALUE - 2);
-		}
-
-		public function addNamed(name:String, listener:Function):void
-		{
-			var listeners:Array = namedSignalListenersByName[name];
-			if(listeners == null)
-				namedSignalListenersByName[name] = listeners = [];
-			if(listeners.indexOf(listener) == -1)
-				listeners.push(listener);
-		}
-
-		public function removeNamed(name:String, listener:Function):void
-		{
-			var listeners:Array = namedSignalListenersByName[name];
-			if(listeners)
-				listeners.splice(listeners.indexOf(listener), 1);
+			canvas = new NamedSignal(this, 'canvas');
 		}
 
 		private function onResize(event:Event):void {
@@ -56,25 +45,22 @@ package tree.common {
 			resizePoint.y = Config.HEIGHT = (event.currentTarget as Stage).stageHeight;
 			sceneResize.dispatch(resizePoint);
 		}
-
-		private function processNamedSignals(signalName:String, ...data):void {
-			var listeners:Array = namedSignalListenersByName[signalName];
-			if(listeners)
-				for each(var f:Function in listeners.slice())
-					f.apply(null, data);
-		}
 	}
 }
 
+import org.osflash.signals.ISignal;
 import org.osflash.signals.PrioritySignal;
-import org.osflash.signals.Signal;
 
-import tree.common.Bus;
 
 class BusSignal extends PrioritySignal
 {
-	public function BusSignal(bus:Bus, name:String, ...classes)
+	private var name:String;
+	private var bus:ISignal;
+
+	public function BusSignal(bus:ISignal, name:String, ...classes)
 	{
+		this.name = name;
+		this.bus = bus;
 		super(classes);
 	}
 }

@@ -1,10 +1,12 @@
 package tree.model {
+	import org.osflash.signals.ISignal;
+
 	import tree.model.base.IModel;
 
 	/**
 	 * Отвечает за геометрическое расположение
 	 */
-	public class Node implements IModel{
+	public class Node extends ModelBase implements IModel{
 
 		public var person:Person;
 		public var uid:int;
@@ -22,7 +24,7 @@ package tree.model {
 			this.uid = person.uid;
 		}
 
-		public function get id():String {
+		override public function get id():String {
 			return person ? person.id : null;
 		}
 	}

@@ -3,6 +3,7 @@ package tree.command {
 
 	import tree.Tree;
 	import tree.common.Bus;
+	import tree.common.Config;
 	import tree.manager.AppServerHandler;
 	import tree.model.Model;
 
@@ -20,8 +21,8 @@ package tree.command {
 
 		public function Command() {
 			var t:Tree = Tree.instance;
-			this.bus = t.bus;
-			this.model = t.model;
+			this.bus = Config.inject(Bus);
+			this.model = Config.inject(Model);
 		}
 
 		public function execute():void

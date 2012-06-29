@@ -1,6 +1,9 @@
 package tree.loader {
+	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.system.ApplicationDomain;
 
 	import tree.Tree;
 	import tree.common.Config;
@@ -12,8 +15,14 @@ package tree.loader {
 		protected var _flashVars:Object;
 		private var _domain:String;
 		protected var app:Tree;
+		protected var lib:Lib;
+		protected var swfAds:Array;
 
 		public function TreeLoaderBase() {
+
+			swfAds = [ApplicationDomain.currentDomain];
+			lib = new Lib(swfAds);
+
 			if(this.stage)
 				onAddedToStage();
 			else
@@ -24,6 +33,16 @@ package tree.loader {
 			if(event)
 				removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 
+			loadAssets();
+		}
+
+		protected function loadAssets():void {
+			throw new Error('Override me')
+		}
+
+		protected function onAssetsLoaded(asset:DisplayObject):void {
+			if(asset.loaderInfo)
+				swfAds.push(asset.loaderInfo.applicationDomain);
 			startup();
 		}
 
@@ -66,6 +85,10 @@ package tree.loader {
 
 		public function get scriptPath():String {
 			return _domain;
+		}
+
+		public function createMc(className:String, library:String = null, instance:Boolean = true):* {
+			return lib.createMc(className, library, instance);
 		}
 	}
 }

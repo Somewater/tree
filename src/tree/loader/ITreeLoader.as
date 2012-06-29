@@ -5,5 +5,7 @@ package tree.loader {
 		function get flashVars():Object;
 
 		function get domain():String
+
+		function createMc(className:String, library:String = null, instance:Boolean = true):*
 	}
 }

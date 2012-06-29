@@ -17,7 +17,7 @@ package tree.model {
 		public function Person() {
 		}
 
-		public function get id():String {
+		override public function get id():String {
 			return uid + '';
 		}
 

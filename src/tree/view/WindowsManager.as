@@ -7,6 +7,7 @@ package tree.view {
 	import tree.common.Bus;
 
 	import tree.common.Config;
+	import tree.signal.ViewSignal;
 
 	public class WindowsManager {
 
@@ -30,6 +31,7 @@ package tree.view {
 
 			bus.sceneResize.addWithPriority(onSceneResize, int.MIN_VALUE);
 			bus.loaderProgress.addWithPriority(onLoaderProgress, int.MIN_VALUE);
+			bus.canvas.addNamed(ViewSignal.CANVAS_CONSTRUCTION_STARTED, hideLoader);
 		}
 
 		public function add(window:IWindow):void
@@ -124,8 +126,7 @@ package tree.view {
 			if(isNaN(progress))
 			{
 				// скрыть лоадер
-				if(preloader.parent)
-					Config.tooltips.removeChild(preloader);
+				hideLoader();
 			}
 			else
 			{
@@ -137,6 +138,11 @@ package tree.view {
 
 				preloader.progress = progress;
 			}
+		}
+
+		private function hideLoader():void {
+			if(preloader.parent)
+					Config.tooltips.removeChild(preloader);
 		}
 	}
 }

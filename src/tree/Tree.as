@@ -14,8 +14,12 @@ package tree {
 
 	import tree.command.ResponseRouter;
 	import tree.command.TraceNodesOutput;
+	import tree.loader.ITreeLoader;
+	import tree.loader.TreeLoaderBase;
+	import tree.manager.ITicker;
 	import tree.model.Join;
 	import tree.model.Model;
+	import tree.manager.Ticker;
 
 	import tree.signal.AppSignal;
 	import tree.command.Command;
@@ -31,23 +35,27 @@ package tree {
 	import tree.model.base.ICollection;
 	import tree.model.base.ModelCollection;
 	import tree.signal.ResponseSignal;
-	import tree.view.Canvas;
-	import tree.view.Gui;
+	import tree.view.canvas.Canvas;
+	import tree.view.canvas.CanvasMediator;
+	import tree.view.gui.Gui;
 	import tree.view.Preloader;
 	import tree.view.WindowsManager;
+	import tree.view.gui.GuiMediator;
 
 	public class Tree extends Sprite{
 
 		public static var instance:Tree;
 
-		public var model:Model;
-		public var bus:Bus;
+		private var model:Model;
+		private var bus:Bus;
 
 		private var commandMap:Array;
 		public var detainedCommands:Array = [];
 
-		public var canvas:Canvas;
-		public var gui:Gui;
+		private var canvas:Canvas;
+		private var gui:Gui;
+
+		public var mediators:Array = [];
 
 		public function Tree() {
 			instance = this;
@@ -68,6 +76,7 @@ package tree {
 				Cc.bindKey(new KeyBind('ё'), showHideConsole);
 			}
 
+			configurateInjections();
 			configurateModel();
 			configurateView();
 			configurateCommands();
@@ -97,14 +106,25 @@ package tree {
 			}
 		}
 
+		private function configurateInjections():void{
+			var ticker:Ticker = new Ticker(this.stage)
+			Config.reject(Ticker, ticker);
+			Config.reject(ITicker, ticker);
+			Config.reject(Tree, this);
+			Config.reject(ITreeLoader, Config.loader);
+		}
+
 		private function configurateModel():void
 		{
 			bus = new Bus(this.stage);
+			Config.reject(Bus, bus);
 			bus.add(onBusSignal);
 			model = new Model(bus);
+			Config.reject(Model, model);
 
 			AppServerHandler.instance = new AppServerHandler(Config.loader.serverHandler, bus);
 			bus.addNamed(RequestSignal.SIGNAL, AppServerHandler.instance.call);
+			Config.reject(AppServerHandler, AppServerHandler.instance);
 
 			Join.initializeConstants();
 		}
@@ -115,8 +135,11 @@ package tree {
 			new WindowsManager(bus, Config.windows, new Preloader());
 			addChild(Config.tooltips = new Sprite());
 
-			Config.content.addChild(canvas = new Canvas(bus, model));
+			Config.content.addChild(canvas = new Canvas());
+			new CanvasMediator(canvas);
+
 			Config.content.addChild(gui = new Gui(bus));
+			new GuiMediator(gui);
 		}
 
 

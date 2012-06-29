@@ -16,7 +16,7 @@ package tree.model {
 		public function TreeModel() {
 		}
 
-		public function get id():String {
+		override public function get id():String {
 			return uid + "";
 		}
 	}

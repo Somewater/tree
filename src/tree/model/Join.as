@@ -5,7 +5,7 @@ package tree.model {
 	 * Связь между людьми. Всегда должна быть в 2-х экземплярах (двунаправленная связь)
 	 * Уникальным id является id персоны, на которую ссылаются
 	 */
-	public class Join implements IModel{
+	public class Join extends ModelBase implements IModel{
 
 		/**
 		 * Применяем маску байт, где
@@ -61,7 +61,7 @@ package tree.model {
 			this.persons = persons;
 		}
 
-		public function get id():String {
+		override public function get id():String {
 			return uid + "";
 		}
 

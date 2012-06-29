@@ -13,8 +13,6 @@ package tree.model.base {
 
 		function update(models:Array):void;
 
-		function get change():ISignal;
-
 		function get added():ISignal;
 
 		function get removed():ISignal;
