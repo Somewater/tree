@@ -18,8 +18,8 @@ package tree.model {
 			return this.hash[id];
 		}
 
-		public function allocate():Person {
-			return new Person();
+		public function allocate(nodes:NodesCollection):Person {
+			return new Person(nodes);
 		}
 	}
 }

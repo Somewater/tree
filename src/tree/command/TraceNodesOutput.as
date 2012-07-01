@@ -33,7 +33,7 @@ package tree.command {
 
 		private function traceNode(nodes:NodesProcessorResponse):void {
 			debugTrace('Нарисовать ' +
-					(nodes.parent ? nodes.node.person.get(nodes.parent.id)
+					(nodes.source ? nodes.node.person.get(nodes.source.id)
 							: nodes.node.person))
 		}
 	}

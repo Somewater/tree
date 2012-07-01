@@ -55,8 +55,8 @@ package tree.model.process {
 				var ownerNode:Node = nodes.get(current.uid + '');
 
 				response.node = ownerNode;
-				response.parent = null;
-				response.fromParent = null;
+				response.source = null;
+				response.fromSource = null;
 				forCallback.push([ownerNode]);
 				neighbours.push(current)
 				queuedUids[ownerNode.uid] = true;
@@ -67,8 +67,8 @@ package tree.model.process {
 				{
 					var arr:Array = forCallback.shift();
 					response.node = arr[0];
-					response.parent = arr[1]
-					response.fromParent = arr[2];
+					response.source = arr[1]
+					response.fromSource = arr[2];
 					callback(response);
 				}
 

@@ -31,7 +31,7 @@ package tree.view {
 
 			bus.sceneResize.addWithPriority(onSceneResize, int.MIN_VALUE);
 			bus.loaderProgress.addWithPriority(onLoaderProgress, int.MIN_VALUE);
-			bus.canvas.addNamed(ViewSignal.CANVAS_CONSTRUCTION_STARTED, hideLoader);
+			bus.addNamed(ViewSignal.CANVAS_READY_FOR_START, hideLoader);
 		}
 
 		public function add(window:IWindow):void

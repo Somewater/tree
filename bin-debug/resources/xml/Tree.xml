@@ -168,6 +168,56 @@
 				</group>						
 			</relatives>
 		</node>	
+		
+		<!--НОВЫЕ НОДЫ-->
+			
+		<node uid="30" name="Мой сын" sex="1" pos="0,107" open="1">
+			<relatives>
+				<group type="son">
+					<node uid="1" />
+				</group>						
+			</relatives>
+		</node>
+		
+		<node uid="31" name="Жена сына" sex="0" pos="0,107" open="1">
+			<relatives>
+				<group type="wife">
+					<node uid="30" />
+				</group>						
+			</relatives>
+		</node>
+		
+		<node uid="32" name="Моя дочь" sex="0" pos="0,107" open="1">
+			<relatives>
+				<group type="daughter">
+					<node uid="1" />
+				</group>						
+			</relatives>
+		</node>
+		
+		<node uid="33" name="Мой внук" sex="1" pos="0,107" open="1">
+			<relatives>
+				<group type="son">
+					<node uid="30" />
+				</group>						
+			</relatives>
+		</node>	
+		
+		<node uid="34" name="Моя внучка" sex="0" pos="0,107" open="1">
+			<relatives>
+				<group type="daughter">
+					<node uid="30" />
+				</group>						
+			</relatives>
+		</node>
+		
+		<node uid="35" name="Мой внебрачный сын" sex="1" pos="0,107" open="1">
+			<relatives>
+				<group type="son">
+					<node uid="1" />
+				</group>						
+			</relatives>
+		</node>		
 			
 	</tree>
 	

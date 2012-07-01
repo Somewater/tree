@@ -1,4 +1,6 @@
 package tree.model {
+	import flash.utils.Dictionary;
+
 	import tree.model.base.IModel;
 
 	/**
@@ -26,34 +28,27 @@ package tree.model {
 		 *         мужчина (true) или женщина, т.е. реципиент связи мужчина
  		 */
 
-		public static const FATHER:int = 		16;// 	1	(0000 100) - биты задом наперед (нулевой слева)
-		public static const MOTHER:int = 		1;// 	2	(1000 000)
+		public static var FATHER:JoinType;// 	1	(0000 100) - биты задом наперед (нулевой слева)
+		public static var MOTHER:JoinType;// 	2	(1000 000)
 
-		public static const BROTHER:int = 		50;// 	3   (0100 110)
-		public static const SISTER:int = 		35;// 	4   (1100 010)
+		public static var BROTHER:JoinType;// 	3   (0100 110)
+		public static var SISTER:JoinType;// 	4   (1100 010)
 
-		public static const SON:int = 			84;// 	5   (0010 101)
-		public static const DAUGHTER:int = 		69;// 	6   (1010 001)
+		public static var SON:JoinType;// 	5   (0010 101)
+		public static var DAUGHTER:JoinType;// 	6   (1010 001)
 
-		public static const HUSBAND:int = 		54;// 	7   (0110 110)
-		public static const WIFE:int = 			39;// 	8   (1110 010)
+		public static var HUSBAND:JoinType;// 	7   (0110 110)
+		public static var WIFE:JoinType;// 	8   (1110 010)
 
-		public static const EX_HUSBAND:int = 	56;// 	9   (0001 110)
-		public static const EX_WIFE:int = 		41;// 	10  (1001 010)
-
-		private static const FLAG_MALE:int = 16;
-		private static const FLAG_FLATTEN:int = 32;
-		private static const FLAG_BREED:int = 64;
-		private static const FLAG_I_AM_MAN:int = 512;
+		public static var EX_HUSBAND:JoinType;// 	9   (0001 110)
+		public static var EX_WIFE:JoinType;// 	10  (1001 010)
 
 		private static var _serverToType:Array;
 		private static var _typeToServer:Array;
-		private static var _typeToAlter:Array;
-		private static var _typeToString:Array;
 
-		public var type:int;
+		public var type:JoinType;
 		public var uid:int;
-		public var owner:Person;
+		public var from:Person;
 
 		private var persons:PersonsCollection;
 
@@ -66,41 +61,126 @@ package tree.model {
 		}
 
 		public function get associate():Person {
-			return persons.get(uid + '');
+			return persons ? persons.get(uid + '') : null;
 		}
 
 		public function get flatten():Boolean {
-			return (type & FLAG_FLATTEN) != 0
+			return type.flatten
 		}
 
 		public function get breed():Boolean {
-			return (type & FLAG_BREED) != 0;
+			return type.breed
 		}
 
-		public static function serverToType(serverType:int):int {
+		public static function serverToType(serverType:String):JoinType {
 			return _serverToType[serverType];
 		}
 
-		public static function typeToServer(type:int):int {
+		public static function typeToServer(type:JoinType):int {
 			return _typeToServer[type];
 		}
 
-		public static function toAlter(type:int, iAmMan:Boolean):int {
-			return _typeToAlter[type | (iAmMan ? FLAG_I_AM_MAN : 0)];
+		public static function toAlter(type:JoinType, iAmMan:Boolean):JoinType {
+			if(iAmMan)
+				return type.associatedTypeForMale;
+			else
+				return type.associatedTypeForFemale;
 		}
 
 		public static function initializeConstants():void {
+			// инициализируем типы
+			FATHER = new JoinType(1, 'father', JoinType.SUPER_TYPE_PARENT, 40);
+			FATHER.manAssoc = true;
+			FATHER.flatten = false;
+			FATHER.breed = false;
+
+			MOTHER = new JoinType(2, 'mother', JoinType.SUPER_TYPE_PARENT, 40);
+			MOTHER.manAssoc = false;
+			MOTHER.flatten = false;
+			MOTHER.breed = false;
+
+			BROTHER = new JoinType(3, 'brother', JoinType.SUPER_TYPE_BRO, 20);
+			BROTHER.manAssoc = true;
+			BROTHER.flatten = true;
+			BROTHER.breed = false;
+
+			SISTER = new JoinType(4, 'sister', JoinType.SUPER_TYPE_BRO, 20);
+			SISTER.manAssoc = false;
+			SISTER.flatten = true;
+			SISTER.breed = false;
+
+			SON = new JoinType(5, 'son', JoinType.SUPER_TYPE_BREED, 80);
+			SON.manAssoc = true;
+			SON.flatten = false;
+			SON.breed = true;
+
+			DAUGHTER = new JoinType(6, 'daughter', JoinType.SUPER_TYPE_BREED, 80);
+			DAUGHTER.manAssoc = false;
+			DAUGHTER.flatten = false;
+			DAUGHTER.breed = true;
+
+			HUSBAND = new JoinType(7, 'husband', JoinType.SUPER_TYPE_MARRY, 100);
+			HUSBAND.manAssoc = true;
+			HUSBAND.flatten = true;
+			HUSBAND.breed = false;
+
+			WIFE = new JoinType(8, 'wife', JoinType.SUPER_TYPE_MARRY, 100);
+			WIFE.manAssoc = false;
+			WIFE.flatten = true;
+			WIFE.breed = false;
+
+			EX_HUSBAND = new JoinType(9, 'ex_husband', JoinType.SUPER_TYPE_EX_MARRY, -100);
+			EX_HUSBAND.manAssoc = true;
+			EX_HUSBAND.flatten = true;
+			EX_HUSBAND.breed = false;
+
+			EX_WIFE = new JoinType(10, 'ex_wife', JoinType.SUPER_TYPE_EX_MARRY, -100);
+			EX_WIFE.manAssoc = false;
+			EX_WIFE.flatten = true;
+			EX_WIFE.breed = false;
+
+			// связываем
+			FATHER.associatedTypeForMale = SON;
+			FATHER.associatedTypeForFemale = DAUGHTER;
+
+			MOTHER.associatedTypeForMale = SON;
+			MOTHER.associatedTypeForFemale = DAUGHTER;
+
+			BROTHER.associatedTypeForMale = BROTHER;
+			BROTHER.associatedTypeForFemale = SISTER;
+
+			SISTER.associatedTypeForMale = BROTHER;
+			SISTER.associatedTypeForFemale = SISTER;
+
+			SON.associatedTypeForMale = FATHER;
+			SON.associatedTypeForFemale = MOTHER;
+
+			DAUGHTER.associatedTypeForMale = FATHER;
+			DAUGHTER.associatedTypeForFemale = MOTHER;
+
+			HUSBAND.associatedTypeForMale = null;
+			HUSBAND.associatedTypeForFemale = WIFE;
+
+			WIFE.associatedTypeForMale = HUSBAND;
+			WIFE.associatedTypeForFemale = null;
+
+			EX_HUSBAND.associatedTypeForMale = null;
+			EX_HUSBAND.associatedTypeForFemale = EX_WIFE;
+
+			EX_WIFE.associatedTypeForMale = EX_HUSBAND;
+			EX_WIFE.associatedTypeForFemale = null;
+
 			_serverToType = [];
-			_serverToType[1] = FATHER;
-			_serverToType[2] = MOTHER;
-			_serverToType[3] = BROTHER;
-			_serverToType[4] = SISTER;
-			_serverToType[5] = SON;
-			_serverToType[6] = DAUGHTER;
-			_serverToType[7] = HUSBAND;
-			_serverToType[8] = WIFE;
-			_serverToType[9] = EX_HUSBAND;
-			_serverToType[10] = EX_WIFE;
+			_serverToType[FATHER.name] 		= _serverToType[1] 	= FATHER;
+			_serverToType[MOTHER.name] 		= _serverToType[2] 	= MOTHER;
+			_serverToType[BROTHER.name] 	= _serverToType[3] 	= BROTHER;
+			_serverToType[SISTER.name] 		= _serverToType[4] 	= SISTER;
+			_serverToType[SON.name] 		= _serverToType[5] 	= SON;
+			_serverToType[DAUGHTER.name] 	= _serverToType[6] 	= DAUGHTER;
+			_serverToType[HUSBAND.name] 	= _serverToType[7] 	= HUSBAND;
+			_serverToType[WIFE.name] 		= _serverToType[8] 	= WIFE;
+			_serverToType[EX_HUSBAND.name] 	= _serverToType[9] 	= EX_HUSBAND;
+			_serverToType[EX_WIFE.name] 	= _serverToType[10] = EX_WIFE;
 
 			_typeToServer = [];
 			_typeToServer[FATHER] = 1;
@@ -113,54 +193,10 @@ package tree.model {
 			_typeToServer[WIFE] = 8;
 			_typeToServer[EX_HUSBAND] = 9;
 			_typeToServer[EX_WIFE] = 10;
-
-			_typeToAlter = [];
-
-			_typeToAlter[FATHER | FLAG_I_AM_MAN] = SON;
-			_typeToAlter[FATHER] = DAUGHTER;
-
-			_typeToAlter[MOTHER | FLAG_I_AM_MAN] = SON;
-			_typeToAlter[MOTHER] = DAUGHTER;
-
-			_typeToAlter[BROTHER | FLAG_I_AM_MAN] = BROTHER;
-			_typeToAlter[BROTHER] = SISTER;
-
-			_typeToAlter[SISTER | FLAG_I_AM_MAN] = BROTHER;
-			_typeToAlter[SISTER] = SISTER;
-
-			_typeToAlter[SON | FLAG_I_AM_MAN] = FATHER;
-			_typeToAlter[SON] = MOTHER;
-
-			_typeToAlter[DAUGHTER | FLAG_I_AM_MAN] = FATHER;
-			_typeToAlter[DAUGHTER] = MOTHER;
-
-			_typeToAlter[HUSBAND | FLAG_I_AM_MAN] = WIFE;// gomo
-			_typeToAlter[HUSBAND] = WIFE;
-
-			_typeToAlter[WIFE | FLAG_I_AM_MAN] = HUSBAND;
-			_typeToAlter[WIFE] = HUSBAND;// gomo
-
-			_typeToAlter[EX_HUSBAND | FLAG_I_AM_MAN] = EX_WIFE;// gomo
-			_typeToAlter[EX_HUSBAND] = EX_WIFE;
-
-			_typeToAlter[EX_WIFE | FLAG_I_AM_MAN] = EX_HUSBAND;
-			_typeToAlter[EX_WIFE] = EX_HUSBAND;// gomo
-
-			_typeToString = [];
-			_typeToString[FATHER] = 'father';
-			_typeToString[MOTHER] = 'mother';
-			_typeToString[BROTHER] = 'brother';
-			_typeToString[SISTER] = 'sister';
-			_typeToString[SON] = 'son';
-			_typeToString[DAUGHTER] = 'daughter';
-			_typeToString[HUSBAND] = 'husband';
-			_typeToString[WIFE] = 'wife';
-			_typeToString[EX_HUSBAND] = 'ex_husband';
-			_typeToString[EX_WIFE] = 'ex_wife';
 		}
 
 		public function toString():String {
-			return owner + ' is ' + _typeToString[type] + ' of ' + associate;
+			return from + ' is ' + type + ' of ' + associate;
 		}
 	}
 }

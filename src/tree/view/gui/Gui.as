@@ -13,7 +13,7 @@ package tree.view.gui {
 		}
 
 		public function setSize(w:int, h:int):void {
-			graphics.beginFill(0xdfeead);
+			graphics.beginFill(0xE0EEB1);
 			graphics.drawRect(0, 0, w, h);
 		}
 	}

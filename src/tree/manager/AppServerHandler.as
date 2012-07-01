@@ -21,7 +21,7 @@ package tree.manager {
 			switch(request.type)
 			{
 				case RequestSignal.USER_TREE:
-					handler.download('Tree.xml', processTree, onError);
+					handler.download('xml/Tree.xml', processTree, onError);
 				break;
 
 				default:
@@ -36,7 +36,7 @@ package tree.manager {
 		}
 
 		private function onError(...args):void {
-			bus.dispatch(RequestSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, null))
+			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, null))
 		}
 	}
 }

@@ -49,6 +49,8 @@ package tree.loader {
 		protected function startup():void {
 			stage.showDefaultContextMenu = CONFIG::debug;
 
+			Config.stage = stage;
+
 			_flashVars = loaderInfo && loaderInfo.parameters ? loaderInfo.parameters : {};
 			_domain = loaderInfo.url.substr(0, loaderInfo.url.indexOf("/", 9));
 			Config.loader = this;
@@ -80,7 +82,7 @@ package tree.loader {
 		}
 
 		public function get publicPath():String {
-			return _domain + '/resources/xml/';
+			return _domain + '/resources/';
 		}
 
 		public function get scriptPath():String {

@@ -1,7 +1,9 @@
 package tree.command {
 	import tree.model.Join;
 	import tree.model.Join;
+	import tree.model.JoinType;
 	import tree.model.Person;
+	import tree.model.PersonsCollection;
 	import tree.model.TreeModel;
 	import tree.signal.ModelSignal;
 
@@ -19,6 +21,7 @@ package tree.command {
 			var person:XML;
 			var treeModel:TreeModel;
 			var join:Join;
+			var persons:PersonsCollection = model.persons;
 
 			// прогон для построения Person
 			for each(tree in xml.*)
@@ -44,9 +47,10 @@ package tree.command {
 					var personModel:Person = model.persons.get(String(person.@uid));
 					if(personModel == null)
 					{
-						personModel = model.persons.allocate();
+						personModel = model.persons.allocate(model.nodes);
 						personModel.uid = int(String(person.@uid))
-						model.persons.add(personModel)
+						personModel.photo = 'foto/' + personModel.uid + '.jpg';
+						persons.add(personModel)
 					}
 					personModel.male = String(person.@sex) == '1';
 					personModel.name = String(person.@name);
@@ -60,30 +64,32 @@ package tree.command {
 
 				for each(person in tree.*)
 				{
-					personModel = model.persons.get(String(person.@uid));
+					personModel = persons.get(String(person.@uid));
 
 					for each(var group:XML in person.relatives.*)
 					{
-						var type:int = Join.serverToType(int(String(group.@type)));
+						var type:JoinType = Join.serverToType(String(group.@type));
 						for each(var node:XML in group.*)
 						{
 							join = personModel.get(node.@uid)
 							if(join == null)
 							{
-								join = new Join(model.persons);
-								join.owner = personModel;
-								join.uid = node.@uid;
-								join.type = type;
+								var associate:Person = persons.get(node.@uid);
+
+								join = new Join(persons);
+								join.from = personModel;
+								join.uid = associate.uid;
+								join.type = Join.toAlter(type, associate.male);
 								personModel.add(join);
 
-								var associate:Person = join.associate;
-
 								// одновременно строим другую связь
-								join = new Join(model.persons);
-								join.owner = associate;
-								join.uid = personModel.uid;
-								join.type = Join.toAlter(type, associate.male);
-								associate.add(join);
+								var join2:Join = new Join(persons);
+								join2.from = associate;
+								join2.uid = personModel.uid;
+								join2.type = type;
+								associate.add(join2);
+
+								log(personModel + ' ~> ' + associate + ';; ' + join + '; ' + join2);
 							}
 
 						}

@@ -48,9 +48,5 @@ package tree.command {
 		{
 			bus.dispatch(RequestSignal.SIGNAL, request);
 		}
-
-		protected function debugTrace(message:*):void {
-			Tree.instance.debugTrace(message);
-		}
 	}
 }

@@ -23,16 +23,16 @@ package tree.loader {
 
 		public function call(params:Object, onComplete:Function, onError:Function):void {
 			var urlRequest:URLRequest = new URLRequest(scriptPath);
-			handle(urlRequest, onComplete, onError);
+			handle(urlRequest, onComplete, onError, false);
 		}
 
 		public function download(file:String, onComplete:Function, onError:Function):void {
 			var urlRequest:URLRequest = new URLRequest(publicPath + file);
-			handle(urlRequest, onComplete, onError);
+			handle(urlRequest, onComplete, onError, true);
 		}
 
-		private function handle(urlRequest:URLRequest, onComplete:Function, onError:Function):void {
-			loader.load({'file':urlRequest}, function(files:Object):void{
+		private function handle(urlRequest:URLRequest, onComplete:Function, onError:Function, binary:Boolean):void {
+			loader.load({'file':{'url':urlRequest, 'binary': binary}}, function(files:Object):void{
 				onComplete(files['file']);
 			}, onError);
 		}

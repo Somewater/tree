@@ -5,6 +5,7 @@ package com.somewater.net
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLRequest;
 
@@ -164,6 +165,7 @@ package com.somewater.net
 				{
 					// больше нет заданий, уничтожаем лоадер
 					clearLoader();
+					jobInProgress = false;
 					return;
 				}
 				
@@ -185,11 +187,14 @@ package com.somewater.net
 			}
 			
 			var url:Object = currentData[currentJobFields[0]];
+			if(url.hasOwnProperty('binary') && url.binary)
+				urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
 			
 			if(!(url is String) && url.hasOwnProperty("url"))
 				url = url.url;
-			
+
 			urlLoader.load(url is URLRequest ? url as URLRequest : new URLRequest(String(url)));
+			jobInProgress = true;
 			
 			onProgress();
 		}

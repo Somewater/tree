@@ -14,7 +14,6 @@ package tree.model {
 		protected var _changeSIgnal:ISignal
 
 		public function ModelBase() {
-			_changeSIgnal = new PrioritySignal(IModel);
 		}
 
 		public function get id():String {
@@ -23,10 +22,12 @@ package tree.model {
 
 		public function fireChange():void {
 			if(!radioSilence)
-				_changeSIgnal.dispatch(this);
+				changed.dispatch(this);
 		}
 
 		public function get changed():ISignal {
+			if(!_changeSIgnal)
+				_changeSIgnal = new PrioritySignal(IModel);
 			return _changeSIgnal;
 		}
 	}

@@ -6,6 +6,7 @@ package tree {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.geom.Point;
 
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
@@ -13,6 +14,8 @@ package tree {
 	import tree.command.RecalculateNodes;
 
 	import tree.command.ResponseRouter;
+	import tree.command.view.ContinueTreeDraw;
+	import tree.command.view.StartTreeDraw;
 	import tree.command.TraceNodesOutput;
 	import tree.loader.ITreeLoader;
 	import tree.loader.TreeLoaderBase;
@@ -35,6 +38,7 @@ package tree {
 	import tree.model.base.ICollection;
 	import tree.model.base.ModelCollection;
 	import tree.signal.ResponseSignal;
+	import tree.signal.ViewSignal;
 	import tree.view.canvas.Canvas;
 	import tree.view.canvas.CanvasMediator;
 	import tree.view.gui.Gui;
@@ -49,7 +53,6 @@ package tree {
 		private var model:Model;
 		private var bus:Bus;
 
-		private var commandMap:Array;
 		public var detainedCommands:Array = [];
 
 		private var canvas:Canvas;
@@ -70,7 +73,7 @@ package tree {
 				Cc.startOnStage(this.stage);
 				Cc.width = Config.WIDTH * 0.8;
 				Cc.height = Config.HEIGHT * 0.6;
-				//Cc.visible = false;
+				Cc.visible = false;
 				Cc.bindKey(new KeyBind('~'), showHideConsole);
 				Cc.bindKey(new KeyBind('`'), showHideConsole);
 				Cc.bindKey(new KeyBind('ё'), showHideConsole);
@@ -82,28 +85,6 @@ package tree {
 			configurateCommands();
 
 			bus.dispatch(AppSignal.STARTUP);
-		}
-
-		private function onBusSignal(signal:String, ...args):void {
-			var commandCl:Class = commandMap[signal];
-			var command:Command;
-			if(commandCl)
-			{
-				if(!args || args.length == 0)
-					command = new commandCl();
-				else if(args.length == 1)
-					command = new commandCl(args[0]);
-				else if(args.length == 2)
-					command = new commandCl(args[0], args[1]);
-				else if(args.length == 3)
-					command = new commandCl(args[0], args[1], args[2]);
-				else if(args.length == 4)
-					command = new commandCl(args[0], args[1], args[2], args[3]);
-				else if(args.length == 5)
-					command = new commandCl(args[0], args[1], args[2], args[3], args[4]);
-
-				command.execute();
-			}
 		}
 
 		private function configurateInjections():void{
@@ -118,7 +99,6 @@ package tree {
 		{
 			bus = new Bus(this.stage);
 			Config.reject(Bus, bus);
-			bus.add(onBusSignal);
 			model = new Model(bus);
 			Config.reject(Model, model);
 
@@ -140,29 +120,34 @@ package tree {
 
 			Config.content.addChild(gui = new Gui(bus));
 			new GuiMediator(gui);
+
+			bus.sceneResize.add(onSceneResize);
+			onSceneResize();
 		}
 
-
 		private function configurateCommands():void {
-			//commandMap = new CommandMapData().create();
-			commandMap = [];
-			commandMap[AppSignal.STARTUP] = StartupCommand;
-			commandMap[ResponseSignal.SIGNAL] = ResponseRouter;
-			commandMap[ModelSignal.NODES_NEED_CONSTRUCT] = RecalculateNodes;
-			commandMap[ModelSignal.NODES_RECALCULATED] = TraceNodesOutput;
+			bus.addCommand(AppSignal.STARTUP, StartupCommand);
+			bus.addCommand(ResponseSignal.SIGNAL, ResponseRouter);
+			bus.addCommand(ModelSignal.NODES_NEED_CONSTRUCT, RecalculateNodes);
+
+			bus.addCommand(ViewSignal.CANVAS_READY_FOR_START, StartTreeDraw);
+			bus.addCommand(ViewSignal.JOIN_QUEUE_STARTED, ContinueTreeDraw);
+			bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);
 		}
 
 
 		CONFIG::debug
 		{
-		public function debugTrace(message:String):void {
-			Cc.log(message);
-		}
-
 		private function showHideConsole():void
 		{
 			Cc.visible = !Cc.visible;
 		}
+		}
+
+		private function onSceneResize(point:Point = null):void {
+			graphics.clear();
+			graphics.beginFill(0xFEFFFD);
+			graphics.drawRect(0, 0, Config.WIDTH, Config.HEIGHT);
 		}
 	}
 }

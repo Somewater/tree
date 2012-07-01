@@ -6,8 +6,8 @@ package tree.model.process {
 	public class NodesProcessorResponse {
 
 		public var node:Node;
-		public var parent:Node;
-		public var fromParent:Join;
+		public var source:Node;
+		public var fromSource:Join;
 
 		public function NodesProcessorResponse() {
 		}

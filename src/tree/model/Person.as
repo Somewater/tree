@@ -8,13 +8,17 @@ package tree.model {
 	/**
 	 * Модель человека. Одновременно, является коллекцией join
 	 */
-	public class Person extends ModelCollection implements IModel, ICollection{
+	public class Person extends JoinCollectionBase implements IModel, ICollection{
 
 		public var name:String;
 		public var male:Boolean;
 		public var uid:int;
 
-		public function Person() {
+		private var nodes:NodesCollection;
+		public var photo:String;
+
+		public function Person(nodes:NodesCollection) {
+			this.nodes = nodes;
 		}
 
 		override public function get id():String {
@@ -44,6 +48,10 @@ package tree.model {
 
 		public function toString():String {
 			return '[' + this.name + ' ' + uid + ']';
+		}
+
+		public function get node():Node {
+			return nodes.get(this.uid + '');
 		}
 	}
 }
