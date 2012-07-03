@@ -198,5 +198,9 @@ package tree.model {
 		public function toString():String {
 			return from + ' is ' + type + ' of ' + associate;
 		}
+
+		public function get name():String {
+			return type.name;
+		}
 	}
 }

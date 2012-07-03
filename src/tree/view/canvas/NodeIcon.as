@@ -53,9 +53,13 @@ package tree.view.canvas {
 			this.photo.source = photo;
 		}
 
+		private var already:Boolean = false;
 		private function refreshPosition(n:Node):void {
 			var x:int = n.x * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
 			var y:int = n.y * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
+			if(already)
+				throw new Error('sdf')
+			already = true;
 			GTweener.to(this, 0.8, {'x':x, 'y':y}, {onComplete: dispatchOnComplete});
 		}
 

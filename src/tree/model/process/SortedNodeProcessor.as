@@ -22,7 +22,7 @@ package tree.model.process {
 		override protected function sortJoins(joins:Array):Array {
 			joins = joins.slice();
 			joins.sort(function(j1:Join, j2:Join):int{
-				var delta:int = j1.type.priority - j2.type.priority;
+				var delta:int = j2.type.priority - j1.type.priority;
 				if(delta != 0)
 					return delta;
 				else {

@@ -41,24 +41,21 @@ package tree.command.view {
 			switch(join.type ? join.type.superType : null) {
 				case JoinType.SUPER_TYPE_MARRY:
 					node.x = sourceNode.x + (join.type == Join.WIFE ? 1 : -1);
-					node.y = sourceNode.y;
 					break;
 				case JoinType.SUPER_TYPE_BREED:
-					node.y = sourceNode.y + 1;
 					// выровнять в соответствии с кол-вом детей
 					var breeds:Array = source.breeds;
 					startX = source.male ? sourceNode.x + 0.5 : sourceNode.x - 0.5;
-					// надо передвинуть остальных детей
+					/*// надо передвинуть остальных детей
 					for each(p in source.breeds) {
 						n = p.node;
 						n.x = startX;
 						n.fireChange();
 						startX++;
-					}
+					}*/
 					node.x = startX;
 					break;
 				case JoinType.SUPER_TYPE_PARENT:
-					node.y = sourceNode.y - 1;
 					var parents:Array = sourceNode.parents;
 					if(parents.length == 0)
 						node.x = sourceNode.x;
@@ -82,11 +79,9 @@ package tree.command.view {
 						if(bros.length) n = bros[bros.length - 1] else n = node;
 						node.x = n.x + (person.male ? -1 : 1);
 					}
-					node.y = sourceNode.y;
 					break;
 				case JoinType.SUPER_TYPE_EX_MARRY:
 					node.x = sourceNode.x + 10;
-					node.y = sourceNode.y;
 					break;
 				default:
 					if(source)
@@ -94,7 +89,6 @@ package tree.command.view {
 
 					// мы имеем перво с самой первой нодой дерева (относительно которой строится всё дерево)
 					node.x = 0;
-					node.y = 0;
 			}
 
 			// добавляем в Generation

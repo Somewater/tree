@@ -11,6 +11,8 @@ package tree {
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
 
+	import tree.command.ConstructNodes;
+
 	import tree.command.RecalculateNodes;
 
 	import tree.command.ResponseRouter;
@@ -128,7 +130,8 @@ package tree {
 		private function configurateCommands():void {
 			bus.addCommand(AppSignal.STARTUP, StartupCommand);
 			bus.addCommand(ResponseSignal.SIGNAL, ResponseRouter);
-			bus.addCommand(ModelSignal.NODES_NEED_CONSTRUCT, RecalculateNodes);
+			bus.addCommand(ModelSignal.NODES_NEED_CONSTRUCT, ConstructNodes);
+			bus.addCommand(ModelSignal.NODES_NEED_CALCULATE, RecalculateNodes);
 
 			bus.addCommand(ViewSignal.CANVAS_READY_FOR_START, StartTreeDraw);
 			bus.addCommand(ViewSignal.JOIN_QUEUE_STARTED, ContinueTreeDraw);

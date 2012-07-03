@@ -28,28 +28,29 @@ package tree.command {
 
 		private function calculateNode(response:NodesProcessorResponse):void {
 			var node:Node = response.node;
-			var parent:Node = response.source;
-			if(parent) {
+			var source:Node = response.source;
+			if(source) {
 				// назначаем параметры, относительно owner
-				node.dist = parent.dist + 1;
+				node.dist = source.dist + 1;
 				if(response.fromSource.flatten) {
-					node.vector = parent.vector;
-					node.generation = parent.generation;
+					node.vector = source.vector;
+					node.generation = source.generation;
 				} else {
 					if(response.fromSource.breed) {
 						node.vector = -1;
-						node.generation = parent.generation + 1;
+						node.generation = source.generation + 1;
 					} else {
 						node.vector = 1;
-						node.generation = parent.generation - 1;
+						node.generation = source.generation - 1;
 					}
 				}
 
-				if(parent.vector != 0 && parent.vector + node.vector == 0)
-					node.vectCount = parent.vectCount + 1;
+				if(source.vector != 0 && source.vector + node.vector == 0)
+					node.vectCount = source.vectCount + 1;
 				else
-					node.vectCount = parent.vectCount;
+					node.vectCount = source.vectCount;
 			} else {
+				node.generation = 0;
 				node.dist = 0;
 				node.vector = 0;
 				node.vectCount = 0;

@@ -12,7 +12,7 @@ package tree.model.process {
 		private var model:Model;
 		private var current:Person;
 		private var callback:Function;
-		private var nodesConstructed:Boolean = false;
+		private var initialized:Boolean = false;
 
 		private var queuedUids:Array;
 		private var neighbours:Array;
@@ -29,30 +29,14 @@ package tree.model.process {
 		 * возвращает false, если процесс завершен
 		 */
 		public function process():Boolean {
-			if(!nodesConstructed)
+			if(!initialized)
 			{
-				nodesConstructed = true;
-				var nodes:NodesCollection = model.nodes;
-				nodes.clear();
-				var node:Node;
-				var p:Person;
-
-				for each(p in model.persons.iterator)
-				{
-					node = nodes.get(p.uid.toString());
-					if(node == null)
-					{
-						node = nodes.allocate(p);
-						nodes.add(node);
-					}
-				}
-
 				queuedUids = [];
 				neighbours = [];
 				forCallback = [];
 				response = new NodesProcessorResponse();
 
-				var ownerNode:Node = nodes.get(current.uid + '');
+				var ownerNode:Node = model.nodes.get(current.uid + '');
 
 				response.node = ownerNode;
 				response.source = null;
@@ -60,6 +44,8 @@ package tree.model.process {
 				forCallback.push([ownerNode]);
 				neighbours.push(current)
 				queuedUids[ownerNode.uid] = true;
+
+				initialized = true;
 				return true;
 			}else{
 
@@ -72,6 +58,7 @@ package tree.model.process {
 					callback(response);
 				}
 
+				var p:Person
 				if(neighbours.length){
 					var newNeighbours:Array = recalculateNeighbours(neighbours.shift());
 					for each(p in newNeighbours)

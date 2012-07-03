@@ -12,6 +12,7 @@ package tree.model {
 		public var persons:PersonsCollection;
 		public var nodes:NodesCollection;
 		public var generations:GenerationsCollection;
+		public var matrixes:MatrixCollection;
 		private var _zoom:Number = 1;
 		private var _mousePosition:Point = new Point();
 
@@ -37,7 +38,8 @@ package tree.model {
 			trees = new TreesCollection(bus);
 			persons = new PersonsCollection(bus);
 			nodes = new NodesCollection(persons, bus);
-			generations = new GenerationsCollection(persons, bus);
+			matrixes = new MatrixCollection();
+			generations = new GenerationsCollection(persons, bus, matrixes);
 		}
 
 		/**

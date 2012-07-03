@@ -30,5 +30,7 @@ package tree.model {
 		public function toString():String {
 			return name;
 		}
+
+		public static var FIRST_JOIN:JoinType = new JoinType(0, 'start', null, int.MAX_VALUE);
 	}
 }

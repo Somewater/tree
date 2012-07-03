@@ -1,6 +1,7 @@
 package tree.command.view {
 	import tree.command.*;
 	import tree.model.Join;
+	import tree.model.JoinType;
 	import tree.model.Person;
 	import tree.model.process.NodesProcessor;
 	import tree.model.process.NodesProcessorResponse;
@@ -22,14 +23,14 @@ package tree.command.view {
 			var firstPerson:Person = model.owner;
 			var firstJoin:Join = new Join(model.persons);
 			firstJoin.uid = firstPerson.uid;
-			firstJoin.type = null;// т.е. не имеет типа, не на кого ссылаться
+			firstJoin.type = JoinType.FIRST_JOIN;// т.е. не имеет типа, не на кого ссылаться
 
 			joinsForDraw.push(firstJoin);
 
 			var proc:NodesProcessor = new SortedNodeProcessor(model, firstPerson,
 					function(response:NodesProcessorResponse):void{
 						var j:Join = response.fromSource;
-						if(j)
+						if(j && response.source == firstPerson.node)
 							joinsForDraw.push(j);
 					})
 			while(proc.process()){}

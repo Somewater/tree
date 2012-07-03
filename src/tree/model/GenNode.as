@@ -8,9 +8,12 @@ package tree.model {
 		public var node:Node;
 		public var join:Join;
 
+		public var priority:int;
+
 		public function GenNode(node:Node, join:Join) {
 			this.node = node;
 			this.join = join;
+			this.priority = join.type.priority;
 		}
 
 		override public function get id():String {
