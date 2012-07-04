@@ -1,4 +1,6 @@
 package tree.common {
+	import com.junkbyte.console.Cc;
+
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -73,6 +75,10 @@ package tree.common {
 		}
 
 		private function onMouseWheel(event:MouseEvent):void {
+			CONFIG::debug {
+				if(Cc.visible)
+					return;
+			}
 			mouseWheel.dispatch(event.delta);
 		}
 

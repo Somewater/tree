@@ -4,6 +4,7 @@ package tree.view.canvas {
 	import flash.geom.Point;
 
 	import tree.common.Config;
+	import tree.model.GenNode;
 	import tree.model.Join;
 	import tree.model.Node;
 	import tree.model.Person;
@@ -48,12 +49,8 @@ package tree.view.canvas {
 			bus.dispatch(ViewSignal.CANVAS_READY_FOR_START);
 		}
 
-		private function onNeedDrawJoin(join:Join,
-										node:Node,
-										person:Person,
-										sourceNode:Node,
-										sourcePerson:Person):void {
-			canvas.drawJoin(join, node);
+		private function onNeedDrawJoin(g:GenNode):void {
+			canvas.drawJoin(g);
 		}
 
 		private function onZoom(zoom:Number):void {

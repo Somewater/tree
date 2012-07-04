@@ -4,6 +4,7 @@ package tree.common {
 	import flash.utils.Dictionary;
 
 	import tree.loader.ITreeLoader;
+	import tree.manager.ITicker;
 
 	public class Config {
 
@@ -21,6 +22,7 @@ package tree.common {
 		public static var tooltips:DisplayObjectContainer;
 
 		public static var stage:Stage;
+		public static var ticker:ITicker;
 
 		public static function reject(clazz:Class, singletone:Object):void {
 			singletones[clazz] = singletone;

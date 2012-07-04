@@ -1,5 +1,6 @@
 package tree.model {
 	import tree.model.base.ICollection;
+	import tree.model.base.IModel;
 	import tree.model.base.ModelCollection;
 
 	public class JoinCollectionBase extends ModelCollection implements ICollection{
@@ -14,6 +15,29 @@ package tree.model {
 		protected var useJoinsCache:Boolean = true;
 
 		public function JoinCollectionBase() {
+		}
+
+		public function get(id:String):Join {
+			return hash[id];
+		}
+
+		/**
+		 * Проверяем, что добавляется Join, причем допустимая
+		 * @param model
+		 */
+		override public function add(model:IModel):void {
+			var join:Join = model as Join;
+			if(join == null)
+				throw new Error('Must be join only');
+			super.add(model);
+		}
+
+
+		override public function remove(model:IModel):void {
+			var join:Join = model as Join;
+			if(join == null)
+				throw new Error('Must be join only');
+			super.remove(model);
 		}
 
 		public function get marry():Person {

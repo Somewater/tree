@@ -71,6 +71,7 @@ package tree {
 			CONFIG::debug
 			{
 				Cc.config.commandLineAllowed = true;
+				Cc.commandLine = true;
 				Cc.config.tracing = true;
 				Cc.startOnStage(this.stage);
 				Cc.width = Config.WIDTH * 0.8;
@@ -91,6 +92,7 @@ package tree {
 
 		private function configurateInjections():void{
 			var ticker:Ticker = new Ticker(this.stage)
+			Config.ticker = ticker;
 			Config.reject(Ticker, ticker);
 			Config.reject(ITicker, ticker);
 			Config.reject(Tree, this);

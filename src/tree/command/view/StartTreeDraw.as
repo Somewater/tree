@@ -30,7 +30,7 @@ package tree.command.view {
 			var proc:NodesProcessor = new SortedNodeProcessor(model, firstPerson,
 					function(response:NodesProcessorResponse):void{
 						var j:Join = response.fromSource;
-						if(j && response.source == firstPerson.node)
+						if(j && response.node.dist < 3)
 							joinsForDraw.push(j);
 					})
 			while(proc.process()){}

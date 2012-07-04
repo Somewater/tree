@@ -51,9 +51,10 @@ package tree.model {
 		 * и всех остальных (она могла их затронуть)
 		 * @param model
 		 */
-		public function addWithJoin(node:Node, join:Join):void {
+		public function addWithJoin(node:Node, join:Join):GenNode {
 			var g:GenNode = new GenNode(node, join);
 			add(g);
+			return g;
 		}
 
 		/**

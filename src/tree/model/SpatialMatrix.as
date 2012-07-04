@@ -16,28 +16,51 @@ package tree.model {
 			var y:int = genNode.node.generation;
 			var g:GenNode;
 
+			if(genNode.node.uid == 13) {
+				trace('ok')
+			}
+
 			const ORIG_VECT:int = -1;
 			var startX:int = x;
 			var vector:int = ORIG_VECT;
+			var searchVector:int;// если предполагается искать свободное место только в одну сторону
+			if(genNode.join.type.superType == JoinType.SUPER_TYPE_BRO
+					|| genNode.join.type.superType == JoinType.SUPER_TYPE_PARENT
+					|| genNode.join.type.superType == JoinType.SUPER_TYPE_EX_MARRY)
+				searchVector = genNode.join.from.male ? -1 : 1;
 			var delta:int = 0;
-			while(g = get(x, y) as GenNode) {
-				var cmp:int = compare(genNode, g);
-				if(cmp > 0) {
+			var important:Boolean = genNode.join.type.superType == JoinType.SUPER_TYPE_MARRY;
+			var cmp:int;
+
+			while(important || (g = get(x, y) as GenNode)) {
+				if(important || (cmp = compare(genNode, g)) > 0) {
+					// определить вектор - с какой стороны пытаться распологать
+					if(genNode.join.type.superType == JoinType.SUPER_TYPE_BRO)
+						vector = genNode.join.from.male ? -1 : 1;// если bro, то слева от брата или справа от сестры (чтобы не мешать супругу)
+					else
+						vector = genNode.vector;
+
 					// убрать других и самому занять место
 					var i:int = 1;
 					var g2:GenNode;
 					while(g){
 						var nx:int = x + i * vector;
 						g2 = get(nx, y) as GenNode;
+						g.node.x = nx;
+						g.node.firePositionChange();
 						set(g,  nx, y)
 						g = g2;
 						i++;
 					}
 					break;
 				} else {
+
+					// todo: если это супруг, то сдвинуть всех.
+					// todo: Если это потомство и не найдено место среди его братьев-сестер, то сдвинуть всех
+
 					// заняться поиском места правее или левее
-					vector = -vector;
-					if(vector != ORIG_VECT)
+					vector = searchVector ? searchVector : -vector;
+					if(searchVector || vector != ORIG_VECT)
 						delta++;
 					x = startX + delta * vector;
 				}

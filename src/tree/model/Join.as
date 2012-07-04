@@ -93,51 +93,61 @@ package tree.model {
 			FATHER.manAssoc = true;
 			FATHER.flatten = false;
 			FATHER.breed = false;
+			FATHER.vector = 0;
 
 			MOTHER = new JoinType(2, 'mother', JoinType.SUPER_TYPE_PARENT, 40);
 			MOTHER.manAssoc = false;
 			MOTHER.flatten = false;
 			MOTHER.breed = false;
+			MOTHER.vector = 1;
 
 			BROTHER = new JoinType(3, 'brother', JoinType.SUPER_TYPE_BRO, 20);
 			BROTHER.manAssoc = true;
 			BROTHER.flatten = true;
 			BROTHER.breed = false;
+			BROTHER.vector = 0;
 
 			SISTER = new JoinType(4, 'sister', JoinType.SUPER_TYPE_BRO, 20);
 			SISTER.manAssoc = false;
 			SISTER.flatten = true;
 			SISTER.breed = false;
+			SISTER.vector = 0;
 
 			SON = new JoinType(5, 'son', JoinType.SUPER_TYPE_BREED, 80);
 			SON.manAssoc = true;
 			SON.flatten = false;
 			SON.breed = true;
+			SON.vector = 0;
 
 			DAUGHTER = new JoinType(6, 'daughter', JoinType.SUPER_TYPE_BREED, 80);
 			DAUGHTER.manAssoc = false;
 			DAUGHTER.flatten = false;
 			DAUGHTER.breed = true;
+			DAUGHTER.vector = 0;
 
-			HUSBAND = new JoinType(7, 'husband', JoinType.SUPER_TYPE_MARRY, 100);
+			HUSBAND = new JoinType(7, 'husband', JoinType.SUPER_TYPE_MARRY, 1000000);
 			HUSBAND.manAssoc = true;
 			HUSBAND.flatten = true;
 			HUSBAND.breed = false;
+			HUSBAND.vector = -1;
 
-			WIFE = new JoinType(8, 'wife', JoinType.SUPER_TYPE_MARRY, 100);
+			WIFE = new JoinType(8, 'wife', JoinType.SUPER_TYPE_MARRY, 1000000);
 			WIFE.manAssoc = false;
 			WIFE.flatten = true;
 			WIFE.breed = false;
+			WIFE.vector = 1;
 
 			EX_HUSBAND = new JoinType(9, 'ex_husband', JoinType.SUPER_TYPE_EX_MARRY, -100);
 			EX_HUSBAND.manAssoc = true;
 			EX_HUSBAND.flatten = true;
 			EX_HUSBAND.breed = false;
+			EX_HUSBAND.vector = -1;
 
 			EX_WIFE = new JoinType(10, 'ex_wife', JoinType.SUPER_TYPE_EX_MARRY, -100);
 			EX_WIFE.manAssoc = false;
 			EX_WIFE.flatten = true;
 			EX_WIFE.breed = false;
+			EX_WIFE.vector = 1;
 
 			// связываем
 			FATHER.associatedTypeForMale = SON;

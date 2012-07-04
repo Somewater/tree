@@ -9,6 +9,7 @@ package tree.view.canvas {
 
 	import tree.common.Config;
 	import tree.common.IClear;
+	import tree.model.GenNode;
 
 	import tree.model.Node;
 	import tree.model.Person;
@@ -16,11 +17,13 @@ package tree.view.canvas {
 
 	public class NodeIcon extends Sprite implements IClear{
 
-		protected var _data:Node;
+		protected var _data:GenNode;
 
 		private var skin:Sprite;
 
 		private var photo:Photo;
+
+		private var needDispatchComplete:Boolean;
 
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
@@ -30,19 +33,21 @@ package tree.view.canvas {
 			photo.photoMask = skin.getChildByName('photo_mask');
 		}
 
-		public function set data(value:Node):void {
+		public function set data(value:GenNode):void {
+			warn('New node: ' + value.node.person + ", time=" + Config.ticker.getTimer)
 			this._data = value;
-			_data.changed.add(refreshPosition);
+			needDispatchComplete = true;
+			_data.node.positionChanged.add(refreshPosition);
 			refreshData();
-			refreshPosition(_data);
+			refreshPosition(_data.node);
 		}
 
-		public function get data():Node {
+		public function get data():GenNode {
 			return _data;
 		}
 
 		protected function refreshData():void {
-			var p:Person = _data.person;
+			var p:Person = _data.node.person;
 			skin.getChildByName('male_back').visible = p.male;
 			skin.getChildByName('female_back').visible = !p.male;
 			(skin.getChildByName('name_tf') as TextField).text = p.name;
@@ -53,14 +58,12 @@ package tree.view.canvas {
 			this.photo.source = photo;
 		}
 
-		private var already:Boolean = false;
-		private function refreshPosition(n:Node):void {
-			var x:int = n.x * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
-			var y:int = n.y * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
-			if(already)
-				throw new Error('sdf')
-			already = true;
-			GTweener.to(this, 0.8, {'x':x, 'y':y}, {onComplete: dispatchOnComplete});
+		private function refreshPosition(node:Node):void {
+			var x:int = node.x * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
+			var y:int = node.y * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
+			GTweener.to(this, 0.4, {'x':x, 'y':y},
+					{onComplete: needDispatchComplete ? dispatchOnComplete : null});
+			needDispatchComplete = false;
 		}
 
 		private function dispatchOnComplete(g:GTween):void {

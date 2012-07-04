@@ -2,6 +2,7 @@ package tree.command.view {
 	import tree.command.*;
 	import tree.common.Config;
 	import tree.manager.Ticker;
+	import tree.model.GenNode;
 	import tree.model.Join;
 	import tree.model.JoinType;
 	import tree.model.Node;
@@ -62,26 +63,25 @@ package tree.command.view {
 					else
 					{
 						node.x = sourceNode.x + 0.5 * (person.male ? -1 : 1);
-						j = parents[0]
-						p = j.associate;
+						p = parents[0] as Person;
 						n = p.node;
 						n.x = sourceNode.x + 0.5 * (p.male ? -1 : 1);
-						n.fireChange();
+						n.firePositionChange();
 					}
 					break;
 				case JoinType.SUPER_TYPE_BRO:
 					var bros:Array = sourceNode.bros;
 					if(sourceNode.marry) {
-						if(bros.length) n = bros[bros.length - 1] else n = node;
+						if(bros.length) n = (bros[bros.length - 1] as Person).node else n = node;
 						node.x = n.x + (person.male ? -1 : 1);
 					} else {
 						// todo: построить в порядке рождения
-						if(bros.length) n = bros[bros.length - 1] else n = node;
+						if(bros.length) n = (bros[bros.length - 1] as Person).node else n = node;
 						node.x = n.x + (person.male ? -1 : 1);
 					}
 					break;
 				case JoinType.SUPER_TYPE_EX_MARRY:
-					node.x = sourceNode.x + 10;
+					node.x = sourceNode.x + (sourceNode.person.male ? -1 : 1);
 					break;
 				default:
 					if(source)
@@ -92,9 +92,15 @@ package tree.command.view {
 			}
 
 			// добавляем в Generation
-			model.generations.get(node.generation).addWithJoin(node, join);
+			var g:GenNode = model.generations.get(node.generation).addWithJoin(node, join);
 
-			bus.dispatch(ViewSignal.DRAW_JOIN, join, node, person, sourceNode, source);
+			// добавить в ноды связи друг на друга
+			if(join.from) { // если это стартовая нода, то join.from == null
+				join.from.node.add(join);
+				node.add(join.from.get(node.uid + ''));
+			}
+
+			bus.dispatch(ViewSignal.DRAW_JOIN, g);
 		}
 	}
 }

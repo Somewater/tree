@@ -19,6 +19,7 @@ package tree.model {
 		public var name:String
 		public var superType:String;
 		public var priority:int
+		public var vector:int;
 
 		public function JoinType(id:int, name:String, superType:String, priority:int) {
 			this.id = id;

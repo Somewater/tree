@@ -64,7 +64,6 @@ package tree.model {
 		public function set zoom(value:Number):void {
 			if(value != _zoom) {
 				_zoom = value;
-				log('zoom=' + value);
 				bus.zoom.dispatch(value);
 			}
 		}

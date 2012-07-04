@@ -1,5 +1,6 @@
 package tree.model {
 	import org.osflash.signals.ISignal;
+	import org.osflash.signals.Signal;
 
 	import tree.model.base.ICollection;
 
@@ -23,12 +24,18 @@ package tree.model {
 		public var vectCount:int = 0;
 		public var generation:int = 0;
 
+
+		public var positionChanged:ISignal;
+
+
 		public function Node(person:Person) {
 			super();
 
 			this.useJoinsCache = false;
 			this.person = person;
 			this.uid = person.uid;
+
+			positionChanged = new Signal(Node);
 		}
 
 		override public function get id():String {
@@ -37,6 +44,10 @@ package tree.model {
 
 		public function get level():int {
 			return vector * vectCount;
+		}
+
+		public function firePositionChange():void {
+			positionChanged.dispatch(this);
 		}
 	}
 }

@@ -9,11 +9,13 @@ package tree.model {
 		public var join:Join;
 
 		public var priority:int;
+		public var vector:int;// с какой стороны от source пытаться разместить ноду
 
 		public function GenNode(node:Node, join:Join) {
 			this.node = node;
 			this.join = join;
-			this.priority = join.type.priority;
+			this.priority =  (1000 / (node.dist + 1)) +  join.type.priority;
+			this.vector = join.type.vector;
 		}
 
 		override public function get id():String {

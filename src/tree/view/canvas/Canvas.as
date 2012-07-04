@@ -2,6 +2,8 @@ package tree.view.canvas {
 	import flash.display.Sprite;
 	import flash.events.Event;
 
+	import tree.model.GenNode;
+
 	import tree.model.Join;
 	import tree.model.Node;
 
@@ -16,32 +18,36 @@ package tree.view.canvas {
 		public static const HEIGHT_SPACE:int = 50;
 		private var nodes:Vector.<NodeIcon> = new Vector.<NodeIcon>();// array of NodeIcon
 		private var nodesHolder:Sprite;
+		private var generationsHolder:Sprite;
 		private var generationHolders:Array = [];
 
 		public function Canvas() {
+			generationsHolder = new Sprite();
+			addChild(generationsHolder);
+
 			nodesHolder = new Sprite();
 			addChild(nodesHolder);
 		}
 
-		public function drawJoin(join:Join, node:Node):void {
+		public function drawJoin(g:GenNode):void {
 			var n:NodeIcon = new NodeIcon();
 			n.addEventListener(Event.COMPLETE, onNodeIconComplete);
 			nodes.push(n);
-			n.data = node;
-			generationHolder(node.generation).addNode(n);
+			n.data = g;
+			generationHolder(g.node.generation).addNode(n);
 		}
 
-		private function generationHolder(generation:int):GenerationHolder {
-			var h:GenerationHolder = generationHolders[generation];
+		private function generationHolder(generation:int):GenerationBackground {
+			var h:GenerationBackground = generationHolders[generation];
 			if(!h) {
-				generationHolders[generation] = h = new GenerationHolder(generation);
+				generationHolders[generation] = h = new GenerationBackground(generation, nodesHolder);
 				h.changed.add(onGenerationHolderChanged);
-				nodesHolder.addChild(h);
+				generationsHolder.addChild(h);
 			}
 			return h;
 		}
 
-		private function onGenerationHolderChanged(generationHolder:GenerationHolder):void {
+		private function onGenerationHolderChanged(generationHolder:GenerationBackground):void {
 
 		}
 

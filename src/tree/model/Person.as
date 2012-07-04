@@ -27,21 +27,6 @@ package tree.model {
 
 		public function get female():Boolean{return !male;}
 
-		/**
-		 * Проверяем, что добавляется Join, причем допустимая
-		 * @param model
-		 */
-		override public function add(model:IModel):void {
-			var join:Join = model as Join;
-			if(join == null)
-				throw new Error('Must be join only');
-			super.add(model);
-		}
-
-		public function get(id:String):Join {
-			return hash[id];
-		}
-
 		public function get joins():Array {
 			return array;
 		}
