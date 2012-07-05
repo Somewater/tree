@@ -5,6 +5,7 @@ package tree.view.canvas {
 
 	import tree.common.Config;
 	import tree.model.GenNode;
+	import tree.model.Generation;
 	import tree.model.Join;
 	import tree.model.Node;
 	import tree.model.Person;
@@ -30,6 +31,7 @@ package tree.view.canvas {
 			bus.zoom.add(onZoom);
 			bus.mouseWheel.add(onMouseWheel);
 			bus.drag.add(onDrag);
+			model.generations.generationChanged.add(onGenerationsChanged);
 		}
 
 		override public function clear():void {
@@ -82,6 +84,10 @@ package tree.view.canvas {
 
 		private function onCanvasComplete(event:Event):void {
 			bus.dispatch(ViewSignal.JOIN_DRAWED);
+		}
+
+		private function onGenerationsChanged(g:Generation):void {
+			canvas.refreshGenerations();
 		}
 	}
 }

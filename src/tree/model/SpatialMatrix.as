@@ -38,7 +38,7 @@ package tree.model {
 					if(genNode.join.type.superType == JoinType.SUPER_TYPE_BRO)
 						vector = genNode.join.from.male ? -1 : 1;// если bro, то слева от брата или справа от сестры (чтобы не мешать супругу)
 					else
-						vector = genNode.vector;
+						vector = genNode.vector || 1;
 
 					// убрать других и самому занять место
 					var i:int = 1;

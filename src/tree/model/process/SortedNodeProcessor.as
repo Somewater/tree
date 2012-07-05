@@ -10,6 +10,8 @@ package tree.model.process {
 
 		public function SortedNodeProcessor(model:Model, start:Person, callback:Function) {
 			super(model, start, callback);
+
+			skipBroIfParents = true;
 		}
 
 		/**

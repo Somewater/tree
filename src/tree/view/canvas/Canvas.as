@@ -34,17 +34,14 @@ package tree.view.canvas {
 			n.addEventListener(Event.COMPLETE, onNodeIconComplete);
 			nodes.push(n);
 			n.data = g;
-			generationHolder(g.node.generation).addNode(n);
-		}
+			nodesHolder.addChild(n);
 
-		private function generationHolder(generation:int):GenerationBackground {
+			var generation:int = g.generation.generation;
 			var h:GenerationBackground = generationHolders[generation];
 			if(!h) {
-				generationHolders[generation] = h = new GenerationBackground(generation, nodesHolder);
-				h.changed.add(onGenerationHolderChanged);
+				generationHolders[generation] = h = new GenerationBackground(g.generation);
 				generationsHolder.addChild(h);
 			}
-			return h;
 		}
 
 		private function onGenerationHolderChanged(generationHolder:GenerationBackground):void {
@@ -57,6 +54,11 @@ package tree.view.canvas {
 
 		private function onNodeIconComplete(event:Event):void {
 			dispatchEvent(event);
+		}
+
+		public function refreshGenerations():void {
+			for each(var g:GenerationBackground in generationHolders)
+				g.refresh();
 		}
 	}
 }

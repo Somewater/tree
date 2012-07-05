@@ -3,6 +3,7 @@ package tree.model {
 	import flash.geom.Point;
 
 	import tree.common.Bus;
+	import tree.model.GenerationsCollection;
 	import tree.model.base.IModel;
 	import tree.model.base.ModelCollection;
 	import tree.model.SpatialMatrix;
@@ -12,11 +13,24 @@ package tree.model {
 	 */
 	public class Generation extends ModelCollection{
 
+		public var generation:int;
+		private var collection:GenerationsCollection
 		protected var matrixes:MatrixCollection;
 
-		public function Generation(persons:PersonsCollection, bus:Bus, matrixes:MatrixCollection) {
+
+		private var _levelNum:int = 0;
+		private var levelNumbers:Array = [];
+
+		public function Generation(collection:GenerationsCollection, generation:int, persons:PersonsCollection, bus:Bus, matrixes:MatrixCollection) {
 			super();
+			this.collection = collection;
+			this.generation = generation;
 			this.matrixes = matrixes;
+		}
+
+
+		override public function get id():String {
+			return generation + '';
 		}
 
 		/**
@@ -52,7 +66,7 @@ package tree.model {
 		 * @param model
 		 */
 		public function addWithJoin(node:Node, join:Join):GenNode {
-			var g:GenNode = new GenNode(node, join);
+			var g:GenNode = new GenNode(node, join, this);
 			add(g);
 			return g;
 		}
@@ -78,7 +92,51 @@ package tree.model {
 		}
 
 		protected function recalculate():void {
+			var newLevelNum:int = 0;
+			var levelsHash:Array = [];
+			var levels:Array = [];
+			for each(var icon:GenNode in array) {
+				if(!levelsHash[icon.node.level])
+				{
+					levelsHash[icon.node.level] = true;
+					levels.push(icon.node.level);
+					newLevelNum++;
+				}
+			}
 
+			if(_levelNum != newLevelNum){
+				_levelNum = newLevelNum;
+				levelNumbers = [];
+				levels.sort(Array.NUMERIC);
+				var j:int;
+				for each(var i:int in levels)
+					levelNumbers[j++] = i;
+				fireChange();
+			}
+		}
+
+		public function get levelNum():int {
+			return _levelNum;
+		}
+
+		public function get y():int {
+			if(generation == 0) return 0;
+			var value:int = generation > 0 ? collection.get(0)._levelNum : 0;
+			var vector:int = value > 0 ? -1 : 1;
+			for (var i:int = generation < 0 ? generation : generation - 1;
+				 i != 0;
+				 i += vector) {
+				value += collection.get(i)._levelNum;
+			}
+			return generation < 0 ? -value : value;
+		}
+
+		/**
+		 * Преобразует номер левела (число -oo ... 0 ...  +oo) в величину типа [0... +oo],
+		 * где 0 соответствует наименьшему левелу из всех нод, содержащихся в Generation
+		 */
+		public function normalize(level:int):int {
+			return levelNumbers[level];
 		}
 	}
 }

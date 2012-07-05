@@ -10,6 +10,7 @@ package tree.view.canvas {
 	import tree.common.Config;
 	import tree.common.IClear;
 	import tree.model.GenNode;
+	import tree.model.Generation;
 
 	import tree.model.Node;
 	import tree.model.Person;
@@ -38,6 +39,7 @@ package tree.view.canvas {
 			this._data = value;
 			needDispatchComplete = true;
 			_data.node.positionChanged.add(refreshPosition);
+			_data.generation.changed.add(refreshPosition);
 			refreshData();
 			refreshPosition(_data.node);
 		}
@@ -58,9 +60,13 @@ package tree.view.canvas {
 			this.photo.source = photo;
 		}
 
-		private function refreshPosition(node:Node):void {
+		private function refreshPosition(...args):void {
+			var node:Node = this._data.node;
+			var generation:Generation = this._data.generation;
+
 			var x:int = node.x * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
-			var y:int = node.y * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
+			var y:int = (generation.y + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
+			GTweener.removeTweens(this);
 			GTweener.to(this, 0.4, {'x':x, 'y':y},
 					{onComplete: needDispatchComplete ? dispatchOnComplete : null});
 			needDispatchComplete = false;

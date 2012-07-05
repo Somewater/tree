@@ -19,6 +19,11 @@ package tree.model.process {
 		private var response:NodesProcessorResponse;
 		private var forCallback:Array;
 
+		/**
+		 * Пропускать братьев-сестер, если есть родители
+		 */
+		protected var skipBroIfParents:Boolean = false;
+
 		public function NodesProcessor(model:Model, start:Person, callback:Function) {
 			this.model = model;
 			this.current = start;
@@ -69,15 +74,22 @@ package tree.model.process {
 			}
 		}
 
-		private function recalculateNeighbours(owner:Person):Array {
+		protected function recalculateNeighbours(owner:Person):Array {
 			var nodes:NodesCollection = model.nodes;
 			var ownerNode:Node = nodes.get(owner.uid + '');
 
 			var newNeighbours:Array = [];
 
+			var hasParents:Boolean = false;
+			if(skipBroIfParents)
+				hasParents = owner.parents.length > 0;
+
 			for each(var join:Join in sortJoins(owner.joins))
 				if(!queuedUids[join.uid])
 				{
+					if(hasParents && join.type.superType == JoinType.SUPER_TYPE_BRO)
+						continue;
+
 					var assoc:Person = join.associate;
 					var assocNode:Node = nodes.get(assoc.uid + '');
 
