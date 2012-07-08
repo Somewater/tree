@@ -32,7 +32,7 @@ package tree.manager {
 					if(!dc.args)
 						dc.callback();
 					else
-						dc.callback.apply(dc.args);
+						dc.callback.apply(null, dc.args);
 					deferredCallbacksByFrames.splice(i, 1);
 				}
 				else

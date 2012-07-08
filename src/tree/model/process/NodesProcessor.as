@@ -23,6 +23,7 @@ package tree.model.process {
 		 * Пропускать братьев-сестер, если есть родители
 		 */
 		protected var skipBroIfParents:Boolean = false;
+		protected var skipIfMarry:Boolean = false;
 
 		public function NodesProcessor(model:Model, start:Person, callback:Function) {
 			this.model = model;
@@ -46,7 +47,7 @@ package tree.model.process {
 				response.node = ownerNode;
 				response.source = null;
 				response.fromSource = null;
-				forCallback.push([ownerNode]);
+				forCallback.push(null);// символизирует вызов для стартовой ноды
 				neighbours.push(current)
 				queuedUids[ownerNode.uid] = true;
 
@@ -56,10 +57,12 @@ package tree.model.process {
 
 				while(forCallback.length)
 				{
-					var arr:Array = forCallback.shift();
-					response.node = arr[0];
-					response.source = arr[1]
-					response.fromSource = arr[2];
+					var join:Join = forCallback.shift();
+					if(join){
+						response.node = join.associate.node;
+						response.source = join.from.node;
+						response.fromSource = join;
+					}
 					callback(response);
 				}
 
@@ -77,6 +80,7 @@ package tree.model.process {
 		protected function recalculateNeighbours(owner:Person):Array {
 			var nodes:NodesCollection = model.nodes;
 			var ownerNode:Node = nodes.get(owner.uid + '');
+			var alter:Person;
 
 			var newNeighbours:Array = [];
 
@@ -87,13 +91,26 @@ package tree.model.process {
 			for each(var join:Join in sortJoins(owner.joins))
 				if(!queuedUids[join.uid])
 				{
-					if(hasParents && join.type.superType == JoinType.SUPER_TYPE_BRO)
-						continue;
+					var j:Join = join;
 
 					var assoc:Person = join.associate;
 					var assocNode:Node = nodes.get(assoc.uid + '');
 
-					forCallback.push([assocNode, ownerNode, join]);
+					if(skipIfMarry
+							&& join.type.superType != JoinType.SUPER_TYPE_MARRY
+							&& (alter = assoc.marry)
+							&& queuedUids[alter.uid]) {
+						j = alter.to(assoc);
+					}else if(hasParents
+							&& join.type.superType == JoinType.SUPER_TYPE_BRO
+							&& (alter = assoc.parents[0]) && queuedUids[alter.uid]) {
+						j = alter.to(assoc);
+					}
+
+					if(j == null)
+						throw new Error('Empty changed join for: ' + assoc);
+
+					forCallback.push(j);
 
 					// ассоциированных с этим человеком родственников добавлям к рассчету
 					if(!queuedUids[assoc.uid])

@@ -5,6 +5,8 @@ package tree.model {
 
 	public class JoinCollectionBase extends ModelCollection implements ICollection{
 
+		public var uid:int;
+
 		private var _marryCalculated:Boolean = false;
 		private var _marry:Person;
 		private var _ex_marries:Array;
@@ -90,6 +92,23 @@ package tree.model {
 						_bros.push(j.associate);
 			}
 			return _bros;
+		}
+
+		/**
+		 * Выдать связь от текущей ноды к переданной
+		 */
+		public function to(target:JoinCollectionBase):Join {
+			for each(var j:Join in array)
+				if(j.uid == target.uid)
+					return j;
+			return null;
+		}
+
+		public function from(source:JoinCollectionBase):Join {
+			for each(var j:Join in source.array)
+				if(j.uid == this.uid)
+					return j;
+			return null;
 		}
 	}
 }

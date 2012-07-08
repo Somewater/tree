@@ -12,7 +12,6 @@ package tree.model {
 
 		public var name:String;
 		public var male:Boolean;
-		public var uid:int;
 
 		private var nodes:NodesCollection;
 		public var photo:String;

@@ -30,7 +30,7 @@ package tree.command.view {
 			var proc:NodesProcessor = new SortedNodeProcessor(model, firstPerson,
 					function(response:NodesProcessorResponse):void{
 						var j:Join = response.fromSource;
-						if(j && response.node.dist < 4)
+						if(j)
 						{
 							// если это братская связь и родители тоже есть, то игнорировать (братья-сестры будут построены от родителей)
 							if(j.type.superType == JoinType.SUPER_TYPE_BRO && response.source.person.parents.length)

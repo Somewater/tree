@@ -12,6 +12,7 @@ package tree.model.process {
 			super(model, start, callback);
 
 			skipBroIfParents = true;
+			skipIfMarry = true;
 		}
 
 		/**

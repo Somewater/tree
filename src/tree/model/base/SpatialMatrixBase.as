@@ -1,6 +1,8 @@
 package tree.model.base {
 	import flash.geom.Point;
 
+	import tree.model.GenNode;
+
 	import tree.model.base.IModel;
 
 	/**
@@ -15,18 +17,31 @@ package tree.model.base {
 		public function SpatialMatrixBase() {
 		}
 
-		protected function get(x:int, y:int):IModel {
+		protected function get(x:Number, y:Number):GenNode {
+			CONFIG::debug{
+				return spatial[x + ',' + y];
+			}
 			return spatial[x + (y << OFFSET)];
 		}
 
-		protected function set(data:IModel, x:int, y:int):void {
+		protected function set(data:GenNode, x:Number, y:Number):void {
+			CONFIG::debug{
+				if(data)
+					spatial[x + ',' + y] = data;
+				else
+					delete(spatial[x + ',' + y]);
+				return;
+			}
 			if(data)
 				spatial[x + (y << OFFSET)] = data;
 			else
-				delete(x + (y << OFFSET));
+				delete(spatial[x + (y << OFFSET)]);
 		}
 
-		protected function has(x:int, y:int):Boolean {
+		protected function has(x:Number, y:Number):Boolean {
+			CONFIG::debug{
+				return spatial[x + ',' + y] != null;
+			}
 			return spatial[x + (y << OFFSET)] != null;
 		}
 	}

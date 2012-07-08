@@ -14,7 +14,6 @@ package tree.model {
 	public class Node extends JoinCollectionBase implements IModel, ICollection{
 
 		public var person:Person;
-		public var uid:int;
 
 		public var x:Number = 0;
 		public var y:Number = 0;
@@ -48,6 +47,14 @@ package tree.model {
 
 		public function firePositionChange():void {
 			positionChanged.dispatch(this);
+		}
+
+		public function get name():String {
+			return person ? person.name : null;
+		}
+
+		public function toString():String {
+			return '[' + this.name + ' #' + uid + ']';
 		}
 	}
 }

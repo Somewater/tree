@@ -32,6 +32,6 @@ package tree.model {
 			return name;
 		}
 
-		public static var FIRST_JOIN:JoinType = new JoinType(0, 'start', null, int.MAX_VALUE);
+		public static var FIRST_JOIN:JoinType = new JoinType(0, 'start', null, int.MAX_VALUE - 1000000);
 	}
 }

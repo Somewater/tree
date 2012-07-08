@@ -24,5 +24,13 @@ package tree.model {
 		override public function get id():String {
 			return node ? node.uid + '' : null;
 		}
+
+		public function get name():String {
+			return node ? node.name : null;
+		}
+
+		public function toString():String {
+			return node ? 'g' + node.toString() : '[GenNode]';
+		}
 	}
 }
