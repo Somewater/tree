@@ -12,6 +12,8 @@ package tree.model.base {
 		protected var array:Array;
 		protected var hash:Array;
 
+		protected var fireChangeIfQuantityChanged:Boolean = false;
+
 		public function ModelCollection() {
 			array = [];
 			hash = [];
@@ -28,7 +30,8 @@ package tree.model.base {
 				hash[model.id] = model;
 
 				added.dispatch(model);
-				fireChange();
+				if(fireChangeIfQuantityChanged)
+					fireChange();
 			}
 		}
 
@@ -39,7 +42,8 @@ package tree.model.base {
 				delete hash[model.id];
 
 				removed.dispatch(model);
-				fireChange();
+				if(fireChangeIfQuantityChanged)
+					fireChange();
 			}
 		}
 

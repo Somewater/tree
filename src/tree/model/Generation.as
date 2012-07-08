@@ -26,6 +26,7 @@ package tree.model {
 			this.collection = collection;
 			this.generation = generation;
 			this.matrixes = matrixes;
+			this.fireChangeIfQuantityChanged =false;
 		}
 
 

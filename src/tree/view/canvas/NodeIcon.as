@@ -7,6 +7,9 @@ package tree.view.canvas {
 	import flash.events.Event;
 	import flash.text.TextField;
 
+	import org.osflash.signals.ISignal;
+	import org.osflash.signals.Signal;
+
 	import tree.common.Config;
 	import tree.common.IClear;
 	import tree.model.GenNode;
@@ -24,7 +27,7 @@ package tree.view.canvas {
 
 		private var photo:Photo;
 
-		private var needDispatchComplete:Boolean;
+		public var complete:ISignal;
 
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
@@ -32,16 +35,15 @@ package tree.view.canvas {
 
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER);
 			photo.photoMask = skin.getChildByName('photo_mask');
+
+			complete = new Signal(NodeIcon);
 		}
 
 		public function set data(value:GenNode):void {
 			warn('New node: ' + value.node.person + ", time=" + Config.ticker.getTimer)
 			this._data = value;
-			needDispatchComplete = true;
-			_data.node.positionChanged.add(refreshPosition);
-			_data.generation.changed.add(refreshPosition);
 			refreshData();
-			refreshPosition(_data.node);
+			refreshPosition();
 		}
 
 		public function get data():GenNode {
@@ -60,20 +62,18 @@ package tree.view.canvas {
 			this.photo.source = photo;
 		}
 
-		private function refreshPosition(...args):void {
+		public function refreshPosition():void {
 			var node:Node = this._data.node;
 			var generation:Generation = this._data.generation;
 
 			var x:int = node.x * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
 			var y:int = (generation.y + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
 			GTweener.removeTweens(this);
-			GTweener.to(this, 0.4, {'x':x, 'y':y},
-					{onComplete: needDispatchComplete ? dispatchOnComplete : null});
-			needDispatchComplete = false;
+			GTweener.to(this, 0.4, {'x':x, 'y':y}, {onComplete: dispatchOnComplete });
 		}
 
 		private function dispatchOnComplete(g:GTween):void {
-			dispatchEvent(new Event(Event.COMPLETE))
+			complete.dispatch(this);
 		}
 
 		public function clear():void {

@@ -17,12 +17,14 @@ package tree.view.canvas {
 	public class CanvasMediator extends Mediator
 	{
 		private var canvas:Canvas;
+		private var controller:CanvasController;
 		private var zoomCenter:Point = new Point();
 		private var tmpPoint:Point = new Point();
 
-		public function CanvasMediator(view:Canvas)
+		public function CanvasMediator(view:Canvas, controller:CanvasController)
 		{
 			this.canvas = view;
+			this.controller = controller;
 			canvas.addEventListener(Event.COMPLETE, onCanvasComplete);
 			super(view);
 
@@ -31,7 +33,6 @@ package tree.view.canvas {
 			bus.zoom.add(onZoom);
 			bus.mouseWheel.add(onMouseWheel);
 			bus.drag.add(onDrag);
-			model.generations.generationChanged.add(onGenerationsChanged);
 		}
 
 		override public function clear():void {
@@ -52,7 +53,7 @@ package tree.view.canvas {
 		}
 
 		private function onNeedDrawJoin(g:GenNode):void {
-			canvas.drawJoin(g);
+			controller.drawJoin(g);
 		}
 
 		private function onZoom(zoom:Number):void {
@@ -84,10 +85,6 @@ package tree.view.canvas {
 
 		private function onCanvasComplete(event:Event):void {
 			bus.dispatch(ViewSignal.JOIN_DRAWED);
-		}
-
-		private function onGenerationsChanged(g:Generation):void {
-			canvas.refreshGenerations();
 		}
 	}
 }

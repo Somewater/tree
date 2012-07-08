@@ -3,6 +3,7 @@ package tree.view.canvas {
 	import flash.events.Event;
 
 	import tree.model.GenNode;
+	import tree.model.Generation;
 
 	import tree.model.Join;
 	import tree.model.Node;
@@ -16,8 +17,10 @@ package tree.view.canvas {
 		public static const LEVEL_HEIGHT:int = ICON_HEIGHT + HEIGHT_SPACE;
 
 		public static const HEIGHT_SPACE:int = 50;
-		private var nodes:Vector.<NodeIcon> = new Vector.<NodeIcon>();// array of NodeIcon
+		private var nodesByUid:Array = [];
+		private var joindByUid:Array = [];
 		private var nodesHolder:Sprite;
+		private var joinsHolder:Sprite;
 		private var generationsHolder:Sprite;
 		private var generationHolders:Array = [];
 
@@ -25,35 +28,70 @@ package tree.view.canvas {
 			generationsHolder = new Sprite();
 			addChild(generationsHolder);
 
+			joinsHolder = new Sprite();
+			addChild(joinsHolder);
+
 			nodesHolder = new Sprite();
 			addChild(nodesHolder);
-		}
-
-		public function drawJoin(g:GenNode):void {
-			var n:NodeIcon = new NodeIcon();
-			n.addEventListener(Event.COMPLETE, onNodeIconComplete);
-			nodes.push(n);
-			n.data = g;
-			nodesHolder.addChild(n);
-
-			var generation:int = g.generation.generation;
-			var h:GenerationBackground = generationHolders[generation];
-			if(!h) {
-				generationHolders[generation] = h = new GenerationBackground(g.generation);
-				generationsHolder.addChild(h);
-			}
-		}
-
-		private function onGenerationHolderChanged(generationHolder:GenerationBackground):void {
-
 		}
 
 		public function setSize(w:int, h:int):void {
 
 		}
 
-		private function onNodeIconComplete(event:Event):void {
-			dispatchEvent(event);
+		public function onNodeIconComplete(n:NodeIcon):void {
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
+
+		public function getNodeIcon(uid:int):NodeIcon {
+			return nodesByUid[uid];
+		}
+
+		public function getNodeIconAndCreate(g:GenNode):NodeIcon {
+			var n:NodeIcon = getNodeIcon(g.node.uid);
+			if(!n){
+				n = new NodeIcon();
+				setNodeIcon(g.node.uid, n);
+				n.data = g;
+				nodesHolder.addChild(n);
+
+				var generation:int = g.generation.generation;
+				var h:GenerationBackground = generationHolders[generation];
+				if(!h) {
+					generationHolders[generation] = h = new GenerationBackground(g.generation);
+					generationsHolder.addChild(h);
+				}
+			}
+			return n;
+		}
+
+		private function setNodeIcon(uid:int, n:NodeIcon):NodeIcon {
+			return nodesByUid[uid] = n;
+		}
+
+		public function getJoinLine(from:int, to:int):JoinLine {
+			CONFIG::debug{
+				return joindByUid[from + '->' + to];
+			}
+			return joindByUid[from << 0xFFFF + to];
+		}
+
+		private function setJoinLine(from:int, to:int, line:JoinLine):void {
+			CONFIG::debug{
+				joindByUid[from + '->' + to] = line;
+				return
+			}
+			joindByUid[from << 0xFFFF + to] = line;
+		}
+
+		public function getJoinLineAndCreate(from:int, to:int):JoinLine {
+			var l:JoinLine = getJoinLine(from, to);
+			if(!l) {
+				l = new JoinLine();
+				joinsHolder.addChild(l);
+				setJoinLine(from, to, l);
+			}
+			return l;
 		}
 
 		public function refreshGenerations():void {

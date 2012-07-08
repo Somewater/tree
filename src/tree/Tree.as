@@ -42,6 +42,7 @@ package tree {
 	import tree.signal.ResponseSignal;
 	import tree.signal.ViewSignal;
 	import tree.view.canvas.Canvas;
+	import tree.view.canvas.CanvasController;
 	import tree.view.canvas.CanvasMediator;
 	import tree.view.gui.Gui;
 	import tree.view.Preloader;
@@ -120,7 +121,7 @@ package tree {
 			addChild(Config.tooltips = new Sprite());
 
 			Config.content.addChild(canvas = new Canvas());
-			new CanvasMediator(canvas);
+			new CanvasMediator(canvas, new CanvasController(canvas));
 
 			Config.content.addChild(gui = new Gui(bus));
 			new GuiMediator(gui);
