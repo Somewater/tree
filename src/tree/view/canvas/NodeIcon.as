@@ -43,7 +43,6 @@ package tree.view.canvas {
 			warn('New node: ' + value.node.person + ", time=" + Config.ticker.getTimer)
 			this._data = value;
 			refreshData();
-			refreshPosition();
 		}
 
 		public function get data():GenNode {
@@ -62,17 +61,23 @@ package tree.view.canvas {
 			this.photo.source = photo;
 		}
 
-		public function refreshPosition():void {
+		public function refreshPosition(animated:Boolean = true):void {
 			var node:Node = this._data.node;
 			var generation:Generation = this._data.generation;
 
 			var x:int = node.x * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
 			var y:int = (generation.y + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
-			GTweener.removeTweens(this);
-			GTweener.to(this, 0.4, {'x':x, 'y':y}, {onComplete: dispatchOnComplete });
+
+			if(animated){
+				GTweener.removeTweens(this);
+				GTweener.to(this, 0.4, {'x':x, 'y':y}, {onComplete: dispatchOnComplete });
+			}else{
+				this.x = x;
+				this.y = y;
+			}
 		}
 
-		private function dispatchOnComplete(g:GTween):void {
+		private function dispatchOnComplete(g:GTween = null):void {
 			complete.dispatch(this);
 		}
 
@@ -82,6 +87,20 @@ package tree.view.canvas {
 				_data = null;
 			}
 			photo.clear();
+		}
+
+		public function hide(animated:Boolean = true):void {
+			if(animated)
+				GTweener.to(this, 0.2, {"alpha":0})
+			else
+				alpha = 0;
+		}
+
+		public function show(animated:Boolean = true):void {
+			if(animated)
+				GTweener.to(this, 0.2, {"alpha":1}, {onComplete: dispatchOnComplete })
+			else
+				alpha = 1;
 		}
 	}
 }

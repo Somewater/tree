@@ -3,12 +3,8 @@ package tree.view.canvas {
 	import flash.events.Event;
 
 	import tree.model.GenNode;
-	import tree.model.Generation;
 
-	import tree.model.Join;
-	import tree.model.Node;
-
-	public class Canvas extends Sprite{
+	public class Canvas extends Sprite implements INodeViewCollection {
 
 		public static const ICON_WIDTH:int = 90;
 		public static const ICON_HEIGHT:int = 125;
@@ -28,11 +24,13 @@ package tree.view.canvas {
 			generationsHolder = new Sprite();
 			addChild(generationsHolder);
 
-			joinsHolder = new Sprite();
-			addChild(joinsHolder);
+
 
 			nodesHolder = new Sprite();
 			addChild(nodesHolder);
+
+			joinsHolder = new Sprite();
+			addChild(joinsHolder);
 		}
 
 		public function setSize(w:int, h:int):void {
@@ -87,7 +85,7 @@ package tree.view.canvas {
 		public function getJoinLineAndCreate(from:int, to:int):JoinLine {
 			var l:JoinLine = getJoinLine(from, to);
 			if(!l) {
-				l = new JoinLine();
+				l = new JoinLine(this);
 				joinsHolder.addChild(l);
 				setJoinLine(from, to, l);
 			}

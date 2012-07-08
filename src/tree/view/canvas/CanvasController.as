@@ -6,7 +6,10 @@ package tree.view.canvas {
 	import tree.model.GenNode;
 	import tree.model.Generation;
 	import tree.model.Join;
+	import tree.model.Join;
 	import tree.model.Node;
+	import tree.view.canvas.JoinLine;
+	import tree.view.canvas.NodeIcon;
 
 	public class CanvasController extends Actor{
 
@@ -23,6 +26,22 @@ package tree.view.canvas {
 				n = canvas.getNodeIconAndCreate(g);
 				n.complete.addOnce(onNodeCompleteOnce);
 			}
+
+			if(g.join.from){
+				n.refreshPosition(false);
+				n.hide(false);
+
+				var l:JoinLine = canvas.getJoinLineAndCreate(g.join.from.uid, g.node.uid);
+				l.data = g.join;
+				l.complete.addOnce(onLineCompleteOnce);
+				l.play()
+			}else{
+				// первая нода дерева
+				n.refreshPosition(false);
+				n.hide(false);
+				n.show();
+			}
+
 
 			g.node.positionChanged.add(onNodePositionChanged);
 			g.generation.changed.add(onGenerationChanged);
@@ -41,6 +60,12 @@ package tree.view.canvas {
 
 			n.complete.addOnce(onNodePositionComplete);
 			n.refreshPosition();
+		}
+
+		private function onLineCompleteOnce(line:JoinLine):void {
+			var j:Join = line.data;
+			var n:NodeIcon = canvas.getNodeIcon(j.associate.uid);
+			n.show();
 		}
 
 		private function onNodeCompleteOnce(n:NodeIcon):void {
