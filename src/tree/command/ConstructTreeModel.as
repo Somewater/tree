@@ -24,7 +24,7 @@ package tree.command {
 			var persons:PersonsCollection = model.persons;
 
 			// прогон для построения Person
-			for each(tree in xml.*)
+			for each(tree in xml.trees.*)
 			{
 				treeModel = model.trees.get(String(tree.@uid));
 
@@ -49,16 +49,16 @@ package tree.command {
 					{
 						personModel = model.persons.allocate(model.nodes);
 						personModel.uid = int(String(person.@uid))
-						personModel.photo = 'foto/' + personModel.uid + '.jpg';
+						personModel.photo = String(person.fields.field.(@name == "photo_small"));
 						persons.add(personModel)
 					}
-					personModel.male = String(person.@sex) == '1';
-					personModel.name = String(person.@name);
+					personModel.male = String(person.fields.field.(@name == "sex")) == '1';
+					personModel.name = String(person.fields.field.(@name == "last_name")) + " " + String(person.fields.field.(@name == "first_name"));
 				}
 			}
 
 			// прогон для построения двусторонних связей между Person
-			for each(tree in xml.*)
+			for each(tree in xml.trees.*)
 			{
 				treeModel = model.trees.get(String(tree.@uid));
 
@@ -79,15 +79,18 @@ package tree.command {
 								join = new Join(persons);
 								join.from = personModel;
 								join.uid = associate.uid;
-								join.type = Join.toAlter(type, associate.male);
+								join.type = type;
 								personModel.add(join);
 
 								// одновременно строим другую связь
 								var join2:Join = new Join(persons);
 								join2.from = associate;
 								join2.uid = personModel.uid;
-								join2.type = type;
+								join2.type = Join.toAlter(type, personModel.male);
 								associate.add(join2);
+
+								if(join.type == null || join2.type == null)
+									throw new Error('Undefined join type');
 
 								log(personModel + ' ~> ' + associate + ';; ' + join + '; ' + join2);
 							}

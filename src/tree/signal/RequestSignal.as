@@ -7,6 +7,8 @@ package tree.signal {
 
 		public var type:String
 
+		public var uid:int;
+
 		public function RequestSignal(type:String) {
 			this.type = type;
 		}

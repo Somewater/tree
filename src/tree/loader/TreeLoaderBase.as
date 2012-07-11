@@ -86,7 +86,7 @@ package tree.loader {
 		}
 
 		public function get scriptPath():String {
-			return _domain;
+			return "http://www.familyspace.ru/ajax/tree4.html";
 		}
 
 		public function createMc(className:String, library:String = null, instance:Boolean = true):* {

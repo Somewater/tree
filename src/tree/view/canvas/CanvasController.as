@@ -50,6 +50,10 @@ package tree.view.canvas {
 		private function onNodePositionChanged(node:Node):void {
 			// саму иконку поправить
 			var n:NodeIcon = canvas.getNodeIcon(node.uid);
+			if(!n){
+				warn("Attempt refresh position of non existent node " + node);
+				return;
+			}
 
 			// все joinline переанимировать
 			for each(var j:Join in node.iterator)

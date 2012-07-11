@@ -21,7 +21,7 @@ package tree.manager {
 			switch(request.type)
 			{
 				case RequestSignal.USER_TREE:
-					handler.download('xml/Tree.xml', processTree, onError);
+					handler.call({"action":"userlist", "uid":request.uid}, processTree, onError);
 				break;
 
 				default:
@@ -30,13 +30,20 @@ package tree.manager {
 			}
 		}
 
-		private function processTree(data:String):void {
-			var xml:XML = new XML(data);
-			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(RequestSignal.USER_TREE, data));
-		}
-
 		private function onError(...args):void {
 			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, null))
+		}
+
+		private function processTree(data:String):void {
+			var xml:XML
+			try{
+				xml = new XML(data);
+			}catch(err:Error){
+				onError(err);
+				return;
+			}
+
+			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(RequestSignal.USER_TREE, xml));
 		}
 	}
 }

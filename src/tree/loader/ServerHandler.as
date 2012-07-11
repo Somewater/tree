@@ -2,6 +2,8 @@ package tree.loader {
 	import com.somewater.net.UrlQueueLoader;
 
 	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
+	import flash.net.URLVariables;
 
 	public class ServerHandler implements IServerHandler{
 
@@ -23,11 +25,15 @@ package tree.loader {
 
 		public function call(params:Object, onComplete:Function, onError:Function):void {
 			var urlRequest:URLRequest = new URLRequest(scriptPath);
+			urlRequest.data = new URLVariables();
+			urlRequest.method = URLRequestMethod.GET;
+			for(var key:String in params)
+				urlRequest.data[key] = params[key];
 			handle(urlRequest, onComplete, onError, false);
 		}
 
 		public function download(file:String, onComplete:Function, onError:Function):void {
-			var urlRequest:URLRequest = new URLRequest(publicPath + file);
+			var urlRequest:URLRequest = new URLRequest(file);
 			handle(urlRequest, onComplete, onError, true);
 		}
 
