@@ -135,5 +135,9 @@ package tree.model.process {
 			neighbours = null;
 			response = null;
 		}
+
+		public function dequeue(uid:int):void{
+			delete(this.queuedUids[uid]);
+		}
 	}
 }

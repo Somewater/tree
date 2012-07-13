@@ -33,8 +33,12 @@ package tree.command.view {
 						if(j)
 						{
 							// если это братская связь и родители тоже есть, то игнорировать (братья-сестры будут построены от родителей)
-							if(j.type.superType == JoinType.SUPER_TYPE_BRO && response.source.person.parents.length)
+							if(j.type.superType == JoinType.SUPER_TYPE_BRO
+									&& breedOfSome(response.source.person.parents, j.associate))
+							{
+								proc.dequeue(j.uid);
 								return;
+							}
 
 							joinsForDraw.push(j);
 						}
@@ -44,6 +48,13 @@ package tree.command.view {
 			proc.clear();
 
 			bus.dispatch(ViewSignal.JOIN_QUEUE_STARTED)
+		}
+
+		private function breedOfSome(parents:Array, breed:Person):Boolean{
+			for each(var p:Person in parents)
+				if(p.breeds.indexOf(breed) != -1)
+					return true
+			return false;
 		}
 	}
 }

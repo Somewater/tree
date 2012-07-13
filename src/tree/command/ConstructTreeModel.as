@@ -80,17 +80,32 @@ package tree.command {
 								join.from = personModel;
 								join.uid = associate.uid;
 								join.type = type;
-								personModel.add(join);
 
 								// одновременно строим другую связь
 								var join2:Join = new Join(persons);
 								join2.from = associate;
 								join2.uid = personModel.uid;
 								join2.type = Join.toAlter(type, personModel.male);
+
+								// проверяем, не пропагандируем ли мы многоженство и многомужество  (todo: пофиксить гомосексуализм)
+								if(join.type.superType == JoinType.SUPER_TYPE_MARRY){
+									if(personModel.marry || associate.marry){
+										join.type = Join.toEx(join.type);
+										join2.type = Join.toEx(join2.type);
+									}
+								}
+
+								personModel.add(join);
 								associate.add(join2);
 
 								if(join.type == null || join2.type == null)
 									throw new Error('Undefined join type');
+
+								if(join.associate == null || join.from == null)
+									throw new Error('Incomplete join ' + join)
+
+								if(join2.associate == null || join2.from == null)
+									throw new Error('Incomplete join ' + join)
 
 								log(personModel + ' ~> ' + associate + ';; ' + join + '; ' + join2);
 							}

@@ -87,6 +87,14 @@ package tree.model {
 				return type.associatedTypeForFemale;
 		}
 
+		public static function toEx(type:JoinType):JoinType {
+			if(type == HUSBAND)
+				return EX_HUSBAND;
+			else if(type == WIFE)
+				return EX_WIFE;
+			throw new Error('Type ' + type + ' has not ex synonim');
+		}
+
 		public static function initializeConstants():void {
 			// инициализируем типы
 			FATHER = new JoinType(1, 'father', JoinType.SUPER_TYPE_PARENT, 40);
