@@ -24,7 +24,14 @@ package tree.loader {
 		}
 
 		public function call(params:Object, onComplete:Function, onError:Function):void {
-			var urlRequest:URLRequest = new URLRequest(scriptPath);
+			var urlRequest:URLRequest
+
+			log("Debug!");
+			if(params && params.action == 'userlist' && params.uid == 0)
+				urlRequest = new URLRequest(scriptPath);
+			else
+				urlRequest = new URLRequest("http://www.familyspace.ru/ajax/tree4.html");
+
 			urlRequest.data = new URLVariables();
 			urlRequest.method = URLRequestMethod.GET;
 			for(var key:String in params)
