@@ -93,6 +93,9 @@ package tree.command {
 										join.type = Join.toEx(join.type);
 										join2.type = Join.toEx(join2.type);
 									}
+									// в любом случае снова выставляем флаг кэша в false, чтобы не создать женатых, которые урвенеы, что не женаты ни на ком
+									personModel.dirtyMattyCache();
+									associate.dirtyMattyCache();
 								}
 
 								personModel.add(join);

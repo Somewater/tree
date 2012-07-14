@@ -37,5 +37,9 @@ package tree.model {
 		public function get node():Node {
 			return nodes.get(this.uid + '');
 		}
+
+		public function dirtyMattyCache():void {
+			_marryCalculated = false;
+		}
 	}
 }

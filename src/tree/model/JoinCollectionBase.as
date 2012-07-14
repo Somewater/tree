@@ -7,7 +7,7 @@ package tree.model {
 
 		public var uid:int;
 
-		private var _marryCalculated:Boolean = false;
+		protected var _marryCalculated:Boolean = false;
 		private var _marry:Person;
 		private var _ex_marries:Array;
 		private var _breeds:Array;

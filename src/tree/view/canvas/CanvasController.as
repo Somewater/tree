@@ -5,6 +5,7 @@ package tree.view.canvas {
 	import tree.command.Command;
 	import tree.model.GenNode;
 	import tree.model.Generation;
+	import tree.model.Generation;
 	import tree.model.Join;
 	import tree.model.Join;
 	import tree.model.Node;
@@ -89,8 +90,11 @@ package tree.view.canvas {
 		private function onGenerationChanged(generation:Generation):void {
 			canvas.refreshGenerations();
 
-			for each(var g:GenNode in generation.iterator)
-				onNodePositionChanged(g.node);
+			// надо обновить ноды текущей generation и всех нижележащих
+			for each(var gener:Generation in model.generations.iterator)
+				if(gener.generation >= generation.generation)
+					for each(var g:GenNode in gener.iterator)
+						onNodePositionChanged(g.node);
 		}
 	}
 }

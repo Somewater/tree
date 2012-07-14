@@ -111,7 +111,7 @@ package tree.model {
 				levels.sort(Array.NUMERIC);
 				var j:int;
 				for each(var i:int in levels)
-					levelNumbers[j++] = i;
+					levelNumbers[i] = j++;
 				fireChange();
 			}
 		}

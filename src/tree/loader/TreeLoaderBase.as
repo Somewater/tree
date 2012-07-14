@@ -86,6 +86,7 @@ package tree.loader {
 		}
 
 		public function get scriptPath():String {
+			return domain + "resources/xml/Tree2.xml";
 			return "http://www.familyspace.ru/ajax/tree4.html";
 		}
 
