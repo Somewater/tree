@@ -6,8 +6,6 @@ package tree.model {
 
 	public class SpatialMatrix extends SpatialMatrixBase{
 
-		protected var tmpPoint:Point = new Point();
-
 		public function SpatialMatrix() {
 		}
 
@@ -50,13 +48,14 @@ package tree.model {
 				} else {
 
 					// определяем случаи, когда надо форсированно сдвинуть многих
-					if(joinSuperType == JoinType.SUPER_TYPE_MARRY){// todo: если это супруг, то сдвинуть всех.
+					if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
+						// если это супруг, то сдвинуть всех.
 						important = true;
 						if(x == 0 && y == 0)// если желает залезть прямо на zero
 							x = genNode.node.person.marry.node.x;
 						importantVector = checkNullNode(x, y, vector) ? -vector : vector;
 						continue;
-					}else if(joinSuperType == JoinType.SUPER_TYPE_BRO){// todo: Если это потомство и не найдено место среди его братьев-сестер, то сдвинуть всех
+					}else if(joinSuperType == JoinType.SUPER_TYPE_BRO){
 						if(g.node.person.bros.indexOf(genNode.node.person) == -1)
 							broCounter++;
 						if(broCounter > 1){// с обоих сторон "небратья", надо двигать всех
@@ -97,52 +96,6 @@ package tree.model {
 				}
 
 			throw new Error('Can`t find this model ' + g);
-		}
-
-		private function shiftUnderPoint(x:int, y:int):Point {
-			tmpPoint.x = x;
-			tmpPoint.y = y;
-			return tmpPoint;
-		}
-
-		/**
-		 * @return положительное число, если g1 имеет больший приоритет занимать место в матрице, чем g2
-		 */
-		private function compare(g1:GenNode, g2:GenNode):int {
-			return g1.priority - g2.priority;
-		}
-
-		/**
-		 * Переместить node влево или вправо (соответственно, сдвинуть следующие ноды, если появится необходимость)
-		 * Если какой-либо вызов возвращает false, перемещение откатывается
-		 * @return перемещение произведено успешно
-		 */
-		private function shift(substitute:GenNode, x:Number, y:Number, vector:int, important:Boolean = false):Boolean {
-			var g:GenNode = get(x, y);
-			if(g){
-				if(important || compare(g,  substitute) > 0)
-					return false;// смещение противоречит правилам
-
-				if(!shift(g, x + vector, y,  vector, important))
-					return false;// в цепи выполнения сдвигов произошло противоречие
-
-				g.node.x = x + vector;
-				g.node.y = y;
-				g.node.firePositionChange();
-			}
-
-			set(substitute, x, y);
-			return true;
-		}
-
-		private function checkNullNode(x:int, y:int, vector:int):Boolean {
-			var g:GenNode
-			while(g = get(x, y)) {
-				if(g.node.dist == 0)
-					return true;
-				x += vector;
-			}
-			return false;
 		}
 	}
 }

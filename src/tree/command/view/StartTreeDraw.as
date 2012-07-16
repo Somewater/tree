@@ -32,6 +32,8 @@ package tree.command.view {
 						var j:Join = response.fromSource;
 						if(j)
 						{
+							if(j.associate.node.level != 0) return;// TODO: после дебага удалить эту строку
+
 							// если это братская связь и родители тоже есть, то игнорировать (братья-сестры будут построены от родителей)
 							if(j.type.superType == JoinType.SUPER_TYPE_BRO
 									&& breedOfSome(response.source.person.parents, j.associate))

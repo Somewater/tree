@@ -8,6 +8,7 @@ package tree.command.view {
 	import tree.model.Node;
 	import tree.model.NodesCollection;
 	import tree.model.Person;
+	import tree.model.SpatialMatrix;
 	import tree.signal.ViewSignal;
 
 	/**
@@ -26,18 +27,31 @@ package tree.command.view {
 			if(!join)
 			{
 				// todo: постреение накончена, что нить задиспатчить
+				log('Дерево построено');
 				return;
 			}
 			model.drawedJoins.push(join);
 
+			calculateRelativePosition(join);
+
+			var g:GenNode = model.generations.get(join.associate.node.generation).addWithJoin(join);
+
+			// добавить в ноды связи друг на друга
+			if(join.from) { // если это стартовая нода, то join.from == null
+				join.from.node.add(join);
+				join.associate.node.add(join.from.get(join.associate.node.uid + ''));
+			}
+
+			bus.dispatch(ViewSignal.DRAW_JOIN, g);
+		}
+
+		private function calculateRelativePosition(join:Join):void {
 			var source:Person = join.from;
 			var sourceNode:Node;
-			var nodes:NodesCollection = model.nodes;
 			if(source)
 				sourceNode = source.node;
 
-			var person:Person = join.associate;
-			var node:Node = model.nodes.get(person.uid + '');
+			var node:Node = join.associate.node;
 
 			switch(join.type ? join.type.superType : null) {
 				case JoinType.SUPER_TYPE_MARRY:
@@ -60,17 +74,6 @@ package tree.command.view {
 					// мы имеем перво с самой первой нодой дерева (относительно которой строится всё дерево)
 					node.x = 0;
 			}
-
-			// добавляем в Generation
-			var g:GenNode = model.generations.get(node.generation).addWithJoin(node, join);
-
-			// добавить в ноды связи друг на друга
-			if(join.from) { // если это стартовая нода, то join.from == null
-				join.from.node.add(join);
-				node.add(join.from.get(node.uid + ''));
-			}
-
-			bus.dispatch(ViewSignal.DRAW_JOIN, g);
 		}
 	}
 }

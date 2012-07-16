@@ -12,8 +12,8 @@ package tree.model {
 		public var priority:int;
 		public var vector:int;// с какой стороны от source пытаться разместить ноду
 
-		public function GenNode(node:Node, join:Join, generation:Generation) {
-			this.node = node;
+		public function GenNode(join:Join, generation:Generation) {
+			this.node = join.associate.node;
 			this.join = join;
 			this.generation = generation;
 

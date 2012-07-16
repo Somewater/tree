@@ -13,18 +13,19 @@ package tree.model.base {
 		public static const OFFSET:int = 16;
 
 		protected var spatial:Array = [];
+		protected var tmpPoint:Point = new Point();
 
 		public function SpatialMatrixBase() {
 		}
 
-		protected function get(x:Number, y:Number):GenNode {
+		public function get(x:Number, y:Number):GenNode {
 			CONFIG::debug{
 				return spatial[x + ',' + y];
 			}
 			return spatial[x + (y << OFFSET)];
 		}
 
-		protected function set(data:GenNode, x:Number, y:Number):void {
+		public function set(data:GenNode, x:Number, y:Number):void {
 			CONFIG::debug{
 				if(data)
 					spatial[x + ',' + y] = data;
@@ -38,11 +39,66 @@ package tree.model.base {
 				delete(spatial[x + (y << OFFSET)]);
 		}
 
-		protected function has(x:Number, y:Number):Boolean {
+		public function has(x:Number, y:Number):Boolean {
 			CONFIG::debug{
 				return spatial[x + ',' + y] != null;
 			}
 			return spatial[x + (y << OFFSET)] != null;
+		}
+
+		//////////////////////////////////////////////
+		//                                          //
+		//  			H E L P E R S				//
+		//                                          //
+		//////////////////////////////////////////////
+
+		protected function shiftUnderPoint(x:int, y:int):Point {
+			tmpPoint.x = x;
+			tmpPoint.y = y;
+			return tmpPoint;
+		}
+
+		/**
+		 * @return положительное число, если g1 имеет больший приоритет занимать место в матрице, чем g2
+		 */
+		protected function compare(g1:GenNode, g2:GenNode):int {
+			return g1.priority - g2.priority;
+		}
+
+		/**
+		 * Переместить node влево или вправо (соответственно, сдвинуть следующие ноды, если появится необходимость)
+		 * Если какой-либо вызов возвращает false, перемещение откатывается
+		 * @return перемещение произведено успешно
+		 */
+		protected function shift(substitute:GenNode, x:Number, y:Number, vector:int, important:Boolean = false):Boolean {
+			var g:GenNode = get(x, y);
+			if(g){
+				if(important || compare(g,  substitute) > 0)
+					return false;// смещение противоречит правилам
+
+				if(!shift(g, x + vector, y,  vector, important))
+					return false;// в цепи выполнения сдвигов произошло противоречие
+
+				g.node.x = x + vector;
+				g.node.y = y;
+				g.node.firePositionChange();
+			}
+
+			set(substitute, x, y);
+			return true;
+		}
+
+		/**
+		 * Проверка, что если двигаться в заданном векторе от указанной точки, то можно дойти до родоначлаьника дерева
+		 */
+		protected function checkNullNode(x:int, y:int, vector:int):Boolean {
+			var g:GenNode
+			while(g = get(x, y)) {
+				if(g.node.dist == 0)
+					return true;
+				x += vector;
+			}
+			return false;
 		}
 	}
 }
