@@ -68,8 +68,13 @@ package tree.view.canvas {
 			var to:Number = fromStart ? 1 : 0;
 
 			this.fromStart = fromStart;
+			refreshLines();
 			this.progress = from;
 			GTweener.to(this, 0.3, {"progress": to}, {onComplete: dispatchOnComplete})
+		}
+
+		protected function refreshLines():void {
+			throw new Error('Override me');
 		}
 
 		private function dispatchOnComplete(g:GTween):void {
@@ -102,7 +107,7 @@ package tree.view.canvas {
 				}else{
 					var dx:int = x - lastX;
 					var dy:int = y - lastY;
-					dist = dx * dx + dy * dy;
+					dist = Math.sqrt(dx * dx + dy * dy);
 					if(l + dist > length){
 						var r:Number = (length - l) / dist;
 						x = lastX + dx * r;

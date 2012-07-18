@@ -5,6 +5,7 @@ package tree.view.canvas {
 
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.geom.Point;
 	import flash.text.TextField;
 
 	import org.osflash.signals.ISignal;
@@ -29,6 +30,8 @@ package tree.view.canvas {
 
 		public var complete:ISignal;
 
+		protected var tmpPoint:Point;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			addChild(skin);
@@ -37,6 +40,8 @@ package tree.view.canvas {
 			photo.photoMask = skin.getChildByName('photo_mask');
 
 			complete = new Signal(NodeIcon);
+
+			tmpPoint = new Point();
 		}
 
 		public function set data(value:GenNode):void {
@@ -101,6 +106,55 @@ package tree.view.canvas {
 				GTweener.to(this, 0.2, {"alpha":1}, {onComplete: dispatchOnComplete })
 			else
 				alpha = 1;
+		}
+
+		///////////////////
+		//               //
+		//  JOIN POINTs  //
+		//               //
+		///////////////////
+		public function get wifePoint():Point{
+			tmpPoint.x = this.x;
+			tmpPoint.y = this.y + Canvas.ICON_HEIGHT * 0.5;
+			return tmpPoint;
+		}
+
+		public function get husbandPoint():Point{
+			tmpPoint.x = this.x + Canvas.ICON_WIDTH;
+			tmpPoint.y = this.y + Canvas.ICON_HEIGHT * 0.5;
+			return tmpPoint;
+		}
+
+		public function get breedPoint():Point{
+			tmpPoint.x = this.x + Canvas.ICON_WIDTH * 0.5;
+			tmpPoint.y = this.y;
+			return tmpPoint;
+		}
+
+		public function get parentPoint():Point{
+			if(fullParent())
+			{
+				tmpPoint.x = this.x + (_data.node.person.male ? Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE * 0.5: -Canvas.ICON_WIDTH_SPACE * 0.5);
+				tmpPoint.y = this.y + Canvas.ICON_HEIGHT * 0.5;
+			}else{
+				tmpPoint.x = this.x + Canvas.ICON_WIDTH * 0.5;
+				tmpPoint.y = this.y + Canvas.ICON_HEIGHT;
+			}
+			return tmpPoint;
+		}
+
+		public function fullParent():Boolean{return _data.node.marry != null;}
+
+		public function get broPoint():Point{
+			tmpPoint.x = this.x + Canvas.ICON_WIDTH * 0.5 - Canvas.JOIN_STICK;
+			tmpPoint.y = this.y;
+			return tmpPoint;
+		}
+
+		public function get exMarryPoint():Point{
+			tmpPoint.x = this.x + Canvas.ICON_WIDTH * 0.5 + Canvas.JOIN_STICK;
+			tmpPoint.y = this.y;
+			return tmpPoint;
 		}
 	}
 }

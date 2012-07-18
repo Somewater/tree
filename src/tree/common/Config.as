@@ -17,6 +17,9 @@ package tree.common {
 
 		public static var GUI_WIDTH:int = 5;
 
+		public static var DESCENDING:Boolean = true;// нисходящее дерево (дети ниже родителей)
+		public static var DESCENDING_INT:int = 1;// нисходящее дерево (дети ниже родителей)
+
 		public static var content:DisplayObjectContainer;
 		public static var windows:DisplayObjectContainer;
 		public static var tooltips:DisplayObjectContainer;
