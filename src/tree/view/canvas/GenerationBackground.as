@@ -32,8 +32,8 @@ package tree.view.canvas {
 		public function refresh():void {
 			this.y = generation.y * Canvas.LEVEL_HEIGHT;
 			graphics.clear();
-			graphics.beginFill(generation.generation == 0 ? 0xccFFcc: 0xCCCCCC + this.generation.generation * 0x111111)
-			//graphics.beginFill(odd ? 0xFCFFFC : 0xFAFAF0);
+			//graphics.beginFill(generation.generation == 0 ? 0xccFFcc: 0xCCCCCC + this.generation.generation * 0x111111)
+			graphics.beginFill(odd ? 0xFCFFFC : 0xFAFAF0);
 
 			graphics.drawRect(Config.WIDTH * -2, 0, Config.WIDTH * 4, generation.levelNum * Canvas.LEVEL_HEIGHT);
 		}

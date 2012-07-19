@@ -70,18 +70,15 @@ package tree.view.canvas {
 		}
 
 		public function getJoinLine(from:int, to:int):JoinLine {
-			CONFIG::debug{
-				return joindByUid[from + '->' + to];
-			}
-			return joindByUid[from << 0xFFFF + to];
+			if(from > to) {var tmp:int = from; from = to; to = tmp;}
+			return joindByUid[from + '->' + to];
+			//return joindByUid[from << 0xFFFF + to];
 		}
 
 		private function setJoinLine(from:int, to:int, line:JoinLine):void {
-			CONFIG::debug{
-				joindByUid[from + '->' + to] = line;
-				return
-			}
-			joindByUid[from << 0xFFFF + to] = line;
+			if(from > to) {var tmp:int = from; from = to; to = tmp;}
+			joindByUid[from + '->' + to] = line;
+			//joindByUid[from << 0xFFFF + to] = line;
 		}
 
 		public function getJoinLineAndCreate(from:int, to:int):JoinLine {

@@ -27,6 +27,7 @@ package tree.model {
 			var cmp:int;
 			var joinSuperType:String = genNode.join.type.superType;
 			var broCounter:int;
+			var moverGenNodes:Array = [];
 
 			while(important || (g = get(x, y) as GenNode)) {
 				if(important || (cmp = compare(genNode, g)) > 0) {
@@ -39,9 +40,9 @@ package tree.model {
 						vector = genNode.vector || 1;
 
 					// убрать других и самому занять место
-					if(!shift(genNode, x, y, vector))
-						if(!shift(genNode, x, y, -vector))
-							shift(genNode, x, y, vector, true);
+					if(!shift(moverGenNodes, genNode, x, y, vector))
+						if(!shift(moverGenNodes, genNode, x, y, -vector))
+							shift(moverGenNodes, genNode, x, y, vector, true);
 							//throw new Error('Cant insert ' + genNode.node + ' in double directions');
 
 					break;
@@ -71,6 +72,12 @@ package tree.model {
 						delta++;
 					x = startX + delta * vector;
 				}
+			}
+
+			for each(g in moverGenNodes)
+			{
+				g.node.firePositionChange();
+				error('refresh node: ' + g.node);
 			}
 
 			set(genNode, x, y)

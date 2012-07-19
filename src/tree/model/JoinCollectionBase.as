@@ -31,6 +31,8 @@ package tree.model {
 			var join:Join = model as Join;
 			if(join == null)
 				throw new Error('Must be join only');
+			if(join.uid == this.uid)
+				throw new Error('Join for me');
 			super.add(model);
 		}
 

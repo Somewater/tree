@@ -70,18 +70,18 @@ package tree.model.base {
 		 * Если какой-либо вызов возвращает false, перемещение откатывается
 		 * @return перемещение произведено успешно
 		 */
-		protected function shift(substitute:GenNode, x:Number, y:Number, vector:int, important:Boolean = false):Boolean {
+		protected function shift(shifted:Array, substitute:GenNode, x:Number, y:Number, vector:int, important:Boolean = false):Boolean {
 			var g:GenNode = get(x, y);
 			if(g){
 				if(important || compare(g,  substitute) > 0)
 					return false;// смещение противоречит правилам
 
-				if(!shift(g, x + vector, y,  vector, important))
+				if(!shift(shifted, g, x + vector, y,  vector, important))
 					return false;// в цепи выполнения сдвигов произошло противоречие
 
 				g.node.x = x + vector;
 				g.node.y = y;
-				g.node.firePositionChange();
+				shifted.push(g);
 			}
 
 			set(substitute, x, y);

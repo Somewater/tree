@@ -60,6 +60,7 @@ package tree.view.canvas {
 				alpha = 1;
 			}
 			_progress = 1;
+			refreshLines();
 			draw();
 		}
 

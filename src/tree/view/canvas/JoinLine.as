@@ -1,4 +1,5 @@
 package tree.view.canvas {
+	import flash.display.DisplayObject;
 	import flash.geom.Point;
 
 	import tree.common.Config;
@@ -14,6 +15,9 @@ package tree.view.canvas {
 
 		protected var lines:Array = [];
 		protected var linesLength:int = 1;
+
+		private var drawIcon:Boolean = false;
+		private var icon:DisplayObject;
 
 
 		public function JoinLine(collection:INodeViewCollection) {
@@ -31,6 +35,7 @@ package tree.view.canvas {
 
 		public function set data(value:Join):void {
 			_data = value;
+			drawIcon = _data.type.superType == JoinType.SUPER_TYPE_MARRY;
 		}
 
 		override public function draw():void {
@@ -66,7 +71,6 @@ package tree.view.canvas {
 			var n2:NodeIcon = collection.getNodeIcon(_data.uid);
 			var p1:Point;
 			var p2:Point;
-			var p:Point;
 			if(!this.fromStart){
 				var tmpN:NodeIcon = n1;
 				n1 = n2;
@@ -84,6 +88,12 @@ package tree.view.canvas {
 				addToLines(p2);
 			}else if(joinSuperType == JoinType.SUPER_TYPE_PARENT || joinSuperType == JoinType.SUPER_TYPE_BREED){
 				var p2IsParent:Boolean = (int(this.fromStart) ^ int(joinSuperType == JoinType.SUPER_TYPE_PARENT)) == 0;
+
+				/*if(Node(p2IsParent ? node2 : node1).marry && Node(p2IsParent ? node2 : node1).person.male){
+					// если родителей двое, то игнорируем линии от отца (рисуем только от матери)
+					return;
+				}*/
+
 				if(p2IsParent){
 					p1 = n1.breedPoint;
 					p2 = n2.parentPoint;
@@ -136,6 +146,55 @@ package tree.view.canvas {
 			lines.push(x);
 			lines.push(y);
 
+		}
+
+		override public function toString():String{
+			return _data + '';
+		}
+
+		override protected function drawLine(line:Array, length:int):void {
+			if(drawIcon){
+				var x1:int = line[0];
+				var x2:int = line[2];
+				var y:int = line[1];
+				var iconX:int = (x1 + x2) * 0.5;
+				const iconHalfSize:int = 6.5;
+
+				graphics.clear();
+				configurateLine();
+				if(length < Math.abs(x1 - x2) * 0.5 + iconHalfSize){
+					// один участок
+					length = Math.min(length, Math.abs(x1 - x2) * 0.5 - iconHalfSize)
+					x2 = x2 > x1 ? x1 + length : x1 - length;
+					graphics.moveTo(x1, y);
+					graphics.lineTo(x2, y);
+				}else {
+					// два участка
+					graphics.moveTo(x1, y);
+					graphics.lineTo(x1 + (x2 > x1 ? 1 : -1) * (Math.abs(x1 - x2) * 0.5 - iconHalfSize), y);
+
+					graphics.moveTo(x1 + (x2 > x1 ? 1 : -1) * (Math.abs(x1 - x2) * 0.5 + iconHalfSize), y);
+					graphics.lineTo(x2, y);
+				}
+
+				if((linesLength / length) > 0.5){
+					// иконка должна быть видна
+					if(icon == null || !icon.visible){
+						if(!icon){
+							icon = Config.loader.createMc('assets.HartLineIcon');
+							addChild(icon);
+						}
+						icon.visible = true;
+					}
+					icon.x = iconX;
+					icon.y = y;
+				}else{
+					// иконка должна быть скрыта
+					if(icon && icon.visible)
+						icon.visible = false;
+				}
+			}else
+				super.drawLine(line, length);
 		}
 	}
 }

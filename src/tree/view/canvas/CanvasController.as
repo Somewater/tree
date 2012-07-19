@@ -8,6 +8,7 @@ package tree.view.canvas {
 	import tree.model.Generation;
 	import tree.model.Join;
 	import tree.model.Join;
+	import tree.model.JoinType;
 	import tree.model.Node;
 	import tree.view.canvas.JoinLine;
 	import tree.view.canvas.NodeIcon;
@@ -63,7 +64,7 @@ package tree.view.canvas {
 				l.hide();
 			}
 
-			n.complete.addOnce(onNodePositionComplete);
+			n.complete.addOnce(refreshNodeJoinLines);
 			n.refreshPosition();
 		}
 
@@ -74,15 +75,34 @@ package tree.view.canvas {
 		}
 
 		private function onNodeCompleteOnce(n:NodeIcon):void {
+			refreshNodeJoinLines(n);
 			canvas.dispatchEvent(new Event(Event.COMPLETE));
 		}
 
-		private function onNodePositionComplete(n:NodeIcon):void {
+		private function refreshNodeJoinLines(n:NodeIcon):void {
 			var node:Node = n.data.node;
+			var j:Join;
+			var l:JoinLine;
 
-			for each(var j:Join in node.iterator)
+			var linetToRefresh:Array = [];
+
+			for each(j in node.iterator)
 			{
-				var l:JoinLine = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
+				l = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
+				linetToRefresh.push(l);
+			}
+
+			// если рассматриваемая нода имеет супруга, обновить джоин-лайны детей
+			if(node.marry){
+				for each(j in node.marry.node.iterator){
+					l = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
+					if(linetToRefresh.indexOf(l) == -1)
+						linetToRefresh.push(l)
+				}
+			}
+
+			for each(l in linetToRefresh){
+				log("REFRESH JOIN " + l)
 				l.show();
 			}
 		}

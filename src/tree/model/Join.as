@@ -214,7 +214,7 @@ package tree.model {
 		}
 
 		public function toString():String {
-			return from + ' is ' + type + ' of ' + associate;
+			return associate + ' is ' + type + ' of ' + from;
 		}
 
 		public function get name():String {

@@ -39,7 +39,7 @@ package tree.command.view {
 			// добавить в ноды связи друг на друга
 			if(join.from) { // если это стартовая нода, то join.from == null
 				join.from.node.add(join);
-				join.associate.node.add(join.from.get(join.associate.node.uid + ''));
+				join.associate.node.add(join.associate.get(join.from.uid + ''));
 			}
 
 			bus.dispatch(ViewSignal.DRAW_JOIN, g);
