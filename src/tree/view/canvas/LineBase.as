@@ -17,6 +17,7 @@ package tree.view.canvas {
 
 		protected var _progress:Number = -1;
 		protected var fromStart:Boolean = true;
+		protected var dashed:Boolean = false;
 		public var complete:ISignal;
 
 
@@ -114,7 +115,23 @@ package tree.view.canvas {
 						x = lastX + dx * r;
 						y = lastY + dy * r;
 					}
-					graphics.lineTo(x, y);
+					if(dashed){
+						const dashSize:int = 5;
+						var rdist:Number = Math.sqrt(Math.pow(x - lastX, 2) + Math.pow(y - lastY, 2))
+						var rx:Number = (x - lastX) / rdist;
+						var ry:Number = (y - lastY) / rdist;
+						var _x:Number = lastX;
+						var _y:Number = lastY;
+						var _dist:Number = 0;
+						while(_dist < rdist){
+							graphics.moveTo(_x, _y);
+							_x += rx * dashSize; _y += ry * dashSize;
+							graphics.lineTo(_x, _y);
+							_x += rx * dashSize; _y += ry * dashSize;
+							_dist += dashSize * 2;
+						}
+					} else
+						graphics.lineTo(x, y);
 				}
 				lastX = x;
 				lastY = y;

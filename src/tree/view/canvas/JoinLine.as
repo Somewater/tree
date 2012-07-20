@@ -58,6 +58,7 @@ package tree.view.canvas {
 			}else{
 				color = 0xAAAAAA;
 			}
+			dashed = superType == JoinType.SUPER_TYPE_EX_MARRY;
 
 			graphics.lineStyle(thickness, color);
 		}

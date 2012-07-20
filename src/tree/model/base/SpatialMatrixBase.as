@@ -73,7 +73,7 @@ package tree.model.base {
 		protected function shift(shifted:Array, substitute:GenNode, x:Number, y:Number, vector:int, important:Boolean = false):Boolean {
 			var g:GenNode = get(x, y);
 			if(g){
-				if(important || compare(g,  substitute) > 0)
+				if(!important && compare(g,  substitute) > 0)
 					return false;// смещение противоречит правилам
 
 				if(!shift(shifted, g, x + vector, y,  vector, important))
