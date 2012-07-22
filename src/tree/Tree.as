@@ -18,11 +18,11 @@ package tree {
 	import tree.command.ResponseRouter;
 	import tree.command.view.ContinueTreeDraw;
 	import tree.command.view.StartTreeDraw;
-	import tree.command.TraceNodesOutput;
 	import tree.loader.ITreeLoader;
 	import tree.loader.TreeLoaderBase;
 	import tree.manager.ITicker;
 	import tree.model.Join;
+	import tree.model.lines.LineMatrixCollection;
 	import tree.model.Model;
 	import tree.manager.Ticker;
 
@@ -98,6 +98,7 @@ package tree {
 			Config.reject(ITicker, ticker);
 			Config.reject(Tree, this);
 			Config.reject(ITreeLoader, Config.loader);
+			Config.reject(LineMatrixCollection, new LineMatrixCollection())
 		}
 
 		private function configurateModel():void

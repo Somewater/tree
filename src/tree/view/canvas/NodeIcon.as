@@ -109,28 +109,28 @@ package tree.view.canvas {
 		//  JOIN POINTs  //
 		//               //
 		///////////////////
-		public function get wifePoint():Point{
+		public function wifePoint():Point{
 			position();
 			tmpPoint.y += Canvas.ICON_HEIGHT * 0.5;
 			return tmpPoint;
 		}
 
-		public function get husbandPoint():Point{
+		public function husbandPoint():Point{
 			position();
 			tmpPoint.x += Canvas.ICON_WIDTH;
 			tmpPoint.y += Canvas.ICON_HEIGHT * 0.5;
 			return tmpPoint;
 		}
 
-		public function get breedPoint():Point{
+		public function breedPoint():Point{
 			position();
 			tmpPoint.x += Canvas.ICON_WIDTH * 0.5;
 			return tmpPoint;
 		}
 
-		public function get parentPoint():Point{
+		public function parentPoint(forBreed:Node):Point{
 			position();
-			if(fullParent())
+			if(fullParent(forBreed))
 			{
 				tmpPoint.x += (_data.node.person.male ? Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE * 0.5: -Canvas.ICON_WIDTH_SPACE * 0.5);
 				tmpPoint.y += Canvas.ICON_HEIGHT * 0.5 + 6.5;//  поправка на полуразмер сердечка
@@ -141,15 +141,21 @@ package tree.view.canvas {
 			return tmpPoint;
 		}
 
-		public function fullParent():Boolean{return _data.node.marry != null;}
+		public function fullParent(forBreed:Node):Boolean{
+			var m:Person = _data.node.marry;
+			if(m)
+				return m.breeds.indexOf(forBreed.person) != -1;
+			else
+				return false;
+		}
 
-		public function get broPoint():Point{
+		public function broPoint():Point{
 			position();
 			tmpPoint.x += Canvas.ICON_WIDTH * 0.5 - Canvas.JOIN_STICK;
 			return tmpPoint;
 		}
 
-		public function get exMarryPoint():Point{
+		public function exMarryPoint():Point{
 			position();
 			tmpPoint.x += Canvas.ICON_WIDTH * 0.5 + Canvas.JOIN_STICK;
 			return tmpPoint;

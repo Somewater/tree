@@ -60,6 +60,18 @@ package tree.model {
 			return uid + "";
 		}
 
+		private var _uniqId:String;
+		public function get uniqId():String{
+			if(!_uniqId) {
+				var arr:Array = [this.uid];
+				if(from)
+					arr.push(from.uid);
+				arr.sort(Array.NUMERIC);
+				_uniqId = arr.join('~>');
+			}
+			return _uniqId;
+		}
+
 		public function get associate():Person {
 			return persons ? persons.get(uid + '') : null;
 		}

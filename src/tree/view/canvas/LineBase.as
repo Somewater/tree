@@ -20,6 +20,9 @@ package tree.view.canvas {
 		protected var dashed:Boolean = false;
 		public var complete:ISignal;
 
+		protected var shiftX:int = 0;
+		protected var shiftY:int = 0;
+
 
 
 		public function LineBase() {
@@ -98,14 +101,19 @@ package tree.view.canvas {
 			var x:int;
 			var y:int;
 			var i:int;
-			while(i < line.length && l < length) {
+			const SHIFT_MULTIPLIER:int = 5;
+			var shiftX:int = this.shiftX * SHIFT_MULTIPLIER;
+			var shiftY:int;
+			var linlen:int = line.length - 1;
+			while(i <= linlen && l < length) {
 				x = line[i];
 				y = line[i + 1];
 				var dist:int = 0;
+				shiftY = i == 0 || i == linlen ? 0 : this.shiftY * SHIFT_MULTIPLIER;
 				if(i == 0){
 					graphics.clear();
 					configurateLine();
-					graphics.moveTo(x, y);
+					graphics.moveTo(x + shiftX, y + shiftY);
 				}else{
 					var dx:int = x - lastX;
 					var dy:int = y - lastY;
@@ -124,14 +132,14 @@ package tree.view.canvas {
 						var _y:Number = lastY;
 						var _dist:Number = 0;
 						while(_dist < rdist){
-							graphics.moveTo(_x, _y);
+							graphics.moveTo(_x + shiftX, _y + shiftY);
 							_x += rx * dashSize; _y += ry * dashSize;
-							graphics.lineTo(_x, _y);
+							graphics.lineTo(_x + shiftX, _y + shiftY);
 							_x += rx * dashSize; _y += ry * dashSize;
 							_dist += dashSize * 2;
 						}
 					} else
-						graphics.lineTo(x, y);
+						graphics.lineTo(x + shiftX, y + shiftY);
 				}
 				lastX = x;
 				lastY = y;

@@ -6,6 +6,7 @@ package tree.view.canvas {
 
 	import tree.model.Join;
 	import tree.model.JoinType;
+	import tree.model.lines.LineMatrixCollection;
 	import tree.model.Node;
 
 	public class JoinLine extends LineBase{
@@ -18,6 +19,7 @@ package tree.view.canvas {
 
 		private var drawIcon:Boolean = false;
 		private var icon:DisplayObject;
+		private var lineModelCollection:LineMatrixCollection;
 
 
 		public function JoinLine(collection:INodeViewCollection) {
@@ -36,12 +38,19 @@ package tree.view.canvas {
 		public function set data(value:Join):void {
 			_data = value;
 			drawIcon = _data.type.superType == JoinType.SUPER_TYPE_MARRY;
+			if(!lineModelCollection)
+				lineModelCollection = Config.inject(LineMatrixCollection);
 		}
 
 		override public function draw():void {
 			drawLine(lines, linesLength * _progress);
 		}
 
+
+		override public function hide(animated:Boolean = true):void {
+			super.hide(animated);
+			removeFromLineMatrix();
+		}
 
 		override protected function configurateLine():void {
 			var color:int
@@ -52,7 +61,7 @@ package tree.view.canvas {
 					|| superType == JoinType.SUPER_TYPE_PARENT
 					|| superType == JoinType.SUPER_TYPE_MARRY ){
 				thickness = 2;
-				color = 0xB2D350;
+				color = 0xFFFFFF * Math.random()//0xB2D350;
 			}else if(superType == JoinType.SUPER_TYPE_BRO) {
 				color = 0x5FC5F5;
 			}else{
@@ -64,8 +73,7 @@ package tree.view.canvas {
 		}
 
 		override protected function refreshLines():void {
-			lines = [];
-			linesLength = 0;
+			removeFromLineMatrix();
 
 			// построить линию n1 -> n2
 			var n1:NodeIcon = collection.getNodeIcon(_data.from.uid);
@@ -83,21 +91,18 @@ package tree.view.canvas {
 
 			var joinSuperType:String = _data.type.superType;
 			if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
-				p1 = node1.person.male ? n1.husbandPoint : n1.wifePoint;
-				p2 = node2.person.male ? n2.husbandPoint : n2.wifePoint;
+				p1 = node1.person.male ? n1.husbandPoint() : n1.wifePoint();
+				p2 = node2.person.male ? n2.husbandPoint() : n2.wifePoint();
+				addToLines(p1);
+				p1.x = (p1.x + p2.x) * 0.5 + shiftX;
 				addToLines(p1);
 				addToLines(p2);
 			}else if(joinSuperType == JoinType.SUPER_TYPE_PARENT || joinSuperType == JoinType.SUPER_TYPE_BREED){
 				var p2IsParent:Boolean = (int(this.fromStart) ^ int(joinSuperType == JoinType.SUPER_TYPE_PARENT)) == 0;
 
-				/*if(Node(p2IsParent ? node2 : node1).marry && Node(p2IsParent ? node2 : node1).person.male){
-					// если родителей двое, то игнорируем линии от отца (рисуем только от матери)
-					return;
-				}*/
-
 				if(p2IsParent){
-					p1 = n1.breedPoint;
-					p2 = n2.parentPoint;
+					p1 = n1.breedPoint();
+					p2 = n2.parentPoint(node1);
 
 					addToLines(p1);
 					p1.y += -Config.DESCENDING_INT * Canvas.JOIN_BREED_STICK;
@@ -106,8 +111,8 @@ package tree.view.canvas {
 					addToLines(p1);
 					addToLines(p2);
 				}else{
-					p1 = n1.parentPoint;
-					p2 = n2.breedPoint;
+					p1 = n1.parentPoint(node2);
+					p2 = n2.breedPoint();
 
 					addToLines(p1);
 					p1.y = p2.y - Config.DESCENDING_INT * Canvas.JOIN_BREED_STICK;
@@ -117,8 +122,8 @@ package tree.view.canvas {
 					addToLines(p2);
 				}
 			}else if(joinSuperType == JoinType.SUPER_TYPE_BRO){
-				p1 = n1.broPoint;
-				p2 = n2.broPoint;
+				p1 = n1.broPoint();
+				p2 = n2.broPoint();
 				addToLines(p1);
 				p1.y += -Config.DESCENDING_INT * Canvas.JOIN_STICK;
 				addToLines(p1);
@@ -126,8 +131,8 @@ package tree.view.canvas {
 				addToLines(p1);
 				addToLines(p2);
 			}else if(joinSuperType == JoinType.SUPER_TYPE_EX_MARRY){
-				p1 = n1.exMarryPoint;
-				p2 = n2.exMarryPoint;
+				p1 = n1.exMarryPoint();
+				p2 = n2.exMarryPoint();
 				addToLines(p1);
 				p1.y += -Config.DESCENDING_INT * Canvas.JOIN_STICK;
 				addToLines(p1);
@@ -136,6 +141,11 @@ package tree.view.canvas {
 				addToLines(p2);
 			}else
 				throw new Error('Undefined Join type: ' + joinSuperType)
+
+			// вычислить смещение, если в этом есть необходимость
+			var shift:Point = lineModelCollection.align(lines, _data)
+			shiftX = shift.x;
+			shiftY = shift.y;
 		}
 
 		private function addToLines(p:Point):void{
@@ -156,25 +166,28 @@ package tree.view.canvas {
 		override protected function drawLine(line:Array, length:int):void {
 			if(drawIcon){
 				var x1:int = line[0];
-				var x2:int = line[2];
+				var x2:int = line[4];
 				var y:int = line[1];
-				var iconX:int = (x1 + x2) * 0.5;
+				var iconX:int = line[2];
 				const iconHalfSize:int = 6.5;
 
 				graphics.clear();
 				configurateLine();
-				if(length < Math.abs(x1 - x2) * 0.5 + iconHalfSize){
-					// один участок
-					length = Math.min(length, Math.abs(x1 - x2) * 0.5 - iconHalfSize)
-					x2 = x2 > x1 ? x1 + length : x1 - length;
-					graphics.moveTo(x1, y);
-					graphics.lineTo(x2, y);
-				}else {
+				var firstSegment:int = Math.abs(x1 - iconX);
+				if(length > firstSegment + iconHalfSize){
 					// два участка
 					graphics.moveTo(x1, y);
-					graphics.lineTo(x1 + (x2 > x1 ? 1 : -1) * (Math.abs(x1 - x2) * 0.5 - iconHalfSize), y);
+					graphics.lineTo(x1 + (x2 > x1 ? 1 : -1) * (firstSegment - iconHalfSize), y);
+					length -= firstSegment + shiftX;
 
-					graphics.moveTo(x1 + (x2 > x1 ? 1 : -1) * (Math.abs(x1 - x2) * 0.5 + iconHalfSize), y);
+					x2 = x1 + (x2 > x1 ? 1 : -1) * (firstSegment + iconHalfSize)
+					graphics.moveTo(x2, y);
+					graphics.lineTo(x2 + (x2 > x1 ? 1 : -1) * length, y);
+				}else{
+					// один участок
+					length = Math.min(length, firstSegment - iconHalfSize)
+					x2 = x2 > x1 ? x1 + length : x1 - length;
+					graphics.moveTo(x1, y);
 					graphics.lineTo(x2, y);
 				}
 
@@ -196,6 +209,21 @@ package tree.view.canvas {
 				}
 			}else
 				super.drawLine(line, length);
+		}
+
+		public function setShift(shiftX:int, shiftY:int):void{
+			this.shiftX = shiftX;
+			this.shiftY = shiftY;
+			show(false);
+		}
+
+		private function removeFromLineMatrix():void{
+			if(lines.length){
+				lineModelCollection.utilize(lines, _data);
+				lines = [];
+				linesLength = 0;
+			}
+
 		}
 	}
 }
