@@ -5,6 +5,9 @@ package tree.view.canvas {
 
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.filters.DropShadowFilter;
+	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	import flash.text.TextField;
 
@@ -32,6 +35,8 @@ package tree.view.canvas {
 
 		protected var tmpPoint:Point;
 
+		private var debugTrace:TextField;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			addChild(skin);
@@ -42,6 +47,19 @@ package tree.view.canvas {
 			complete = new Signal(NodeIcon);
 
 			tmpPoint = new Point();
+
+			CONFIG::debug{
+				debugTrace = new TextField();
+				debugTrace.wordWrap = debugTrace.multiline = true;
+				debugTrace.selectable = false;
+				debugTrace.width = Canvas.ICON_WIDTH;
+				debugTrace.filters = [new DropShadowFilter(1, 45, 0xFFFFFF, 1, 1, 1, 2)]
+				addChild(debugTrace);
+
+				addEventListener(MouseEvent.CLICK, function(ev:Event):void{
+					refreshData();
+				})
+			}
 		}
 
 		public function set data(value:GenNode):void {
@@ -60,6 +78,11 @@ package tree.view.canvas {
 			skin.getChildByName('female_back').visible = !p.male;
 			(skin.getChildByName('name_tf') as TextField).text = p.name;
 			Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace);
+			CONFIG::debug{
+				debugTrace.text = "x=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
+						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
+						+ "\ndist=" + p.node.dist;
+			}
 		}
 
 		private function onPhotoDownloaded(photo:*):void {
@@ -71,6 +94,7 @@ package tree.view.canvas {
 
 			if(animated){
 				GTweener.removeTweens(this);
+				this.alpha = 1;
 				GTweener.to(this, 0.4, {'x':p.x, 'y':p.y}, {onComplete: dispatchOnComplete });
 			}else{
 				this.x = p.x;

@@ -12,7 +12,7 @@ package tree.model {
 		public function add(genNode:GenNode):Point {
 			var x:Number = genNode.node.x;
 			var y:Number = genNode.node.generation;
-			var marryX:Number
+			var marryOrBroX :Number
 			var g:GenNode;
 
 			const ORIG_VECT:int = -1;
@@ -35,17 +35,27 @@ package tree.model {
 					// определить вектор - с какой стороны пытаться распологать
 					if(importantVector)
 						vector = importantVector;
-					else if(genNode.join.type.superType == JoinType.SUPER_TYPE_BRO)
+					else if(joinSuperType == JoinType.SUPER_TYPE_BRO)
 						vector = genNode.join.from.male ? -1 : 1;// если bro, то слева от брата или справа от сестры (чтобы не мешать супругу)
 					else
 						vector = genNode.vector || 1;
 
+					if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
+						// проследить, что супруг (или bro) накладывается на супруга, при движении вектора в сторону супруга
+						marryOrBroX = genNode.join.from.node.x;
+						if(joinSuperType == JoinType.SUPER_TYPE_MARRY && genNode.node.person.male){
+							if(vector == 1){x = marryOrBroX ;marryOrBroX  -= 1;}
+						}else{
+							if(vector == -1){x = marryOrBroX ;marryOrBroX  += 1;}
+						}
+					}
+
 					// убрать других и самому занять место
 					if(!shift(moverGenNodes, genNode, x, y, vector))
-						if(!shift(moverGenNodes, genNode, !isNaN(marryX) ? marryX : x, y, -vector))
+						if(!shift(moverGenNodes, genNode, !isNaN(marryOrBroX ) ? marryOrBroX  : x, y, -vector))
 							shift(moverGenNodes, genNode, x, y, vector, true);
-							//throw new Error('Cant insert ' + genNode.node + ' in double directions');
-
+						else if(!isNaN(marryOrBroX ))// если была принята вершина marryOrBroX
+							x = marryOrBroX ;
 					break;
 				} else {
 
@@ -56,26 +66,22 @@ package tree.model {
 						if(x == 0 && y == 0)// если желает залезть прямо на zero
 							x = genNode.node.person.marry.node.x;
 						importantVector = checkNullNode(x, y, vector) ? -vector : vector;
-						// проследить, что супруг накладывается на супруга, при движении вектора в сторону супруга
-						marryX = genNode.join.from.node.x;
-						if(genNode.node.person.male){
-							if(importantVector == 1){
-								x = marryX;
-								marryX -= 1;
-							}
-						}else{
-							if(importantVector == -1){
-								x = marryX;
-								marryX += 1;
-							}
-						}
 						continue;
 					}else if(joinSuperType == JoinType.SUPER_TYPE_BRO){
 						if(g.node.person.bros.indexOf(genNode.node.person) == -1)
 							broCounter++;
-						if(broCounter > 1){// с обоих сторон "небратья", надо двигать всех
+						if(broCounter > (importantVector ? 0 : 1)){// с обоих сторон "небратья", надо двигать всех (если поиск только в одну сторону, то довольно и одного "небрата")
 							important = true;
-							importantVector = vector;
+							importantVector = checkNullNode(x, y, vector) ? -vector : vector;
+							marryOrBroX = genNode.join.from.node.x > x ? x + 1 : x - 1;
+
+							if(x < marryOrBroX && importantVector == 1){
+								marryOrBroX = x;
+								x += 1;// поближе к брату тоесть, не сдвигаем чужака
+							}else if(x > marryOrBroX && importantVector == -1){
+								marryOrBroX = x;
+								x -= 1;
+							}
 							continue;
 						}
 					}

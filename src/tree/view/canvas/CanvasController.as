@@ -112,7 +112,7 @@ package tree.view.canvas {
 
 			// надо обновить ноды текущей generation и всех нижележащих
 			for each(var gener:Generation in model.generations.iterator)
-				if(gener.generation >= generation.generation)
+				//if(gener.generation <= generation.generation)
 					for each(var g:GenNode in gener.iterator)
 						onNodePositionChanged(g.node);
 		}

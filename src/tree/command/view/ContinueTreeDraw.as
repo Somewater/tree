@@ -27,7 +27,7 @@ package tree.command.view {
 			if(!join)
 			{
 				// todo: постреение накончена, что нить задиспатчить
-				log('Дерево построено');
+				log('Дерево построено. ' + model.drawedJoins.length + ' вершин');
 				return;
 			}
 			model.drawedJoins.push(join);
