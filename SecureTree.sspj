@@ -1,0 +1,2624 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_17" class="java.beans.XMLDecoder"> 
+ <object class="secureSWF.settings.SwfProcessingSettings"> 
+  <void property="KZipCompression"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="adtPath"> 
+   <string></string> 
+  </void> 
+  <void property="codeWrapIntensity"> 
+   <int>2</int> 
+  </void> 
+  <void property="controlFlowObfuscation"> 
+   <int>20</int> 
+  </void> 
+  <void property="forceCompression"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="inputFiles"> 
+   <array class="java.lang.String" length="1"> 
+    <void index="0"> 
+     <string>P:\lab\tree\bin-debug\TreeLoader.swf</string> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="outputFiles"> 
+   <array class="java.lang.String" length="1"> 
+    <void index="0"> 
+     <string>P:\lab\tree\bin-debug\secure_TreeLoader.swf</string> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="performOptimization"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="projectVersion"> 
+   <string>3.6</string> 
+  </void> 
+  <void property="removeDeadCode"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="removeDebugInfo"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="removeDebugLines"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="removeFunctionParameters"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="renameIdentifiers"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="renameProtectedNamespaces"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="renamingLevel"> 
+   <int>6</int> 
+  </void> 
+  <void property="swfFiles"> 
+   <array class="secureSWF.settings.SwfFileInfo" length="1"> 
+    <void index="0"> 
+     <object class="secureSWF.settings.SwfFileInfo"> 
+      <void property="as3"> 
+       <boolean>true</boolean> 
+      </void> 
+      <void property="as3Packages"> 
+       <array class="secureSWF.settings.Identifier" length="29"> 
+        <void index="0"> 
+         <object class="secureSWF.settings.Identifier"> 
+          <void id="Boolean0" property="changed"/> 
+          <void property="members"> 
+           <array class="secureSWF.settings.Identifier" length="1"> 
+            <void index="0"> 
+             <object class="secureSWF.settings.Identifier"> 
+              <void property="changed"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="members"> 
+               <array class="secureSWF.settings.Identifier" length="1"> 
+                <void index="0"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>assets</string> 
+                  </void> 
+                  <void property="public"> 
+                   <object idref="Boolean0"/> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Private Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+               </array> 
+              </void> 
+              <void property="name"> 
+               <string>TreeLoader</string> 
+              </void> 
+              <void property="public"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="type"> 
+               <string>Class</string> 
+              </void> 
+             </object> 
+            </void> 
+           </array> 
+          </void> 
+          <void property="renameSelectedValue"> 
+           <boolean>true</boolean> 
+          </void> 
+          <void property="type"> 
+           <string>Package</string> 
+          </void> 
+         </object> 
+        </void> 
+        <void index="1"> 
+         <object class="secureSWF.settings.Identifier"> 
+          <void property="members"> 
+           <array class="secureSWF.settings.Identifier" length="2"> 
+            <void index="0"> 
+             <object class="secureSWF.settings.Identifier"> 
+              <void property="changed"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="members"> 
+               <array class="secureSWF.settings.Identifier" length="19"> 
+                <void index="0"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>data</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="1"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>duration</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="2"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>pluginData</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="3"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>repeatCount</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="4"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>target</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="5"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>onComplete</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="6"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>paused</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="7"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>paused</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="8"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>position</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="9"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>position</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="10"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>delay</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="11"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>delay</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="12"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>setValue</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="13"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>swapValues</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="14"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>init</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="15"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>invalidate</string> 
+                  </void> 
+                  <void property="public"> 
+                   <object idref="Boolean0"/> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Private Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="16"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>copy</string> 
+                  </void> 
+                  <void property="public"> 
+                   <object idref="Boolean0"/> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Private Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="17"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>version</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="18"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>time</string> 
+                  </void> 
+                  <void property="public"> 
+                   <object idref="Boolean0"/> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+               </array> 
+              </void> 
+              <void property="name"> 
+               <string>GTween</string> 
+              </void> 
+              <void property="public"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="type"> 
+               <string>Class</string> 
+              </void> 
+             </object> 
+            </void> 
+            <void index="1"> 
+             <object class="secureSWF.settings.Identifier"> 
+              <void property="changed"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="members"> 
+               <array class="secureSWF.settings.Identifier" length="5"> 
+                <void index="0"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>init</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="1"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>tween</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="2"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>instance</string> 
+                  </void> 
+                  <void property="public"> 
+                   <object idref="Boolean0"/> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="3"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>to</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="4"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>from</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+               </array> 
+              </void> 
+              <void property="name"> 
+               <string>GTweener</string> 
+              </void> 
+              <void property="public"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="type"> 
+               <string>Class</string> 
+              </void> 
+             </object> 
+            </void> 
+           </array> 
+          </void> 
+          <void property="name"> 
+           <string>com.gskinner.motion</string> 
+          </void> 
+          <void property="renameSelectedValue"> 
+           <boolean>true</boolean> 
+          </void> 
+          <void property="type"> 
+           <string>Package</string> 
+          </void> 
+         </object> 
+        </void> 
+        <void index="2"> 
+         <object class="secureSWF.settings.Identifier"> 
+          <void property="members"> 
+           <array class="secureSWF.settings.Identifier" length="6"> 
+            <void index="0"> 
+             <object class="secureSWF.settings.Identifier"> 
+              <void property="changed"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="members"> 
+               <array class="secureSWF.settings.Identifier" length="49"> 
+                <void index="0"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>removeGraph</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="1"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>displayRoller</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="2"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>displayRoller</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="3"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>setRollerCaptureKey</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="4"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>rollerCaptureKey</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="5"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>fpsMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="6"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>fpsMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="7"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>memoryMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="8"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>memoryMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="9"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>gc</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="10"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>map</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="11"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>mapch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="12"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>inspect</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="13"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>inspectch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="14"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>explode</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="15"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>explodech</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="16"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>paused</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="17"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>paused</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="18"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remoting</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="19"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remoting</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="20"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remotingSocket</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="21"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>setViewingChannels</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="22"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>report</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="23"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLine</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="24"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLine</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="25"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>stack</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="26"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>stackch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="27"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>log</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="28"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>info</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="29"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>warn</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="30"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>error</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="31"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>ch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="32"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>logch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="33"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>infoch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="34"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>debugch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="35"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>warnch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="36"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>errorch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="37"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>fatalch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="38"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>config</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="39"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>panels</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="40"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>cl</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="41"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remoter</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="42"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>graphing</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="43"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>refs</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="44"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>logs</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>3</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="45"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>so</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="46"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>updateSO</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="47"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>VERSION</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="48"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>ERROR</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+               </array> 
+              </void> 
+              <void property="name"> 
+               <string>Console</string> 
+              </void> 
+              <void property="public"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="renamingLevel"> 
+               <int>2</int> 
+              </void> 
+              <void property="type"> 
+               <string>Class</string> 
+              </void> 
+             </object> 
+            </void> 
+            <void index="1"> 
+             <object class="secureSWF.settings.Identifier"> 
+              <void property="members"> 
+               <array class="secureSWF.settings.Identifier" length="22"> 
+                <void index="0"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>keystrokePassword</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="1"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remotingPassword</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="2"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>maxLines</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="3"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>maxRepeats</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="4"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>useObjectLinking</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="5"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>objectHardReferenceTimer</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="6"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>tracing</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="7"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>traceCall</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="8"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>showTimestamp</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="9"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>timeStampFormatter</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="10"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>showLineNumber</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="11"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remotingConnectionName</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="12"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>allowedRemoteDomain</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="13"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLineAllowed</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="14"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLineAutoScope</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="15"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLineInputPassThrough</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="16"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLineAutoCompleteEnabled</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="17"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>keyBindsEnabled</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="18"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>displayRollerEnabled</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="19"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>rulerToolEnabled</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="20"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>rememberFilterSettings</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="21"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>style</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+               </array> 
+              </void> 
+              <void property="name"> 
+               <string>ConsoleConfig</string> 
+              </void> 
+              <void property="public"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="renameSelectedValue"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="renamingLevel"> 
+               <int>1</int> 
+              </void> 
+              <void property="type"> 
+               <string>Class</string> 
+              </void> 
+             </object> 
+            </void> 
+            <void index="2"> 
+             <object class="secureSWF.settings.Identifier"> 
+              <void property="members"> 
+               <array class="secureSWF.settings.Identifier" length="36"> 
+                <void index="0"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>config</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="1"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>start</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="2"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>ch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="3"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>log</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="4"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>info</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="5"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>warn</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="6"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>error</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="7"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>logch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="8"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>infoch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="9"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>debugch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="10"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>warnch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="11"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>errorch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="12"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>fatalch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="13"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>stack</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="14"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>stackch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="15"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>inspect</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="16"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>inspectch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="17"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>explode</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="18"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>explodech</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="19"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>map</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="20"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>mapch</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="21"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>removeGraph</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="22"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>setViewingChannels</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="23"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>fpsMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="24"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>fpsMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="25"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>memoryMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="26"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>memoryMonitor</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="27"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLine</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="28"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>commandLine</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="29"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>displayRoller</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="30"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>displayRoller</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="31"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>setRollerCaptureKey</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>1</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="32"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remoting</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="33"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remoting</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="34"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>remotingSocket</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="35"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>instance</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Function</string> 
+                  </void> 
+                 </object> 
+                </void> 
+               </array> 
+              </void> 
+              <void property="name"> 
+               <string>Cc</string> 
+              </void> 
+              <void property="public"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="renameSelectedValue"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="type"> 
+               <string>Class</string> 
+              </void> 
+             </object> 
+            </void> 
+            <void index="3"> 
+             <object class="secureSWF.settings.Identifier"> 
+              <void property="changed"> 
+               <boolean>true</boolean> 
+              </void> 
+              <void property="members"> 
+               <array class="secureSWF.settings.Identifier" length="10"> 
+                <void index="0"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>enabled</string> 
+                  </void> 
+                  <void property="public"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="renamingLevel"> 
+                   <int>2</int> 
+                  </void> 
+                  <void property="type"> 
+                   <string>Public Variable</string> 
+                  </void> 
+                 </object> 
+                </void> 
+                <void index="1"> 
+                 <object class="secureSWF.settings.Identifier"> 
+                  <void property="changed"> 
+                   <boolean>true</boolean> 
+                  </void> 
+                  <void property="name"> 
+                   <string>log</string> 
+                  </void> 
+                  <void property="public"> 
+            
