@@ -61,7 +61,8 @@ package tree.view.canvas {
 					|| superType == JoinType.SUPER_TYPE_PARENT
 					|| superType == JoinType.SUPER_TYPE_MARRY ){
 				thickness = 2;
-				color = 0xFFFFFF * Math.random()//0xB2D350;
+				//color = 0xFFFFFF * Math.random()//0xB2D350;
+				color = 0xB2D350;
 			}else if(superType == JoinType.SUPER_TYPE_BRO) {
 				color = 0x5FC5F5;
 			}else{
@@ -144,8 +145,8 @@ package tree.view.canvas {
 
 			// вычислить смещение, если в этом есть необходимость
 			var shift:Point = lineModelCollection.align(lines, _data)
-			shiftX = shift.x;
-			shiftY = shift.y;
+			//shiftX = shift.x;
+			//shiftY = shift.y;
 		}
 
 		private function addToLines(p:Point):void{
