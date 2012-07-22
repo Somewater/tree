@@ -12,6 +12,7 @@ package tree.model {
 		public function add(genNode:GenNode):Point {
 			var x:Number = genNode.node.x;
 			var y:Number = genNode.node.generation;
+			var marryX:Number
 			var g:GenNode;
 
 			const ORIG_VECT:int = -1;
@@ -41,7 +42,7 @@ package tree.model {
 
 					// убрать других и самому занять место
 					if(!shift(moverGenNodes, genNode, x, y, vector))
-						if(!shift(moverGenNodes, genNode, x, y, -vector))
+						if(!shift(moverGenNodes, genNode, !isNaN(marryX) ? marryX : x, y, -vector))
 							shift(moverGenNodes, genNode, x, y, vector, true);
 							//throw new Error('Cant insert ' + genNode.node + ' in double directions');
 
@@ -55,6 +56,19 @@ package tree.model {
 						if(x == 0 && y == 0)// если желает залезть прямо на zero
 							x = genNode.node.person.marry.node.x;
 						importantVector = checkNullNode(x, y, vector) ? -vector : vector;
+						// проследить, что супруг накладывается на супруга, при движении вектора в сторону супруга
+						marryX = genNode.join.from.node.x;
+						if(genNode.node.person.male){
+							if(importantVector == 1){
+								x = marryX;
+								marryX -= 1;
+							}
+						}else{
+							if(importantVector == -1){
+								x = marryX;
+								marryX += 1;
+							}
+						}
 						continue;
 					}else if(joinSuperType == JoinType.SUPER_TYPE_BRO){
 						if(g.node.person.bros.indexOf(genNode.node.person) == -1)

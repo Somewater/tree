@@ -6,7 +6,10 @@ package tree {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.ui.Keyboard;
 
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
@@ -139,7 +142,9 @@ package tree {
 
 			bus.addCommand(ViewSignal.CANVAS_READY_FOR_START, StartTreeDraw);
 			bus.addCommand(ViewSignal.JOIN_QUEUE_STARTED, ContinueTreeDraw);
-			bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);
+
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void{if(e.keyCode == Keyboard.N) new ContinueTreeDraw().execute()})
+			//bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);
 		}
 
 
