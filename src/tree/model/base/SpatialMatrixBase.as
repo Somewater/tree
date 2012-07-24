@@ -76,6 +76,9 @@ package tree.model.base {
 				if(!important && compare(g,  substitute) > 0)
 					return false;// смещение противоречит правилам
 
+				if(!important && g.node.marry && Math.abs(g.node.marry.node.x - x - vector) > 1)
+					return false;// проверка, что смещение разделяет супругов
+
 				if(!shift(shifted, g, x + vector, y,  vector, important))
 					return false;// в цепи выполнения сдвигов произошло противоречие
 

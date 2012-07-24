@@ -51,11 +51,14 @@ package tree.model {
 					}
 
 					// убрать других и самому занять место
-					if(!shift(moverGenNodes, genNode, x, y, vector))
-						if(!shift(moverGenNodes, genNode, !isNaN(marryOrBroX ) ? marryOrBroX  : x, y, -vector))
-							shift(moverGenNodes, genNode, x, y, vector, true);
-						else if(!isNaN(marryOrBroX ))// если была принята вершина marryOrBroX
+					if(!shift(moverGenNodes, genNode, x, y, vector)){
+						if(!shift(moverGenNodes, genNode, !isNaN(marryOrBroX ) ? marryOrBroX  : x, y, -vector)){
+							if(!shift(moverGenNodes, genNode, x, y, vector, true)){
+								error("Fatal error: (" + x + "," +y +  "), v=" + vector + "  " + genNode)
+							}
+						}else if(!isNaN(marryOrBroX ))// если была принята вершина marryOrBroX
 							x = marryOrBroX ;
+					}
 					break;
 				} else {
 
