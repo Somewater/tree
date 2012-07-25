@@ -24,11 +24,14 @@ package tree.model.lines {
 			tmpPoint.y = 0;
 			var i:int;
 			var len:int = lines.length - 2;
-			var x1:int;
-			var x2:int;
-			var y1:int;
-			var y2:int;
+			var x1:int = lines[0];
+			var y1:int = lines[1];
+			var x2:int = lines[lines.length - 2];
+			var y2:int = lines[lines.length - 1];
 			var l:Line;
+
+			var from:uint = (x1 + 0x7FFF) + (y1 + 0x7FFF) << 0x10;
+			var to:uint = (x2 + 0x7FFF) + (y2 + 0x7FFF) << 0x10;
 
 			var hlines:Array = [];
 			var vlines:Array = [];
@@ -63,20 +66,24 @@ package tree.model.lines {
 					}
 					vlines.push(l);
 				}
+
+				l.from = from;
+				l.to = to;
 			}
 
 			var matrixesByMask:Array;
 			var m:LineMatrix;
 			var dirLines:Array;
 			var shift:int = 0;
-			var vector:int = 0;
 			var horizontal:Boolean = true;
 			var intersection:Boolean;
 			var step:int;
+			var otherShift:int = 0;
 
 			for(i = 0; i<2; i++, horizontal = false){
 			    dirLines = i == 0 ? hlines : vlines;
 				step = 0;
+				shift = 0;
 				intersection = true;
 
 				while(intersection){
@@ -87,7 +94,7 @@ package tree.model.lines {
 						m = matrixesByMask[mask];
 						if(!m)
 							matrixesByMask[mask] = m = new LineMatrix(l.horizontal, mask);
-						if(!m.empty(l.start, l.end, l.constant + shift, l.join)){
+						if(!m.empty(l.start + otherShift, l.end + otherShift, l.constant + shift, from, to)){
 							intersection = true;
 							break;
 						}
@@ -98,18 +105,19 @@ package tree.model.lines {
 						if(step * 0.5 > MAX_SHIFT)
 							shift = Math.random() * (MAX_SHIFT * 2 + 1) - MAX_SHIFT;
 						else
-							shift = Math.ceil(step / 2) * (step % 2 == 0 ? 1 : -1);
+							shift = -(step > MAX_SHIFT ? MAX_SHIFT - step : step);//Math.ceil(step / 2) * (step % 2 == 0 ? 1 : -1);
 					}else{
 						if(horizontal) tmpPoint.y = shift; else tmpPoint.x = shift;
+						otherShift = shift;
 					}
 				}
 			}
 
 			if(hlines.length)
-				LineMatrix(horizontalMatrixesByMask[mask]).addFor(data, hlines);
+				LineMatrix(horizontalMatrixesByMask[mask]).addFor(data, hlines, tmpPoint.x, tmpPoint.y);
 
 			if(vlines.length)
-				LineMatrix(verticalMatrixesByMask[mask]).addFor(data, vlines);
+				LineMatrix(verticalMatrixesByMask[mask]).addFor(data, vlines, tmpPoint.y, tmpPoint.x);
 
 
 			return tmpPoint;

@@ -104,7 +104,7 @@ package tree.view.canvas {
 			const SHIFT_MULTIPLIER:int = 5;
 			var shiftX:int = this.shiftX * SHIFT_MULTIPLIER;
 			var shiftY:int;
-			var linlen:int = line.length - 1;
+			var linlen:int = line.length - 2;
 			while(i <= linlen && l < length) {
 				x = line[i];
 				y = line[i + 1];

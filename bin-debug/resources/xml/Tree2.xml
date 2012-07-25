@@ -145,6 +145,34 @@
 				</relatives>
 			</node>
 
+			<node uid="16" name="Сын D" open="1">
+				<fields>
+					<field name="last_name">Сын D</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="father">
+						<node uid="1" status="1" />
+					</group>
+				</relatives>
+			</node>
+
+			<node uid="17" name="Сын E" open="1">
+				<fields>
+					<field name="last_name">Сын E</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="mother">
+						<node uid="2" status="1" />
+					</group>
+				</relatives>
+			</node>
+
 			<node uid="13" name="Дочь брата A" open="1">
 				<fields>
 					<field name="last_name">Дочь брата A</field>

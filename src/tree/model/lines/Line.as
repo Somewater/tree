@@ -10,6 +10,9 @@ package tree.model.lines {
 		public var horizontal:Boolean;
 		public var join:Join;
 
+		public var from:uint;
+		public var to:uint;
+
 		public function Line() {
 		}
 	}

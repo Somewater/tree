@@ -20,6 +20,7 @@ package tree.view.canvas {
 		private var drawIcon:Boolean = false;
 		private var icon:DisplayObject;
 		private var lineModelCollection:LineMatrixCollection;
+		private var lineMask:int;
 
 
 		public function JoinLine(collection:INodeViewCollection) {
@@ -89,6 +90,7 @@ package tree.view.canvas {
 
 			var node1:Node = n1.data.node;
 			var node2:Node = n2.data.node;
+			lineMask = 0;
 
 			var joinSuperType:String = _data.type.superType;
 			if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
@@ -131,6 +133,7 @@ package tree.view.canvas {
 				p1.x = p2.x;
 				addToLines(p1);
 				addToLines(p2);
+				lineMask = 1
 			}else if(joinSuperType == JoinType.SUPER_TYPE_EX_MARRY){
 				p1 = n1.exMarryPoint();
 				p2 = n2.exMarryPoint();
@@ -140,13 +143,14 @@ package tree.view.canvas {
 				p1.x = p2.x;
 				addToLines(p1);
 				addToLines(p2);
+				lineMask = 2;
 			}else
 				throw new Error('Undefined Join type: ' + joinSuperType)
 
 			// вычислить смещение, если в этом есть необходимость
-			var shift:Point = lineModelCollection.align(lines, _data)
-			//shiftX = shift.x;
-			//shiftY = shift.y;
+			var shift:Point = lineModelCollection.align(lines, _data, lineMask)
+			shiftX = shift.x;
+			shiftY = shift.y;
 		}
 
 		private function addToLines(p:Point):void{
@@ -212,7 +216,7 @@ package tree.view.canvas {
 				super.drawLine(line, length);
 		}
 
-		public function setShift(shiftX:int, shiftY:int):void{
+		public function setShift(shiftX:int, shiftY:int = 0):void{
 			this.shiftX = shiftX;
 			this.shiftY = shiftY;
 			show(false);
@@ -220,7 +224,7 @@ package tree.view.canvas {
 
 		private function removeFromLineMatrix():void{
 			if(lines.length){
-				lineModelCollection.utilize(lines, _data);
+				lineModelCollection.utilize(lines, _data, lineMask);
 				lines = [];
 				linesLength = 0;
 			}

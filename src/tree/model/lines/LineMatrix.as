@@ -18,7 +18,7 @@ package tree.model.lines {
 			this.mask = mask;
 		}
 
-		public function addFor(join:Join, array:Array):void{
+		public function addFor(join:Join, array:Array, shiftValues:int, shiftConstant:int):void{
 			CONFIG::debug{
 				if(byJoin[join])
 					throw new Error('Array lines by join already filled');
@@ -30,6 +30,9 @@ package tree.model.lines {
 			var l2:Line;
 			var inserted:Boolean;
 			for each(l in array){
+				l.start += shiftValues;
+				l.end += shiftValues;
+				l.constant += shiftConstant;
 				lines = linesByConstant[l.constant];
 				if(!lines)
 					linesByConstant[l.constant] = lines = [];
@@ -63,11 +66,12 @@ package tree.model.lines {
 			return arr;
 		}
 
-		public function empty(start:int, end:int, constant:int, join:Join):Boolean{
+		public function empty(start:int, end:int, constant:int, from:uint, to:uint):Boolean{
 			var lines:Array = linesByConstant[constant];
 			if(lines)
 				for each(var l:Line in lines)
-					if(l.join.from.uid != join.from.uid && !(l.start > end || l.end < start)) {
+					if(!(l.from == from || l.to == to || l.from == to || l.to == from)
+							&& !(l.start > end || l.end < start)) {
 						error("INTERSECTION: " + this + "\t" + start + ".." + end + " (" + constant + ")")
 						return false;
 					}

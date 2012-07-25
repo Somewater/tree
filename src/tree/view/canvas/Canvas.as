@@ -26,13 +26,11 @@ package tree.view.canvas {
 			generationsHolder = new Sprite();
 			addChild(generationsHolder);
 
-
+			joinsHolder = new Sprite();
+			addChild(joinsHolder);
 
 			nodesHolder = new Sprite();
 			addChild(nodesHolder);
-
-			joinsHolder = new Sprite();
-			addChild(joinsHolder);
 		}
 
 		public function setSize(w:int, h:int):void {
