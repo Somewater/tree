@@ -37,6 +37,8 @@ package tree.view.canvas {
 
 		private var debugTrace:TextField;
 
+		public var click:ISignal;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			addChild(skin);
@@ -45,6 +47,7 @@ package tree.view.canvas {
 			photo.photoMask = skin.getChildByName('photo_mask');
 
 			complete = new Signal(NodeIcon);
+			click = new Signal(NodeIcon);
 
 			tmpPoint = new Point();
 
@@ -60,6 +63,12 @@ package tree.view.canvas {
 					refreshData();
 				})
 			}
+
+			addEventListener(MouseEvent.CLICK, onClicked);
+		}
+
+		private function onClicked(event:MouseEvent):void {
+			click.dispatch(this);
 		}
 
 		public function set data(value:GenNode):void {
@@ -112,6 +121,7 @@ package tree.view.canvas {
 				_data = null;
 			}
 			photo.clear();
+			removeEventListener(MouseEvent.CLICK, onClicked);
 		}
 
 		public function hide(animated:Boolean = true):void {

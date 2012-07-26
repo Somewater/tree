@@ -19,7 +19,9 @@ package tree {
 	import tree.command.RecalculateNodes;
 
 	import tree.command.ResponseRouter;
+	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
+	import tree.command.view.RollUnrollNode;
 	import tree.command.view.StartTreeDraw;
 	import tree.loader.ITreeLoader;
 	import tree.loader.TreeLoaderBase;
@@ -142,6 +144,8 @@ package tree {
 
 			bus.addCommand(ViewSignal.CANVAS_READY_FOR_START, StartTreeDraw);
 			bus.addCommand(ViewSignal.JOIN_QUEUE_STARTED, ContinueTreeDraw);
+			bus.addCommand(ViewSignal.NODE_ROLL_UNROLL, RollUnrollNode);
+			bus.addCommand(ViewSignal.JOIN_QUEUE_COMPLETED, CompleteTreeDraw);
 
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void{if(e.keyCode == Keyboard.N) new ContinueTreeDraw().execute()})
 			//bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);

@@ -16,7 +16,7 @@ package tree.command.view {
 		}
 
 		override public function execute():void {
-			model.drawedJoins = [];
+			model.drawedNodesUids = [];
 			var joinsForDraw:Array = model.joinsForDraw = [];
 
 			// создаем специальную Join которая не имеет обратной ссылки, для пострения первого участника
@@ -46,6 +46,7 @@ package tree.command.view {
 			while(proc.process()){}
 
 			proc.clear();
+			model.joinsQueue = joinsForDraw.slice();
 
 			bus.dispatch(ViewSignal.JOIN_QUEUE_STARTED)
 		}

@@ -27,10 +27,10 @@ package tree.command.view {
 			if(!join)
 			{
 				// todo: постреение накончена, что нить задиспатчить
-				log('Дерево построено. ' + model.drawedJoins.length + ' вершин');
+				log('Дерево построено');
 				return;
 			}
-			model.drawedJoins.push(join);
+			model.drawedNodesUids[join.uid] = true;
 
 			calculateRelativePosition(join);
 

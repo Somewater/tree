@@ -27,6 +27,7 @@ package tree.view.canvas {
 			if(!n){
 				n = canvas.getNodeIconAndCreate(g);
 				n.complete.addOnce(onNodeCompleteOnce);
+				n.click.add(onNodeClicked);
 			}
 
 			if(g.join.from){
@@ -115,6 +116,10 @@ package tree.view.canvas {
 				//if(gener.generation <= generation.generation)
 					for each(var g:GenNode in gener.iterator)
 						onNodePositionChanged(g.node);
+		}
+
+		private function onNodeClicked(node:NodeIcon):void{
+			bus.dispatch(node.data);
 		}
 	}
 }

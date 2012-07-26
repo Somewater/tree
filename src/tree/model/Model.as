@@ -25,11 +25,14 @@ package tree.model {
 		 * Очередь на прорисовку, array of join
 		 */
 		public var joinsForDraw:Array = [];
+		public var joinsForRemove:Array = [];
+
+		public var joinsQueue:Array = [];
 
 		/**
 		 * соединения, которые уже были нарисованы
 		 */
-		public var drawedJoins:Array = [];
+		public var drawedNodesUids:Array = [];
 
 		private var bus:Bus;
 

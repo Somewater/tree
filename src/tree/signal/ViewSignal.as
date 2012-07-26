@@ -9,6 +9,10 @@ package tree.signal {
 
 		public static const JOIN_DRAWED:String = 'joinDrawed';// канва построила очередную связь и готова для дальнейших манипуляций
 
+		public static const NODE_ROLL_UNROLL:String = 'nodeRoll';// свернуть-развернуть выбранную ноду
+
+		public static const JOIN_QUEUE_COMPLETED:String = 'joinQueueCompleted';// все ноды построены
+
 		public function ViewSignal() {
 		}
 	}

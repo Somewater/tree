@@ -1,6 +1,7 @@
 package tree.view.canvas {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 
 	import tree.model.GenNode;
 
