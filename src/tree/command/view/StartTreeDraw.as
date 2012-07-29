@@ -3,9 +3,9 @@ package tree.command.view {
 	import tree.model.Join;
 	import tree.model.JoinType;
 	import tree.model.Person;
-	import tree.model.process.NodesProcessor;
+	import tree.model.process.PersonsProcessor;
 	import tree.model.process.NodesProcessorResponse;
-	import tree.model.process.SortedNodeProcessor;
+	import tree.model.process.SortedPersonsProcessor;
 	import tree.signal.ViewSignal;
 
 	/**
@@ -27,7 +27,7 @@ package tree.command.view {
 
 			joinsForDraw.push(firstJoin);
 
-			var proc:NodesProcessor = new SortedNodeProcessor(model, firstPerson,
+			var proc:PersonsProcessor = new SortedPersonsProcessor(model, firstPerson,
 					function(response:NodesProcessorResponse):void{
 						var j:Join = response.fromSource;
 						if(j)

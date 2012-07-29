@@ -75,6 +75,7 @@ package tree.view.canvas {
 			warn('New node: ' + value.node.person + ", time=" + Config.ticker.getTimer)
 			this._data = value;
 			refreshData();
+			value.node.visible = true;
 		}
 
 		public function get data():GenNode {
@@ -117,6 +118,7 @@ package tree.view.canvas {
 
 		public function clear():void {
 			if(_data) {
+				_data.node.visible = false;
 				_data.changed.remove(refreshPosition);
 				_data = null;
 			}
@@ -126,7 +128,7 @@ package tree.view.canvas {
 
 		public function hide(animated:Boolean = true):void {
 			if(animated)
-				GTweener.to(this, 0.2, {"alpha":0})
+				GTweener.to(this, 0.2, {"alpha":0}, {onComplete: dispatchOnComplete })
 			else
 				alpha = 0;
 		}
@@ -177,7 +179,7 @@ package tree.view.canvas {
 
 		public function fullParent(forBreed:Node):Boolean{
 			var m:Person = _data.node.marry;
-			if(m)
+			if(m && m.node.visible)
 				return m.breeds.indexOf(forBreed.person) != -1;
 			else
 				return false;

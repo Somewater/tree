@@ -5,7 +5,9 @@ package tree.signal {
 
 		public static const JOIN_QUEUE_STARTED:String = 'joinQueueStarted';// просчитана и готова к начать появляться новая очередь Join-ов
 
-		public static const DRAW_JOIN:String = 'drawJoin';// событие от контроллера, что пришло время построить очередную связь
+		public static const DRAW_JOIN:String = 'drawJoin';// событие от контроллера, что пришло время построить очередную связь (g:GenNode)
+
+		public static const REMOVE_JOIN:String = 'removeJoin';// пришло время удалить связь (g:GenNode)
 
 		public static const JOIN_DRAWED:String = 'joinDrawed';// канва построила очередную связь и готова для дальнейших манипуляций
 

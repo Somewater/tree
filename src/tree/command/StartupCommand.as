@@ -22,7 +22,7 @@ package tree.command {
 				var v:URLVariables = new URLVariables(get);
 				uid = v.uid;
 			}
-			request.uid = uid || 0;// 18985299 36007
+			request.uid = uid || 1;// 18985299 36007
 			call(request);
 		}
 	}

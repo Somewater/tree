@@ -7,7 +7,7 @@ package tree.model.process {
 	import tree.model.NodesCollection;
 	import tree.model.Person;
 
-	public class NodesProcessor {
+	public class PersonsProcessor {
 
 		private var model:Model;
 		private var current:Person;
@@ -23,9 +23,24 @@ package tree.model.process {
 		 * Пропускать братьев-сестер, если есть родители
 		 */
 		protected var skipBroIfParents:Boolean = false;
+
+		/**
+		 * Строить от супруга, если имеет уже отрисованного супруга
+		 */
 		protected var skipIfMarry:Boolean = false;
 
-		public function NodesProcessor(model:Model, start:Person, callback:Function) {
+		/**
+		 * Дополнительная кастомная проверка персоны на включение в очередь на обработку
+		 * callback(join:Join)
+		 */
+		protected var customCheck:Function;
+
+		/**
+		 * Извлекать join-ы из person или node
+		 */
+		protected var useNodeJoins:Boolean = false;
+
+		public function PersonsProcessor(model:Model, start:Person, callback:Function) {
 			this.model = model;
 			this.current = start;
 			this.callback = callback;
@@ -42,7 +57,7 @@ package tree.model.process {
 				forCallback = [];
 				response = new NodesProcessorResponse();
 
-				var ownerNode:Node = model.nodes.get(current.uid + '');
+				var ownerNode:Node = current.node;
 
 				response.node = ownerNode;
 				response.source = null;
@@ -88,7 +103,7 @@ package tree.model.process {
 			if(skipBroIfParents)
 				hasParents = owner.parents.length > 0;
 
-			for each(var join:Join in sortJoins(owner.joins))
+			for each(var join:Join in sortJoins(useNodeJoins ? owner.node.joins : owner.joins))
 				if(!queuedUids[join.uid])
 				{
 					var j:Join = join;
@@ -96,27 +111,33 @@ package tree.model.process {
 					var assoc:Person = join.associate;
 					var assocNode:Node = nodes.get(assoc.uid + '');
 
-					if(skipIfMarry
-							&& join.type.superType != JoinType.SUPER_TYPE_MARRY
-							&& (alter = assoc.marry)
-							&& queuedUids[alter.uid]) {
-						j = alter.to(assoc);
-					}else if(hasParents
-							&& join.type.superType == JoinType.SUPER_TYPE_BRO
-							&& (alter = assoc.parents[0]) && queuedUids[alter.uid]) {
-						j = alter.to(assoc);
+					if(!useNodeJoins){// если используются join-ы из node, то нижележащие правила и так гарантированно выполнены, проверка излишня
+						if(skipIfMarry
+								&& join.type.superType != JoinType.SUPER_TYPE_MARRY
+								&& (alter = assoc.marry)
+								&& queuedUids[alter.uid]) {
+							j = alter.to(assoc);
+						}else if(hasParents
+								&& join.type.superType == JoinType.SUPER_TYPE_BRO
+								&& (alter = assoc.parents[0]) && queuedUids[alter.uid]) {
+							j = alter.to(assoc);
+						}
 					}
 
 					if(j == null)
 						throw new Error('Empty changed join for: ' + assoc);
 
-					forCallback.push(j);
-
-					// ассоциированных с этим человеком родственников добавлям к рассчету
-					if(!queuedUids[assoc.uid])
-					{
-						newNeighbours.push(assoc);
+					if(customCheck != null && !customCheck(j)){
 						queuedUids[assoc.uid] = true;
+					}else{
+						forCallback.push(j);
+
+						// ассоциированных с этим человеком родственников добавлям к рассчету
+						if(!queuedUids[assoc.uid])
+						{
+							newNeighbours.push(assoc);
+							queuedUids[assoc.uid] = true;
+						}
 					}
 				}
 

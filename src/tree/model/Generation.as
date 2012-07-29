@@ -72,6 +72,17 @@ package tree.model {
 			return g;
 		}
 
+		public function removeWithJoin(join:Join):GenNode {
+			var g:GenNode
+			for each(var _g:GenNode in array)
+					if(join && join == _g.join){
+						g = _g;
+						break;
+					}
+			remove(g)
+			return g;
+		}
+
 		/**
 		 * Использовать ф-ю, не зная GenNode, но зная принадлежащие ей Node или Join
 		 */

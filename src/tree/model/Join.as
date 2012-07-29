@@ -50,6 +50,8 @@ package tree.model {
 		public var uid:int;
 		public var from:Person;
 
+		public var visible:Boolean = false;
+
 		private var persons:PersonsCollection;
 
 		public function Join(persons:PersonsCollection) {

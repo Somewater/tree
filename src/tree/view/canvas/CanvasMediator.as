@@ -30,6 +30,7 @@ package tree.view.canvas {
 
 			addModelListener(ModelSignal.NODES_RECALCULATED, onModelChanged);
 			addModelListener(ViewSignal.DRAW_JOIN, onNeedDrawJoin);
+			addModelListener(ViewSignal.REMOVE_JOIN, onNeedRemoveJoin);
 			bus.zoom.add(onZoom);
 			bus.mouseWheel.add(onMouseWheel);
 			bus.drag.add(onDrag);
@@ -54,6 +55,10 @@ package tree.view.canvas {
 
 		private function onNeedDrawJoin(g:GenNode):void {
 			controller.drawJoin(g);
+		}
+
+		private function onNeedRemoveJoin(g:GenNode):void {
+			controller.removeJoin(g);
 		}
 
 		private function onZoom(zoom:Number):void {

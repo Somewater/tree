@@ -26,10 +26,6 @@ package tree.model {
 
 		public function get female():Boolean{return !male;}
 
-		public function get joins():Array {
-			return array;
-		}
-
 		public function toString():String {
 			return '[' + this.name + ' ' + uid + ']';
 		}

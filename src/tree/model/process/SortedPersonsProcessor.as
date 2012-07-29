@@ -6,9 +6,9 @@ package tree.model.process {
 	/**
 	 * Сортирует родственников в соответствии с правилами очередности отображения
 	 */
-	public class SortedNodeProcessor extends NodesProcessor{
+	public class SortedPersonsProcessor extends PersonsProcessor{
 
-		public function SortedNodeProcessor(model:Model, start:Person, callback:Function) {
+		public function SortedPersonsProcessor(model:Model, start:Person, callback:Function) {
 			super(model, start, callback);
 
 			skipBroIfParents = true;

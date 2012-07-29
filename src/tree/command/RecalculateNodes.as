@@ -1,5 +1,5 @@
 package tree.command {
-	import tree.model.process.NodesProcessor;
+	import tree.model.process.PersonsProcessor;
 	import tree.model.Join;
 	import tree.model.Join;
 	import tree.model.Node;
@@ -17,7 +17,7 @@ package tree.command {
 		}
 
 		override public function execute():void {
-			var proc:NodesProcessor = new NodesProcessor(model, model.owner, calculateNode);
+			var proc:PersonsProcessor = new PersonsProcessor(model, model.owner, calculateNode);
 			while(proc.process())
 			{
 

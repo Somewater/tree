@@ -112,5 +112,9 @@ package tree.model {
 					return j;
 			return null;
 		}
+
+		public function get joins():Array {
+			return array;
+		}
 	}
 }

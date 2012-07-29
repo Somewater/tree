@@ -10,6 +10,8 @@ package tree.view.canvas {
 	import tree.model.Join;
 	import tree.model.JoinType;
 	import tree.model.Node;
+	import tree.model.Person;
+	import tree.signal.ViewSignal;
 	import tree.view.canvas.JoinLine;
 	import tree.view.canvas.NodeIcon;
 
@@ -36,7 +38,7 @@ package tree.view.canvas {
 
 				var l:JoinLine = canvas.getJoinLineAndCreate(g.join.from.uid, g.node.uid);
 				l.data = g.join;
-				l.complete.addOnce(onLineCompleteOnce);
+				l.complete.addOnce(onLineShowedOnce);
 				l.play()
 			}else{
 				// первая нода дерева
@@ -50,6 +52,15 @@ package tree.view.canvas {
 			g.generation.changed.add(onGenerationChanged);
 		}
 
+		public function removeJoin(g:GenNode):void{
+			var n:NodeIcon = canvas.getNodeIcon(g.node.uid);
+			n.complete.addOnce(onNodeHidedOnce);
+			n.hide();
+
+			var l:JoinLine = canvas.getJoinLine(g.join.from.uid, g.node.uid);
+			l.hide();
+		}
+
 		private function onNodePositionChanged(node:Node):void {
 			// саму иконку поправить
 			var n:NodeIcon = canvas.getNodeIcon(node.uid);
@@ -61,27 +72,42 @@ package tree.view.canvas {
 			// все joinline переанимировать
 			for each(var j:Join in node.iterator)
 			{
-				var l:JoinLine = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
-				l.hide();
+				var l:JoinLine = canvas.getJoinLine(j.from.uid, j.uid);
+				if(l)
+					l.hide();
 			}
 
-			n.complete.addOnce(refreshNodeJoinLines);
+			n.complete.addOnce(onNodeIconPositionChanged);
 			n.refreshPosition();
 		}
 
-		private function onLineCompleteOnce(line:JoinLine):void {
+		private function onNodeIconPositionChanged(node:NodeIcon):void{
+			if(node.data)// когда пока играла анимация, эту ноду уже удалили (ручноая анимация по "N")
+				refreshNodeJoinLines(node.data.node);
+		}
+
+		private function onLineShowedOnce(line:JoinLine):void {
 			var j:Join = line.data;
 			var n:NodeIcon = canvas.getNodeIcon(j.associate.uid);
 			n.show();
 		}
 
-		private function onNodeCompleteOnce(n:NodeIcon):void {
-			refreshNodeJoinLines(n);
-			canvas.dispatchEvent(new Event(Event.COMPLETE));
+		private function onNodeHidedOnce(n:NodeIcon):void{
+			var line:JoinLine = canvas.getJoinLine(n.data.join.from.uid, n.data.node.uid);
+			var node:Node = n.data.node;
+			canvas.destroyLine(line);
+			canvas.destroyNode(n);
+			canvas.fireComplete();
+
+			refreshNodeJoinLines(node);
 		}
 
-		private function refreshNodeJoinLines(n:NodeIcon):void {
-			var node:Node = n.data.node;
+		private function onNodeCompleteOnce(n:NodeIcon):void {
+			refreshNodeJoinLines(n.data.node);
+			canvas.fireComplete();
+		}
+
+		private function refreshNodeJoinLines(node:Node):void {
 			var j:Join;
 			var l:JoinLine;
 
@@ -89,17 +115,20 @@ package tree.view.canvas {
 
 			for each(j in node.iterator)
 			{
-				l = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
-				linetToRefresh.push(l);
+				l = canvas.getJoinLine(j.from.uid, j.uid);
+				if(l)
+					linetToRefresh.push(l);
 			}
 
 			// если рассматриваемая нода имеет супруга, обновить джоин-лайны детей
-			if(node.marry){
-				for each(j in node.marry.node.iterator){
-					l = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
-					if(linetToRefresh.indexOf(l) == -1)
-						linetToRefresh.push(l)
-				}
+			var m:Person = node.marry;
+			if(m && m.node.visible){
+				for each(j in m.node.iterator)
+					if(j.type.superType == JoinType.SUPER_TYPE_BREED){
+						l = canvas.getJoinLine(j.from.uid, j.uid);
+						if(l && linetToRefresh.indexOf(l) == -1)
+							linetToRefresh.push(l)
+					}
 			}
 
 			for each(l in linetToRefresh){
@@ -119,7 +148,7 @@ package tree.view.canvas {
 		}
 
 		private function onNodeClicked(node:NodeIcon):void{
-			bus.dispatch(node.data);
+			bus.dispatch(ViewSignal.NODE_ROLL_UNROLL, node.data.node);
 		}
 	}
 }

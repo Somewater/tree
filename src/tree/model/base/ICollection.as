@@ -18,5 +18,7 @@ package tree.model.base {
 		function get removed():ISignal;
 
 		function get iterator():Array;
+
+		function get length():int;
 	}
 }

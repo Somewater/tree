@@ -30,6 +30,10 @@ package tree.view.canvas {
 		override public function clear():void {
 			super.clear();
 			collection = null;
+			if(_data){
+				_data.visible = false;
+				_data = null;
+			}
 		}
 
 		public function get data():Join {
@@ -41,6 +45,7 @@ package tree.view.canvas {
 			drawIcon = _data.type.superType == JoinType.SUPER_TYPE_MARRY;
 			if(!lineModelCollection)
 				lineModelCollection = Config.inject(LineMatrixCollection);
+			value.visible = true;
 		}
 
 		override public function draw():void {

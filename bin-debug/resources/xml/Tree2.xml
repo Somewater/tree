@@ -92,7 +92,7 @@
 			 *************************************
 					ДЕТИ
 			  *************************************
-			-->
+			>
 
 			<node uid="10" name="Сын A" open="1">
 				<fields>
@@ -222,7 +222,7 @@
 						<node uid="6" status="1" />
 					</group>
 				</relatives>
-			</node>
+			</node-->
 
 
 			<!--
@@ -262,7 +262,7 @@
 				</relatives>
 			</node>
 
-			<node uid="100" name="Папин брат" open="1">
+			<!--node uid="100" name="Папин брат" open="1">
 				<fields>
 					<field name="last_name">Папин брат</field>
 					<field name="first_name"></field>
@@ -274,7 +274,7 @@
 						<node uid="4" status="1" />
 					</group>
 				</relatives>
-			</node>
+			</node-->
 
 
 			<!--
@@ -285,7 +285,7 @@
 			*********************************
 			-->
 
-			<node uid="200" name="Двоюродный брат" open="1">
+			<!--node uid="200" name="Двоюродный брат" open="1">
 				<fields>
 					<field name="last_name">Двоюродный брат</field>
 					<field name="first_name"></field>
@@ -325,7 +325,7 @@
 						<node uid="201" status="1" />
 					</group>
 				</relatives>
-			</node>
+			</node-->
 
 
 

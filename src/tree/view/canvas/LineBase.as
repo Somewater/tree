@@ -19,6 +19,7 @@ package tree.view.canvas {
 		protected var fromStart:Boolean = true;
 		protected var dashed:Boolean = false;
 		public var complete:ISignal;
+		public var hided:ISignal;
 
 		protected var shiftX:int = 0;
 		protected var shiftY:int = 0;
@@ -27,6 +28,7 @@ package tree.view.canvas {
 
 		public function LineBase() {
 			complete = new Signal(LineBase);
+			hided = new Signal(LineBase);
 		}
 
 		public function clear():void {
@@ -46,7 +48,7 @@ package tree.view.canvas {
 
 		public function hide(animated:Boolean = true):void {
 			if(animated){
-				GTweener.to(this, 0.5, {"alpha": 0});
+				GTweener.to(this, 0.5, {"alpha": 0},{onComplete: dispatchHideComplete});
 			}else{
 				alpha = 0;
 			}
@@ -75,15 +77,20 @@ package tree.view.canvas {
 			this.fromStart = fromStart;
 			refreshLines();
 			this.progress = from;
-			GTweener.to(this, 0.3, {"progress": to}, {onComplete: dispatchOnComplete})
+			this.alpha = 1;
+			GTweener.to(this, 0.3, {"progress": to}, {onComplete: dispatchPlayComplete})
 		}
 
 		protected function refreshLines():void {
 			throw new Error('Override me');
 		}
 
-		private function dispatchOnComplete(g:GTween):void {
+		private function dispatchPlayComplete(g:GTween):void {
 			complete.dispatch(this);
+		}
+
+		private function dispatchHideComplete(g:GTween):void {
+			hided.dispatch(this);
 		}
 
 		public function draw():void {

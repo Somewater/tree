@@ -21,6 +21,8 @@ package tree {
 	import tree.command.ResponseRouter;
 	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
+	import tree.command.view.AddNode;
+	import tree.command.view.RemoveNode;
 	import tree.command.view.RollUnrollNode;
 	import tree.command.view.StartTreeDraw;
 	import tree.loader.ITreeLoader;
@@ -141,6 +143,8 @@ package tree {
 			bus.addCommand(ResponseSignal.SIGNAL, ResponseRouter);
 			bus.addCommand(ModelSignal.NODES_NEED_CONSTRUCT, ConstructNodes);
 			bus.addCommand(ModelSignal.NODES_NEED_CALCULATE, RecalculateNodes);
+			bus.addCommand(ModelSignal.ADD_NODE, AddNode);
+			bus.addCommand(ModelSignal.REMOVE_NODE, RemoveNode);
 
 			bus.addCommand(ViewSignal.CANVAS_READY_FOR_START, StartTreeDraw);
 			bus.addCommand(ViewSignal.JOIN_QUEUE_STARTED, ContinueTreeDraw);

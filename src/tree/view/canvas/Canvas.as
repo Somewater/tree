@@ -4,6 +4,8 @@ package tree.view.canvas {
 	import flash.events.MouseEvent;
 
 	import tree.model.GenNode;
+	import tree.model.Join;
+	import tree.model.Node;
 
 	public class Canvas extends Sprite implements INodeViewCollection {
 
@@ -91,8 +93,40 @@ package tree.view.canvas {
 		}
 
 		public function refreshGenerations():void {
-			for each(var g:GenerationBackground in generationHolders)
-				g.refresh();
+			var forRemove:Array = [];
+			var g:GenerationBackground;
+			for each(g in generationHolders)
+			{
+				if(g.generation.length)
+					g.refresh();
+				else
+					forRemove.push(g);
+			}
+			for each(g in forRemove){
+				delete(generationHolders[g.generation.generation]);
+				if(g.parent) g.parent.removeChild(g);
+				g.clear();
+			}
+		}
+
+		public function destroyNode(node:NodeIcon):void {
+			var n:Node = node.data.node;
+			setNodeIcon(n.uid, null);
+			if(node.parent)
+				node.parent.removeChild(node);
+			node.clear();
+		}
+
+		public function destroyLine(line:JoinLine):void {
+			var j:Join = line.data;
+			setJoinLine(j.uid, j.from.uid, null);
+			if(line.parent)
+				line.parent.removeChild(line);
+			line.clear();
+		}
+
+		public function fireComplete():void{
+			dispatchEvent(new Event(Event.COMPLETE));
 		}
 	}
 }

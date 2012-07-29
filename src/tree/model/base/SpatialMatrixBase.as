@@ -2,6 +2,7 @@ package tree.model.base {
 	import flash.geom.Point;
 
 	import tree.model.GenNode;
+	import tree.model.Person;
 
 	import tree.model.base.IModel;
 
@@ -76,7 +77,8 @@ package tree.model.base {
 				if(!important && compare(g,  substitute) > 0)
 					return false;// смещение противоречит правилам
 
-				if(!important && g.node.marry && Math.abs(g.node.marry.node.x - x - vector) > 1)
+				var m:Person;
+				if(!important && (m = g.node.marry) && m.node.visible && Math.abs(m.node.x - x - vector) > 1)
 					return false;// проверка, что смещение разделяет супругов
 
 				if(!shift(shifted, g, x + vector, y,  vector, important))

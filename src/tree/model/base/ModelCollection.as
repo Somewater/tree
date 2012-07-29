@@ -86,5 +86,9 @@ package tree.model.base {
 		public function get iterator():Array {
 			return array;
 		}
+
+		public function get length():int{
+			return array.length;
+		}
 	}
 }

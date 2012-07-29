@@ -23,6 +23,7 @@ package tree.model {
 		public var vectCount:int = 0;
 		public var generation:int = 0;
 
+		public var visible:Boolean = false;
 
 		public var positionChanged:ISignal;
 
