@@ -21,7 +21,7 @@ package tree.manager {
 			switch(request.type)
 			{
 				case RequestSignal.USER_TREE:
-					handler.call({"action":"userlist", "uid":request.uid}, processTree, onError);
+					handler.call({"action":"q_tree", "taction":"userlist", "uid":request.uid}, processTree, onError);
 				break;
 
 				default:

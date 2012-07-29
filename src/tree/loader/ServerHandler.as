@@ -30,7 +30,7 @@ package tree.loader {
 			if(params && params.action == 'userlist' && params.uid == 0)
 				urlRequest = new URLRequest(scriptPath);
 			else
-				urlRequest = new URLRequest("http://old.familyspace.ru/ajax/tree4.html");
+				urlRequest = new URLRequest("http://www.familyspace.ru/ajax.php");
 
 			urlRequest.data = new URLVariables();
 			urlRequest.method = URLRequestMethod.GET;
