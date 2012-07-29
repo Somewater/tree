@@ -7,6 +7,7 @@ package tree.signal {
 
 		public static const ADD_NODE:String = 'addNode';
 		public static const REMOVE_NODE:String = 'removeNode';
+		public static const TREE_NEED_CONSTRUCT:String = 'treeNeedConstruct';
 
 		public function ModelSignal() {
 		}

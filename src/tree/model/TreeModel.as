@@ -1,4 +1,6 @@
 package tree.model {
+	import tree.common.Bus;
+	import tree.common.IClear;
 	import tree.model.base.ICollection;
 	import tree.model.base.IModel;
 	import tree.model.base.ModelCollection;
@@ -6,18 +8,41 @@ package tree.model {
 	/**
 	 * Модель дерева. Одновременно, является коллекцией Person
 	 */
-	public class TreeModel extends ModelCollection implements IModel, ICollection{
+	public class TreeModel extends ModelBase implements IClear{
 
 		public var uid:int;
 		public var level:int;
 
 		public var persons:PersonsCollection;
+		public var nodes:NodesCollection;
 
-		public function TreeModel() {
+		public var visible:Boolean = false;// дерево уже построено (в процессе построения)
+		public var number:int = 0;
+
+		public var minX:int = 0;
+		public var minGen:int = 0;
+		public var maxX:int = 0;
+		public var maxGen:int = 0;
+
+		public var shiftX:int = 0;
+		public var dirty:Boolean;// одна из нод изменила размеры дерева
+
+
+		public function TreeModel(bus:Bus) {
+			persons = new PersonsCollection(bus);
+			nodes = new NodesCollection(persons, bus);
 		}
 
 		override public function get id():String {
 			return uid + "";
+		}
+
+		public function get owner():Person {
+			return persons.get(uid + '');
+		}
+
+		public function clear():void{
+
 		}
 	}
 }

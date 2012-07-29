@@ -1,4 +1,5 @@
 package tree.command {
+	import tree.model.TreeModel;
 	import tree.model.process.PersonsProcessor;
 	import tree.model.Join;
 	import tree.model.Join;
@@ -17,12 +18,14 @@ package tree.command {
 		}
 
 		override public function execute():void {
-			var proc:PersonsProcessor = new PersonsProcessor(model, model.owner, calculateNode);
-			while(proc.process())
-			{
+			for each(var tree:TreeModel in model.trees.iterator){
+				var proc:PersonsProcessor = new PersonsProcessor(tree, tree.owner, calculateNode);
+				while(proc.process())
+				{
 
+				}
+				proc.clear();
 			}
-			proc.clear();
 			bus.dispatch(ModelSignal.NODES_RECALCULATED);
 		}
 

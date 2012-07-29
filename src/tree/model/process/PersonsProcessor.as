@@ -9,7 +9,7 @@ package tree.model.process {
 
 	public class PersonsProcessor {
 
-		private var model:Model;
+		private var tree:TreeModel;
 		private var current:Person;
 		private var callback:Function;
 		private var initialized:Boolean = false;
@@ -40,8 +40,8 @@ package tree.model.process {
 		 */
 		protected var useNodeJoins:Boolean = false;
 
-		public function PersonsProcessor(model:Model, start:Person, callback:Function) {
-			this.model = model;
+		public function PersonsProcessor(tree:TreeModel, start:Person, callback:Function) {
+			this.tree = tree;
 			this.current = start;
 			this.callback = callback;
 		}
@@ -93,7 +93,7 @@ package tree.model.process {
 		}
 
 		protected function recalculateNeighbours(owner:Person):Array {
-			var nodes:NodesCollection = model.nodes;
+			var nodes:NodesCollection = owner.tree.nodes;
 			var ownerNode:Node = nodes.get(owner.uid + '');
 			var alter:Person;
 
@@ -149,7 +149,7 @@ package tree.model.process {
 		}
 
 		public function clear():void {
-			model = null;
+			tree = null;
 			current = null;
 			callback = null;
 			queuedUids = null;

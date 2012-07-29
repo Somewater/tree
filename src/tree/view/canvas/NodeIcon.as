@@ -200,7 +200,7 @@ package tree.view.canvas {
 		public function position():Point {
 			var node:Node = this._data.node;
 			var generation:Generation = this._data.generation;
-			tmpPoint.x = node.x * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
+			tmpPoint.x = (node.x + node.person.tree.shiftX) * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
 			tmpPoint.y = (generation.y + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
 			return tmpPoint;
 		}

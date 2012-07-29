@@ -16,6 +16,8 @@ package tree.model {
 		private var nodes:NodesCollection;
 		public var photo:String;
 
+		public var tree:TreeModel;
+
 		public function Person(nodes:NodesCollection) {
 			this.nodes = nodes;
 		}

@@ -2,6 +2,7 @@ package tree.command {
 	import tree.model.Node;
 	import tree.model.NodesCollection;
 	import tree.model.Person;
+	import tree.model.TreeModel;
 	import tree.signal.ModelSignal;
 
 	public class ConstructNodes extends Command{
@@ -9,18 +10,18 @@ package tree.command {
 		}
 
 		override public function execute():void {
-			var nodes:NodesCollection = model.nodes;
-			nodes.clear();
+
 			var node:Node;
 			var p:Person;
+			var tree:TreeModel;
 
-			for each(p in model.persons.iterator)
-			{
-				node = nodes.get(p.uid.toString());
-				if(node == null)
-				{
-					node = nodes.allocate(p);
-					nodes.add(node);
+			for each(tree in model.trees.iterator) {
+				for each(p in tree.persons.iterator) {
+					node = tree.nodes.get(p.uid.toString());
+					if(node == null) {
+						node = tree.nodes.allocate(p);
+						tree.nodes.add(node);
+					}
 				}
 			}
 

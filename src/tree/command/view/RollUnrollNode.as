@@ -19,7 +19,7 @@ package tree.command.view {
 				return;
 
 			detain();
-			var processor:RollQueueProcessor = new RollQueueProcessor(model, node.person, onQueueCompleted);
+			var processor:RollQueueProcessor = new RollQueueProcessor(node.person.tree, node.person, onQueueCompleted);
 		}
 
 		private function onQueueCompleted(queue:Array):void {

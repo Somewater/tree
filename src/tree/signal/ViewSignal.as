@@ -15,6 +15,8 @@ package tree.signal {
 
 		public static const JOIN_QUEUE_COMPLETED:String = 'joinQueueCompleted';// все ноды построены
 
+		public static const ALL_TREES_COMPLETED:String = 'allTreesCompleted';// все ноды построены
+
 		public function ViewSignal() {
 		}
 	}

@@ -27,7 +27,7 @@ package tree.loader {
 			var urlRequest:URLRequest
 
 			log("Debug!");
-			if(params && params.action == 'userlist' && params.uid == 0)
+			if(params && params.action == 'q_tree' && params.uid == 0)
 				urlRequest = new URLRequest(scriptPath);
 			else
 				urlRequest = new URLRequest("http://www.familyspace.ru/ajax.php");

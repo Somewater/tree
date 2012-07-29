@@ -21,7 +21,7 @@ package tree.model {
 		private var _levelNum:int = 0;
 		private var levelNumbers:Array = [];
 
-		public function Generation(collection:GenerationsCollection, generation:int, persons:PersonsCollection, bus:Bus, matrixes:MatrixCollection) {
+		public function Generation(collection:GenerationsCollection, generation:int, bus:Bus, matrixes:MatrixCollection) {
 			super();
 			this.collection = collection;
 			this.generation = generation;
@@ -43,7 +43,7 @@ package tree.model {
 			var g:GenNode = model as GenNode;
 			if(!g)
 				throw new Error('Only GenNode can be removed');
-			matrixes.byLevel(g.node.level).remove(g);
+			matrixes.byLevelAndTree(g.node.level, g.node.person.tree).remove(g);
 			super.remove(model);
 			recalculate();
 		}
@@ -53,7 +53,7 @@ package tree.model {
 			if(!g)
 				throw new Error('Only GenNode can be added');
 
-			var p:Point = matrixes.byLevel(g.node.level).add(g);
+			var p:Point = matrixes.byLevelAndTree(g.node.level, g.node.person.tree).add(g);
 			g.node.x = p.x;
 			g.node.y = g.node.generation;
 

@@ -1,16 +1,21 @@
 package tree.model {
 	public class MatrixCollection {
 
-		protected var matrixByLevel:Array = [];
+		protected var matrixByLevelAndTree:Array = [];
 
 		public function MatrixCollection() {
 		}
 
-		public function byLevel(level:int):SpatialMatrix {
-			var m:SpatialMatrix = matrixByLevel[level];
+		public function byLevelAndTree(level:int, tree:TreeModel):SpatialMatrix {
+			var hash:String = level + ":" + tree.number;
+			var m:SpatialMatrix = matrixByLevelAndTree[hash];
 			if(!m)
-				matrixByLevel[level] = m = new SpatialMatrix();
+				matrixByLevelAndTree[hash] = m = new SpatialMatrix();
 			return m;
+		}
+
+		public function clear():void{
+			matrixByLevelAndTree = [];
 		}
 	}
 }

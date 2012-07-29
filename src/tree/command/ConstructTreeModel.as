@@ -21,7 +21,8 @@ package tree.command {
 			var person:XML;
 			var treeModel:TreeModel;
 			var join:Join;
-			var persons:PersonsCollection = model.persons;
+
+			model.clear();
 
 			// прогон для построения Person
 			for each(tree in xml.trees.*)
@@ -44,13 +45,14 @@ package tree.command {
 
 				for each(person in tree.*)
 				{
-					var personModel:Person = model.persons.get(String(person.@uid));
+					var personModel:Person = treeModel.persons.get(String(person.@uid));
 					if(personModel == null)
 					{
-						personModel = model.persons.allocate(model.nodes);
+						personModel = treeModel.persons.allocate(treeModel.nodes);
+						personModel.tree = treeModel;
 						personModel.uid = int(String(person.@uid))
 						personModel.photo = String(person.fields.field.(@name == "photo_small"));
-						persons.add(personModel)
+						treeModel.persons.add(personModel)
 					}
 					personModel.male = String(person.fields.field.(@name == "sex")) == '1';
 					personModel.name = String(person.fields.field.(@name == "last_name")) + " " + String(person.fields.field.(@name == "first_name"));
@@ -64,7 +66,7 @@ package tree.command {
 
 				for each(person in tree.*)
 				{
-					personModel = persons.get(String(person.@uid));
+					personModel = treeModel.persons.get(String(person.@uid));
 
 					for each(var group:XML in person.relatives.*)
 					{
@@ -74,15 +76,17 @@ package tree.command {
 							join = personModel.get(node.@uid)
 							if(join == null)
 							{
-								var associate:Person = persons.get(node.@uid);
+								var associate:Person = treeModel.persons.get(node.@uid);
+								if(!associate)
+									continue;
 
-								join = new Join(persons);
+								join = new Join(treeModel.persons);
 								join.from = personModel;
 								join.uid = associate.uid;
 								join.type = type;
 
 								// одновременно строим другую связь
-								var join2:Join = new Join(persons);
+								var join2:Join = new Join(treeModel.persons);
 								join2.from = associate;
 								join2.uid = personModel.uid;
 								join2.type = Join.toAlter(type, personModel.male);

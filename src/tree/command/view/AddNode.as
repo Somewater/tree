@@ -28,6 +28,8 @@ package tree.command.view {
 				join.associate.node.add(join.associate.get(join.from.uid + ''));
 			}
 
+			model.trees.refreshTreeSizes(g.node.person, true);
+
 			bus.dispatch(ViewSignal.DRAW_JOIN, g);
 		}
 

@@ -330,5 +330,176 @@
 
 
 		</tree>
+
+		<tree uid="13">
+			<node uid="13" name="Дочь брата A" open="1">
+				<fields>
+					<field name="last_name">Дочь брата A</field>
+					<field name="first_name"></field>
+					<field name="sex">0</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="sister">
+						<node uid="14" status="1" />
+						<node uid="15" status="1" />
+					</group>
+				</relatives>
+			</node>
+
+			<node uid="14" name="Дочь брата B" open="1">
+				<fields>
+					<field name="last_name">Дочь брата B</field>
+					<field name="first_name"></field>
+					<field name="sex">0</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="sister">
+						<node uid="13" status="1" />
+						<node uid="15" status="1" />
+					</group>
+				</relatives>
+			</node>
+
+			<node uid="15" name="Дочь брата C" open="1">
+				<fields>
+					<field name="last_name">Дочь брата C</field>
+					<field name="first_name"></field>
+					<field name="sex">0</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="sister">
+						<node uid="14" status="1" />
+						<node uid="13" status="1" />
+					</group>
+				</relatives>
+			</node>
+
+			<node uid="16" name="Муж Дочери брата C" open="1">
+				<fields>
+					<field name="last_name">Муж Дочери брата C</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="wife">
+						<node uid="14" status="1" />
+					</group>
+				</relatives>
+			</node>
+
+			<node uid="17" name="Внук брата C" open="1">
+				<fields>
+					<field name="last_name">Внук брата C</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="mother">
+						<node uid="14" status="1" />
+					</group>
+				</relatives>
+			</node>
+		</tree>
+		<tree uid="117">
+			<node uid="117" name="Кто-то" open="1">
+				<fields>
+					<field name="last_name">Кто-то</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="mother">
+						<node uid="118" status="1" />
+					</group>
+					<group type="wife">
+						<node uid="119" status="1" />
+					</group>
+				</relatives>
+			</node>
+			<node uid="118" name="Мать кого-то" open="1">
+				<fields>
+					<field name="last_name">Кто-то</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+				</relatives>
+			</node>
+			<node uid="119" name="Жена кого-то" open="1">
+				<fields>
+					<field name="last_name">Жена кого-то</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+				</relatives>
+			</node>
+		</tree>
+		<tree uid="217">
+			<node uid="217" name="Кто-то 2" open="1">
+				<fields>
+					<field name="last_name">Кто-то 2</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+					<group type="mother">
+						<node uid="218" status="1" />
+					</group>
+					<group type="wife">
+						<node uid="219" status="1" />
+					</group>
+				</relatives>
+			</node>
+			<node uid="218" name="Мать кого-то 2" open="1">
+				<fields>
+					<field name="last_name">Кто-то 2</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+				</relatives>
+			</node>
+			<node uid="219" name="Жена кого-то 2" open="1">
+				<fields>
+					<field name="last_name">Жена кого-то 2</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+				<relatives>
+				</relatives>
+			</node>
+		</tree>
+		<tree uid="317">
+			<node uid="317" name="Кто-то 3" open="1">
+				<fields>
+					<field name="last_name">Кто-то 3</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+			</node>
+		</tree>
+		<tree uid="417">
+			<node uid="417" name="Кто-то 4" open="1">
+				<fields>
+					<field name="last_name">Кто-то 4</field>
+					<field name="first_name"></field>
+					<field name="sex">1</field>
+					<field name="photo_small">http://fs2.familyspace.ru/images/userpic/00/0000/00002/u2_e51d0d0e.jpg</field>
+				</fields>
+			</node>
+		</tree>
 	</trees>
 </familytree>

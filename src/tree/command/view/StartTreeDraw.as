@@ -3,6 +3,7 @@ package tree.command.view {
 	import tree.model.Join;
 	import tree.model.JoinType;
 	import tree.model.Person;
+	import tree.model.TreeModel;
 	import tree.model.process.PersonsProcessor;
 	import tree.model.process.NodesProcessorResponse;
 	import tree.model.process.SortedPersonsProcessor;
@@ -12,22 +13,29 @@ package tree.command.view {
 	 * Начать построение дерева
 	 */
 	public class StartTreeDraw extends Command{
-		public function StartTreeDraw() {
+
+		private var tree:TreeModel;
+
+		public function StartTreeDraw(tree:TreeModel) {
+			this.tree = tree;
 		}
 
 		override public function execute():void {
-			model.drawedNodesUids = [];
+			// должны быть закончены все предыдущие построения
+			if(model.joinsForDraw.length || model.joinsForRemove.length)
+				throw new Error('Preview process not completed: draw=' + model.joinsForDraw + ", remove=" + model.joinsForRemove);
+
 			var joinsForDraw:Array = model.joinsForDraw = [];
 
 			// создаем специальную Join которая не имеет обратной ссылки, для пострения первого участника
-			var firstPerson:Person = model.owner;
-			var firstJoin:Join = new Join(model.persons);
+			var firstPerson:Person = tree.owner;
+			var firstJoin:Join = new Join(tree.persons);
 			firstJoin.uid = firstPerson.uid;
 			firstJoin.type = JoinType.FIRST_JOIN;// т.е. не имеет типа, не на кого ссылаться
 
 			joinsForDraw.push(firstJoin);
 
-			var proc:PersonsProcessor = new SortedPersonsProcessor(model, firstPerson,
+			var proc:PersonsProcessor = new SortedPersonsProcessor(tree, firstPerson,
 					function(response:NodesProcessorResponse):void{
 						var j:Join = response.fromSource;
 						if(j)

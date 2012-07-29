@@ -8,14 +8,12 @@ package tree.model {
 
 	public class GenerationsCollection extends ModelCollection{
 
-		private var persons:PersonsCollection;
 		private var bus:Bus;
 		private var matrixes:MatrixCollection;
 
 		public var generationChanged:ISignal;
 
-		public function GenerationsCollection(persons:PersonsCollection, bus:Bus, matrixes:MatrixCollection) {
-			this.persons = persons;
+		public function GenerationsCollection(bus:Bus, matrixes:MatrixCollection) {
 			this.bus = bus;
 			this.matrixes = matrixes;
 
@@ -25,7 +23,7 @@ package tree.model {
 		public function get(generation:int):Generation {
 			var g:Generation = hash[generation + ''];
 			if(!g) {
-				g = new Generation(this, generation, persons, bus, matrixes);
+				g = new Generation(this, generation, bus, matrixes);
 				g.changed.add(onGenerationChanged);
 				add(g);
 			}

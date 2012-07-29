@@ -9,8 +9,6 @@ package tree.model {
 	public class Model {
 
 		public var trees:TreesCollection;
-		public var persons:PersonsCollection;
-		public var nodes:NodesCollection;
 		public var generations:GenerationsCollection;
 		public var matrixes:MatrixCollection;
 		private var _zoom:Number = 1;
@@ -39,10 +37,8 @@ package tree.model {
 		public function Model(bus:Bus) {
 			this.bus = bus;
 			trees = new TreesCollection(bus);
-			persons = new PersonsCollection(bus);
-			nodes = new NodesCollection(persons, bus);
 			matrixes = new MatrixCollection();
-			generations = new GenerationsCollection(persons, bus, matrixes);
+			generations = new GenerationsCollection(bus, matrixes);
 		}
 
 		/**
@@ -51,13 +47,6 @@ package tree.model {
 		 */
 		public function get user():Person {
 			return null;
-		}
-
-		/**
-		 * Относительно кого строится дерево
-		 */
-		public function get owner():Person {
-			return persons.get(trees.first.uid.toString());
 		}
 
 		public function get zoom():Number {
@@ -75,6 +64,12 @@ package tree.model {
 			_mousePosition.x = Tree.instance.mouseX;
 			_mousePosition.y = Tree.instance.mouseY;
 			return _mousePosition;
+		}
+
+		public function clear():void {
+			trees.clear();
+			generations.clear();
+			matrixes.clear();
 		}
 	}
 }
