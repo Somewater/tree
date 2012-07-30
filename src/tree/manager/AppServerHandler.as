@@ -39,6 +39,7 @@ package tree.manager {
 			try{
 				xml = new XML(data);
 			}catch(err:Error){
+				error(err);
 				onError(err);
 				return;
 			}
