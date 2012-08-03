@@ -39,6 +39,8 @@ package tree.view.canvas {
 
 		public var click:ISignal;
 
+		public var rollUnrollButton:RollUnrollButton;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			addChild(skin);
@@ -65,6 +67,12 @@ package tree.view.canvas {
 			}
 
 			addEventListener(MouseEvent.CLICK, onClicked);
+
+			rollUnrollButton = new RollUnrollButton();
+			rollUnrollButton.x = 70;
+			rollUnrollButton.y = 110;
+			addChild(rollUnrollButton);
+			rollUnrollButton.visible = false;
 		}
 
 		private function onClicked(event:MouseEvent):void {
@@ -124,6 +132,7 @@ package tree.view.canvas {
 			}
 			photo.clear();
 			removeEventListener(MouseEvent.CLICK, onClicked);
+			rollUnrollButton.clear();
 		}
 
 		public function hide(animated:Boolean = true):void {
