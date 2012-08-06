@@ -55,7 +55,12 @@ package tree.command {
 						treeModel.persons.add(personModel)
 					}
 					personModel.male = String(person.fields.field.(@name == "sex")) == '1';
-					personModel.name = String(person.fields.field.(@name == "last_name")) + " " + String(person.fields.field.(@name == "first_name"));
+					personModel.lastName = String(person.fields.field.(@name == "last_name"))
+					personModel.firstName = String(person.fields.field.(@name == "first_name"));
+					personModel.middleName = String(person.fields.field.(@name == "middle_name"));
+					personModel.maidenName = String(person.fields.field.(@name == "maiden_name"));
+					personModel.birthday = databaseFormatToDate(person.fields.field.(@name == "birthday"));
+					personModel.deathday = databaseFormatToDate(person.fields.field.(@name == "deathday"));
 				}
 			}
 
@@ -124,6 +129,13 @@ package tree.command {
 
 			// всё требует пересчёта
 			bus.dispatch(ModelSignal.NODES_NEED_CONSTRUCT);
+		}
+
+		private function databaseFormatToDate(string:String):Date{
+			var data:Array = string.split('-');
+			if(parseInt(data[0]) == 0)
+				return null;
+			return new Date(parseInt(data[0]), parseInt(data[1]) - 1, parseInt(data[2]));
 		}
 	}
 }

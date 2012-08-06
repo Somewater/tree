@@ -41,6 +41,9 @@ package tree.view.canvas {
 
 		public var rollUnrollButton:RollUnrollButton;
 
+		public var deleteClick:ISignal;
+		private var deleteButton:RollUnrollButton;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			addChild(skin);
@@ -50,6 +53,7 @@ package tree.view.canvas {
 
 			complete = new Signal(NodeIcon);
 			click = new Signal(NodeIcon);
+			deleteClick = new Signal(NodeIcon);
 
 			tmpPoint = new Point();
 
@@ -73,6 +77,13 @@ package tree.view.canvas {
 			rollUnrollButton.y = 110;
 			addChild(rollUnrollButton);
 			rollUnrollButton.visible = false;
+
+			deleteButton = new RollUnrollButton();
+			deleteButton.x = 90;
+			deleteButton.y = 10;
+			addChild(deleteButton);
+			deleteButton.addEventListener(MouseEvent.CLICK, onDeletButtonClicked);
+			deleteButton.visible = false;
 		}
 
 		private function onClicked(event:MouseEvent):void {
@@ -95,7 +106,8 @@ package tree.view.canvas {
 			skin.getChildByName('male_back').visible = p.male;
 			skin.getChildByName('female_back').visible = !p.male;
 			(skin.getChildByName('name_tf') as TextField).text = p.name;
-			Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace);
+			if(p.photo)
+				Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace);
 			CONFIG::debug{
 				debugTrace.text = "x=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
 						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
@@ -133,6 +145,11 @@ package tree.view.canvas {
 			photo.clear();
 			removeEventListener(MouseEvent.CLICK, onClicked);
 			rollUnrollButton.clear();
+
+			deleteButton.removeEventListener(MouseEvent.CLICK, onDeletButtonClicked);
+			deleteClick.removeAll();
+			click.removeAll();
+			complete.removeAll();
 		}
 
 		public function hide(animated:Boolean = true):void {
@@ -212,6 +229,10 @@ package tree.view.canvas {
 			tmpPoint.x = (node.x + node.person.tree.shiftX) * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
 			tmpPoint.y = (generation.y + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
 			return tmpPoint;
+		}
+
+		private function onDeletButtonClicked(event:MouseEvent):void {
+			deleteClick.dispatch(this);
 		}
 	}
 }

@@ -23,14 +23,14 @@ package tree.command.view {
 			var join:Join = model.joinsForDraw.shift();
 			if(join)
 			{
-				bus.dispatch(ModelSignal.ADD_NODE, join);
+				bus.dispatch(ModelSignal.SHOW_NODE, join);
 				return;
 			}
 
 			join = model.joinsForRemove.shift();
 			if(join)
 			{
-				bus.dispatch(ModelSignal.REMOVE_NODE, join);
+				bus.dispatch(ModelSignal.HIDE_NODE, join);
 				return;
 			}
 

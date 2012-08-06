@@ -7,11 +7,11 @@ package tree.command.view {
 	import tree.model.Person;
 	import tree.signal.ViewSignal;
 
-	public class AddNode extends Command{
+	public class ShowNode extends Command{
 
 		private var join:Join;
 
-		public function AddNode(join:Join) {
+		public function ShowNode(join:Join) {
 			this.join = join;
 		}
 

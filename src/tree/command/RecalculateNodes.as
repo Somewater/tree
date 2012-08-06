@@ -30,16 +30,21 @@ package tree.command {
 		}
 
 		private function calculateNode(response:NodesProcessorResponse):void {
-			var node:Node = response.node;
-			var source:Node = response.source;
+			if(response.fromSource)
+				calculate(response.node, response.source, response.fromSource.flatten, response.fromSource.breed);
+			else
+				calculate(response.node, null, false, false);
+		}
+
+		public static function calculate(node:Node, source:Node, flatten:Boolean, breed:Boolean):void{
 			if(source) {
 				// назначаем параметры, относительно owner
 				node.dist = source.dist + 1;
-				if(response.fromSource.flatten) {
+				if(flatten) {
 					node.vector = source.vector;
 					node.generation = source.generation;
 				} else {
-					if(response.fromSource.breed) {
+					if(breed) {
 						node.vector = -1;
 						node.generation = source.generation + 1;
 					} else {

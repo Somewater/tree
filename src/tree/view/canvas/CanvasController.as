@@ -11,6 +11,7 @@ package tree.view.canvas {
 	import tree.model.JoinType;
 	import tree.model.Node;
 	import tree.model.Person;
+	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
 	import tree.view.canvas.JoinLine;
 	import tree.view.canvas.NodeIcon;
@@ -30,6 +31,7 @@ package tree.view.canvas {
 				n = canvas.getNodeIconAndCreate(g);
 				n.complete.addOnce(onNodeCompleteOnce);
 				n.click.add(onNodeClicked);
+				n.deleteClick.add(onNodeDeleteClicked);
 			}
 
 			if(g.join.from){
@@ -149,6 +151,10 @@ package tree.view.canvas {
 
 		private function onNodeClicked(node:NodeIcon):void{
 			bus.dispatch(ViewSignal.NODE_ROLL_UNROLL, node.data.node);
+		}
+
+		private function onNodeDeleteClicked(node:NodeIcon):void{
+			bus.dispatch(ModelSignal, node.data.join);
 		}
 	}
 }

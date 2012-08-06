@@ -10,13 +10,20 @@ package tree.model {
 	 */
 	public class Person extends JoinCollectionBase implements IModel, ICollection{
 
-		public var name:String;
 		public var male:Boolean;
 
 		private var nodes:NodesCollection;
 		public var photo:String;
 
 		public var tree:TreeModel;
+
+		public var firstName:String;
+		public var lastName:String;
+		public var middleName:String;
+		public var maidenName:String;
+		public var birthday:Date = new Date();
+		public var deathday:Date;
+		public var email:String;
 
 		public function Person(nodes:NodesCollection) {
 			this.nodes = nodes;
@@ -38,6 +45,14 @@ package tree.model {
 
 		public function dirtyMattyCache():void {
 			_marryCalculated = false;
+		}
+
+		public function get name():String {
+			return lastName + ' ' + firstName;
+		}
+
+		public function get died():Boolean{
+			return deathday != null;
 		}
 	}
 }

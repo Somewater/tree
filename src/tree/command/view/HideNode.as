@@ -5,11 +5,11 @@ package tree.command.view {
 	import tree.model.Person;
 	import tree.signal.ViewSignal;
 
-	public class RemoveNode extends Command{
+	public class HideNode extends Command{
 
 		private var join:Join
 
-		public function RemoveNode(join:Join) {
+		public function HideNode(join:Join) {
 			this.join = join;
 		}
 

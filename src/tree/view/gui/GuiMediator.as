@@ -1,14 +1,20 @@
 package tree.view.gui {
+	import flash.events.MouseEvent;
+
 	import tree.common.Config;
 	import tree.view.Mediator;
 
 	public class GuiMediator extends Mediator{
 
 		private var gui:Gui;
+		private var controller:GuiController;
 
 		public function GuiMediator(gui:Gui) {
 			this.gui = gui;
+			this.controller = new GuiController(gui);
 			super(gui);
+
+			gui.addEventListener(MouseEvent.CLICK, onPanelClicked);
 		}
 
 		override public function clear():void {
@@ -27,6 +33,10 @@ package tree.view.gui {
 				gui.visible = false;
 
 			// todo: перевести интерфейс в необходимое состояние
+		}
+
+		private function onPanelClicked(event:MouseEvent):void {
+			controller.addPerson();
 		}
 	}
 }
