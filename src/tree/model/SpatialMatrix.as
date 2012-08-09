@@ -122,6 +122,10 @@ package tree.model {
 					delete(spatial[key]);
 					var x:int = int(key) & 0xFFFF;
 					var y:int = int(key) >>> SpatialMatrixBase.OFFSET;
+					CONFIG::debug{
+						x = parseInt(String(key).split(',')[0]);
+						y = parseInt(String(key).split(',')[1]);
+					}
 					return shiftUnderPoint(x, y);
 				}
 
