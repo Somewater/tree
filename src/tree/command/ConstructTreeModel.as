@@ -87,13 +87,13 @@ package tree.command {
 
 								join = new Join(treeModel.persons);
 								join.from = personModel;
-								join.uid = associate.uid;
+								join.associate = associate;
 								join.type = type;
 
 								// одновременно строим другую связь
 								var join2:Join = new Join(treeModel.persons);
 								join2.from = associate;
-								join2.uid = personModel.uid;
+								join2.associate = personModel;
 								join2.type = Join.toAlter(type, personModel.male);
 
 								// проверяем, не пропагандируем ли мы многоженство и многомужество  (todo: пофиксить гомосексуализм)

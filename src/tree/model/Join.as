@@ -47,7 +47,7 @@ package tree.model {
 		private static var _typeToServer:Array;
 
 		public var type:JoinType;
-		public var uid:int;
+		public var associate:Person;
 		public var from:Person;
 
 		public var visible:Boolean = false;
@@ -74,8 +74,8 @@ package tree.model {
 			return _uniqId;
 		}
 
-		public function get associate():Person {
-			return persons ? persons.get(uid + '') : null;
+		public function get uid():int {
+			return associate.uid;
 		}
 
 		public function get flatten():Boolean {

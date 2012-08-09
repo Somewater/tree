@@ -30,7 +30,7 @@ package tree.command.view {
 			// создаем специальную Join которая не имеет обратной ссылки, для пострения первого участника
 			var firstPerson:Person = tree.owner;
 			var firstJoin:Join = new Join(tree.persons);
-			firstJoin.uid = firstPerson.uid;
+			firstJoin.associate = firstPerson;
 			firstJoin.type = JoinType.FIRST_JOIN;// т.е. не имеет типа, не на кого ссылаться
 
 			joinsForDraw.push(firstJoin);

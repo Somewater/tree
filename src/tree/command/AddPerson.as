@@ -17,10 +17,12 @@ package tree.command {
 			var tree:TreeModel = join.from.tree;
 			join.associate.tree = tree;
 			var node:Node = tree.nodes.allocate(join.associate);
+			tree.persons.add(join.associate);
 			tree.nodes.add(node);
 
+
 			var alterJoin:Join = new Join(tree.persons);
-			alterJoin.uid = join.from.uid;
+			alterJoin.associate = join.from;
 			alterJoin.from = join.associate;
 			alterJoin.type = Join.toAlter(join.type, join.associate.male);
 

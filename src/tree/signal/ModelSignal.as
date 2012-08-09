@@ -10,7 +10,7 @@ package tree.signal {
 		public static const TREE_NEED_CONSTRUCT:String = 'treeNeedConstruct';
 
 		public static const ADD_PERSON:String = 'addPerson';// join
-		public static const REMOVE_PERSON:String = 'removePerson';// join
+		public static const REMOVE_PERSON:String = 'removePerson';// person
 		public static const CHANGE_PERSON_JOINS:String = 'changePersonJoins';// person
 
 		public function ModelSignal() {

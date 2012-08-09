@@ -17,6 +17,7 @@ package tree.signal {
 		public var uid:int;
 
 		public var addedJoin:Join;
+		public var removedPerson:Person;
 
 		public function RequestSignal(type:String) {
 			this.type = type;

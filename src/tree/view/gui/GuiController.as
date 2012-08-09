@@ -18,11 +18,10 @@ package tree.view.gui {
 			p.uid = (int.MAX_VALUE * Math.random()) | 536870912;
 			p.firstName = 'Ребенок ' + int(Math.random() * 10);
 			var from:Person = model.trees.first.owner;
-			from.tree.persons.add(p);
 
 			var j:Join = new Join(model.trees.first.persons);
 			j.from = from;
-			j.uid = p.uid;
+			j.associate = p;
 			j.type = p.male ? Join.SON : Join.DAUGHTER;
 
 			bus.dispatch(ModelSignal.ADD_PERSON, j);
