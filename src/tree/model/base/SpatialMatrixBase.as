@@ -26,6 +26,15 @@ package tree.model.base {
 			return spatial[x + (y << OFFSET)];
 		}
 
+		public function getInArea(x:Number, y:Number):GenNode {
+			var g:GenNode = get(x, y);
+			if(g) return g;
+			g = get(x + 1, y);
+			if(g) return g;
+			g = get(x - 1, y);
+			return g;
+		}
+
 		public function set(data:GenNode, x:Number, y:Number):void {
 			CONFIG::debug{
 				if(data)
@@ -38,13 +47,6 @@ package tree.model.base {
 				spatial[x + (y << OFFSET)] = data;
 			else
 				delete(spatial[x + (y << OFFSET)]);
-		}
-
-		public function has(x:Number, y:Number):Boolean {
-			CONFIG::debug{
-				return spatial[x + ',' + y] != null;
-			}
-			return spatial[x + (y << OFFSET)] != null;
 		}
 
 		//////////////////////////////////////////////
@@ -72,19 +74,19 @@ package tree.model.base {
 		 * @return перемещение произведено успешно
 		 */
 		protected function shift(shifted:Array, substitute:GenNode, x:Number, y:Number, vector:int, important:Boolean = false):Boolean {
-			var g:GenNode = get(x, y);
+			var g:GenNode = getInArea(x, y);
 			if(g){
 				if(!important && compare(g,  substitute) > 0)
 					return false;// смещение противоречит правилам
 
 				var m:Person;
-				if(!important && (m = g.node.marry) && m.node.visible && Math.abs(m.node.x - x - vector) > 1)
+				if(!important && (m = g.node.marry) && m.node.visible && Math.abs(m.node.x - x - vector * 2) > 1)
 					return false;// проверка, что смещение разделяет супругов
 
-				if(!shift(shifted, g, x + vector, y,  vector, important))
+				if(!shift(shifted, g, x + vector * 2, y,  vector, important))
 					return false;// в цепи выполнения сдвигов произошло противоречие
 
-				g.node.x = x + vector;
+				g.node.x = x + vector * 2;
 				g.node.y = y;
 				shifted.push(g);
 			}
@@ -98,10 +100,10 @@ package tree.model.base {
 		 */
 		protected function checkNullNode(x:int, y:int, vector:int):Boolean {
 			var g:GenNode
-			while(g = get(x, y)) {
+			while(g = getInArea(x, y)) {
 				if(g.node.dist == 0)
 					return true;
-				x += vector;
+				x += vector * 2;
 			}
 			return false;
 		}

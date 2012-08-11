@@ -43,17 +43,19 @@ package tree.command.view {
 
 			switch(join.type ? join.type.superType : null) {
 				case JoinType.SUPER_TYPE_MARRY:
-					node.x = sourceNode.x + (join.type == Join.WIFE ? 1 : -1);
+					node.x = sourceNode.x + (join.type == Join.WIFE ? 2 : -2);
 					break;
 				case JoinType.SUPER_TYPE_BREED:
-					node.x = sourceNode.x;
+					node.x = sourceNode.x + (sourceNode.person.hasLegitimateBreed() ?
+																	(sourceNode.person.male ? 1 : -1) : 0);
 					break;
 				case JoinType.SUPER_TYPE_PARENT:
-					node.x = sourceNode.x;
+					node.x = sourceNode.x + (node.person.hasLegitimateBreed() ?
+																	(node.person.male ? -1 : 1) : 0);
 					break;
 				case JoinType.SUPER_TYPE_BRO:
 				case JoinType.SUPER_TYPE_EX_MARRY:
-					node.x = sourceNode.x + (source.male ? -1 : 1);
+					node.x = sourceNode.x + (source.male ? -2 : 2);
 					break;
 				default:
 					if(source)

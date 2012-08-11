@@ -56,6 +56,18 @@ package tree.model {
 			return _marry;
 		}
 
+		public function hasLegitimateBreed():Boolean{
+			var marry:Person = this.marry;
+			if(marry){
+				var marryBreeds:Array = marry.breeds;
+				var myBreeds:Array = this.breeds;
+				for each(var b:Person in marryBreeds)
+					if(myBreeds.indexOf(b) != -1)
+						return true;
+			}
+			return false;
+		}
+
 		public function get ex_marries():Array {
 			if(!useJoinsCache || !_ex_marries) {
 				_ex_marries = [];

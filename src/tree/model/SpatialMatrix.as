@@ -30,7 +30,7 @@ package tree.model {
 			var broCounter:int;
 			var moverGenNodes:Array = [];
 
-			while(important || (g = get(x, y) as GenNode)) {
+			while(important || (g = getInArea(x, y) as GenNode)) {
 				if(important || (cmp = compare(genNode, g)) > 0) {
 					// определить вектор - с какой стороны пытаться распологать
 					if(importantVector)
@@ -44,9 +44,9 @@ package tree.model {
 						// проследить, что супруг (или bro) накладывается на супруга, при движении вектора в сторону супруга
 						marryOrBroX = genNode.join.from.node.x;
 						if(joinSuperType == JoinType.SUPER_TYPE_MARRY && genNode.node.person.male){
-							if(vector == 1){x = marryOrBroX ;marryOrBroX  -= 1;}
+							if(vector == 1){x = marryOrBroX ;marryOrBroX  -= 2;}
 						}else{
-							if(vector == -1){x = marryOrBroX ;marryOrBroX  += 1;}
+							if(vector == -1){x = marryOrBroX ;marryOrBroX  += 2;}
 						}
 					}
 
@@ -66,7 +66,7 @@ package tree.model {
 					if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
 						// если это супруг, то сдвинуть всех.
 						important = true;
-						if(x == 0 && y == 0)// если желает залезть прямо на zero
+						if((x >= -1 && x <= 1) && y == 0)// если желает залезть прямо на zero
 							x = genNode.node.person.marry.node.x;
 						importantVector = checkNullNode(x, y, vector) ? -vector : vector;
 						continue;
@@ -76,14 +76,14 @@ package tree.model {
 						if(broCounter > (importantVector ? 0 : 1)){// с обоих сторон "небратья", надо двигать всех (если поиск только в одну сторону, то довольно и одного "небрата")
 							important = true;
 							importantVector = checkNullNode(x, y, vector) ? -vector : vector;
-							marryOrBroX = genNode.join.from.node.x > x ? x + 1 : x - 1;
+							marryOrBroX = genNode.join.from.node.x > x ? x + 2 : x - 2;
 
 							if(x < marryOrBroX && importantVector == 1){
 								marryOrBroX = x;
-								x += 1;// поближе к брату тоесть, не сдвигаем чужака
+								x += 2;// поближе к брату тоесть, не сдвигаем чужака
 							}else if(x > marryOrBroX && importantVector == -1){
 								marryOrBroX = x;
-								x -= 1;
+								x -= 2;
 							}
 							continue;
 						}
@@ -93,7 +93,7 @@ package tree.model {
 					vector = importantVector ? importantVector : -vector;
 					if(importantVector || vector != ORIG_VECT)
 						delta++;
-					x = startX + delta * vector;
+					x = startX + (delta * vector) * 2;
 				}
 			}
 

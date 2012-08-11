@@ -194,7 +194,8 @@ package tree.view.canvas {
 			position();
 			if(fullParent(forBreed))
 			{
-				tmpPoint.x += (_data.node.person.male ? Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE * 0.5: -Canvas.ICON_WIDTH_SPACE * 0.5);
+				var halfSpase:int = (Canvas.ICON_WIDTH_SPACE * 2 - Canvas.ICON_WIDTH) * 0.5;
+				tmpPoint.x += (_data.node.person.male ? halfSpase + Canvas.ICON_WIDTH: -halfSpase);
 				tmpPoint.y += Canvas.ICON_HEIGHT * 0.5 + 6.5;//  поправка на полуразмер сердечка
 			}else{
 				tmpPoint.x += Canvas.ICON_WIDTH * 0.5;
@@ -226,7 +227,7 @@ package tree.view.canvas {
 		public function position():Point {
 			var node:Node = this._data.node;
 			var generation:Generation = this._data.generation;
-			tmpPoint.x = (node.x + node.person.tree.shiftX) * (Canvas.ICON_WIDTH + Canvas.ICON_WIDTH_SPACE);
+			tmpPoint.x = (node.x + node.person.tree.shiftX) * Canvas.ICON_WIDTH_SPACE;
 			tmpPoint.y = (generation.y + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
 			return tmpPoint;
 		}

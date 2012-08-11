@@ -11,7 +11,7 @@ package tree.view.canvas {
 
 		public static const ICON_WIDTH:int = 90;
 		public static const ICON_HEIGHT:int = 125;
-		public static const ICON_WIDTH_SPACE:int = 50;
+		public static const ICON_WIDTH_SPACE:int = (ICON_WIDTH + 50) * 0.5;
 		public static const ICON_HEIGHT_SPACE:int = 50;
 		public static const LEVEL_HEIGHT:int = ICON_HEIGHT + HEIGHT_SPACE;
 		public static const JOIN_BREED_STICK:int = 20;
