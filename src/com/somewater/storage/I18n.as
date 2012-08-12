@@ -1,15 +1,13 @@
 package com.somewater.storage
 {
-	import com.somewater.rabbit.storage.Config;
-
-	final public class Lang
+	final public class I18n
 	{
-		private static var _instance:Lang;
+		private static var _instance:I18n;
 		private var dictionry:Object;
 		
 		// для записи текстовых констант, которые будут доступны еще до выбора и загрузки языка
 		// basic[0] содержит список всех доступных языков вида [{},{}...{label:название, data:путь загрузки файла или null}..]
-		public static const basic:Array = [];
+		public static var text:String;
 		
 		/**
 		 * Настройки конкретики пользователя (напр, пол и т.д...)
@@ -18,13 +16,12 @@ package com.somewater.storage
 												'male':true
 											};
 		
-		public function Lang()
+		public function I18n()
 		{
-			var langPack:String = Config.memory['lang_pack'];
+			var langPack:String = text;
 			if(langPack != null && langPack.length > 0)
 			{
 				_instance = this;
-				delete(Config.memory['lang_pack']);
 				parse(langPack);
 			}
 		}
@@ -33,7 +30,7 @@ package com.somewater.storage
 		 * Получить слово по введенному ключу. Согласно текущему словарю
 		 */
 		public static function t(key:String, args:Object = null):String{
-			if(_instance == null) new Lang();
+			if(_instance == null) new I18n();
 			if(_instance == null) return key;
 			var dict:Object = _instance.dictionry;
 			if (dict[key])
@@ -83,7 +80,7 @@ package com.somewater.storage
 		}
 		
 		public static function arr(key:String, separator:String = ","):Array{
-			if(_instance == null) new Lang();
+			if(_instance == null) new I18n();
 			if(_instance == null) return [];
 			var dict:Object = _instance.dictionry;
 			if (dict.hasOwnProperty(key))
@@ -135,7 +132,7 @@ package com.somewater.storage
 		 * либо как key_rule
 		 */
 		private static function abstractRule(value:int,_rule:Array,key_rule:String,key_default:String):String{
-			if (_rule == null) _rule = Lang.arr(key_rule);
+			if (_rule == null) _rule = I18n.arr(key_rule);
 			var rules:Array = _rule;
 			var i:int = 0;
 			while((i+2)<rules.length){
@@ -143,7 +140,7 @@ package com.somewater.storage
 					return rules[i+1];
 				i += 3;
 			}
-			return Lang.t(key_default);
+			return I18n.t(key_default);
 		} 
 		
 		private var _day_rule:Array;

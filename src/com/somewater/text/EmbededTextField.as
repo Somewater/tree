@@ -7,7 +7,7 @@ package com.somewater.text
 	import flash.text.TextFormat;
 	
 	
-	public class EmbededTextField extends TextField implements IHinted
+	public class EmbededTextField extends TextField
 	{
 		public static var DEFAULT_FONT:String = "Tahoma";
 		
@@ -24,7 +24,7 @@ package com.somewater.text
 			if (value != null && value != "")
 				if (_hint == null || _hint == ""){
 					_hint = value;
-					Hint.bind(this,value);
+					//Hint.bind(this,value);
 					return;
 				}
 			_hint = value;

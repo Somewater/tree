@@ -75,23 +75,29 @@ package tree.common {
 		}
 
 		private function onMouseWheel(event:MouseEvent):void {
-			CONFIG::debug {
-				if(Cc.visible)
-					return;
+			if(mouseOnCanvas()){
+				CONFIG::debug {
+					if(Cc.visible)
+						return;
+				}
+				mouseWheel.dispatch(event.delta);
 			}
-			mouseWheel.dispatch(event.delta);
 		}
 
 		private function onMouseDown(event:MouseEvent):void {
-			tmpPoint.x =  Tree.instance.mouseX;
-			tmpPoint.y =  Tree.instance.mouseY;
-			mouseDown.dispatch(tmpPoint);
+			if(mouseOnCanvas()){
+				tmpPoint.x =  Tree.instance.mouseX;
+				tmpPoint.y =  Tree.instance.mouseY;
+				mouseDown.dispatch(tmpPoint);
+			}
 		}
 
 		private function onMouseUp(event:MouseEvent):void {
-			tmpPoint.x =  Tree.instance.mouseX;
-			tmpPoint.y =  Tree.instance.mouseY;
-			mouseUp.dispatch(tmpPoint);
+			if(mouseOnCanvas()){
+				tmpPoint.x =  Tree.instance.mouseX;
+				tmpPoint.y =  Tree.instance.mouseY;
+				mouseUp.dispatch(tmpPoint);
+			}
 		}
 
 		private function onStartDrag(pos:Point):void {
@@ -118,6 +124,10 @@ package tree.common {
 
 			dragSignal.lastPoint.x = dragSignal.currentPoint.x;
 			dragSignal.lastPoint.y = dragSignal.currentPoint.y;
+		}
+
+		private function mouseOnCanvas():Boolean{
+			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH);
 		}
 	}
 }

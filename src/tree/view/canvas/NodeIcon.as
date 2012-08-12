@@ -3,6 +3,8 @@ package tree.view.canvas {
 	import com.gskinner.motion.GTweener;
 	import com.somewater.display.Photo;
 
+	import flash.display.DisplayObject;
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -39,13 +41,22 @@ package tree.view.canvas {
 
 		public var click:ISignal;
 
+		public var rollUnrollClick:ISignal;
 		public var rollUnrollButton:RollUnrollButton;
 
 		public var deleteClick:ISignal;
 		private var deleteButton:RollUnrollButton;
 
+		private var maleHighlight:DisplayObject;
+		private var femaleHighlight:DisplayObject;
+
+		private var _highlighted:int = 0;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
+			maleHighlight = skin.getChildByName('male_back_hl');
+			femaleHighlight = skin.getChildByName('female_back_hl');
+			maleHighlight.visible = femaleHighlight.visible = false;
 			addChild(skin);
 
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER);
@@ -72,11 +83,12 @@ package tree.view.canvas {
 
 			addEventListener(MouseEvent.CLICK, onClicked);
 
+			rollUnrollClick = new Signal(NodeIcon);
 			rollUnrollButton = new RollUnrollButton();
-			rollUnrollButton.x = 70;
-			rollUnrollButton.y = 110;
+			rollUnrollButton.x = 90;
+			rollUnrollButton.y = 0;
+			rollUnrollButton.addEventListener(MouseEvent.CLICK, onRollUnrollClicked);
 			addChild(rollUnrollButton);
-			rollUnrollButton.visible = false;
 
 			deleteButton = new RollUnrollButton();
 			deleteButton.x = 90;
@@ -108,6 +120,7 @@ package tree.view.canvas {
 			(skin.getChildByName('name_tf') as TextField).text = p.name;
 			if(p.photo)
 				Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace);
+			rollUnrollButton.male = _data.node.person.male;
 			CONFIG::debug{
 				debugTrace.text = "x=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
 						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
@@ -145,11 +158,13 @@ package tree.view.canvas {
 			photo.clear();
 			removeEventListener(MouseEvent.CLICK, onClicked);
 			rollUnrollButton.clear();
+			rollUnrollButton.removeEventListener(MouseEvent.CLICK, onRollUnrollClicked);
 
 			deleteButton.removeEventListener(MouseEvent.CLICK, onDeletButtonClicked);
 			deleteClick.removeAll();
 			click.removeAll();
 			complete.removeAll();
+			rollUnrollClick.removeAll()
 		}
 
 		public function hide(animated:Boolean = true):void {
@@ -234,6 +249,22 @@ package tree.view.canvas {
 
 		private function onDeletButtonClicked(event:MouseEvent):void {
 			deleteClick.dispatch(this);
+		}
+
+		private function onRollUnrollClicked(event:MouseEvent):void {
+			rollUnrollClick.dispatch(this);
+		}
+
+		public function get highlighted():int {
+			return _highlighted;
+		}
+
+		public function set highlighted(value:int):void {
+			if(_highlighted != value){
+				_highlighted = value;
+				femaleHighlight.visible = value == 1 && _data && _data.node.person.female;
+				maleHighlight.visible = value == 1 && _data && _data.node.person.male;
+			}
 		}
 	}
 }

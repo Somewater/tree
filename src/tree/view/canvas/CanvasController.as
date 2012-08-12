@@ -31,6 +31,7 @@ package tree.view.canvas {
 				n = canvas.getNodeIconAndCreate(g);
 				n.complete.addOnce(onNodeCompleteOnce);
 				n.click.add(onNodeClicked);
+				n.rollUnrollClick.add(onNodeRolUnrollClicked);
 				n.deleteClick.add(onNodeDeleteClicked);
 			}
 
@@ -150,6 +151,11 @@ package tree.view.canvas {
 		}
 
 		private function onNodeClicked(node:NodeIcon):void{
+			//
+		}
+
+		private function onNodeRolUnrollClicked(node:NodeIcon):void{
+			node.rollUnrollButton.rollState = !node.rollUnrollButton.rollState;
 			bus.dispatch(ViewSignal.NODE_ROLL_UNROLL, node.data.node);
 		}
 

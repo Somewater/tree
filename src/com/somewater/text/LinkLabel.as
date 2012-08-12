@@ -1,13 +1,11 @@
 package com.somewater.text
 {
-	import com.somewater.control.IClear;
-	
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
-	
+
 	[Event(name="linkClick",type="com.somewater.text.LinkLabel")]
 	
-	public class LinkLabel extends EmbededTextField implements IClear
+	public class LinkLabel extends EmbededTextField
 	{
 		public static const LINK_CLICK:String = "linkClick";
 		

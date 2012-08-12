@@ -12,11 +12,12 @@ package tree.view.canvas {
 
 		private var movie:MovieClip;
 
-		private var rollState:Boolean = false;// в состоянии развернуто
+		private var _rollState:Boolean = false;// в состоянии развернуто
 
 		private var over:Boolean;
 		private var down:Boolean;
 		private var out:Boolean = true;
+		private var _male:Boolean;
 
 		public function RollUnrollButton() {
 			movie = Config.loader.createMc('assets.RollUnrollButton');
@@ -63,9 +64,30 @@ package tree.view.canvas {
 		}
 
 		private function refresh():void{
-			var frame:int = rollState ? 0 : 3;
+			var frame:int = _rollState ? 0 : 3;
 			if(over) frame += 1; else if(down) frame += 2;
+			if(!_male)frame += 6;
 			movie.gotoAndStop(frame + 1)
+		}
+
+		public function get male():Boolean {
+			return _male;
+		}
+
+		public function set male(value:Boolean):void {
+			_male = value;
+			refresh();
+		}
+
+		public function get rollState():Boolean {
+			return _rollState;
+		}
+
+		public function set rollState(value:Boolean):void {
+			if(_rollState != value){
+				_rollState = value;
+				refresh();
+			}
 		}
 	}
 }

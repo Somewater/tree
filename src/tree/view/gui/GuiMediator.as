@@ -14,7 +14,7 @@ package tree.view.gui {
 			this.controller = new GuiController(gui);
 			super(gui);
 
-			gui.addEventListener(MouseEvent.CLICK, onPanelClicked);
+			//gui.addEventListener(MouseEvent.CLICK, onPanelClicked);
 		}
 
 		override public function clear():void {

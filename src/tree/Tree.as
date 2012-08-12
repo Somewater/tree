@@ -1,6 +1,8 @@
 package tree {
 	import com.junkbyte.console.Cc;
 	import com.junkbyte.console.KeyBind;
+	import com.somewater.storage.I18n;
+	import com.somewater.text.EmbededTextField;
 
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -9,6 +11,7 @@ package tree {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.text.Font;
 	import flash.ui.Keyboard;
 
 	import org.osflash.signals.ISignal;
@@ -75,8 +78,13 @@ package tree {
 
 		public var mediators:Array = [];
 
+		[Embed(source='common/ru.txt', mimeType='application/octet-stream')]
+		private var i18nText:Class;
+
 		public function Tree() {
 			instance = this;
+			EmbededTextField.DEFAULT_FONT = 'Arial';
+			I18n.text = (new i18nText()).toString();
 		}
 
 		public function startup():void {
@@ -128,6 +136,9 @@ package tree {
 		}
 
 		private function configurateView():void {
+			Font.registerFont(Config.loader.createMc('font.ArialBold_font', null, false));
+			Font.registerFont(Config.loader.createMc('font.Arial_font', null, false));
+
 			addChild(Config.content = new Sprite());
 			addChild(Config.windows = new Sprite());
 			new WindowsManager(bus, Config.windows, new Preloader());
@@ -136,7 +147,7 @@ package tree {
 			Config.content.addChild(canvas = new Canvas());
 			new CanvasMediator(canvas, new CanvasController(canvas));
 
-			Config.content.addChild(gui = new Gui(bus));
+			Config.content.addChild(gui = new Gui());
 			new GuiMediator(gui);
 
 			bus.sceneResize.add(onSceneResize);

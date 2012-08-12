@@ -32,7 +32,7 @@ package tree.model {
 		 */
 		public var drawedNodesUids:Array = [];
 
-		private var bus:Bus;
+		public var bus:Bus;
 
 		public function Model(bus:Bus) {
 			this.bus = bus;

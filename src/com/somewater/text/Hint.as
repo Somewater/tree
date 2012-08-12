@@ -7,13 +7,12 @@
  */
 package com.somewater.text
 {
-	import com.greensock.TweenMax;
-	import com.somewater.controller.PopUpManager;
-	import com.somewater.rabbit.storage.Config;
-	import com.somewater.rabbit.storage.Lib;
-	
+	import com.gskinner.motion.GTween;
+	import com.gskinner.motion.GTweener;
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -29,7 +28,7 @@ package com.somewater.text
 		private var ground:Sprite;
 		private var application:DisplayObjectContainer;// относительно чего выводить и просчитывать подсказку
 		
-		private var timer:TweenMax;
+		private var timer:GTween;
 		private var currentControl:Object;// ссылка на объект, для которого в данный момент выведена подсказка
 		
 		protected var textField:EmbededTextField;
@@ -44,10 +43,10 @@ package com.somewater.text
 			else
 				_instance = this;
 			
-			ground = Lib.createMC("interface.HintGround");
+			ground = new Sprite();//Lib.createMC("interface.HintGround");
 			addChild(ground);
 			
-			textField = new EmbededTextField(Config.FONT_SECONDARY,0x124D18,14,true,true,false,false,"center");
+			textField = new EmbededTextField(null,0x124D18,14,true,true,false,false,"center");
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			addChild(textField);
 			
@@ -98,12 +97,12 @@ package com.somewater.text
 			e.currentTarget.addEventListener(MouseEvent.ROLL_OUT, stopHint);
 			e.currentTarget.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);//начинаем следить мышь
 			// включаем таймер на автоскрытие
-			if (timer != null) timer.kill();
+			if (timer != null) timer.
 			currentControl = e.currentTarget;
-			timer = TweenMax.delayedCall(Math.max(2,hint.length * 0.2) + 1.8,stopHint);
+			timer = GTweener.(Math.max(2,hint.length * 0.2) + 1.8,stopHint);
 			// обеспечить появление не сразу. а спустя "время удержания"
 			alpha = 0;
-			TweenMax.to(this,0.2,{alpha:1,delay:0.2})
+			GTweener.to(this,0.2,{alpha:1,delay:0.2})
 		}
 		
 		private function stopHint(e:MouseEvent = null):void{
