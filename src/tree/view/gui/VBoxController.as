@@ -34,7 +34,7 @@ package tree.view.gui {
 			else
 				childrens.push(child);
 
-			(child as DisplayObject).addEventListener(Event.CHANGE, onChildResized);
+			(child as DisplayObject).addEventListener(Event.RESIZE, onChildResized);
 			needRefresh();
 		}
 
@@ -44,7 +44,7 @@ package tree.view.gui {
 				throw new Error('Can\'t find child');
 
 			childrens.splice(idx, 1);
-			(child as DisplayObject).removeEventListener(Event.CHANGE, onChildResized);
+			(child as DisplayObject).removeEventListener(Event.RESIZE, onChildResized);
 			needRefresh();
 		}
 
@@ -68,9 +68,7 @@ package tree.view.gui {
 			var nextY:int = 0;
 			for (var i:int = 0; i < childrens.length; i++) {
 				var child:DisplayObject = childrens[i];
-				if(child.y != nextY){
-					(child as ISize).moveTo(nextY);
-				}
+				(child as ISize).moveTo(nextY);
 				nextY += (child as ISize).calculatedHeight;
 			}
 		}

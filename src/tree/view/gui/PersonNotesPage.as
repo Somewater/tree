@@ -10,7 +10,9 @@ package tree.view.gui {
 
 	public class PersonNotesPage extends PageBase{
 
+		public static const NOTE_WIDTH:int = Config.GUI_WIDTH;
 		public static const NOTE_HEIGHT:int = 65;
+		public static const NOTE_ICON_Y:int = 30;
 		public static const CHANGE_TIME:Number = 0.3;
 
 
@@ -31,14 +33,14 @@ package tree.view.gui {
 
 			constructNotes();
 
-			model.bus.addNamed(ViewSignal.DRAW_JOIN, addNoteSignal)
-			model.bus.addNamed(ViewSignal.REMOVE_JOIN, removeNoteSignal)
+			model.bus.addNamed(ViewSignal.DRAW_JOIN, addNote)
+			model.bus.addNamed(ViewSignal.REMOVE_JOIN, removeNote)
 		}
 
 		override public function clear():void {
 			super.clear();
-			model.bus.removeNamed(ViewSignal.DRAW_JOIN, addNoteSignal);
-			model.bus.removeNamed(ViewSignal.REMOVE_JOIN, removeNoteSignal);
+			model.bus.removeNamed(ViewSignal.DRAW_JOIN, addNote);
+			model.bus.removeNamed(ViewSignal.REMOVE_JOIN, removeNote);
 			model = null;
 		}
 
@@ -52,20 +54,26 @@ package tree.view.gui {
 			notes = [];
 
 			for each(var j:Join in model.joinsQueue){
-				addNoteSignal(j)
+				addNote(j)
 			}
 		}
 
-		private function addNoteSignal(data:ModelBase):void {
+		private function addNote(data:ModelBase):void {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			var note:PersonNoteItem = new PersonNoteItem();
 			notes.push(note);
 			notesHolder.addChild(note);
 			note.data = join;
 			vbox.addChildAt(note);
+
+			//note.over.add(selectNote);
+			//note.out.add(deselectNote);
+			note.click.add(selectNote);
+			note.dblClick.add(centreNote);
+			note.actionClick.add(openNote);
 		}
 
-		private function removeNoteSignal(data:ModelBase):void {
+		private function removeNote(data:ModelBase):void {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			for (var i:int = 0; i < notes.length; i++) {
 				var note:PersonNoteItem = notes[i];
@@ -77,6 +85,38 @@ package tree.view.gui {
 					break;
 				}
 			}
+		}
+
+		private function selectNote(note:PersonNoteItem):void {
+			if(selectedNote != note){
+				if(selectedNote){
+					deselectNote(selectedNote);
+				}
+				selectedNote = note;
+				if(note){
+					note.selected = true;
+				}
+			}
+		}
+
+		private function deselectNote(note:PersonNoteItem):void {
+			if(selectedNote == note){
+				if(note)
+					note.selected = false;
+				selectedNote = null;
+			}
+		}
+
+		private function centreNote(note:PersonNoteItem):void{
+			selectNote(note);
+		}
+
+		private function openNote(note:PersonNoteItem):void{
+			var open:Boolean = !note.opened;
+			if(open)
+				selectNote(note);
+			note.opened = open;
+
 		}
 	}
 }

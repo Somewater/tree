@@ -13,22 +13,29 @@ package tree.view.gui {
 															PersonNotesPage: PersonNotesPage
 														};
 
-		private var background:DisplayObject
+		private var background:Sprite;
+		private var foreground:Sprite;
 		private var page:PageBase;
 		private var pageHolder:Sprite;
 
 		public function Gui() {
 			background = Config.loader.createMc('assets.GuiBack');
+			background.mouseEnabled = background.mouseChildren = false;
 			addChild(background);
 
 			pageHolder = new Sprite()
 			addChild(pageHolder);
+
+			foreground = Config.loader.createMc('assets.GuiForeground');
+			foreground.mouseEnabled = foreground.mouseChildren = false;
+			addChild(foreground);
 
 			setPage('PersonNotesPage')
 		}
 
 		public function setSize(w:int, h:int):void {
 			background.height = h;
+			foreground.height = h;
 			if(page)
 				page.setSize(w, h);
 		}
