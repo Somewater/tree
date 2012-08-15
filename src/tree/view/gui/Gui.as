@@ -17,13 +17,20 @@ package tree.view.gui {
 		private var foreground:Sprite;
 		private var page:PageBase;
 		private var pageHolder:Sprite;
+		private var switcher:ProfileSwitcher;
 
 		public function Gui() {
 			background = Config.loader.createMc('assets.GuiBack');
 			background.mouseEnabled = background.mouseChildren = false;
 			addChild(background);
 
+			switcher = new ProfileSwitcher();
+			switcher.x = (Config.GUI_WIDTH - switcher.width) * 0.5;
+			switcher.y = 15;
+			addChild(switcher);
+
 			pageHolder = new Sprite()
+			pageHolder.y = 60;
 			addChild(pageHolder);
 
 			foreground = Config.loader.createMc('assets.GuiForeground');
@@ -37,7 +44,7 @@ package tree.view.gui {
 			background.height = h;
 			foreground.height = h;
 			if(page)
-				page.setSize(w, h);
+				page.setSize(w, h - pageHolder.y);
 		}
 
 		public function setPage(name:String):void{

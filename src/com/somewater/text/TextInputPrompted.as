@@ -9,10 +9,11 @@ package com.somewater.text
 		
 		public function TextInputPrompted(font:String=null, color:*=null, size:int=12, bold:Boolean=false, align:String="left",bitmapText:Boolean = false)
 		{
-			super(font, color, size, bold, true, true, true, align, bitmapText);
+			super(font, color, size, bold, false, true, true, align, bitmapText);
 			_color = super.color;
 			_bold = bold;
-			_textEmpty = false;	
+			_textEmpty = false;
+			this.text = '';
 		}	
 			
 		// подсказка когда text=""
@@ -33,6 +34,7 @@ package com.somewater.text
 				removeEventListener( FocusEvent.FOCUS_IN, focusIn_handler );
 				removeEventListener( FocusEvent.FOCUS_OUT, focusOut_handler );
 			}
+			trace("-" + super.text + "-");
 			_textEmpty = super.text.length == 0?true:(super.text == _prompt?true:false);	
 			_prompt = value;
 			validate_prompt();

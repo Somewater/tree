@@ -63,6 +63,8 @@ package tree {
 	import tree.view.Preloader;
 	import tree.view.WindowsManager;
 	import tree.view.gui.GuiMediator;
+	import tree.view.gui.Panel;
+	import tree.view.gui.PanelMediator;
 
 	public class Tree extends Sprite{
 
@@ -75,6 +77,7 @@ package tree {
 
 		private var canvas:Canvas;
 		private var gui:Gui;
+		private var panel:Panel;
 
 		public var mediators:Array = [];
 
@@ -149,6 +152,9 @@ package tree {
 
 			Config.content.addChild(gui = new Gui());
 			new GuiMediator(gui);
+
+			Config.content.addChild(panel = new Panel());
+			new PanelMediator(panel);
 
 			bus.sceneResize.add(onSceneResize);
 			onSceneResize();

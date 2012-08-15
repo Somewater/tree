@@ -4,16 +4,20 @@ package tree.view.gui {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 
 	import tree.common.Config;
 
-	public class VBoxController {
+	public class VBoxController extends EventDispatcher{
 		private var holder:DisplayObjectContainer;
 		private var _width:int;
 		private var _height:int;
 		private var childrens:Array = [];
 		private var refreshOrdered:Boolean = false;
+		private var _filter:Function;
+
+		public var calculatedHeight:int;
 
 		public function VBoxController(holder:DisplayObjectContainer) {
 			this.holder = holder;
@@ -63,14 +67,26 @@ package tree.view.gui {
 			needRefresh();
 		}
 
-		private function refresh():void{
+		public function refresh():void{
 			refreshOrdered = false;
 			var nextY:int = 0;
 			for (var i:int = 0; i < childrens.length; i++) {
 				var child:DisplayObject = childrens[i];
-				(child as ISize).moveTo(nextY);
-				nextY += (child as ISize).calculatedHeight;
+				if(_filter == null || _filter(child)){
+					child.visible = true;
+					(child as ISize).moveTo(nextY);
+					nextY += (child as ISize).calculatedHeight;
+				}else{
+					child.visible = false;
+				}
 			}
+			calculatedHeight = nextY
+			dispatchEvent(new Event(Event.CHANGE));
+		}
+
+		public function filter(func:Function):void {
+			_filter = func;
+			refresh();
 		}
 	}
 }

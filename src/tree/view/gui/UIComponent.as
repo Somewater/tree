@@ -1,4 +1,6 @@
 package tree.view.gui {
+	import com.somewater.display.CorrectSizeDefinerSprite;
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -8,7 +10,7 @@ package tree.view.gui {
 
 	import tree.common.IClear;
 
-	public class UIComponent extends Sprite implements IClear, ISize{
+	public class UIComponent extends CorrectSizeDefinerSprite implements IClear, ISize{
 
 		public var over:ISignal;
 		public var out:ISignal;
@@ -58,7 +60,7 @@ package tree.view.gui {
 		}
 
 		public function fireResize():void{
-			dispatchEvent(new Event(Event.RESIZE))
+			dispatchEvent(new Event(Event.RESIZE, true))
 		}
 
 		public function get calculatedHeight():int {

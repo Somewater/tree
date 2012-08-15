@@ -3,15 +3,12 @@ package tree.view.gui {
 
 	import tree.common.IClear;
 
-	public class PageBase extends Sprite implements IClear{
+	public class PageBase extends UIComponent implements IClear{
 
 		protected var _width:int;
 		protected var _height:int;
 
 		public function PageBase() {
-		}
-
-		public function clear():void {
 		}
 
 		public function get pageName():String{
@@ -25,7 +22,7 @@ package tree.view.gui {
 		}
 
 		public function resize():void{
-
+			fireResize();
 		}
 	}
 }

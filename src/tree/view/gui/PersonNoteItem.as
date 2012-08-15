@@ -94,6 +94,10 @@ package tree.view.gui {
 			return _opened ? PersonNotesPage.NOTE_ICON_Y + menu.height : PersonNotesPage.NOTE_HEIGHT;
 		}
 
+		override public function get height():Number {
+			return calculatedHeight;
+		}
+
 		override public function clear():void {
 			actionsTF.clear();
 			_data = null;
@@ -165,6 +169,10 @@ package tree.view.gui {
 
 		private function onActionClicked(event:Event):void{
 			actionClick.dispatch(this);
+		}
+
+		public function get post():String{
+			return postTF.text;
 		}
 	}
 }

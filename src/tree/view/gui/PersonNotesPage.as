@@ -1,11 +1,18 @@
 package tree.view.gui {
+	import com.somewater.display.CorrectSizeDefinerSprite;
+
+	import fl.containers.ScrollPane;
+	import fl.controls.ScrollPolicy;
+
 	import flash.display.Sprite;
+	import flash.events.Event;
 
 	import tree.common.Config;
 	import tree.model.GenNode;
 	import tree.model.Join;
 	import tree.model.Model;
 	import tree.model.ModelBase;
+	import tree.model.Person;
 	import tree.signal.ViewSignal;
 
 	public class PersonNotesPage extends PageBase{
@@ -23,13 +30,30 @@ package tree.view.gui {
 
 		private var selectedNote:PersonNoteItem;
 
+		private var searchField:SearchField;
+		private var scroller:ScrollPane;
+
 		public function PersonNotesPage() {
 			this.model = Config.inject(Model);
 
-			notesHolder = new Sprite();
-			addChild(notesHolder);
+			searchField = new SearchField();
+			searchField.x = (Config.GUI_WIDTH - searchField.width) * 0.5;
+			searchField.addEventListener(Event.CHANGE, onSearchWordChanged);
+			addChild(searchField);
 
 			vbox = new VBoxController(notesHolder);
+			vbox.addEventListener(Event.CHANGE, onResize);
+			vbox.filter(filterNotes);
+
+			notesHolder = new NotesHolder(vbox);
+
+			scroller = new ScrollPane();
+			scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
+			scroller.width = Config.GUI_WIDTH;
+			scroller.height = 400;
+			scroller.y = searchField.y + searchField.height + 8;
+			addChild(scroller);
+			scroller.source = notesHolder;
 
 			constructNotes();
 
@@ -37,11 +61,26 @@ package tree.view.gui {
 			model.bus.addNamed(ViewSignal.REMOVE_JOIN, removeNote)
 		}
 
+		private function onResize(event:Event):void{
+			scroller.update();
+		}
+
 		override public function clear():void {
 			super.clear();
 			model.bus.removeNamed(ViewSignal.DRAW_JOIN, addNote);
 			model.bus.removeNamed(ViewSignal.REMOVE_JOIN, removeNote);
 			model = null;
+
+			vbox.removeEventListener(Event.CHANGE, onResize);
+			searchField.removeEventListener(Event.CHANGE, onSearchWordChanged);
+			searchField.clear();
+			for each(var n:PersonNoteItem in notes)
+				n.clear();
+		}
+
+		override public function resize():void {
+			scroller.height = _height - scroller.y;
+			scroller.update();
 		}
 
 		private function constructNotes():void {
@@ -71,6 +110,7 @@ package tree.view.gui {
 			note.click.add(selectNote);
 			note.dblClick.add(centreNote);
 			note.actionClick.add(openNote);
+			fireResize();
 		}
 
 		private function removeNote(data:ModelBase):void {
@@ -85,6 +125,7 @@ package tree.view.gui {
 					break;
 				}
 			}
+			fireResize();
 		}
 
 		private function selectNote(note:PersonNoteItem):void {
@@ -116,7 +157,44 @@ package tree.view.gui {
 			if(open)
 				selectNote(note);
 			note.opened = open;
-
+			fireResize();
 		}
+
+		private function onSearchWordChanged(event:Event):void{
+			vbox.refresh();
+		}
+
+		private function filterNotes(note:PersonNoteItem):Boolean{
+			var search:String = searchField.search;
+			if(search && search.length){
+				var p:Person = note.data.associate;
+				if(p.firstName.indexOf(search) != -1)
+					return true;
+				if(p.lastName.indexOf(search) != -1)
+					return true;
+				if(note.post.indexOf(search) != -1)
+					return true;
+				return false;
+			} else
+				return true;
+		}
+	}
+}
+
+import flash.display.Sprite;
+
+import tree.view.gui.VBoxController;
+
+class NotesHolder extends Sprite{
+
+	private var vbox:VBoxController;
+
+	public function NotesHolder(vbox:VBoxController){
+		this.vbox = vbox;
+	}
+
+
+	override public function get height():Number {
+		return vbox.calculatedHeight;
 	}
 }
