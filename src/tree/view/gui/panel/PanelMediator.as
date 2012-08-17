@@ -1,4 +1,4 @@
-package tree.view.gui {
+package tree.view.gui.panel {
 	import tree.common.Config;
 	import tree.view.Mediator;
 

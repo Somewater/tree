@@ -1,4 +1,5 @@
-package tree.view.gui {
+package tree.view.gui.notes {
+	import tree.view.gui.*;
 	import com.somewater.display.CorrectSizeDefinerSprite;
 
 	import fl.containers.ScrollPane;
@@ -42,8 +43,8 @@ package tree.view.gui {
 			addChild(searchField);
 
 			vbox = new VBoxController(notesHolder);
-			vbox.addEventListener(Event.CHANGE, onResize);
 			vbox.filter(filterNotes);
+			vbox.addEventListener(Event.CHANGE, onResize);
 
 			notesHolder = new NotesHolder(vbox);
 
@@ -78,7 +79,8 @@ package tree.view.gui {
 				n.clear();
 		}
 
-		override public function resize():void {
+		override protected function refresh():void {
+			super.refresh();
 			scroller.height = _height - scroller.y;
 			scroller.update();
 		}

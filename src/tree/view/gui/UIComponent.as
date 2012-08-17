@@ -16,17 +16,26 @@ package tree.view.gui {
 		public var out:ISignal;
 		public var click:ISignal;
 		public var dblClick:ISignal;
+		public var down:ISignal;
+		public var up:ISignal;
+
+		protected var _width:Number;
+		protected var _height:Number;
 
 		public function UIComponent() {
 			over = new Signal(UIComponent);
 			out = new Signal(UIComponent);
 			click = new Signal(UIComponent);
 			dblClick = new Signal(UIComponent);
+			down = new Signal(UIComponent);
+			up = new Signal(UIComponent);
 
 			addEventListener(MouseEvent.MOUSE_OVER, onOver);
 			addEventListener(MouseEvent.MOUSE_OUT, onOut);
 			addEventListener(MouseEvent.CLICK, onClick);
 			addEventListener(MouseEvent.DOUBLE_CLICK, onDblClick);
+			addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+			addEventListener(MouseEvent.MOUSE_UP, onUp);
 		}
 
 		public function clear():void{
@@ -34,13 +43,17 @@ package tree.view.gui {
 			removeEventListener(MouseEvent.MOUSE_OUT, onOut);
 			removeEventListener(MouseEvent.CLICK, onClick);
 			removeEventListener(MouseEvent.DOUBLE_CLICK, onDblClick);
+			removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
+			removeEventListener(MouseEvent.MOUSE_UP, onUp);
 
 			over.removeAll();
 			out.removeAll();
 			click.removeAll();
 			dblClick.removeAll();
+			down.removeAll();
+			up.removeAll();
 
-			out = over = click = dblClick = null;
+			down = up = out = over = click = dblClick = null;
 		}
 
 		private function onOver(event:MouseEvent):void {
@@ -59,6 +72,14 @@ package tree.view.gui {
 			dblClick.dispatch(this);
 		}
 
+		private function onDown(event:MouseEvent):void {
+			down.dispatch(this);
+		}
+
+		private function onUp(event:MouseEvent):void {
+			up.dispatch(this);
+		}
+
 		public function fireResize():void{
 			dispatchEvent(new Event(Event.RESIZE, true))
 		}
@@ -69,6 +90,32 @@ package tree.view.gui {
 
 		public function moveTo(y:int):void {
 			this.y = y;
+		}
+
+		public function setSize(w:int, h:int):void{
+			_width = w;
+			_height = h;
+			refresh();
+		}
+
+		protected function refresh():void{
+
+		}
+
+		override public function get width():Number {
+			return isNaN(_width) ? super.width : _width;
+		}
+
+		override public function get height():Number {
+			return isNaN(_height) ? super.height : _height;
+		}
+
+		override public function set width(value:Number):void {
+			setSize(value, this.height);
+		}
+
+		override public function set height(value:Number):void {
+			setSize(this.width, value);
 		}
 	}
 }

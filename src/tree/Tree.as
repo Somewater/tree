@@ -63,8 +63,8 @@ package tree {
 	import tree.view.Preloader;
 	import tree.view.WindowsManager;
 	import tree.view.gui.GuiMediator;
-	import tree.view.gui.Panel;
-	import tree.view.gui.PanelMediator;
+	import tree.view.gui.panel.Panel;
+	import tree.view.gui.panel.PanelMediator;
 
 	public class Tree extends Sprite{
 

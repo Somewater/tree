@@ -5,9 +5,6 @@ package tree.view.gui {
 
 	public class PageBase extends UIComponent implements IClear{
 
-		protected var _width:int;
-		protected var _height:int;
-
 		public function PageBase() {
 		}
 
@@ -15,13 +12,8 @@ package tree.view.gui {
 			throw new Error('Implement me');
 		}
 
-		public function setSize(w:int, h:int):void{
-			_width = w;
-			_height = h;
-			resize();
-		}
-
-		public function resize():void{
+		override protected function refresh():void{
+			super.refresh();
 			fireResize();
 		}
 	}

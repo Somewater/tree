@@ -1,4 +1,4 @@
-package tree.view.gui {
+package tree.view.gui.notes {
 	import com.somewater.storage.I18n;
 	import com.somewater.text.TextInputPrompted;
 

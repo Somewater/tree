@@ -1,4 +1,5 @@
-package tree.view.gui {
+package tree.view.gui.notes {
+	import tree.view.gui.*;
 	import com.gskinner.motion.GTweener;
 	import com.somewater.storage.I18n;
 	import com.somewater.text.LinkLabel;
@@ -120,10 +121,6 @@ package tree.view.gui {
 			return _data;
 		}
 
-		private function refresh():void {
-		}
-
-
 		public function get selected():Boolean {
 			return _selected;
 		}
@@ -188,8 +185,8 @@ import tree.common.Config;
 
 import tree.common.IClear;
 
-import tree.view.gui.PersonNoteItem;
-import tree.view.gui.PersonNotesPage;
+import tree.view.gui.notes.PersonNoteItem;
+import tree.view.gui.notes.PersonNotesPage;
 
 class NoteContextMenu extends Sprite implements IClear{
 

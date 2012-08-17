@@ -1,4 +1,4 @@
-package tree.view.gui {
+package tree.view.gui.panel {
 	import tree.command.Actor;
 
 	public class PanelController extends Actor{

@@ -6,6 +6,7 @@ package tree.view.gui {
 
 	import tree.common.Bus;
 	import tree.common.Config;
+	import tree.view.gui.notes.PersonNotesPage;
 
 	public class Gui extends Sprite{
 
