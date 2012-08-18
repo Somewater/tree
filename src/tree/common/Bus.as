@@ -3,6 +3,7 @@ package tree.common {
 
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.events.FullScreenEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
@@ -39,6 +40,8 @@ package tree.common {
 
 		public var zoom:IPrioritySignal// callback(zoom:Number)
 
+		public var fullscreen:IPrioritySignal;
+
 		private var stage:Stage;
 
 		public function Bus(stage:Stage) {
@@ -66,12 +69,17 @@ package tree.common {
 			mouseUp.addWithPriority(onStopDrag, int.MIN_VALUE + 1000);
 
 			zoom = new BusSignal(this, 'zoom');
+
+			fullscreen = new BusSignal(this, 'fullscreen');
+			stage.addEventListener(FullScreenEvent.FULL_SCREEN, onFullScreenChanged);
 		}
 
 		private function onResize(event:Event):void {
-			tmpPoint.x = Config.WIDTH = (event.currentTarget as Stage).stageWidth;
-			tmpPoint.y = Config.HEIGHT = (event.currentTarget as Stage).stageHeight;
-			sceneResize.dispatch(tmpPoint);
+			if(event == null || event.target == stage){
+				tmpPoint.x = Config.WIDTH = stage.stageWidth;
+				tmpPoint.y = Config.HEIGHT = stage.stageHeight;
+				sceneResize.dispatch(tmpPoint);
+			}
 		}
 
 		private function onMouseWheel(event:MouseEvent):void {
@@ -129,8 +137,15 @@ package tree.common {
 		private function mouseOnCanvas():Boolean{
 			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH);
 		}
+
+		private function onFullScreenChanged(event:FullScreenEvent):void{
+			fullscreen.dispatch(event.fullScreen)
+			onResize(null);
+		}
 	}
 }
+
+import com.junkbyte.console.Cc;
 
 import org.osflash.signals.ISignal;
 import org.osflash.signals.PrioritySignal;
@@ -146,5 +161,10 @@ class BusSignal extends PrioritySignal
 		this.name = name;
 		this.bus = bus;
 		super(classes);
+	}
+
+	override public function dispatch(... valueObjects):void {
+		Cc.log("DISPATCH: (" + name + ")" + valueObjects);
+		super.dispatch.apply(null, valueObjects)
 	}
 }

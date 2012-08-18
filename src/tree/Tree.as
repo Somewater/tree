@@ -156,7 +156,7 @@ package tree {
 			Config.content.addChild(panel = new Panel());
 			new PanelMediator(panel);
 
-			bus.sceneResize.add(onSceneResize);
+			//bus.sceneResize.add(onSceneResize);
 			onSceneResize();
 		}
 

@@ -29,7 +29,7 @@ package tree.view {
 			splashScreen = new Sprite();
 			onSceneResize(null);
 
-			bus.sceneResize.addWithPriority(onSceneResize, int.MIN_VALUE);
+			//bus.sceneResize.addWithPriority(onSceneResize, int.MIN_VALUE);
 			bus.loaderProgress.addWithPriority(onLoaderProgress, int.MIN_VALUE);
 			bus.addNamed(ViewSignal.CANVAS_READY_FOR_START, hideLoader);
 		}

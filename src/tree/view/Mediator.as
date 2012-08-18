@@ -1,4 +1,6 @@
 package tree.view {
+	import com.junkbyte.console.Cc;
+
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Point;
@@ -30,7 +32,7 @@ package tree.view {
 			if(view.parent)
 				active(null);
 
-			bus.sceneResize.addWithPriority(onSceneResize);
+			bus.sceneResize.add(onSceneResize);
 		}
 
 		public function clear():void {
@@ -121,6 +123,7 @@ package tree.view {
 		}
 
 		protected function onSceneResize(point:Point):void {
+			Cc.log('Mediator scene resize ' + point + " " + this)
 			refresh();
 		}
 

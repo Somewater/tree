@@ -11,14 +11,14 @@ package tree.view.gui.panel {
 
 	public class Panel extends Sprite{
 
-		private var titleTF:EmbededTextField;
-		private var savePrintButton:DoubleButton;
-		private var centreRotateButton:DoubleButton;
-		private var optionsButton:Button;
-		private var fullscreenButton:Button;
-		private var densitySelector:DensitySelector;
-		private var zoomSlider:ZoomSlider;
-		private var saveTreeButton:BlueButton;
+		public var titleTF:EmbededTextField;
+		public var savePrintButton:DoubleButton;
+		public var centreRotateButton:DoubleButton;
+		public var optionsButton:Button;
+		public var fullscreenButton:Button;
+		public var densitySelector:DensitySelector;
+		public var zoomSlider:ZoomSlider;
+		public var saveTreeButton:BlueButton;
 
 		public function Panel() {
 			titleTF = new EmbededTextField(null, 0, 19, true);
