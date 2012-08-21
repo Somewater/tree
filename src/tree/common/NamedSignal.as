@@ -46,6 +46,7 @@ package tree.common {
 					else if(data.length == 5)
 						command = new commandCl(data[0], data[1], data[2], data[3], data[4]);
 
+					command.signalName = signalName;
 					command.execute();
 				}
 			}
@@ -73,6 +74,12 @@ package tree.common {
 				commandsByName[name] = listeners = [];
 			if(listeners.indexOf(command) == -1)
 				listeners.push(command);
+		}
+
+		public function removeCommand(name:String, command:Class):void {
+			var listeners:Array = commandsByName[name];
+			if(listeners)
+				listeners.splice(listeners.indexOf(command), 1);
 		}
 	}
 }

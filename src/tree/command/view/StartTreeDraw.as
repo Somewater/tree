@@ -48,6 +48,7 @@ package tree.command.view {
 								return;
 							}
 
+							response.node.join = j;
 							joinsForDraw.push(j);
 						}
 					})

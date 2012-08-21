@@ -2,6 +2,7 @@ package tree.command {
 	import tree.model.Join;
 	import tree.model.Join;
 	import tree.model.JoinType;
+	import tree.model.Node;
 	import tree.model.Person;
 	import tree.model.PersonsCollection;
 	import tree.model.TreeModel;
@@ -45,6 +46,7 @@ package tree.command {
 
 				for each(person in tree.*)
 				{
+					var nodeModel:Node;
 					var personModel:Person = treeModel.persons.get(String(person.@uid));
 					if(personModel == null)
 					{
@@ -61,6 +63,9 @@ package tree.command {
 					personModel.maidenName = String(person.fields.field.(@name == "maiden_name"));
 					personModel.birthday = databaseFormatToDate(person.fields.field.(@name == "birthday"));
 					personModel.deathday = databaseFormatToDate(person.fields.field.(@name == "deathday"));
+
+					nodeModel = treeModel.nodes.allocate(personModel) ;
+					treeModel.nodes.add(nodeModel);
 				}
 			}
 
@@ -128,7 +133,7 @@ package tree.command {
 			}
 
 			// всё требует пересчёта
-			bus.dispatch(ModelSignal.NODES_NEED_CONSTRUCT);
+			bus.dispatch(ModelSignal.NODES_NEED_CALCULATE);
 		}
 
 		private function databaseFormatToDate(string:String):Date{

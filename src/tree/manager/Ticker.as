@@ -14,6 +14,7 @@ package tree.manager {
 		public function Ticker(stage:Stage) {
 			deferredCallbacksByFrames = new Vector.<DC>();
 			deferredCallbacksByMS = new Vector.<DC>();
+			tickers = new Vector.<ITick>();
 			stage.addEventListener(Event.ENTER_FRAME, onTick);
 		}
 

@@ -155,7 +155,6 @@ package tree.view.canvas {
 		}
 
 		private function onNodeRolUnrollClicked(node:NodeIcon):void{
-			node.rollUnrollButton.rollState = !node.rollUnrollButton.rollState;
 			bus.dispatch(ViewSignal.NODE_ROLL_UNROLL, node.data.node);
 		}
 

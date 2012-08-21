@@ -20,14 +20,14 @@ package tree {
 	import tree.command.AddPerson;
 	import tree.command.ChangePersonJoins;
 
-	import tree.command.ConstructNodes;
-
 	import tree.command.RecalculateNodes;
 	import tree.command.RemovePerson;
 
 	import tree.command.ResponseRouter;
+	import tree.command.view.CalculateNextNodeRollUnroll;
 	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
+	import tree.command.view.RecalculateNodeRollUnroll;
 	import tree.command.view.ShowNode;
 	import tree.command.view.HideNode;
 	import tree.command.view.RollUnrollNode;
@@ -59,6 +59,7 @@ package tree {
 	import tree.view.canvas.Canvas;
 	import tree.view.canvas.CanvasController;
 	import tree.view.canvas.CanvasMediator;
+	import tree.view.canvas.INodeViewCollection;
 	import tree.view.gui.Gui;
 	import tree.view.Preloader;
 	import tree.view.WindowsManager;
@@ -148,7 +149,11 @@ package tree {
 			addChild(Config.tooltips = new Sprite());
 
 			Config.content.addChild(canvas = new Canvas());
-			new CanvasMediator(canvas, new CanvasController(canvas));
+			var canvasController:CanvasController = new CanvasController(canvas)
+			new CanvasMediator(canvas, canvasController);
+			Config.reject(CanvasController, canvasController);
+			Config.reject(Canvas, canvas);
+			Config.reject(INodeViewCollection, canvas);
 
 			Config.content.addChild(gui = new Gui());
 			new GuiMediator(gui);
@@ -163,7 +168,6 @@ package tree {
 		private function configurateCommands():void {
 			bus.addCommand(AppSignal.STARTUP, StartupCommand);
 			bus.addCommand(ResponseSignal.SIGNAL, ResponseRouter);
-			bus.addCommand(ModelSignal.NODES_NEED_CONSTRUCT, ConstructNodes);
 			bus.addCommand(ModelSignal.NODES_NEED_CALCULATE, RecalculateNodes);
 			bus.addCommand(ModelSignal.TREE_NEED_CONSTRUCT, StartTreeDraw);
 			bus.addCommand(ModelSignal.SHOW_NODE, ShowNode);
@@ -179,8 +183,11 @@ package tree {
 			bus.addCommand(ModelSignal.REMOVE_PERSON, RemovePerson);
 			bus.addCommand(ModelSignal.CHANGE_PERSON_JOINS, ChangePersonJoins)
 
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void{if(e.keyCode == Keyboard.N) new ContinueTreeDraw().execute()})
-			//bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);
+			bus.addCommand(ViewSignal.RECALCULATE_ROLL_UNROLL, RecalculateNodeRollUnroll);
+			bus.addCommand(ViewSignal.CALCULATE_NEXT_ROLL_UNROLL, CalculateNextNodeRollUnroll);
+
+			//stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void{if(e.keyCode == Keyboard.N) new ContinueTreeDraw().execute()})
+			bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);
 		}
 
 

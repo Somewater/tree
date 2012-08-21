@@ -128,5 +128,9 @@ package tree.view.canvas {
 		public function fireComplete():void{
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
+
+		public function get iterator():*{
+			return nodesByUid;
+		}
 	}
 }

@@ -1,9 +1,11 @@
 package tree.command.view {
 	import tree.command.Command;
+	import tree.common.Config;
 	import tree.model.Join;
 	import tree.model.Node;
 	import tree.model.process.RollQueueProcessor;
 	import tree.signal.ViewSignal;
+	import tree.view.canvas.INodeViewCollection;
 
 	public class RollUnrollNode extends Command{
 
@@ -18,37 +20,29 @@ package tree.command.view {
 			if(model.joinsForDraw.length || model.joinsForRemove.length)
 				return;
 
-			detain();
-			var processor:RollQueueProcessor = new RollQueueProcessor(node.person.tree, node.person, onQueueCompleted);
-		}
 
-		private function onQueueCompleted(queue:Array):void {
-			release();
-
-			if(queue.length){
-				// если указанные ноды свернуты, развернуть их. Иначе свернуть
+			var n:Node;
+			var canvas:INodeViewCollection = Config.inject(INodeViewCollection);
+			if(node.slavesUnrolled){
+				node.slavesUnrolled = false;
 				var visible:Array = [];
+				for each(n in node.slaves)
+					if(n.visible)
+						visible.push(n.join)
+				reverse(visible);
+				model.joinsForRemove = model.joinsForRemove.concat(visible)
+			}else{// hidden.length
+				node.slavesUnrolled = true;
 				var hidden:Array = [];
-
-				for each(var j:Join in queue){
-					if(model.drawedNodesUids[j.uid])
-						visible.push(j);
-					else
-						hidden.push(j);
-				}
-
-				if(hidden.length == 0 && visible.length == 0){
-					error("Node " + node + " has wrong roll-unroll queue. Roll: " + hidden + ", Unroll: " + visible);
-					return;
-				}else if(visible.length){
-					reverse(visible);
-					model.joinsForRemove = model.joinsForRemove.concat(visible)
-				}else{// hidden.length
-					model.joinsForDraw = model.joinsForDraw.concat(hidden)
-				}
-
-				bus.dispatch(ViewSignal.JOIN_QUEUE_STARTED);
+				for each(n in node.slaves)
+					if(!n.visible && n.unrolled)
+						hidden.push(n.join)
+				model.joinsForDraw = model.joinsForDraw.concat(hidden)
 			}
+
+			node.fireRollChange();
+
+			bus.dispatch(ViewSignal.JOIN_QUEUE_STARTED);
 		}
 
 		private function reverse(a:Array):void {

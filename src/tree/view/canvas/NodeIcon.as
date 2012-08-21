@@ -20,6 +20,7 @@ package tree.view.canvas {
 	import tree.common.IClear;
 	import tree.model.GenNode;
 	import tree.model.Generation;
+	import tree.model.Join;
 
 	import tree.model.Node;
 	import tree.model.Person;
@@ -107,6 +108,8 @@ package tree.view.canvas {
 			this._data = value;
 			refreshData();
 			value.node.visible = true;
+			value.node.rollChanged.add(refreshRollUnroll)
+			refreshRollUnroll(value.node);
 		}
 
 		public function get data():GenNode {
@@ -145,6 +148,13 @@ package tree.view.canvas {
 			}
 		}
 
+		private function refreshRollUnroll(n:Node):void{
+			if(!n.slaves || n.slaves.length == 0)
+				hideRollUnroll();
+			else
+				showRollUnroll();
+		}
+
 		private function dispatchOnComplete(g:GTween = null):void {
 			complete.dispatch(this);
 		}
@@ -152,6 +162,7 @@ package tree.view.canvas {
 		public function clear():void {
 			if(_data) {
 				_data.node.visible = false;
+				_data.node.rollChanged.remove(refreshRollUnroll);
 				_data.changed.remove(refreshPosition);
 				_data = null;
 			}
@@ -265,6 +276,18 @@ package tree.view.canvas {
 				femaleHighlight.visible = value == 1 && _data && _data.node.person.female;
 				maleHighlight.visible = value == 1 && _data && _data.node.person.male;
 			}
+		}
+
+		public function hideRollUnroll():void{
+			rollUnrollButton.visible = false;
+			rollUnrollButton.alpha = 0;
+		}
+
+		public function showRollUnroll():void{
+			rollUnrollButton.visible = true;
+			rollUnrollButton.alpha = 0;
+			GTweener.to(rollUnrollButton, 0.3, {alpha: 1});
+			rollUnrollButton.rollState = data.node.slavesUnrolled;
 		}
 	}
 }

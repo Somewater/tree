@@ -17,6 +17,10 @@ package tree.signal {
 
 		public static const ALL_TREES_COMPLETED:String = 'allTreesCompleted';// все ноды построены
 
+		public static const RECALCULATE_ROLL_UNROLL:String = 'recalculateRollUnroll';// скрыть все кнопки roll-unroll и начать их пересчет
+
+		public static const CALCULATE_NEXT_ROLL_UNROLL:String = 'calculateNextRollUnroll';// калькулировать очередную ноду на возможность отображения кнопки roll-unroll
+
 		public function ViewSignal() {
 		}
 	}

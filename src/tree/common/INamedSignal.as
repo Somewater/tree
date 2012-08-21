@@ -5,8 +5,10 @@ package tree.common {
 
 		function addNamed(name:String, listener:Function):void
 
+		function removeNamed(name:String, listener:Function):void
+
 		function addCommand(name:String, command:Class):void
 
-		function removeNamed(name:String, listener:Function):void
+		function removeCommand(name:String, command:Class):void
 	}
 }
