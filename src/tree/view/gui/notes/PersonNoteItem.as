@@ -199,22 +199,22 @@ package tree.view.gui.notes {
 
 		public function show():void {
 			this.visible = true;
-			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha: 1}, {onComplete: onShowComplete})
+			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {scaleY: 1, alpha:1}, {onComplete: onShowComplete})
 		}
 
 		public function hide():void {
-			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha: 0}, {onComplete: onHideComplete})
+			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {scaleY: 0, alpha:0.2}, {onComplete: onHideComplete})
 		}
 
 		private function onShowComplete(g:GTween):void{
-			this.actionsTF.visible = true;
-			this.actionMark.visible = true;
+			//this.actionsTF.visible = true;
+			//this.actionMark.visible = true;
 		}
 
 		private function onHideComplete(g:GTween):void{
 			this.visible = false;
-			this.actionsTF.visible = false;
-			this.actionMark.visible = false;
+			//this.actionsTF.visible = false;
+			//this.actionMark.visible = false;
 		}
 	}
 }

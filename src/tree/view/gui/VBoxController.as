@@ -80,6 +80,7 @@ package tree.view.gui {
 						child.visible = true;
 					nextY += (child as ISize).calculatedHeight;
 				}else{
+					(child as ISize).moveTo(nextY);
 					if(child is IShowable)
 						IShowable(child).hide()
 					else
