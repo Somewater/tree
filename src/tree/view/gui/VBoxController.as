@@ -72,12 +72,18 @@ package tree.view.gui {
 			var nextY:int = 0;
 			for (var i:int = 0; i < childrens.length; i++) {
 				var child:DisplayObject = childrens[i];
-				if(_filter == null || _filter(child)){
-					child.visible = true;
+				if(_filter == null || _filter(child, i)){
 					(child as ISize).moveTo(nextY);
+					if(child is IShowable)
+						IShowable(child).show()
+					else
+						child.visible = true;
 					nextY += (child as ISize).calculatedHeight;
 				}else{
-					child.visible = false;
+					if(child is IShowable)
+						IShowable(child).hide()
+					else
+						child.visible = false;
 				}
 			}
 			calculatedHeight = nextY

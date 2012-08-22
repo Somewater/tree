@@ -25,6 +25,7 @@ package tree.view.canvas {
 	import tree.model.Node;
 	import tree.model.Person;
 	import tree.view.canvas.Canvas;
+	import tree.view.gui.Helper;
 
 	public class NodeIcon extends Sprite implements IClear{
 
@@ -97,6 +98,8 @@ package tree.view.canvas {
 			addChild(deleteButton);
 			deleteButton.addEventListener(MouseEvent.CLICK, onDeletButtonClicked);
 			deleteButton.visible = false;
+
+			Helper.stylizeText((skin.getChildByName('name_tf') as TextField));
 		}
 
 		private function onClicked(event:MouseEvent):void {

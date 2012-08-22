@@ -1,4 +1,6 @@
 package tree.view.gui.notes {
+	import com.somewater.storage.I18n;
+
 	import tree.view.gui.*;
 	import com.somewater.display.CorrectSizeDefinerSprite;
 
@@ -102,10 +104,23 @@ package tree.view.gui.notes {
 		private function addNote(data:ModelBase):void {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			var note:PersonNoteItem = new PersonNoteItem();
-			notes.push(note);
-			notesHolder.addChild(note);
+			if(notes.length == 0)
+				note.firstPerson = true;
+
 			note.data = join;
-			vbox.addChildAt(note);
+			var noteName:String = join.associate.fullname;
+
+			var index:int = notes.length;
+			var notesLen:int = notes.length;
+			for(var i:int = 1;i<notesLen;i++)
+				if(noteName < (notes[i] as PersonNoteItem).data.associate.fullname){
+					index = i;
+					break;
+				}
+
+			notes.splice(index, 0, note);
+			notesHolder.addChildAt(note, index);
+			vbox.addChildAt(note, index);
 
 			//note.over.add(selectNote);
 			//note.out.add(deselectNote);
@@ -166,15 +181,18 @@ package tree.view.gui.notes {
 			vbox.refresh();
 		}
 
-		private function filterNotes(note:PersonNoteItem):Boolean{
-			var search:String = searchField.search;
-			if(search && search.length){
+		private function filterNotes(note:PersonNoteItem, index:int):Boolean{
+			if(index == 0)
+				return true;
+			var search:String = searchField.search.toLowerCase();
+			var spaces:RegExp = /^\s+$/;
+			if(search && search.length && !spaces.test(search)){
 				var p:Person = note.data.associate;
-				if(p.firstName.indexOf(search) != -1)
+				if(p.firstName.toLowerCase().indexOf(search) != -1)
 					return true;
-				if(p.lastName.indexOf(search) != -1)
+				if(p.lastName.toLowerCase().indexOf(search) != -1)
 					return true;
-				if(note.post.indexOf(search) != -1)
+				if(note.post.toLowerCase().indexOf(search) != -1)
 					return true;
 				return false;
 			} else

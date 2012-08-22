@@ -1,4 +1,11 @@
 package tree.view.gui.notes {
+	import com.gskinner.motion.GTween;
+	import com.somewater.text.EmbededTextField;
+
+	import flash.display.GradientType;
+
+	import flash.geom.Matrix;
+
 	import tree.view.gui.*;
 	import com.gskinner.motion.GTweener;
 	import com.somewater.storage.I18n;
@@ -20,10 +27,10 @@ package tree.view.gui.notes {
 	import tree.common.IClear;
 	import tree.model.Join;
 
-	public class PersonNoteItem extends UIComponent implements ISize, IClear{
+	public class PersonNoteItem extends UIComponent implements ISize, IClear, IShowable{
 
 		private var _data:Join;
-		private var nameTF:TruncatedTextField;
+		private var nameTF:EmbededTextField;
 		private var postTF:TruncatedTextField;
 		private var actionsTF:LinkLabel;
 		private var actionMark:DisplayObject;
@@ -38,19 +45,36 @@ package tree.view.gui.notes {
 		private var menuMask:Shape;
 
 		public var actionClick:ISignal;
+		public var firstPerson:Boolean = false;
 
 		public function PersonNoteItem() {
-			nameTF = new TruncatedTextField(null, 0x799919, 15, true);
-			nameTF.maxWidth = 225;
+			const nameTfMaxWidth:int = Config.GUI_WIDTH - 15;
+			nameTF = new EmbededTextField(null, 0x799919, 15, true);
 			nameTF.x = 14;
 			nameTF.y = 12;
 			addChild(nameTF);
+			Helper.stylizeText(nameTF);
+
+			var nameMask:Shape = new Shape();
+			addChild(nameMask);
+			var mat:Matrix= new Matrix();
+			var colors:Array=[0,0];
+			var alphas:Array=[1,0];
+			var ratios:Array=[230,255];
+			mat.createGradientBox(nameTfMaxWidth,nameTfMaxWidth);
+			nameMask.graphics.lineStyle();
+			nameMask.graphics.beginGradientFill(GradientType.LINEAR,colors,alphas,ratios,mat);
+			nameMask.graphics.drawRect(0,0,nameTfMaxWidth,50);
+			nameMask.graphics.endFill();
+			nameTF.mask = nameMask;
+			nameMask.cacheAsBitmap = nameTF.cacheAsBitmap = true;
 
 			postTF = new TruncatedTextField(null, 0x799919, 13, false);
 			postTF.maxWidth = 225;
 			postTF.x = nameTF.x;
 			postTF.y = 35;
 			addChild(postTF);
+			Helper.stylizeText(postTF);
 
 			bottomBorder = Config.loader.createMc('assets.GuiElementHRile');
 			bottomBorder.y = PersonNotesPage.NOTE_HEIGHT;
@@ -112,7 +136,7 @@ package tree.view.gui.notes {
 
 		public function set data(data:Join):void {
 			_data = data;
-			nameTF.text = data.associate.name;
+			nameTF.text = data.associate.fullname;
 			postTF.text = data.type.toString();
 			refresh();
 		}
@@ -154,13 +178,14 @@ package tree.view.gui.notes {
 		}
 
 		override public function moveTo(y:int):void {
+			var time:Number = PersonNotesPage.CHANGE_TIME * (this.visible ? 0.7 : 1);
 			if(newItem){
 				this.visible = true;
 				this.y = y;
 				alpha = 0;
-				GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha: 1})
+				GTweener.to(this, time, {alpha: 1})
 			}else if(this.y != y)
-				GTweener.to(this, PersonNotesPage.CHANGE_TIME, {y: y});
+				GTweener.to(this, time, {y: y});
 			newItem = false;
 		}
 
@@ -170,6 +195,26 @@ package tree.view.gui.notes {
 
 		public function get post():String{
 			return postTF.text;
+		}
+
+		public function show():void {
+			this.visible = true;
+			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha: 1}, {onComplete: onShowComplete})
+		}
+
+		public function hide():void {
+			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha: 0}, {onComplete: onHideComplete})
+		}
+
+		private function onShowComplete(g:GTween):void{
+			this.actionsTF.visible = true;
+			this.actionMark.visible = true;
+		}
+
+		private function onHideComplete(g:GTween):void{
+			this.visible = false;
+			this.actionsTF.visible = false;
+			this.actionMark.visible = false;
 		}
 	}
 }

@@ -5,8 +5,10 @@ package com.somewater.text
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
-	
-	
+
+	import tree.view.gui.Helper;
+
+
 	public class EmbededTextField extends TextField
 	{
 		public static var DEFAULT_FONT:String = "Tahoma";
@@ -73,6 +75,7 @@ package com.somewater.text
 			antiAliasType = (format.font.indexOf("pt_st") == -1)?AntiAliasType.ADVANCED:AntiAliasType.NORMAL;
 			type = input?TextFieldType.INPUT: TextFieldType.DYNAMIC;
 			text = " ";
+			Helper.stylizeText(this)
 		}
 		
 		/**

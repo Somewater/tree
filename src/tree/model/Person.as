@@ -51,6 +51,10 @@ package tree.model {
 			return lastName + ' ' + firstName;
 		}
 
+		public function get fullname():String {
+			return lastName + ' ' + firstName + ' ' + middleName;
+		}
+
 		public function get died():Boolean{
 			return deathday != null;
 		}
