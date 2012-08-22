@@ -1,8 +1,11 @@
 package tree.view.canvas {
+	import com.gskinner.motion.GTweener;
+
 	import flash.events.Event;
 
 	import tree.command.Actor;
 	import tree.command.Command;
+	import tree.common.Config;
 	import tree.model.GenNode;
 	import tree.model.Generation;
 	import tree.model.Generation;
@@ -33,6 +36,8 @@ package tree.view.canvas {
 				n.click.add(onNodeClicked);
 				n.rollUnrollClick.add(onNodeRolUnrollClicked);
 				n.deleteClick.add(onNodeDeleteClicked);
+				n.over.add(onNodeOver);
+				n.out.add(onNodeOut);
 			}
 
 			if(g.join.from){
@@ -160,6 +165,37 @@ package tree.view.canvas {
 
 		private function onNodeDeleteClicked(node:NodeIcon):void{
 			bus.dispatch(ModelSignal, node.data.join);
+		}
+
+		public function onNodeOver(node:NodeIcon):void{
+			canvas.highlightNode(node);
+		}
+
+		public function onNodeOut(node:NodeIcon):void{
+			canvas.unhighlightNode(node);
+		}
+
+		public function onPersonSelected(person:Person):void {
+			canvas.selectNode(person.uid);
+		}
+
+		public function centreOn(person:Person = null, animated:Boolean = false):void{
+			var x:int = (Config.WIDTH - Config.GUI_WIDTH) * 0.5 - Canvas.ICON_WIDTH * 0.5;
+			var y:int = Config.PANEL_HEIGHT + (Config.HEIGHT - Config.PANEL_HEIGHT) * 0.5 - Canvas.ICON_HEIGHT;
+			if(person){
+				var node:NodeIcon = canvas.getNodeIcon(person.uid);
+				if(node){
+					x -= node.x;
+					y -= node.y;
+				}
+			}
+			if(animated){
+				GTweener.to(canvas, 0.3, {x:x, y:y});
+			}else{
+				canvas.x = x;
+				canvas.y = y;
+			}
+			canvas.setSize(Config.WIDTH - Config.GUI_WIDTH, Config.HEIGHT - Config.PANEL_HEIGHT);
 		}
 	}
 }

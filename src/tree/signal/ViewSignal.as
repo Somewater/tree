@@ -21,6 +21,13 @@ package tree.signal {
 
 		public static const CALCULATE_NEXT_ROLL_UNROLL:String = 'calculateNextRollUnroll';// калькулировать очередную ноду на возможность отображения кнопки roll-unroll
 
+		public static const PERSON_DESELECTED:String = 'personDeselected';// с персоны снят выбор в GUI (person:Person)
+
+		public static const PERSON_SELECTED:String = 'personSelected';// персона выбрана в GUI (person:Person)
+
+		public static const PERSON_CENTERED:String = 'personCentered';// запрос на центровку на персоне (person:Person)
+
+
 		public function ViewSignal() {
 		}
 	}

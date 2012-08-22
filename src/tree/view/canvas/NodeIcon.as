@@ -42,6 +42,8 @@ package tree.view.canvas {
 		private var debugTrace:TextField;
 
 		public var click:ISignal;
+		public var over:ISignal;
+		public var out:ISignal;
 
 		public var rollUnrollClick:ISignal;
 		public var rollUnrollButton:RollUnrollButton;
@@ -52,7 +54,8 @@ package tree.view.canvas {
 		private var maleHighlight:DisplayObject;
 		private var femaleHighlight:DisplayObject;
 
-		private var _highlighted:int = 0;
+		private var _highlighted:Boolean = false;// рамка (при наведении мышкой)
+		private var _selected:Boolean = false;// glow (при выборе в GUI)
 
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
@@ -66,6 +69,8 @@ package tree.view.canvas {
 
 			complete = new Signal(NodeIcon);
 			click = new Signal(NodeIcon);
+			over = new Signal(NodeIcon);
+			out = new Signal(NodeIcon);
 			deleteClick = new Signal(NodeIcon);
 
 			tmpPoint = new Point();
@@ -84,6 +89,8 @@ package tree.view.canvas {
 			}
 
 			addEventListener(MouseEvent.CLICK, onClicked);
+			addEventListener(MouseEvent.MOUSE_OVER, onOver);
+			addEventListener(MouseEvent.MOUSE_OUT, onOut);
 
 			rollUnrollClick = new Signal(NodeIcon);
 			rollUnrollButton = new RollUnrollButton();
@@ -104,6 +111,14 @@ package tree.view.canvas {
 
 		private function onClicked(event:MouseEvent):void {
 			click.dispatch(this);
+		}
+
+		private function onOver(event:MouseEvent):void {
+			over.dispatch(this);
+		}
+
+		private function onOut(event:MouseEvent):void {
+			out.dispatch(this);
 		}
 
 		public function set data(value:GenNode):void {
@@ -171,6 +186,8 @@ package tree.view.canvas {
 			}
 			photo.clear();
 			removeEventListener(MouseEvent.CLICK, onClicked);
+			removeEventListener(MouseEvent.MOUSE_OVER, onOver);
+			removeEventListener(MouseEvent.MOUSE_OUT, onOut);
 			rollUnrollButton.clear();
 			rollUnrollButton.removeEventListener(MouseEvent.CLICK, onRollUnrollClicked);
 
@@ -179,6 +196,8 @@ package tree.view.canvas {
 			click.removeAll();
 			complete.removeAll();
 			rollUnrollClick.removeAll()
+			over.removeAll();
+			out.removeAll();
 		}
 
 		public function hide(animated:Boolean = true):void {
@@ -269,15 +288,15 @@ package tree.view.canvas {
 			rollUnrollClick.dispatch(this);
 		}
 
-		public function get highlighted():int {
+		public function get highlighted():Boolean {
 			return _highlighted;
 		}
 
-		public function set highlighted(value:int):void {
+		public function set highlighted(value:Boolean):void {
 			if(_highlighted != value){
 				_highlighted = value;
-				femaleHighlight.visible = value == 1 && _data && _data.node.person.female;
-				maleHighlight.visible = value == 1 && _data && _data.node.person.male;
+				femaleHighlight.visible = value && _data && _data.node.person.female;
+				maleHighlight.visible = value && _data && _data.node.person.male;
 			}
 		}
 
@@ -291,6 +310,22 @@ package tree.view.canvas {
 			rollUnrollButton.alpha = 0;
 			GTweener.to(rollUnrollButton, 0.3, {alpha: 1});
 			rollUnrollButton.rollState = data.node.slavesUnrolled;
+		}
+
+		public function get selected():Boolean {
+			return _selected;
+		}
+
+		public function set selected(value:Boolean):void {
+			if(_selected != value){
+				_selected = value;
+				if(value){
+					var male:Boolean = _data && _data.node.person.male;
+					filters = [new GlowFilter(male ? 0x51BBEC : 0xE79BA7, 1, 12, 12)];
+				} else {
+					filters = [];
+				}
+			}
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package tree.view.canvas {
 
+	import com.gskinner.motion.GTweener;
+
 	import flash.events.Event;
 	import flash.geom.Point;
 
@@ -31,6 +33,8 @@ package tree.view.canvas {
 			addModelListener(ModelSignal.NODES_RECALCULATED, onModelChanged);
 			addModelListener(ViewSignal.DRAW_JOIN, onNeedDrawJoin);
 			addModelListener(ViewSignal.REMOVE_JOIN, onNeedRemoveJoin);
+			addModelListener(ViewSignal.PERSON_SELECTED, onPersonSelected);
+			addModelListener(ViewSignal.PERSON_CENTERED, onPersonCentered);
 			bus.zoom.add(onZoom);
 			bus.mouseWheel.add(onMouseWheel);
 			bus.drag.add(onDrag);
@@ -42,9 +46,7 @@ package tree.view.canvas {
 		}
 
 		override protected function refresh():void {
-			canvas.x = (Config.WIDTH - Config.GUI_WIDTH) * 0.5;
-			canvas.y = Config.HEIGHT * 0.5;
-			canvas.setSize(Config.WIDTH - Config.GUI_WIDTH, Config.HEIGHT);
+			controller.centreOn();
 		}
 
 		private function onModelChanged():void {
@@ -90,6 +92,14 @@ package tree.view.canvas {
 
 		private function onCanvasComplete(event:Event):void {
 			bus.dispatch(ViewSignal.JOIN_DRAWED);
+		}
+
+		private function onPersonSelected(person:Person):void{
+			controller.onPersonSelected(person);
+		}
+
+		private function onPersonCentered(person:Person):void{
+			controller.centreOn(person, true);
 		}
 	}
 }

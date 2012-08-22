@@ -139,6 +139,8 @@ package tree.view.gui.notes {
 					notesHolder.removeChild(note);
 					vbox.removeChild(note);
 					note.clear();
+					if(selectedNote == note)
+						selectedNote = null;
 					break;
 				}
 			}
@@ -153,20 +155,24 @@ package tree.view.gui.notes {
 				selectedNote = note;
 				if(note){
 					note.selected = true;
+					bus.dispatch(ViewSignal.PERSON_SELECTED, note.data.associate);
+					bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
 				}
 			}
 		}
 
 		private function deselectNote(note:PersonNoteItem):void {
 			if(selectedNote == note){
-				if(note)
+				if(note){
 					note.selected = false;
+					bus.dispatch(ViewSignal.PERSON_DESELECTED, note.data.associate);
+				}
 				selectedNote = null;
 			}
 		}
 
 		private function centreNote(note:PersonNoteItem):void{
-			selectNote(note);
+			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
 		}
 
 		private function openNote(note:PersonNoteItem):void{

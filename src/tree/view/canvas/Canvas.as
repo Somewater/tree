@@ -25,6 +25,9 @@ package tree.view.canvas {
 		private var generationsHolder:Sprite;
 		private var generationHolders:Array = [];
 
+		private var selectedNode:NodeIcon;
+		private var highlightedNode:NodeIcon;
+
 		public function Canvas() {
 			generationsHolder = new Sprite();
 			addChild(generationsHolder);
@@ -115,6 +118,10 @@ package tree.view.canvas {
 			if(node.parent)
 				node.parent.removeChild(node);
 			node.clear();
+			if(selectedNode == node)
+				selectedNode = null;
+			if(highlightedNode == node)
+				highlightedNode = null;
 		}
 
 		public function destroyLine(line:JoinLine):void {
@@ -131,6 +138,37 @@ package tree.view.canvas {
 
 		public function get iterator():*{
 			return nodesByUid;
+		}
+
+		public function selectNode(uid:int):void{
+			var node:NodeIcon = getNodeIcon(uid);
+			if(node != selectedNode){
+				if(selectedNode){
+					selectedNode.selected = false;
+				}
+				selectedNode = node;
+				if(node){
+					node.selected = true;
+				}
+			}
+		}
+
+		public function highlightNode(node:NodeIcon):void{
+			if(highlightedNode != node){
+				if(highlightedNode)
+					unhighlightNode(highlightedNode);
+				highlightedNode = node;
+				if(node){
+					node.highlighted = true;
+				}
+			}
+		}
+
+		public function unhighlightNode(node:NodeIcon):void{
+			if(highlightedNode && highlightedNode == node){
+				node.highlighted = false;
+				highlightedNode = null;
+			}
 		}
 	}
 }
