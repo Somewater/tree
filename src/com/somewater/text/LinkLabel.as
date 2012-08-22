@@ -1,56 +1,56 @@
 package com.somewater.text
 {
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 
+	import tree.view.gui.Helper;
+
 	[Event(name="linkClick",type="com.somewater.text.LinkLabel")]
 	
-	public class LinkLabel extends EmbededTextField
+	public class LinkLabel extends Sprite
 	{
 		public static const LINK_CLICK:String = "linkClick";
 		
 		protected var _linked:Boolean;
+		protected var _underline:Boolean = false;
+		private var _dasched:Boolean = true;
+		protected var _text:String;
 		public var linkClick:Function;
 		public var data:Object;
+		public var textField:EmbededTextField;
 		
 		public function LinkLabel(font:String=null, color:*=null, size:int=12, bold:Boolean=false, align:String="left",bitmapText:Boolean = false)
 		{
-			super(font, color, size, bold, false, false, false, align,bitmapText);
+			textField = new EmbededTextField(font, color, size, bold, false, false, false, align,bitmapText)
+			textField.filters = [];
+			addChild(textField);
 			_linked = false;// иначе не сработает linked = true;
 			linked = true;
+			Helper.stylizeText(this);
 		}
 		
 		public function clear():void{
 			removeAllListeners();
-			hint = null;
+			textField.hint = null;
 		}
 		
 		public function set linked(flag:Boolean):void{
 			if (flag == _linked) return;
-			mouseEnabled = underline = _linked = flag;
+			underline = useHandCursor = buttonMode = mouseEnabled = underline = _linked = flag;
 			if (flag){
 				addEventListener(MouseEvent.MOUSE_OVER,headerLabelMouseOverEvent,false,0,true);
 				addEventListener(MouseEvent.MOUSE_OUT,headerLabelMouseOutEvent,false,0,true);
 				addEventListener(MouseEvent.CLICK,headerLabelMouseClick,false,0,true);
-				if (super.text.length) text = super.text;
 			}else{
 				removeAllListeners();
-				if (underline) underline = false;
-				if (super.text.length) super.htmlText = super.text;
-			}			
+			}
 		}
 		
 		private function removeAllListeners():void{
 			removeEventListener(MouseEvent.MOUSE_OVER,headerLabelMouseOverEvent);
 			removeEventListener(MouseEvent.MOUSE_OUT,headerLabelMouseOutEvent);
 			removeEventListener(MouseEvent.MOUSE_OUT,headerLabelMouseClick);
-		}
-		
-		override public function set text(value:String):void{
-			if (_linked)
-				super.htmlText = "<a href='event:'>"+value+"</a>";
-			else
-				super.text = value;
 		}
 		
 		public function get linked():Boolean{
@@ -74,6 +74,62 @@ package com.somewater.text
 			}
 			
 		}
-		
+
+		public function set text(value:String):void{
+			_text = value;
+			textField.htmlText = "<a href='event:'>"+value+"</a>";
+			if(_underline)
+				drawUnderline();
+		}
+
+		public function get text():String{
+			return _text;
+		}
+
+		public function get underline():Boolean {
+			return _underline;
+		}
+
+		public function set underline(value:Boolean):void {
+			if(_underline != value){
+				_underline = value;
+				if(value)
+					drawUnderline();
+				else
+					graphics.clear();
+			}
+		}
+
+		private function drawUnderline():void {
+			graphics.clear();
+			graphics.lineStyle(1, textField.color);
+			var CONST:int = (textField.width - textField.textWidth) * 0.5;
+			graphics.moveTo(CONST, textField.textHeight + 2);
+
+			if(_dasched){
+				const dashSize:int = 1;
+				var maxX:int = CONST + textField.textWidth;
+				var y:Number = textField.textHeight + 2;
+				var x:Number = CONST;
+				while(x < maxX){
+					x += dashSize;
+					graphics.lineTo(x, y);
+					x += dashSize + 1;
+					graphics.moveTo(x, y);
+				}
+			} else
+				graphics.lineTo(CONST + textField.textWidth, textField.textHeight + 2);
+		}
+
+
+		public function get dasched():Boolean {
+			return _dasched;
+		}
+
+		public function set dasched(value:Boolean):void {
+			_dasched = value;
+			if(_underline)
+				drawUnderline();
+		}
 	}
 }
