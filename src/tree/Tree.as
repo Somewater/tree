@@ -3,6 +3,7 @@ package tree {
 	import com.junkbyte.console.KeyBind;
 	import com.somewater.storage.I18n;
 	import com.somewater.text.EmbededTextField;
+	import com.somewater.text.Hint;
 
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -147,6 +148,7 @@ package tree {
 			addChild(Config.windows = new Sprite());
 			new WindowsManager(bus, Config.windows, new Preloader());
 			addChild(Config.tooltips = new Sprite());
+			Hint.init(Config.tooltips);
 
 			Config.content.addChild(canvas = new Canvas());
 			var canvasController:CanvasController = new CanvasController(canvas)

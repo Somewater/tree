@@ -3,11 +3,14 @@ package tree.view.canvas {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
+	import tree.common.Config;
+
 	import tree.model.GenNode;
 	import tree.model.Join;
 	import tree.model.Node;
+	import tree.view.gui.UIComponent;
 
-	public class Canvas extends Sprite implements INodeViewCollection {
+	public class Canvas extends UIComponent implements INodeViewCollection {
 
 		public static const ICON_WIDTH:int = 90;
 		public static const ICON_HEIGHT:int = 125;
@@ -26,7 +29,8 @@ package tree.view.canvas {
 		private var generationHolders:Array = [];
 
 		private var selectedNode:NodeIcon;
-		private var highlightedNode:NodeIcon;
+		public var highlightedNode:NodeIcon;
+		public var arrowMenu:ArrowMenu;
 
 		public function Canvas() {
 			generationsHolder = new Sprite();
@@ -37,9 +41,13 @@ package tree.view.canvas {
 
 			nodesHolder = new Sprite();
 			addChild(nodesHolder);
+
+			arrowMenu = new ArrowMenu();
+			Config.tooltips.addChild(arrowMenu);
+			arrowMenu.visible = false;
 		}
 
-		public function setSize(w:int, h:int):void {
+		override public function setSize(w:int, h:int):void {
 
 		}
 
@@ -155,8 +163,10 @@ package tree.view.canvas {
 
 		public function highlightNode(node:NodeIcon):void{
 			if(highlightedNode != node){
-				if(highlightedNode)
+				if(highlightedNode){
+					highlightedNode.deleteArrows();
 					unhighlightNode(highlightedNode);
+				}
 				highlightedNode = node;
 				if(node){
 					node.highlighted = true;
@@ -169,6 +179,12 @@ package tree.view.canvas {
 				node.highlighted = false;
 				highlightedNode = null;
 			}
+		}
+
+		override protected function _onOut(event:MouseEvent):void {
+			if(event.relatedObject && (event.relatedObject == arrowMenu || arrowMenu.contains(event.relatedObject)))
+				return;
+			super._onOut(event);
 		}
 	}
 }

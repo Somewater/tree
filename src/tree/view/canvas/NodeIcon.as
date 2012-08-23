@@ -51,11 +51,16 @@ package tree.view.canvas {
 		public var deleteClick:ISignal;
 		private var deleteButton:RollUnrollButton;
 
+		public var showArrowMenu:ISignal;
+		public var hideArrowMenu:ISignal;
+
 		private var maleHighlight:DisplayObject;
 		private var femaleHighlight:DisplayObject;
 
 		private var _highlighted:Boolean = false;// рамка (при наведении мышкой)
 		private var _selected:Boolean = false;// glow (при выборе в GUI)
+
+		private var arrows:Array = [];
 
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
@@ -107,6 +112,9 @@ package tree.view.canvas {
 			deleteButton.visible = false;
 
 			Helper.stylizeText((skin.getChildByName('name_tf') as TextField));
+
+			showArrowMenu = new Signal(NodeArrow);
+			hideArrowMenu = new Signal();
 		}
 
 		private function onClicked(event:MouseEvent):void {
@@ -118,6 +126,9 @@ package tree.view.canvas {
 		}
 
 		private function onOut(event:MouseEvent):void {
+			if(event.relatedObject && this.contains(event.relatedObject))
+				return;
+
 			out.dispatch(this);
 		}
 
@@ -198,6 +209,8 @@ package tree.view.canvas {
 			rollUnrollClick.removeAll()
 			over.removeAll();
 			out.removeAll();
+			showArrowMenu.removeAll();
+			hideArrowMenu.removeAll();
 		}
 
 		public function hide(animated:Boolean = true):void {
@@ -297,6 +310,10 @@ package tree.view.canvas {
 				_highlighted = value;
 				femaleHighlight.visible = value && _data && _data.node.person.female;
 				maleHighlight.visible = value && _data && _data.node.person.male;
+				if(value)
+					showArrows();
+				else
+					hideArrows();
 			}
 		}
 
@@ -326,6 +343,57 @@ package tree.view.canvas {
 					filters = [];
 				}
 			}
+		}
+
+		public function deleteArrows():void{
+			for each(var a:NodeArrow in arrows)
+			{
+				a.clear();
+				if(a.parent)
+					a.parent.removeChild(a);
+			}
+			arrows = [];
+			hideArrowMenu.dispatch();
+		}
+
+		private function showArrows():void{
+			deleteArrows();
+			for (var i:int = 1; i <= 3; i++) {
+				var a:NodeArrow = new NodeArrow(this._data.node.person, i);
+				addChildAt(a, 0);
+				a.showed.add(onArrowShowed);
+				a.hided.add(onArrowHided);
+				a.over.add(onArrowOver);
+				a.out.add(onArrowOut);
+				a.show();
+				arrows.push(a);
+			}
+		}
+
+		private function onArrowShowed(a:NodeArrow):void {
+
+		}
+
+		private function onArrowHided(a:NodeArrow):void {
+			var idx:int = arrows.indexOf(a);
+			if(idx != -1)
+				arrows.splice(idx, 1);
+			a.clear();
+			if(a.parent)
+				a.parent.removeChild(a);
+		}
+
+		private function hideArrows():void{
+			for each(var a:NodeArrow in arrows)
+				a.hide();
+		}
+
+		private function onArrowOver(a:NodeArrow):void{
+			showArrowMenu.dispatch(a);
+		}
+
+		private function onArrowOut(a:NodeArrow):void{
+
 		}
 	}
 }

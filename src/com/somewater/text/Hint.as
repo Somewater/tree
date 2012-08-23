@@ -18,7 +18,9 @@ package com.somewater.text
 	import flash.geom.Point;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.Dictionary;
-	
+
+	import tree.common.Config;
+
 	public class Hint extends Sprite
 	{
 		public static var PADDING:int = 5;// сколько пикселей от края есть всегда
@@ -28,8 +30,7 @@ package com.somewater.text
 		private var ground:Sprite;
 		private var application:DisplayObjectContainer;// относительно чего выводить и просчитывать подсказку
 		
-		private var timer:GTween;
-		private var currentControl:Object;// ссылка на объект, для которого в данный момент выведена подсказка
+		private var currentControl:DisplayObject;// ссылка на объект, для которого в данный момент выведена подсказка
 		
 		protected var textField:EmbededTextField;
 		
@@ -44,6 +45,8 @@ package com.somewater.text
 				_instance = this;
 			
 			ground = new Sprite();//Lib.createMC("interface.HintGround");
+			ground.graphics.beginFill(0xFFFFFF);
+			ground.graphics.drawRect(0,0,100,100);
 			addChild(ground);
 			
 			textField = new EmbededTextField(null,0x124D18,14,true,true,false,false,"center");
@@ -97,23 +100,26 @@ package com.somewater.text
 			e.currentTarget.addEventListener(MouseEvent.ROLL_OUT, stopHint);
 			e.currentTarget.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);//начинаем следить мышь
 			// включаем таймер на автоскрытие
-			if (timer != null) timer.
-			currentControl = e.currentTarget;
-			timer = GTweener.(Math.max(2,hint.length * 0.2) + 1.8,stopHint);
+			currentControl = e.currentTarget as DisplayObject;
 			// обеспечить появление не сразу. а спустя "время удержания"
 			alpha = 0;
-			GTweener.to(this,0.2,{alpha:1,delay:0.2})
+			GTweener.to(this,0.2,{alpha:1});
+			Config.ticker.defer(onAutoStop, (Math.max(2,hint.length * 0.2) + 2)*1000, [currentControl]);
+		}
+
+		private function onAutoStop(control:DisplayObject):void {
+			if(currentControl == control)
+				stopHint();
 		}
 		
 		private function stopHint(e:MouseEvent = null):void{
 			if (e != null){
 				if(e.relatedObject && (e.relatedObject == this || e.relatedObject == ground || e.relatedObject.parent == this)) {moving();return;}
-				deleteListeners(e.currentTarget);
+				deleteListeners(e.currentTarget as DisplayObject);
 			}else
 				if(currentControl)
-					deleteListeners(currentControl);
+					deleteListeners(currentControl as DisplayObject);
 			
-			if (timer != null) timer.kill();		
 			currentControl = null;
 			
 			if(application.contains(this))
@@ -139,10 +145,10 @@ package com.somewater.text
 			var x:int = application.mouseX;
 			var y:int = application.mouseY + HORIZONTAL_PADDING;
 			
-			if(x + w + PADDING > PopUpManager.WIDTH)
+			if(x + w + PADDING > Config.WIDTH)
 				x = x - w - PADDING;
 			
-			if(y + h + PADDING > PopUpManager.HEIGHT)
+			if(y + h + PADDING > Config.HEIGHT)
 				y = y - ground.height - HORIZONTAL_PADDING - PADDING;
 			
 			this.x = x;
@@ -156,6 +162,6 @@ package com.somewater.text
 			ground.width = w;
 			ground.height = Math.max(28,h);
 		}
-		
+
 	}
 }

@@ -30,21 +30,21 @@ package tree.view.gui {
 			down = new Signal(UIComponent);
 			up = new Signal(UIComponent);
 
-			addEventListener(MouseEvent.MOUSE_OVER, onOver);
-			addEventListener(MouseEvent.MOUSE_OUT, onOut);
-			addEventListener(MouseEvent.CLICK, onClick);
-			addEventListener(MouseEvent.DOUBLE_CLICK, onDblClick);
-			addEventListener(MouseEvent.MOUSE_DOWN, onDown);
-			addEventListener(MouseEvent.MOUSE_UP, onUp);
+			addEventListener(MouseEvent.MOUSE_OVER, _onOver);
+			addEventListener(MouseEvent.MOUSE_OUT, _onOut);
+			addEventListener(MouseEvent.CLICK, _onClick);
+			addEventListener(MouseEvent.DOUBLE_CLICK, _onDblClick);
+			addEventListener(MouseEvent.MOUSE_DOWN, _onDown);
+			addEventListener(MouseEvent.MOUSE_UP, _onUp);
 		}
 
 		public function clear():void{
-			removeEventListener(MouseEvent.MOUSE_OVER, onOver);
-			removeEventListener(MouseEvent.MOUSE_OUT, onOut);
-			removeEventListener(MouseEvent.CLICK, onClick);
-			removeEventListener(MouseEvent.DOUBLE_CLICK, onDblClick);
-			removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
-			removeEventListener(MouseEvent.MOUSE_UP, onUp);
+			removeEventListener(MouseEvent.MOUSE_OVER, _onOver);
+			removeEventListener(MouseEvent.MOUSE_OUT, _onOut);
+			removeEventListener(MouseEvent.CLICK, _onClick);
+			removeEventListener(MouseEvent.DOUBLE_CLICK, _onDblClick);
+			removeEventListener(MouseEvent.MOUSE_DOWN, _onDown);
+			removeEventListener(MouseEvent.MOUSE_UP, _onUp);
 
 			over.removeAll();
 			out.removeAll();
@@ -56,27 +56,29 @@ package tree.view.gui {
 			down = up = out = over = click = dblClick = null;
 		}
 
-		private function onOver(event:MouseEvent):void {
+		private function _onOver(event:MouseEvent):void {
 			over.dispatch(this);
 		}
 
-		private function onOut(event:MouseEvent):void {
+		protected function _onOut(event:MouseEvent):void {
+			if(event.relatedObject && this.contains(event.relatedObject))
+				return;
 			out.dispatch(this);
 		}
 
-		private function onClick(event:MouseEvent):void {
+		private function _onClick(event:MouseEvent):void {
 			click.dispatch(this);
 		}
 
-		private function onDblClick(event:MouseEvent):void {
+		private function _onDblClick(event:MouseEvent):void {
 			dblClick.dispatch(this);
 		}
 
-		private function onDown(event:MouseEvent):void {
+		private function _onDown(event:MouseEvent):void {
 			down.dispatch(this);
 		}
 
-		private function onUp(event:MouseEvent):void {
+		private function _onUp(event:MouseEvent):void {
 			up.dispatch(this);
 		}
 

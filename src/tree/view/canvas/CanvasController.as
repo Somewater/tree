@@ -2,9 +2,11 @@ package tree.view.canvas {
 	import com.gskinner.motion.GTweener;
 
 	import flash.events.Event;
+	import flash.geom.Point;
 
 	import tree.command.Actor;
 	import tree.command.Command;
+	import tree.common.Config;
 	import tree.common.Config;
 	import tree.model.GenNode;
 	import tree.model.Generation;
@@ -26,6 +28,9 @@ package tree.view.canvas {
 		public function CanvasController(canvas:Canvas) {
 			this.canvas = canvas;
 			detain();
+
+			canvas.out.add(onCanvasDeselect);
+			canvas.click.add(onCanvasDeselect);
 		}
 
 		public function drawJoin(g:GenNode):void {
@@ -38,6 +43,8 @@ package tree.view.canvas {
 				n.deleteClick.add(onNodeDeleteClicked);
 				n.over.add(onNodeOver);
 				n.out.add(onNodeOut);
+				n.showArrowMenu.add(onShowArrowMenu);
+				n.hideArrowMenu.add(onHideArrowMenu);
 			}
 
 			if(g.join.from){
@@ -172,6 +179,8 @@ package tree.view.canvas {
 		}
 
 		public function onNodeOut(node:NodeIcon):void{
+			if(canvas.arrowMenu.data == node.data.node.person)
+				return;// если для ноды открыто меню, то не сниаем выделение запросто
 			canvas.unhighlightNode(node);
 		}
 
@@ -196,6 +205,24 @@ package tree.view.canvas {
 				canvas.y = y;
 			}
 			canvas.setSize(Config.WIDTH - Config.GUI_WIDTH, Config.HEIGHT - Config.PANEL_HEIGHT);
+		}
+
+		private function onShowArrowMenu(arrow:NodeArrow):void{
+			canvas.arrowMenu.show(arrow.data);
+
+			var p:Point = Config.tooltips.globalToLocal(arrow.localToGlobal(new Point(NodeArrow.SIZE, 0)));
+			canvas.arrowMenu.x = p.x;
+			canvas.arrowMenu.y = p.y;
+		}
+
+		private function onHideArrowMenu():void{
+			canvas.arrowMenu.hide()
+		}
+
+		private function onCanvasDeselect(c:Canvas):void{
+			if(canvas.highlightedNode)
+				canvas.unhighlightNode(canvas.highlightedNode);
+			canvas.arrowMenu.hide()
 		}
 	}
 }
