@@ -1,5 +1,6 @@
 package tree.model {
 	import flash.geom.Point;
+	import flash.geom.Point;
 
 	import tree.Tree;
 
@@ -12,6 +13,7 @@ package tree.model {
 		public var generations:GenerationsCollection;
 		public var matrixes:MatrixCollection;
 		private var _zoom:Number = 1;
+		public var zoomCenter:Point = new Point();
 		private var _mousePosition:Point = new Point();
 
 		//////////////////////////
@@ -54,6 +56,7 @@ package tree.model {
 		}
 
 		public function set zoom(value:Number):void {
+			value = Math.max(0.1, Math.min(1, value));
 			if(value != _zoom) {
 				_zoom = value;
 				bus.zoom.dispatch(value);

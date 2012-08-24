@@ -20,7 +20,6 @@ package tree.view.canvas {
 	{
 		private var canvas:Canvas;
 		private var controller:CanvasController;
-		private var zoomCenter:Point = new Point();
 		private var tmpPoint:Point = new Point();
 
 		public function CanvasMediator(view:Canvas, controller:CanvasController)
@@ -66,14 +65,14 @@ package tree.view.canvas {
 		private function onZoom(zoom:Number):void {
 			var currentZoom:Number = view.scaleX;
 
-			var zoomCenterRelativeCanvasX:Number = (zoomCenter.x) * zoom;
-			var zoomCenterRelativeCanvasY:Number = (zoomCenter.y) * zoom;
+			var zoomCenterRelativeCanvasX:Number = (model.zoomCenter.x) * zoom;
+			var zoomCenterRelativeCanvasY:Number = (model.zoomCenter.y) * zoom;
 
 			view.scaleX = zoom;
 			view.scaleY = zoom;
 
-			view.x += zoomCenter.x * (currentZoom - zoom);
-			view.y += zoomCenter.y * (currentZoom - zoom);
+			view.x += model.zoomCenter.x * (currentZoom - zoom);
+			view.y += model.zoomCenter.y * (currentZoom - zoom);
 
 			controller.onCanvasDeselect();
 		}
@@ -82,9 +81,9 @@ package tree.view.canvas {
 			tmpPoint.x = canvas.mouseX;
 			tmpPoint.y = canvas.mouseY;
 			//var p:Point = canvas.localToGlobal(tmpPoint);
-			zoomCenter.x = tmpPoint.x;
-			zoomCenter.y = tmpPoint.y;
-			model.zoom = Math.max(0.1, Math.min(1, model.zoom - delta * 0.1));
+			model.zoomCenter.x = tmpPoint.x;
+			model.zoomCenter.y = tmpPoint.y;
+			model.zoom = Math.max(0.1, Math.min(1, model.zoom - delta * 0.2));
 			controller.onCanvasDeselect();
 		}
 

@@ -194,8 +194,8 @@ package tree.view.canvas {
 			if(person){
 				var node:NodeIcon = canvas.getNodeIcon(person.uid);
 				if(node){
-					x -= node.x;
-					y -= node.y;
+					x -= node.x * model.zoom;
+					y -= node.y * model.zoom;
 				}
 			}
 			if(animated){

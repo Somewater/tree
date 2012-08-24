@@ -135,7 +135,7 @@ package tree.common {
 		}
 
 		private function mouseOnCanvas():Boolean{
-			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH);
+			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH) && stage.mouseY > Config.PANEL_HEIGHT;
 		}
 
 		private function onFullScreenChanged(event:FullScreenEvent):void{

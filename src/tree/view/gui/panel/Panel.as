@@ -40,7 +40,7 @@ package tree.view.gui.panel {
 			densitySelector = new DensitySelector();
 			addChild(densitySelector);
 
-			zoomSlider = new ZoomSlider();
+			zoomSlider = new ZoomSliderComponent();
 			addChild(zoomSlider);
 
 			saveTreeButton = new BlueButton();
@@ -77,9 +77,16 @@ package tree.view.gui.panel {
 	}
 }
 
+import flash.display.DisplayObject;
 import flash.display.MovieClip;
+import flash.geom.Point;
+
+import tree.common.Config;
+import tree.model.Model;
+import tree.view.canvas.Canvas;
 
 import tree.view.gui.Button;
+import tree.view.gui.panel.ZoomSlider;
 
 class DoubleButton extends Button{
 	public function DoubleButton(movie:MovieClip){
@@ -88,5 +95,31 @@ class DoubleButton extends Button{
 
 	public function onFirst():Boolean{
 		return true;
+	}
+}
+
+class ZoomSliderComponent extends ZoomSlider{
+
+	private var model:Model;
+
+	public function ZoomSliderComponent(){
+		super();
+
+		model = Config.inject(Model) as Model;
+		model.bus.zoom.add(onZoomChanged);
+		changed.add(onValueChanged);
+
+		this.value = model.zoom;
+	}
+
+	private function onZoomChanged(zoom:Number):void {
+		value = zoom;
+	}
+
+	private function onValueChanged(value:Number):void {
+		var canvas:DisplayObject = Config.inject(Canvas);
+		model.zoomCenter = canvas.globalToLocal(new Point((Config.WIDTH - Config.GUI_WIDTH) * 0.5,
+															(Config.HEIGHT - Config.PANEL_HEIGHT) * 0.5));
+		model.zoom = value;
 	}
 }
