@@ -13,20 +13,20 @@ package tree.view.canvas {
 
 		private var background:DisplayObject;
 		private var actionsHolder:Sprite;
-		private var _data:Person;
+		public var arrow:NodeArrow;
 
 		public function ArrowMenu() {
 			actionsHolder = new Sprite();
 			addChild(actionsHolder);
 		}
 
-		public function show(person:Person):void{
-			this._data = person;
+		public function show(arrow:NodeArrow):void{
+			this.arrow = arrow;
 			this.visible = true;
 
 			if(background)
 				background.parent.removeChild(background);
-			background = Config.loader.createMc(person.male ? 'assets.MaleArrowMenu' : 'assets.FemaleArrowMenu');
+			background = Config.loader.createMc(arrow.data.male ? 'assets.MaleArrowMenu' : 'assets.FemaleArrowMenu');
 			addChildAt(background, 0);
 
 			var action:ArrowMenuAction;
@@ -51,14 +51,23 @@ package tree.view.canvas {
 
 			background.width = nextX;
 			background.height = nextY + 5;
+
+			refreshPosition();
+		}
+
+		public function refreshPosition():void{
+			if(arrow){
+				var s:Point = new Point(this.width, this.height);
+				var p:Point = Config.tooltips.globalToLocal(arrow.localToGlobal(new Point(NodeArrow.SIZE, 0)));
+				this.x = p.x + (arrow.type == NodeArrow.BREED || arrow.type == NodeArrow.PARENT ? -s.x * 0.5 : (arrow.data.male ? -s.x : 0));
+				this.y = p.y + (arrow.type == NodeArrow.PARALLEL ? -s.y * 0.5 : (arrow.type == NodeArrow.PARENT ? -s.y : 0))
+			}else
+				hide();
 		}
 
 		public function hide():void{
+			arrow = null;
 			this.visible = false;
-		}
-
-		public function get data():Person {
-			return _data;
 		}
 	}
 }

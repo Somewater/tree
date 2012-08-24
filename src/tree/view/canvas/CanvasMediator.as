@@ -74,6 +74,8 @@ package tree.view.canvas {
 
 			view.x += zoomCenter.x * (currentZoom - zoom);
 			view.y += zoomCenter.y * (currentZoom - zoom);
+
+			controller.onCanvasDeselect();
 		}
 
 		private function onMouseWheel(delta:int):void {
@@ -83,11 +85,13 @@ package tree.view.canvas {
 			zoomCenter.x = tmpPoint.x;
 			zoomCenter.y = tmpPoint.y;
 			model.zoom = Math.max(0.1, Math.min(1, model.zoom - delta * 0.1));
+			controller.onCanvasDeselect();
 		}
 
 		private function onDrag(signal:DragSignal):void {
 			canvas.x += signal.delta.x;
 			canvas.y += signal.delta.y;
+			controller.onCanvasDragged();
 		}
 
 		private function onCanvasComplete(event:Event):void {

@@ -179,7 +179,7 @@ package tree.view.canvas {
 		}
 
 		public function onNodeOut(node:NodeIcon):void{
-			if(canvas.arrowMenu.data == node.data.node.person)
+			if(canvas.arrowMenu.arrow && canvas.arrowMenu.arrow.data == node.data.node.person)
 				return;// если для ноды открыто меню, то не сниаем выделение запросто
 			canvas.unhighlightNode(node);
 		}
@@ -208,21 +208,24 @@ package tree.view.canvas {
 		}
 
 		private function onShowArrowMenu(arrow:NodeArrow):void{
-			canvas.arrowMenu.show(arrow.data);
-
-			var p:Point = Config.tooltips.globalToLocal(arrow.localToGlobal(new Point(NodeArrow.SIZE, 0)));
-			canvas.arrowMenu.x = p.x;
-			canvas.arrowMenu.y = p.y;
+			canvas.arrowMenu.show(arrow);
 		}
 
 		private function onHideArrowMenu():void{
 			canvas.arrowMenu.hide()
 		}
 
-		private function onCanvasDeselect(c:Canvas):void{
+		public function onCanvasDeselect(c:Canvas = null):void{
 			if(canvas.highlightedNode)
 				canvas.unhighlightNode(canvas.highlightedNode);
 			canvas.arrowMenu.hide()
+		}
+
+		public function onCanvasDragged():void{
+			if(!canvas.arrowMenu.visible)
+				return;
+
+			canvas.arrowMenu.refreshPosition();
 		}
 	}
 }
