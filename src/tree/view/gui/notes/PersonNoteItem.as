@@ -45,7 +45,6 @@ package tree.view.gui.notes {
 		private var menuMask:Shape;
 
 		public var actionClick:ISignal;
-		public var firstPerson:Boolean = false;
 
 		public function PersonNoteItem() {
 			const nameTfMaxWidth:int = Config.GUI_WIDTH - 15;

@@ -28,6 +28,7 @@ package tree.view.gui.notes {
 
 		private var model:Model;
 		private var notesHolder:Sprite;
+		private var firstNote:PersonNoteItem;
 		private var notes:Array = [];
 		private var vbox:VBoxController;
 
@@ -54,7 +55,7 @@ package tree.view.gui.notes {
 			scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
 			scroller.width = Config.GUI_WIDTH;
 			scroller.height = 400;
-			scroller.y = searchField.y + searchField.height + 8;
+			scroller.y = searchField.y + searchField.height + 8 + PersonNotesPage.NOTE_HEIGHT;
 			addChild(scroller);
 			scroller.source = notesHolder;
 
@@ -79,6 +80,10 @@ package tree.view.gui.notes {
 			searchField.clear();
 			for each(var n:PersonNoteItem in notes)
 				n.clear();
+			if(firstNote){
+				firstNote.clear();
+				firstNote = null;
+			}
 		}
 
 		override protected function refresh():void {
@@ -104,23 +109,29 @@ package tree.view.gui.notes {
 		private function addNote(data:ModelBase):void {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			var note:PersonNoteItem = new PersonNoteItem();
-			if(notes.length == 0)
-				note.firstPerson = true;
 
 			note.data = join;
 			var noteName:String = join.associate.fullname;
 
-			var index:int = notes.length;
-			var notesLen:int = notes.length;
-			for(var i:int = 1;i<notesLen;i++)
-				if(noteName < (notes[i] as PersonNoteItem).data.associate.fullname){
-					index = i;
-					break;
-				}
+			if(!firstNote){
+				firstNote = note;
+				addChildAt(note, getChildIndex(scroller));
+				note.x = scroller.x;
+				note.y = scroller.y - note.height;
+				note.visible = true;
+			}else{
+				var index:int = notes.length;
+				var notesLen:int = notes.length;
+				for(var i:int = 1;i<notesLen;i++)
+					if(noteName < (notes[i] as PersonNoteItem).data.associate.fullname){
+						index = i;
+						break;
+					}
 
-			notes.splice(index, 0, note);
-			notesHolder.addChildAt(note, index);
-			vbox.addChildAt(note, index);
+				notes.splice(index, 0, note);
+				notesHolder.addChildAt(note, index);
+				vbox.addChildAt(note, index);
+			}
 
 			//note.over.add(selectNote);
 			//note.out.add(deselectNote);
@@ -188,8 +199,6 @@ package tree.view.gui.notes {
 		}
 
 		private function filterNotes(note:PersonNoteItem, index:int):Boolean{
-			if(index == 0)
-				return true;
 			var search:String = searchField.search.toLowerCase();
 			var spaces:RegExp = /^\s+$/;
 			if(search && search.length && !spaces.test(search)){
