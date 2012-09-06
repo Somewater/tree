@@ -137,7 +137,7 @@ package tree.view.gui.notes {
 		public function set data(data:Join):void {
 			_data = data;
 			nameTF.text = data.associate.fullname;
-			postTF.text = data.type.toString();
+			postTF.text = data.associate.post;
 			refresh();
 		}
 

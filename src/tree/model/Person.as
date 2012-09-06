@@ -24,6 +24,7 @@ package tree.model {
 		public var birthday:Date = new Date();
 		public var deathday:Date;
 		public var email:String;
+		public var post:String;
 
 		public function Person(nodes:NodesCollection) {
 			this.nodes = nodes;
