@@ -1,5 +1,6 @@
 package tree.view.canvas {
 
+	import com.gskinner.motion.GTween;
 	import com.gskinner.motion.GTweener;
 
 	import flash.events.Event;
@@ -23,6 +24,7 @@ package tree.view.canvas {
 		private var canvas:Canvas;
 		private var controller:CanvasController;
 		private var tmpPoint:Point = new Point();
+		private var zoomTween:GTween;
 
 		public function CanvasMediator(view:Canvas, controller:CanvasController)
 		{
@@ -70,22 +72,25 @@ package tree.view.canvas {
 			var zoomCenterRelativeCanvasX:Number = (model.zoomCenter.x) * zoom;
 			var zoomCenterRelativeCanvasY:Number = (model.zoomCenter.y) * zoom;
 
-			view.scaleX = zoom;
-			view.scaleY = zoom;
+			var centreX:Number = view.x + model.zoomCenter.x * (currentZoom - zoom);
+			var centreY:Number = view.y += model.zoomCenter.y * (currentZoom - zoom);
 
-			view.x += model.zoomCenter.x * (currentZoom - zoom);
-			view.y += model.zoomCenter.y * (currentZoom - zoom);
+			if(zoomTween)GTweener.remove(zoomTween);
+			zoomTween = GTweener.to(view, 0.2, {x : centreX, y : centreY, scaleX : zoom, scaleY : zoom});
 
 			controller.onCanvasDeselect();
 		}
 
 		private function onMouseWheel(delta:int):void {
+			// только +-1
+			delta = delta > 0 ? 1 : -1;
+
 			tmpPoint.x = canvas.mouseX;
 			tmpPoint.y = canvas.mouseY;
 			//var p:Point = canvas.localToGlobal(tmpPoint);
 			model.zoomCenter.x = tmpPoint.x;
 			model.zoomCenter.y = tmpPoint.y;
-			model.zoom = Math.max(0.1, Math.min(1, model.zoom - delta * 0.2));
+			model.zoom = Math.max(0.1, Math.min(1, model.zoom + delta * 0.2));
 			controller.onCanvasDeselect();
 		}
 
