@@ -1,6 +1,8 @@
 package tree.view.gui.notes {
 	import com.somewater.storage.I18n;
 
+	import tree.common.Config;
+
 	import tree.view.gui.*;
 	import com.somewater.display.CorrectSizeDefinerSprite;
 
@@ -120,6 +122,7 @@ package tree.view.gui.notes {
 				note.x = scroller.x;
 				note.y = scroller.y - note.height;
 				note.visible = true;
+				note.addEventListener(Event.RESIZE, onFirstNoteResized);
 			}else{
 				var index:int = notes.length;
 				var notesLen:int = notes.length;
@@ -180,6 +183,14 @@ package tree.view.gui.notes {
 				selectedNote = note;
 				if(note){
 					note.selected = true;
+
+					if(note != firstNote){
+						// перематываем, чтобы note была в области видимости
+						if(note.y + note.height > scroller.verticalScrollPosition + scroller.height)
+							scroller.verticalScrollPosition = note.y + note.height - scroller.height;
+						else if(scroller.verticalScrollPosition > note.y)
+							scroller.verticalScrollPosition = note.y;
+					}
 				}
 			}
 		}
@@ -224,6 +235,11 @@ package tree.view.gui.notes {
 				return false;
 			} else
 				return true;
+		}
+
+		private function onFirstNoteResized(event:Event):void{
+			scroller.y = firstNote.y + firstNote.calculatedHeight;
+			refresh();
 		}
 	}
 }
