@@ -147,7 +147,6 @@ package tree.view.canvas {
 			}
 
 			for each(l in linetToRefresh){
-				log("REFRESH JOIN " + l)
 				l.show();
 			}
 		}

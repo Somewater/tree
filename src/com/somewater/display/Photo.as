@@ -309,7 +309,7 @@ package com.somewater.display
 			if (animatedShowing)
 			{
 				image.alpha = 0;
-				GTweener.to(image,  0.5,  { alpha: 1})
+				GTweener.to(image,  0.3,  { alpha: 1})
 			}
 			
 			dispatchComplete();

@@ -9,6 +9,7 @@ package tree.view.canvas {
 	import org.osflash.signals.Signal;
 
 	import tree.common.IClear;
+	import tree.model.Model;
 
 	/**
 	 * Умеет анимированно строить ломаную линию
@@ -48,7 +49,7 @@ package tree.view.canvas {
 
 		public function hide(animated:Boolean = true):void {
 			if(animated){
-				GTweener.to(this, 0.5, {"alpha": 0},{onComplete: dispatchHideComplete});
+				GTweener.to(this, Model.instance.animationTime * 0.5, {"alpha": 0},{onComplete: dispatchHideComplete});
 			}else{
 				alpha = 0;
 			}
@@ -61,7 +62,7 @@ package tree.view.canvas {
 		 */
 		public function show(animated:Boolean = true):void {
 			if(animated){
-				GTweener.to(this, 0.2, {"alpha": 1});
+				GTweener.to(this, Model.instance.animationTime * 0.3, {"alpha": 1});
 			}else{
 				alpha = 1;
 			}
@@ -78,7 +79,7 @@ package tree.view.canvas {
 			refreshLines();
 			this.progress = from;
 			this.alpha = 1;
-			GTweener.to(this, 0.3, {"progress": to}, {onComplete: dispatchPlayComplete})
+			GTweener.to(this, Model.instance.animationTime * 0.4, {"progress": to}, {onComplete: dispatchPlayComplete})
 		}
 
 		protected function refreshLines():void {

@@ -22,7 +22,8 @@ package tree.command.view {
 			if(tree){
 				bus.dispatch(ModelSignal.TREE_NEED_CONSTRUCT, tree)
 			}else{
-				bus.dispatch(ViewSignal.ALL_TREES_COMPLETED)
+				if(!model.treeViewConstructed)
+					bus.dispatch(ViewSignal.ALL_TREES_COMPLETED)
 			}
 		}
 	}

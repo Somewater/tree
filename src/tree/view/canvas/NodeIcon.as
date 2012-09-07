@@ -21,6 +21,7 @@ package tree.view.canvas {
 	import tree.model.GenNode;
 	import tree.model.Generation;
 	import tree.model.Join;
+	import tree.model.Model;
 
 	import tree.model.Node;
 	import tree.model.Person;
@@ -170,7 +171,7 @@ package tree.view.canvas {
 			if(animated){
 				GTweener.removeTweens(this);
 				this.alpha = 1;
-				GTweener.to(this, 0.4, {'x':p.x, 'y':p.y}, {onComplete: dispatchOnComplete });
+				GTweener.to(this, Model.instance.animationTime * 0.5, {'x':p.x, 'y':p.y}, {onComplete: dispatchOnComplete });
 			}else{
 				this.x = p.x;
 				this.y = p.y;
@@ -215,14 +216,14 @@ package tree.view.canvas {
 
 		public function hide(animated:Boolean = true):void {
 			if(animated)
-				GTweener.to(this, 0.2, {"alpha":0}, {onComplete: dispatchOnComplete })
+				GTweener.to(this, Model.instance.animationTime * 0.3, {"alpha":0}, {onComplete: dispatchOnComplete })
 			else
 				alpha = 0;
 		}
 
 		public function show(animated:Boolean = true):void {
 			if(animated)
-				GTweener.to(this, 0.2, {"alpha":1}, {onComplete: dispatchOnComplete })
+				GTweener.to(this, Model.instance.animationTime * 0.3, {"alpha":1}, {onComplete: dispatchOnComplete })
 			else
 				alpha = 1;
 		}

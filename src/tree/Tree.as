@@ -20,6 +20,7 @@ package tree {
 
 	import tree.command.AddPerson;
 	import tree.command.ChangePersonJoins;
+	import tree.command.PrepareateTreeDraw;
 
 	import tree.command.RecalculateNodes;
 	import tree.command.RemovePerson;
@@ -176,6 +177,7 @@ package tree {
 			bus.addCommand(ModelSignal.HIDE_NODE, HideNode);
 
 			bus.addCommand(ViewSignal.CANVAS_READY_FOR_START, SelectNextTree);
+			bus.addCommand(ViewSignal.JOIN_QUEUE_STARTED, PrepareateTreeDraw);
 			bus.addCommand(ViewSignal.JOIN_QUEUE_STARTED, ContinueTreeDraw);
 			bus.addCommand(ViewSignal.NODE_ROLL_UNROLL, RollUnrollNode);
 			bus.addCommand(ViewSignal.JOIN_QUEUE_COMPLETED, SelectNextTree);

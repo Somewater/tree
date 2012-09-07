@@ -7,8 +7,8 @@ package tree.command.view {
 		}
 
 		override public function execute():void {
-			bus.removeCommand(ViewSignal.ALL_TREES_COMPLETED, CompleteTreeDraw);
 			log('Дерево построено');
+			model.treeViewConstructed = true;
 
 			bus.dispatch(ViewSignal.RECALCULATE_ROLL_UNROLL);
 		}

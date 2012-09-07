@@ -5,6 +5,8 @@ package tree.view.canvas {
 	import flash.events.Event;
 	import flash.geom.Point;
 
+	import tree.command.view.CompleteTreeDraw;
+
 	import tree.common.Config;
 	import tree.model.GenNode;
 	import tree.model.Generation;
@@ -50,7 +52,7 @@ package tree.view.canvas {
 
 		private function onModelChanged():void {
 			// todo: провести анимацию перехода, если уже было построено какое-то дерево
-
+			model.treeViewConstructed = false;
 			bus.dispatch(ViewSignal.CANVAS_READY_FOR_START);
 		}
 

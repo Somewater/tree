@@ -37,16 +37,44 @@ package tree.model.base {
 
 		public function set(data:GenNode, x:Number, y:Number):void {
 			CONFIG::debug{
-				if(data)
+				if(data){
 					spatial[x + ',' + y] = data;
-				else
+					// проверка, что поблизости нет ссылок на ту же ноду
+					//if(get(x + 1, y) == data)
+					//	set(null, x + 1, y);
+					//else if(get(x - 1, y) == data)
+					//	set(null, x - 1, y);
+				}else
 					delete(spatial[x + ',' + y]);
 				return;
 			}
-			if(data)
+			if(data){
 				spatial[x + (y << OFFSET)] = data;
-			else
+				// проверка, что поблизости нет ссылок на ту же ноду
+				//if(get(x + 1, y) == data)
+				//	set(null, x + 1, y);
+				//else if(get(x - 1, y) == data)
+				//	set(null, x - 1, y);
+			}else
 				delete(spatial[x + (y << OFFSET)]);
+		}
+
+		public function check():void{
+			CONFIG::debug{
+				var all:Array = [];
+				var data:GenNode;
+				for each(data in spatial)
+					all.push(data);
+				for each(data in all.slice()){
+					var counter:int = 0;
+					for each(var g:GenNode in all)
+						if(g == data){
+							counter++;
+							if(counter > 1)
+								throw new Error('Doublicated spatial entries');
+						}
+				}
+			}
 		}
 
 		//////////////////////////////////////////////

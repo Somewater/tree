@@ -72,7 +72,7 @@ package tree.model.lines {
 				for each(var l:Line in lines)
 					if(!(l.from == from || l.to == to || l.from == to || l.to == from)
 							&& !(l.start > end || l.end < start)) {
-						error("INTERSECTION: " + this + "\t" + start + ".." + end + " (" + constant + ")")
+						//error("INTERSECTION: " + this + "\t" + start + ".." + end + " (" + constant + ")")
 						return false;
 					}
 			return true;

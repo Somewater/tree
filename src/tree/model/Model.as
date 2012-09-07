@@ -26,6 +26,8 @@ package tree.model {
 		 */
 		public var joinsForDraw:Array = [];
 		public var joinsForRemove:Array = [];
+		public var animationTime:Number = 1;// время, отводимое на анимацию появления-скрытия отдельной ноды
+		public var treeViewConstructed:Boolean = false;
 
 		public var joinsQueue:Array = [];
 
@@ -36,7 +38,12 @@ package tree.model {
 
 		public var bus:Bus;
 
+		public static var instance:Model;
+
 		public function Model(bus:Bus) {
+			if(instance)
+				throw new Error('Must be only one');
+			instance = this;
 			this.bus = bus;
 			trees = new TreesCollection(bus);
 			matrixes = new MatrixCollection();
