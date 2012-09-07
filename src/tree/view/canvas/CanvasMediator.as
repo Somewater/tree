@@ -5,6 +5,7 @@ package tree.view.canvas {
 
 	import flash.events.Event;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 
 	import tree.command.view.CompleteTreeDraw;
 
@@ -41,6 +42,7 @@ package tree.view.canvas {
 			bus.zoom.add(onZoom);
 			bus.mouseWheel.add(onMouseWheel);
 			bus.drag.add(onDrag);
+			bus.stopDrag.add(onStopDrag);
 		}
 
 		override public function clear():void {
@@ -73,7 +75,7 @@ package tree.view.canvas {
 			var zoomCenterRelativeCanvasY:Number = (model.zoomCenter.y) * zoom;
 
 			var centreX:Number = view.x + model.zoomCenter.x * (currentZoom - zoom);
-			var centreY:Number = view.y += model.zoomCenter.y * (currentZoom - zoom);
+			var centreY:Number = view.y + model.zoomCenter.y * (currentZoom - zoom);
 
 			if(zoomTween)GTweener.remove(zoomTween);
 			zoomTween = GTweener.to(view, 0.2, {x : centreX, y : centreY, scaleX : zoom, scaleY : zoom});
@@ -100,6 +102,60 @@ package tree.view.canvas {
 			controller.onCanvasDragged();
 		}
 
+		private function onStopDrag(signal:DragSignal):void{
+			var rect:Rect = new Rect();
+			for each(var node:NodeIcon in canvas.iterator){
+				var x:int = node.x;
+				var y:int = node.y;
+				if(x < rect.x)
+					rect.x = x;
+				else if(x > rect.right)
+					rect.right = x;
+				if(y < rect.y)
+					rect.y = y;
+				else if(y > rect.bottom)
+					rect.bottom = y;
+			}
+
+			var zoom:Number = model.zoom;
+			const PADDING_X:int = Canvas.ICON_WIDTH;
+			const PADDING_Y:int = Canvas.ICON_HEIGHT;
+
+			rect.right += Canvas.ICON_WIDTH - PADDING_X;
+			rect.bottom += Canvas.ICON_HEIGHT - PADDING_Y;
+			rect.x += PADDING_X;
+			rect.y += PADDING_Y;
+			rect.x *= zoom;
+			rect.y *= zoom;
+			rect.right *= zoom;
+			rect.bottom *= zoom;
+
+			var screen:Rect = new Rect();
+			screen.x = -view.x;
+			screen.y = -view.y + Config.PANEL_HEIGHT;
+			screen.right = screen.x + Config.WIDTH - Config.GUI_WIDTH;
+			screen.bottom = screen.y + Config.HEIGHT - Config.PANEL_HEIGHT;
+
+			var centreX:Number = NaN;
+			var centreY:Number = NaN;
+
+			if(screen.right < rect.x)
+				centreX = rect.x - Config.WIDTH + Config.GUI_WIDTH;
+			else if(screen.x > rect.right)
+				centreX = rect.right;
+
+			if(screen.bottom < rect.y)
+				centreY = rect.y - Config.HEIGHT + Config.PANEL_HEIGHT;
+			else if(screen.y > rect.bottom)
+				centreY = rect.bottom;
+
+			var obj:Object = {};
+			if(!isNaN(centreX)) obj['x'] = -centreX;
+			if(!isNaN(centreY)) obj['y'] = Config.PANEL_HEIGHT - centreY;
+			if(!isNaN(centreX) || !isNaN(centreY))
+				GTweener.to(view, 0.3, obj);
+		}
+
 		private function onCanvasComplete(event:Event):void {
 			bus.dispatch(ViewSignal.JOIN_DRAWED);
 		}
@@ -112,4 +168,11 @@ package tree.view.canvas {
 			controller.centreOn(person, true);
 		}
 	}
+}
+
+class Rect{
+	public var x:Number = 0;
+	public var y:Number = 0;
+	public var right:Number = 0;
+	public var bottom:Number = 0;
 }

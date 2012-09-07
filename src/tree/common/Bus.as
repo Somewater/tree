@@ -32,6 +32,8 @@ package tree.common {
 		public var mouseWheel:IPrioritySignal;// callback(delta:int)
 
 		public var drag:IPrioritySignal;// callback(dragSignal:DragSignal)
+		public var startDrag:IPrioritySignal;// callback(dragSignal:DragSignal)
+		public var stopDrag:IPrioritySignal;// callback(dragSignal:DragSignal)
 		private var dragSignal:DragSignal;
 
 		public var mouseDown:IPrioritySignal;// callback(position:Point)
@@ -64,6 +66,8 @@ package tree.common {
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 
 			drag = new BusSignal(this, 'drag');
+			startDrag = new BusSignal(this, 'startDrag');
+			stopDrag = new BusSignal(this, 'stopDrag');
 			dragSignal = new DragSignal();
 			mouseDown.addWithPriority(onStartDrag, int.MIN_VALUE + 1000);
 			mouseUp.addWithPriority(onStopDrag, int.MIN_VALUE + 1000);
@@ -112,10 +116,12 @@ package tree.common {
 			dragSignal.lastPoint.x = dragSignal.startPoint.x = pos.x;
 			dragSignal.lastPoint.y = dragSignal.startPoint.y = pos.y;
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onDragMove);
+			startDrag.dispatch(dragSignal);
 		}
 
 		private function onStopDrag(pos:Point):void {
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onDragMove);
+			stopDrag.dispatch(dragSignal);
 		}
 
 		private function onDragMove(event:MouseEvent):void {
