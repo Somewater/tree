@@ -63,6 +63,7 @@ package tree.view.gui.notes {
 
 			model.bus.addNamed(ViewSignal.DRAW_JOIN, addNote)
 			model.bus.addNamed(ViewSignal.REMOVE_JOIN, removeNote)
+			model.bus.addNamed(ViewSignal.PERSON_SELECTED, onSelectNodeSignal);
 		}
 
 		private function onResize(event:Event):void{
@@ -161,6 +162,17 @@ package tree.view.gui.notes {
 		}
 
 		private function selectNote(note:PersonNoteItem):void {
+			bus.dispatch(ViewSignal.PERSON_SELECTED, note.data.associate);
+			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
+		}
+
+		private function onSelectNodeSignal(person:Person):void {
+			var note:PersonNoteItem;
+			for each(var n:PersonNoteItem in notes.concat(firstNote))
+				if(n.data.id == person.id){
+					note = n;
+				}
+
 			if(selectedNote != note){
 				if(selectedNote){
 					deselectNote(selectedNote);
@@ -168,8 +180,6 @@ package tree.view.gui.notes {
 				selectedNote = note;
 				if(note){
 					note.selected = true;
-					bus.dispatch(ViewSignal.PERSON_SELECTED, note.data.associate);
-					bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
 				}
 			}
 		}

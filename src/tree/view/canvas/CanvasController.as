@@ -162,7 +162,7 @@ package tree.view.canvas {
 		}
 
 		private function onNodeClicked(node:NodeIcon):void{
-			//
+			bus.dispatch(ViewSignal.PERSON_SELECTED, node.data.node.person);
 		}
 
 		private function onNodeRolUnrollClicked(node:NodeIcon):void{
