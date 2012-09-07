@@ -112,6 +112,7 @@ package tree.view.gui.notes {
 			actionsTF.addEventListener(LinkLabel.LINK_CLICK, onActionClicked);
 
 			this.visible = false;
+			this.buttonMode = this.useHandCursor = !selected;
 		}
 
 		override public function get calculatedHeight():int {
@@ -155,6 +156,8 @@ package tree.view.gui.notes {
 
 				if(!_selected && _opened)
 					this.opened = false;
+
+				this.buttonMode = this.useHandCursor = !value;
 			}
 		}
 

@@ -60,6 +60,7 @@ package tree.view.gui.notes {
 			scroller.y = searchField.y + searchField.height + 8 + PersonNotesPage.NOTE_HEIGHT;
 			addChild(scroller);
 			scroller.source = notesHolder;
+			scroller.verticalLineScrollSize = PersonNotesPage.NOTE_HEIGHT * 3;
 
 			constructNotes();
 
