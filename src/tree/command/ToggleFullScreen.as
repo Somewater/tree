@@ -9,7 +9,7 @@ package tree.command {
 
 		override public function execute():void {
 			if(Config.stage.displayState == StageDisplayState.NORMAL)
-				Config.stage.displayState = StageDisplayState.FULL_SCREEN;
+				Config.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			else
 				Config.stage.displayState = StageDisplayState.NORMAL;
 		}
