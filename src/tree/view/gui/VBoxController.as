@@ -72,6 +72,7 @@ package tree.view.gui {
 			var nextY:int = 0;
 			for (var i:int = 0; i < childrens.length; i++) {
 				var child:DisplayObject = childrens[i];
+				GTweener.removeTweens(child)
 				if(_filter == null || _filter(child, i)){
 					(child as ISize).moveTo(nextY);
 					if(child is IShowable)

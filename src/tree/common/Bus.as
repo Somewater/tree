@@ -164,7 +164,7 @@ class BusSignal extends PrioritySignal
 	}
 
 	override public function dispatch(... valueObjects):void {
-		Cc.log("DISPATCH: (" + name + ")" + valueObjects);
+		//Cc.log("DISPATCH: (" + name + ")" + valueObjects);
 		super.dispatch.apply(null, valueObjects)
 	}
 }
