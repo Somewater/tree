@@ -138,6 +138,7 @@ package tree.view.gui.notes {
 			note.click.add(selectNote);
 			note.dblClick.add(centreNote);
 			note.actionClick.add(openNote);
+			vbox.refresh();
 			fireResize();
 		}
 
@@ -155,6 +156,7 @@ package tree.view.gui.notes {
 					break;
 				}
 			}
+			vbox.refresh();
 			fireResize();
 		}
 
