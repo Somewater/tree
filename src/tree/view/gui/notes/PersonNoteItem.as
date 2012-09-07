@@ -96,7 +96,7 @@ package tree.view.gui.notes {
 			menuMask.graphics.drawRect(135, menu.y, PersonNotesPage.NOTE_WIDTH - 135, 25);
 			menuMask.graphics.drawRect(0, menu.y + 25, PersonNotesPage.NOTE_WIDTH, 500);
 
-			actionsTF = new LinkLabel(null, 0, 13, false);
+			actionsTF = new LinkLabel(null, 0, 11, false);
 			actionsTF.text = I18n.t('ACTIONS')
 			actionsTF.x = Config.GUI_WIDTH - 25 - actionsTF.width;
 			actionsTF.y = postTF.y;
