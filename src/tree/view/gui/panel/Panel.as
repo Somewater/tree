@@ -1,8 +1,15 @@
 package tree.view.gui.panel {
 	import com.somewater.storage.I18n;
 	import com.somewater.text.EmbededTextField;
+	import com.somewater.text.LinkLabel;
+
+	import flash.display.DisplayObject;
 
 	import flash.display.Sprite;
+	import flash.events.Event;
+
+	import org.osflash.signals.ISignal;
+	import org.osflash.signals.Signal;
 
 	import tree.common.Config;
 
@@ -12,6 +19,8 @@ package tree.view.gui.panel {
 	public class Panel extends Sprite{
 
 		public var titleTF:EmbededTextField;
+		public var treeOwnerNameTF:LinkLabel;
+		public var treeOwnerMark:DisplayObject;
 		public var savePrintButton:DoubleButton;
 		public var centreRotateButton:DoubleButton;
 		public var optionsButton:Button;
@@ -20,15 +29,26 @@ package tree.view.gui.panel {
 		public var zoomSlider:ZoomSlider;
 		public var saveTreeButton:BlueButton;
 
+		public var ownerNameClick:ISignal;
+		public var treeSelectorPopup:TreeSelectorPopup;
+
 		public function Panel() {
 			titleTF = new EmbededTextField(null, 0, 19, true);
-			titleTF.text = 'Семья Андреева Сергея';
+			titleTF.text = I18n.t('FAMILY');
 			addChild(titleTF);
 
-			savePrintButton = new DoubleButton(Config.loader.createMc('assets.SavePrintButton'));
+			treeOwnerNameTF = new LinkLabel(null,0x2682c5, 19, true);
+			addChild(treeOwnerNameTF);
+			treeOwnerNameTF.addEventListener(LinkLabel.LINK_CLICK, onLinkClicked);
+			ownerNameClick = new Signal();
+			treeOwnerMark = Config.loader.createMc('assets.TriangleMarkLink');
+			treeOwnerMark.rotation = 180;
+			addChild(treeOwnerMark);
+
+			savePrintButton = new DoubleButton(Config.loader.createMc('assets.SaveButton'), Config.loader.createMc('assets.PrintButton'));
 			addChild(savePrintButton);
 
-			centreRotateButton = new DoubleButton(Config.loader.createMc('assets.CentreRotateButton'));
+			centreRotateButton = new DoubleButton(Config.loader.createMc('assets.CentreButton'), Config.loader.createMc('assets.RotateButton'));
 			addChild(centreRotateButton);
 
 			optionsButton = new Button(Config.loader.createMc('assets.OptionsButton'));
@@ -46,6 +66,15 @@ package tree.view.gui.panel {
 			saveTreeButton = new BlueButton();
 			addChild(saveTreeButton);
 			saveTreeButton.label = I18n.t('SAVE_TREE');
+
+			treeSelectorPopup = new TreeSelectorPopup();
+			Config.tooltips.addChild(treeSelectorPopup);
+			treeSelectorPopup.visible = false;
+			treeSelectorPopup.alpha = 0;
+		}
+
+		private function onLinkClicked(event:Event):void {
+			ownerNameClick.dispatch();
 		}
 
 		public function setSize(w:int, h:int):void {
@@ -55,6 +84,7 @@ package tree.view.gui.panel {
 
 			titleTF.x = 30;
 			titleTF.y = 15;
+			refreshOwnerName();
 
 			saveTreeButton.x = w - 30 - saveTreeButton.width;
 			saveTreeButton.y = 15;
@@ -74,6 +104,22 @@ package tree.view.gui.panel {
 				}
 			}
 		}
+
+		public function setOwnerName(name:String):void {
+			treeOwnerNameTF.text = name;
+			refreshOwnerName();
+		}
+
+		private function refreshOwnerName():void {
+			treeOwnerNameTF.x = titleTF.x + titleTF.width + 10;
+			treeOwnerNameTF.y = titleTF.y;
+
+			treeOwnerMark.x = treeOwnerNameTF.x + treeOwnerNameTF.width + 10;
+			treeOwnerMark.y = treeOwnerNameTF.y + treeOwnerNameTF.height * 0.5;
+
+			treeSelectorPopup.x = treeOwnerNameTF.x;
+			treeSelectorPopup.y = treeOwnerNameTF.y + treeOwnerNameTF.height;
+		}
 	}
 }
 
@@ -88,16 +134,6 @@ import tree.view.canvas.Canvas;
 import tree.view.gui.Button;
 import tree.view.gui.panel.ZoomSlider;
 
-class DoubleButton extends Button{
-	public function DoubleButton(movie:MovieClip){
-		super(movie);
-	}
-
-	public function onFirst():Boolean{
-		return true;
-	}
-}
-
 class ZoomSliderComponent extends ZoomSlider{
 
 	private var model:Model;
@@ -110,6 +146,7 @@ class ZoomSliderComponent extends ZoomSlider{
 		changed.add(onValueChanged);
 
 		this.value = model.zoom;
+		thumb.y = 2;
 	}
 
 	private function onZoomChanged(zoom:Number):void {

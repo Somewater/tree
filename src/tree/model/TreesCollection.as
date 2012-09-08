@@ -116,5 +116,12 @@ package tree.model {
 				t.dirty = true;
 			}
 		}
+
+		public function iteratorForAllPersons():Array {
+			var persons:Array = [];
+			for each(var t:TreeModel in array)
+				persons = persons.concat(t.persons.iterator);
+			return persons;
+		}
 	}
 }

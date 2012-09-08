@@ -5,6 +5,8 @@ package tree {
 	import com.somewater.text.EmbededTextField;
 	import com.somewater.text.Hint;
 
+	import flash.display.DisplayObject;
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -207,6 +209,16 @@ package tree {
 			graphics.clear();
 			graphics.beginFill(0xFEFFFD);
 			graphics.drawRect(0, 0, Config.WIDTH, Config.HEIGHT);
+		}
+
+		public function mouseOnCanvas():Boolean{
+			if(panel.treeSelectorPopup.visible){
+				var popup:DisplayObject = panel.treeSelectorPopup;
+				if(stage.mouseX > popup.x && stage.mouseX < popup.x + popup.width &&
+						stage.mouseY > popup.y && stage.mouseY < popup.y + popup.height)
+					return false;
+			}
+			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH) && stage.stage.mouseY > Config.PANEL_HEIGHT;
 		}
 	}
 }

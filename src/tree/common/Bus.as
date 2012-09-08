@@ -14,6 +14,7 @@ package tree.common {
 	import org.osflash.signals.Signal;
 
 	import tree.Tree;
+	import tree.model.Model;
 	import tree.signal.DragSignal;
 
 	public class Bus extends NamedSignal{
@@ -98,7 +99,7 @@ package tree.common {
 		}
 
 		private function onMouseWheel(event:MouseEvent):void {
-			if(mouseOnCanvas()){
+			if(Tree.instance.mouseOnCanvas()){
 				CONFIG::debug {
 					if(Cc.visible)
 						return;
@@ -108,7 +109,7 @@ package tree.common {
 		}
 
 		private function onMouseDown(event:MouseEvent):void {
-			if(mouseOnCanvas()){
+			if(Tree.instance.mouseOnCanvas()){
 				tmpPoint.x =  Tree.instance.mouseX;
 				tmpPoint.y =  Tree.instance.mouseY;
 				mouseDown.dispatch(tmpPoint);
@@ -116,7 +117,7 @@ package tree.common {
 		}
 
 		private function onMouseUp(event:MouseEvent):void {
-			if(mouseOnCanvas()){
+			if(Tree.instance.mouseOnCanvas()){
 				tmpPoint.x =  Tree.instance.mouseX;
 				tmpPoint.y =  Tree.instance.mouseY;
 				mouseUp.dispatch(tmpPoint);
@@ -124,7 +125,7 @@ package tree.common {
 		}
 
 		private function onMouseMove(event:MouseEvent):void {
-			if(mouseOnCanvas()){
+			if(Tree.instance.mouseOnCanvas()){
 				tmpPoint.x =  Tree.instance.mouseX;
 				tmpPoint.y =  Tree.instance.mouseY;
 				mouseMove.dispatch(tmpPoint);
@@ -157,10 +158,6 @@ package tree.common {
 
 			dragSignal.lastPoint.x = dragSignal.currentPoint.x;
 			dragSignal.lastPoint.y = dragSignal.currentPoint.y;
-		}
-
-		private function mouseOnCanvas():Boolean{
-			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH) && stage.mouseY > Config.PANEL_HEIGHT;
 		}
 
 		private function onFullScreenChanged(event:FullScreenEvent):void{

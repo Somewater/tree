@@ -20,7 +20,6 @@ package tree.view.gui.panel {
 		}
 
 		override protected function refresh():void {
-			Cc.log('resize panel ********')
 			panel.setSize(Config.WIDTH - Config.GUI_WIDTH, Config.PANEL_HEIGHT);
 		}
 

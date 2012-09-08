@@ -106,5 +106,9 @@ package tree.model {
 				bus.constructionInProcess.dispatch();
 			}
 		}
+
+		public function get owner():Person {
+			return trees.first.owner;
+		}
 	}
 }

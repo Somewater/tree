@@ -18,7 +18,7 @@ package tree.view.gui.panel {
 	public class ZoomSlider extends UIComponent{
 
 		private var line:DisplayObject;
-		private var thumb:Button;
+		protected var thumb:Button;
 		private var thumbDragged:Boolean = false;
 		private var holder:Sprite;
 		private var dragStartMousePos:Point = new Point();

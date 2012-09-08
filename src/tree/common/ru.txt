@@ -1,3 +1,4 @@
 ACTIONS=Действия
 SEARCH_PROMPT=Найти
 SAVE_TREE=Сохранить дерево
+FAMILY=Семья

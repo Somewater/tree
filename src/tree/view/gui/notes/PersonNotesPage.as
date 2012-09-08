@@ -127,7 +127,7 @@ package tree.view.gui.notes {
 			}else{
 				var index:int = notes.length;
 				var notesLen:int = notes.length;
-				for(var i:int = 1;i<notesLen;i++)
+				for(var i:int = 0;i<notesLen;i++)
 					if(noteName < (notes[i] as PersonNoteItem).data.associate.fullname){
 						index = i;
 						break;
