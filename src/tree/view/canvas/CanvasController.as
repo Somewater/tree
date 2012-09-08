@@ -24,13 +24,16 @@ package tree.view.canvas {
 	public class CanvasController extends Actor{
 
 		private var canvas:Canvas;
+		private var lineController:LineHighlightController;
 
 		public function CanvasController(canvas:Canvas) {
 			this.canvas = canvas;
+			this.lineController = new LineHighlightController(canvas);
 			detain();
 
 			canvas.out.add(onCanvasDeselect);
 			canvas.click.add(onCanvasDeselect);
+			bus.constructionInProcess.add(onConstructionStatusChanged);
 		}
 
 		public function drawJoin(g:GenNode):void {
@@ -174,10 +177,16 @@ package tree.view.canvas {
 		}
 
 		public function onNodeOver(node:NodeIcon):void{
-			canvas.highlightNode(node);
+			if(!model.constructionInProcess){
+				canvas.highlightNode(node);
+				lineController.highlightPersonLines(node.data.node.person);
+				lineController.supressMouseMoveAction = true;
+			}
 		}
 
 		public function onNodeOut(node:NodeIcon):void{
+			lineController.clearHighlighted();
+			lineController.supressMouseMoveAction = false;
 			if(canvas.arrowMenu.arrow && canvas.arrowMenu.arrow.data == node.data.node.person)
 				return;// если для ноды открыто меню, то не сниаем выделение запросто
 			canvas.unhighlightNode(node);
@@ -225,6 +234,16 @@ package tree.view.canvas {
 				return;
 
 			canvas.arrowMenu.refreshPosition();
+		}
+
+		private function onConstructionStatusChanged():void{
+			if(!model.constructionInProcess){
+				// закончено строительство или анимирование нод
+				lineController.start();
+			}else{
+				// ноды в процессе построения или анимации
+				lineController.stop();
+			}
 		}
 	}
 }

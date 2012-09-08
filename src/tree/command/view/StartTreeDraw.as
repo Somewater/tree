@@ -57,6 +57,7 @@ package tree.command.view {
 			proc.clear();
 			model.joinsQueue = model.joinsQueue.concat(joinsForDraw);
 
+			model.constructionInProcess = true;
 			bus.dispatch(ViewSignal.JOIN_QUEUE_STARTED)
 		}
 

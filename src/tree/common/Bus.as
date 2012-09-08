@@ -40,11 +40,16 @@ package tree.common {
 
 		public var mouseUp:IPrioritySignal;// callback(position:Point)
 
+		public var mouseMove:IPrioritySignal;// callback(position:Point)
+
 		public var zoom:IPrioritySignal// callback(zoom:Number)
 
 		public var fullscreen:IPrioritySignal;
 
 		private var stage:Stage;
+
+		public var treeViewConstructed:ISignal;
+		public var constructionInProcess:ISignal;
 
 		public function Bus(stage:Stage) {
 			super(null, '');
@@ -65,6 +70,9 @@ package tree.common {
 			mouseUp = new BusSignal(this, 'mouseUp');
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 
+			mouseMove = new BusSignal(this, 'mouseMove');
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+
 			drag = new BusSignal(this, 'drag');
 			startDrag = new BusSignal(this, 'startDrag');
 			stopDrag = new BusSignal(this, 'stopDrag');
@@ -76,6 +84,9 @@ package tree.common {
 
 			fullscreen = new BusSignal(this, 'fullscreen');
 			stage.addEventListener(FullScreenEvent.FULL_SCREEN, onFullScreenChanged);
+
+			treeViewConstructed = new Signal();
+			constructionInProcess = new Signal();
 		}
 
 		private function onResize(event:Event):void {
@@ -109,6 +120,14 @@ package tree.common {
 				tmpPoint.x =  Tree.instance.mouseX;
 				tmpPoint.y =  Tree.instance.mouseY;
 				mouseUp.dispatch(tmpPoint);
+			}
+		}
+
+		private function onMouseMove(event:MouseEvent):void {
+			if(mouseOnCanvas()){
+				tmpPoint.x =  Tree.instance.mouseX;
+				tmpPoint.y =  Tree.instance.mouseY;
+				mouseMove.dispatch(tmpPoint);
 			}
 		}
 

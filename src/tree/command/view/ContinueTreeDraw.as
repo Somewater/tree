@@ -20,6 +20,7 @@ package tree.command.view {
 		}
 
 		override public function execute():void {
+			model.constructionInProcess = true;
 			var join:Join = model.joinsForDraw.shift();
 			if(join)
 			{
@@ -34,6 +35,7 @@ package tree.command.view {
 				return;
 			}
 
+			model.constructionInProcess = false;
 			bus.dispatch(ViewSignal.JOIN_QUEUE_COMPLETED)
 		}
 	}

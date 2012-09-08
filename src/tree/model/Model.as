@@ -27,7 +27,8 @@ package tree.model {
 		public var joinsForDraw:Array = [];
 		public var joinsForRemove:Array = [];
 		public var animationTime:Number = 1;// время, отводимое на анимацию появления-скрытия отдельной ноды
-		public var treeViewConstructed:Boolean = false;
+		private var _treeViewConstructed:Boolean = false;
+		private var _constructionInProcess:Boolean = false;
 
 		public var joinsQueue:Array = [];
 
@@ -80,6 +81,30 @@ package tree.model {
 			trees.clear();
 			generations.clear();
 			matrixes.clear();
+		}
+
+
+		public function get treeViewConstructed():Boolean {
+			return _treeViewConstructed;
+		}
+
+		public function set treeViewConstructed(value:Boolean):void {
+			if(_treeViewConstructed != value){
+				_treeViewConstructed = value;
+				bus.treeViewConstructed.dispatch();
+			}
+		}
+
+
+		public function get constructionInProcess():Boolean {
+			return _constructionInProcess;
+		}
+
+		public function set constructionInProcess(value:Boolean):void {
+			if(_constructionInProcess != value){
+				_constructionInProcess = value;
+				bus.constructionInProcess.dispatch();
+			}
 		}
 	}
 }

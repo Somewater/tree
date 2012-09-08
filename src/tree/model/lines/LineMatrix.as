@@ -8,7 +8,7 @@ package tree.model.lines {
 		/**
 		 * linesByConstant[<constant>] == array of lines
 		 */
-		private var linesByConstant:Array = [];
+		public var linesByConstant:Array = [];
 
 		private var horizontal:Boolean;
 		private var mask:int;

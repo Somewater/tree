@@ -57,6 +57,7 @@ package tree.view.canvas {
 		private function onModelChanged():void {
 			// todo: провести анимацию перехода, если уже было построено какое-то дерево
 			model.treeViewConstructed = false;
+			model.constructionInProcess = true;
 			bus.dispatch(ViewSignal.CANVAS_READY_FOR_START);
 		}
 
@@ -105,6 +106,8 @@ package tree.view.canvas {
 		private function onStopDrag(signal:DragSignal):void{
 			var rect:Rect = new Rect();
 			for each(var node:NodeIcon in canvas.iterator){
+				if(!node)
+					continue;
 				var x:int = node.x;
 				var y:int = node.y;
 				if(x < rect.x)

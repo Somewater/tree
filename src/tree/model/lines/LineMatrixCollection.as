@@ -13,8 +13,9 @@ package tree.model.lines {
 
 		private var tmpPoint:Point = new Point();
 
-		private var horizontalMatrixesByMask:Array = [];
-		private var verticalMatrixesByMask:Array = [];
+		public var horizontalMatrixesByMask:Array = [];
+		public var verticalMatrixesByMask:Array = [];
+		public var iconsByUids:Array = [];
 
 		public function LineMatrixCollection() {
 		}
@@ -152,6 +153,26 @@ package tree.model.lines {
 
 			for each(var l:Line in utilization)
 				utilizedLines.push(l);
+		}
+
+		public function addIcon(data:Join, x:int, y:int):void {
+			var from:int = data.from.uid;
+			var to:int = data.associate.uid;
+			if(from > to) {var tmp:int = from; from = to; to = tmp;}
+			var i:Icon = iconsByUids[from + '->' + to];
+			if(!i){
+				iconsByUids[from + '->' + to] = i = new Icon();
+				i.join = data;
+			}
+			i.x = x;
+			i.y = y;
+		}
+
+		public function removeIcon(data:Join):void {
+			var from:int = data.from.uid;
+			var to:int = data.associate.uid;
+			if(from > to) {var tmp:int = from; from = to; to = tmp;}
+			delete(iconsByUids[from + '->' + to]);
 		}
 	}
 }

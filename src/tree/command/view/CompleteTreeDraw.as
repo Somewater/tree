@@ -9,6 +9,7 @@ package tree.command.view {
 		override public function execute():void {
 			log('Дерево построено');
 			model.treeViewConstructed = true;
+			model.constructionInProcess = false;
 
 			bus.dispatch(ViewSignal.RECALCULATE_ROLL_UNROLL);
 		}

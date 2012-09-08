@@ -155,7 +155,7 @@ package tree.view.canvas {
 				Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace);
 			rollUnrollButton.male = _data.node.person.male;
 			CONFIG::debug{
-				debugTrace.text = "x=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
+				debugTrace.text = p.node.id + "\nx=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
 						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
 						+ "\ndist=" + p.node.dist;
 			}

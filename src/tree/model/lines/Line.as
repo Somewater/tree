@@ -1,7 +1,7 @@
 package tree.model.lines {
 	import tree.model.Join;
 
-	internal class Line {
+	public class Line {
 
 		public var start:int;
 		public var end:int;

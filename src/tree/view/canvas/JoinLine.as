@@ -1,5 +1,9 @@
 package tree.view.canvas {
+	import com.gskinner.geom.ColorMatrix;
+
 	import flash.display.DisplayObject;
+	import flash.filters.GlowFilter;
+	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 
 	import tree.common.Config;
@@ -21,6 +25,7 @@ package tree.view.canvas {
 		private var icon:DisplayObject;
 		private var lineModelCollection:LineMatrixCollection;
 		private var lineMask:int;
+		private var _highlighted:Boolean = false;
 
 
 		public function JoinLine(collection:INodeViewCollection) {
@@ -212,10 +217,12 @@ package tree.view.canvas {
 					}
 					icon.x = iconX;
 					icon.y = y;
+					lineModelCollection.addIcon(data, iconX, y);
 				}else{
 					// иконка должна быть скрыта
 					if(icon && icon.visible)
 						icon.visible = false;
+					lineModelCollection.removeIcon(data);
 				}
 			}else
 				super.drawLine(line, length);
@@ -234,6 +241,20 @@ package tree.view.canvas {
 				linesLength = 0;
 			}
 
+		}
+
+		public function set highlighted(value:Boolean):void {
+			if(_highlighted != value){
+				_highlighted = value;
+				var colorTransform:ColorTransform = new ColorTransform();
+				if(value) colorTransform.color = 0x51BBEC;
+				this.transform.colorTransform = colorTransform;
+				filters = value ? [new GlowFilter(0x51BBEC, 1, 4, 4)] : []
+			}
+		}
+
+		public function get highlighted():Boolean {
+			return _highlighted;
 		}
 	}
 }
