@@ -22,6 +22,10 @@ package tree.view {
 		private var supressRefresh:int = 0;
 
 		public function WindowsManager(bus:Bus, windowsLayer:DisplayObjectContainer, preloader:Preloader) {
+			if(instance)
+				throw new Error('Singletone');
+			instance = this;
+
 			this.bus = bus;
 			this.windowsLayer = windowsLayer;
 
@@ -112,7 +116,7 @@ package tree.view {
 			if(splashScreen.parent)
 				windowsLayer.removeChild(splashScreen);
 
-			for (var i:int = windows.length; i > -1; i--) {
+			for (var i:int = windows.length - 1; i > -1; i--) {
 				var w:WindowsData = windows[i];
 				if(w.modal)
 				{

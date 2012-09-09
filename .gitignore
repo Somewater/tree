@@ -6,3 +6,4 @@ bin-debug/*.swf
 *.iml
 doc/*
 Rakefile.rb
+scripts/text.rb

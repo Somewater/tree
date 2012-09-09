@@ -10,7 +10,6 @@ package tree.view {
 
 		public function Window() {
 			resize();
-			addEventListener(MouseEvent.CLICK, function(event:Event){close();})
 		}
 
 		public function open():void {

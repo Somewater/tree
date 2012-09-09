@@ -65,6 +65,7 @@ package tree {
 	import tree.view.canvas.Canvas;
 	import tree.view.canvas.CanvasController;
 	import tree.view.canvas.CanvasMediator;
+	import tree.view.canvas.ConsoleWindow;
 	import tree.view.canvas.INodeViewCollection;
 	import tree.view.gui.Gui;
 	import tree.view.Preloader;
@@ -170,6 +171,13 @@ package tree {
 
 			//bus.sceneResize.add(onSceneResize);
 			onSceneResize();
+
+			Config.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+
+		private function onKeyDown(event:KeyboardEvent):void {
+			if(event.ctrlKey && event.shiftKey && event.altKey && event.keyCode == Keyboard.I)
+				new ConsoleWindow();
 		}
 
 		private function configurateCommands():void {
