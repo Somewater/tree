@@ -124,7 +124,7 @@ package tree.view.gui.profile {
 			if(!person) return;
 			photo.source = person.photo;
 			nameTF.text = person.fullname;
-			birthdayTF.text = I18n.t('BIRTHDAY_LABEL', {birthday: (person.birthday ? person.birthday.toString() : '    ---')});
+			birthdayTF.text = I18n.t('BIRTHDAY_LABEL', {birthday: (person.birthday ? formattedBirthday(person.birthday) : '    ---')});
 			familyBlock.setPerson(person);
 
 			refresh();
@@ -132,6 +132,10 @@ package tree.view.gui.profile {
 
 		private function onFamilyBlockResized(event:Event):void{
 			refresh();
+		}
+
+		private function formattedBirthday(date:Date):String{
+			return date.date + ' ' + I18n.t('MONTH_GENETIVE_' + date.month) + ' ' + date.fullYear;
 		}
 	}
 }
