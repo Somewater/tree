@@ -72,6 +72,10 @@ package tree.view.gui.panel {
 			Config.tooltips.addChild(treeSelectorPopup);
 			treeSelectorPopup.visible = false;
 			treeSelectorPopup.alpha = 0;
+
+			optionsButton.alpha = 0;
+			savePrintButton.alpha = 0;
+			saveTreeButton.alpha = 0;
 		}
 
 		private function onLinkClicked(event:Event):void {

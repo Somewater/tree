@@ -61,6 +61,11 @@ package tree.view.gui.profile {
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 			onPersonSelected(model.selectedPerson);
+
+			editProfileButton.visible = false;
+			profileLink.visible = false;
+			familyTreeLink.visible = false;
+			createProfileButton.visible = false;
 		}
 
 		override public function get pageName():String {
