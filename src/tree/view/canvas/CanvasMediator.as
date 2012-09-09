@@ -43,6 +43,7 @@ package tree.view.canvas {
 			bus.mouseWheel.add(onMouseWheel);
 			bus.drag.add(onDrag);
 			bus.stopDrag.add(onStopDrag);
+			bus.addNamed(ViewSignal.NEED_CENTRE_CANVAS, onNeedCentreCanvas)
 		}
 
 		override public function clear():void {
@@ -56,6 +57,7 @@ package tree.view.canvas {
 
 		private function onModelChanged():void {
 			// todo: провести анимацию перехода, если уже было построено какое-то дерево
+			controller.centreOn();
 			model.treeViewConstructed = false;
 			model.constructionInProcess = true;
 			bus.dispatch(ViewSignal.CANVAS_READY_FOR_START);
@@ -170,11 +172,15 @@ package tree.view.canvas {
 		private function onPersonCentered(person:Person):void{
 			controller.centreOn(person, true);
 		}
+
+		private function onNeedCentreCanvas():void {
+			controller.centreOn(null, true);
+		}
 	}
 }
 
-class Rect{
-	public var x:Number = 0;
+	class Rect{
+			public var x:Number = 0;
 	public var y:Number = 0;
 	public var right:Number = 0;
 	public var bottom:Number = 0;

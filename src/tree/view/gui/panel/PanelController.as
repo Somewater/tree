@@ -14,7 +14,10 @@ package tree.view.gui.panel {
 	import tree.common.Config;
 	import tree.model.Person;
 	import tree.model.TreeModel;
+	import tree.signal.AppSignal;
 	import tree.signal.ModelSignal;
+	import tree.signal.ViewSignal;
+	import tree.view.gui.Button;
 
 	public class PanelController extends Actor{
 
@@ -27,11 +30,12 @@ package tree.view.gui.panel {
 			Config.stage.addEventListener(MouseEvent.CLICK, onMouseDown);
 			panel.ownerNameClick.add(onOwnerNameClicked);
 			panel.treeSelectorPopup.linkClick.add(onNewOwnerClicked);
+			panel.centreRotateButton.left.click.add(onCentre);
 		}
 
 		private function onNewOwnerClicked(person:Person):void {
 			hideTreeOwnerSelectorPopup();
-			// todo: и дерево загрузить
+			bus.dispatch(AppSignal.RELOAD_TREE, person.uid);
 		}
 
 		private function onMouseDown(event:MouseEvent):void {
@@ -66,6 +70,10 @@ package tree.view.gui.panel {
 			GTweener.to(panel.treeSelectorPopup, 0.3, {scaleX: 0.1, scaleY: 0.1, alpha: 0},
 					{onComplete: function(g:GTween):void{panel.treeSelectorPopup.visible = false;}})
 			panel.treeOwnerMark.rotation = 180;
+		}
+
+		private function onCentre(b:Button):void{
+			bus.dispatch(ViewSignal.NEED_CENTRE_CANVAS);
 		}
 	}
 }

@@ -1,4 +1,6 @@
 package tree.view.canvas {
+	import com.gskinner.motion.GTweener;
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -185,6 +187,31 @@ package tree.view.canvas {
 			if(event.relatedObject && (event.relatedObject == arrowMenu || arrowMenu.contains(event.relatedObject)))
 				return;
 			super._onOut(event);
+		}
+
+		public function utilize():void {
+			for each(var n:NodeIcon in nodesByUid)
+				if(n)
+					n.clear();
+			nodesByUid = [];
+
+			for each(var j:JoinLine in joindByUid)
+				if(j)
+					j.clear();
+			joindByUid = [];
+
+			while(nodesHolder.numChildren)
+				nodesHolder.removeChildAt(0);
+			while(joinsHolder.numChildren)
+				joinsHolder.removeChildAt(0);
+			while(generationsHolder.numChildren)
+				generationsHolder.removeChildAt(0);
+			generationHolders = [];
+
+			selectedNode = null;
+			highlightedNode = null;
+			arrowMenu.visible = false;
+			GTweener.removeTweens(this);
 		}
 	}
 }

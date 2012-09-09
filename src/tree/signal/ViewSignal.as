@@ -27,6 +27,8 @@ package tree.signal {
 
 		public static const PERSON_CENTERED:String = 'personCentered';// запрос на центровку на персоне (person:Person)
 
+		public static const NEED_CENTRE_CANVAS:String = 'needCentreCanvas';
+
 
 		public function ViewSignal() {
 		}

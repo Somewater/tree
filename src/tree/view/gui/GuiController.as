@@ -3,6 +3,7 @@ package tree.view.gui {
 	import tree.model.Join;
 	import tree.model.Person;
 	import tree.signal.ModelSignal;
+	import tree.signal.ViewSignal;
 
 	public class GuiController extends Actor{
 
@@ -10,6 +11,7 @@ package tree.view.gui {
 
 		public function GuiController(gui:Gui) {
 			this.gui = gui;
+			bus.addNamed(ViewSignal.CANVAS_READY_FOR_START, onStart);
 		}
 
 
@@ -29,6 +31,10 @@ package tree.view.gui {
 
 		public function removePerson(uid:int):void{
 
+		}
+
+		private function onStart():void{
+			gui.setPage('PersonNotesPage');
 		}
 	}
 }

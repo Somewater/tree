@@ -120,6 +120,10 @@ package tree.view.gui.panel {
 			treeSelectorPopup.x = treeOwnerNameTF.x;
 			treeSelectorPopup.y = treeOwnerNameTF.y + treeOwnerNameTF.height;
 		}
+
+		public function utilize():void {
+			setOwnerName('...')
+		}
 	}
 }
 

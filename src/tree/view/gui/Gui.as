@@ -37,8 +37,6 @@ package tree.view.gui {
 			foreground = Config.loader.createMc('assets.GuiForeground');
 			foreground.mouseEnabled = foreground.mouseChildren = false;
 			addChild(foreground);
-
-			setPage('PersonNotesPage')
 		}
 
 		public function setSize(w:int, h:int):void {
@@ -59,6 +57,14 @@ package tree.view.gui {
 				var cl:Class = PAGES_CLASSES_BY_NAME[name];
 				page = new cl();
 				pageHolder.addChild(page);
+			}
+		}
+
+		public function utilize():void {
+			if(page){
+				page.clear();
+				pageHolder.removeChild(page);
+				page = null;
 			}
 		}
 	}

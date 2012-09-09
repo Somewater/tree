@@ -132,6 +132,7 @@ package tree.view.gui.notes {
 			actionsTF.removeEventListener(LinkLabel.LINK_CLICK, onActionClicked);
 			actionClick.removeAll();
 			actionClick = null;
+			GTweener.removeTweens(this);
 		}
 
 		public function set data(data:Join):void {

@@ -33,7 +33,7 @@ package tree.view.canvas {
 		}
 
 		public function clear():void {
-
+			GTweener.removeTweens(this);
 		}
 
 		public function get progress():Number {

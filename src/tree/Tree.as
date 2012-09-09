@@ -1,4 +1,5 @@
 package tree {
+	import com.gskinner.motion.GTweener;
 	import com.junkbyte.console.Cc;
 	import com.junkbyte.console.KeyBind;
 	import com.somewater.storage.I18n;
@@ -25,6 +26,7 @@ package tree {
 	import tree.command.PrepareateTreeDraw;
 
 	import tree.command.RecalculateNodes;
+	import tree.command.ReloadTree;
 	import tree.command.RemovePerson;
 
 	import tree.command.ResponseRouter;
@@ -194,6 +196,7 @@ package tree {
 
 			//stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void{if(e.keyCode == Keyboard.N) new ContinueTreeDraw().execute()})
 			bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);
+			bus.addCommand(AppSignal.RELOAD_TREE, ReloadTree);
 		}
 
 
@@ -219,6 +222,13 @@ package tree {
 					return false;
 			}
 			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH) && stage.stage.mouseY > Config.PANEL_HEIGHT;
+		}
+
+		public function utilize():void {
+			canvas.utilize();
+			gui.utilize();
+			panel.utilize();
+			model.utilize();
 		}
 	}
 }

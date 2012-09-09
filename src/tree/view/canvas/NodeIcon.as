@@ -212,6 +212,7 @@ package tree.view.canvas {
 			out.removeAll();
 			showArrowMenu.removeAll();
 			hideArrowMenu.removeAll();
+			GTweener.removeTweens(this);
 		}
 
 		public function hide(animated:Boolean = true):void {

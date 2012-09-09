@@ -110,5 +110,18 @@ package tree.model {
 		public function get owner():Person {
 			return trees.first.owner;
 		}
+
+		public function utilize():void{
+			joinsForDraw = [];
+			joinsForRemove = [];
+			_treeViewConstructed = false;
+			_constructionInProcess = false;
+			joinsQueue = [];
+			drawedNodesUids = [];
+
+			trees = new TreesCollection(bus);
+			matrixes = new MatrixCollection();
+			generations = new GenerationsCollection(bus, matrixes);
+		}
 	}
 }

@@ -77,17 +77,25 @@ package tree.view.gui.notes {
 			super.clear();
 			model.bus.removeNamed(ViewSignal.DRAW_JOIN, addNote);
 			model.bus.removeNamed(ViewSignal.REMOVE_JOIN, removeNote);
+			model.bus.removeNamed(ViewSignal.PERSON_SELECTED, onSelectNodeSignal);
 			model = null;
 
 			vbox.removeEventListener(Event.CHANGE, onResize);
 			searchField.removeEventListener(Event.CHANGE, onSearchWordChanged);
 			searchField.clear();
-			for each(var n:PersonNoteItem in notes)
+			for each(var n:PersonNoteItem in notes){
+				notesHolder.removeChild(n);
+				vbox.removeChild(n);
 				n.clear();
+			}
+			notes = [];
 			if(firstNote){
 				firstNote.clear();
-				firstNote = null;
+				firstNote.parent.removeChild(firstNote);
 			}
+
+			selectedNote = null;
+			firstNote = null;
 		}
 
 		override protected function refresh():void {
