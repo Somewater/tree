@@ -1,4 +1,5 @@
 package tree.loader {
+	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.display.MovieClip;
 	import flash.display.Shape;
@@ -83,6 +84,15 @@ package tree.loader {
 				g.lineStyle(0, 0, 0);
 				g.beginFill(0x8DB70A);
 				g.drawRect(-w * 0.5, -w * 0.5, w * value, h);
+
+				var i:int = 0;
+				while(i < this.numChildren){
+					var ch:DisplayObject = this.getChildAt(i);
+					if(ch == textField || ch == progressbar)
+						i++;
+					else
+						this.removeChildAt(i);
+				}
 			}
 		}
 
