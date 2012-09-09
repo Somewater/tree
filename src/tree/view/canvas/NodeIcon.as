@@ -87,11 +87,6 @@ package tree.view.canvas {
 				debugTrace.selectable = false;
 				debugTrace.width = Canvas.ICON_WIDTH;
 				debugTrace.filters = [new DropShadowFilter(1, 45, 0xFFFFFF, 1, 1, 1, 2)]
-				addChild(debugTrace);
-
-				addEventListener(MouseEvent.CLICK, function(ev:Event):void{
-					refreshData();
-				})
 			}
 
 			addEventListener(MouseEvent.CLICK, onClicked);
