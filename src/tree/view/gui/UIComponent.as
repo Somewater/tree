@@ -22,6 +22,8 @@ package tree.view.gui {
 		protected var _width:Number;
 		protected var _height:Number;
 
+		private var clickFlag:Boolean = false;
+
 		public function UIComponent() {
 			over = new Signal(UIComponent);
 			out = new Signal(UIComponent);
@@ -32,7 +34,6 @@ package tree.view.gui {
 
 			addEventListener(MouseEvent.MOUSE_OVER, _onOver);
 			addEventListener(MouseEvent.MOUSE_OUT, _onOut);
-			addEventListener(MouseEvent.CLICK, _onClick);
 			addEventListener(MouseEvent.DOUBLE_CLICK, _onDblClick);
 			addEventListener(MouseEvent.MOUSE_DOWN, _onDown);
 			addEventListener(MouseEvent.MOUSE_UP, _onUp);
@@ -41,7 +42,6 @@ package tree.view.gui {
 		public function clear():void{
 			removeEventListener(MouseEvent.MOUSE_OVER, _onOver);
 			removeEventListener(MouseEvent.MOUSE_OUT, _onOut);
-			removeEventListener(MouseEvent.CLICK, _onClick);
 			removeEventListener(MouseEvent.DOUBLE_CLICK, _onDblClick);
 			removeEventListener(MouseEvent.MOUSE_DOWN, _onDown);
 			removeEventListener(MouseEvent.MOUSE_UP, _onUp);
@@ -64,10 +64,7 @@ package tree.view.gui {
 			if(event.relatedObject && this.contains(event.relatedObject))
 				return;
 			out.dispatch(this);
-		}
-
-		private function _onClick(event:MouseEvent):void {
-			click.dispatch(this);
+			clickFlag = false;
 		}
 
 		private function _onDblClick(event:MouseEvent):void {
@@ -76,10 +73,15 @@ package tree.view.gui {
 
 		private function _onDown(event:MouseEvent):void {
 			down.dispatch(this);
+			clickFlag = true;
 		}
 
 		private function _onUp(event:MouseEvent):void {
 			up.dispatch(this);
+			if(clickFlag){
+				clickFlag = false;
+				click.dispatch(this)
+			}
 		}
 
 		public function fireResize():void{
