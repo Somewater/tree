@@ -109,9 +109,9 @@ package tree {
 				Cc.width = Config.WIDTH * 0.8;
 				Cc.height = Config.HEIGHT * 0.6;
 				Cc.visible = false;
-				//Cc.bindKey(new KeyBind('~'), showHideConsole);
-				//Cc.bindKey(new KeyBind('`'), showHideConsole);
-				//Cc.bindKey(new KeyBind('ё'), showHideConsole);
+				Cc.bindKey(new KeyBind('~'), showHideConsole);
+				Cc.bindKey(new KeyBind('`'), showHideConsole);
+				Cc.bindKey(new KeyBind('ё'), showHideConsole);
 			}
 
 			configurateInjections();
