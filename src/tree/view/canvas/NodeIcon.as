@@ -360,7 +360,6 @@ package tree.view.canvas {
 
 		private function showArrows():void{
 			deleteArrows();
-			return;
 			for (var i:int = 1; i <= 3; i++) {
 				var a:NodeArrow = new NodeArrow(this._data.node.person, i);
 				addChildAt(a, 0);

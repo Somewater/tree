@@ -249,13 +249,13 @@ class NoteContextMenu extends Sprite implements IClear{
 	private var actionsHolder:Sprite;
 
 	private static const ACTIONS:Array = [
-//		{text: "SEND_MESSAGE"}
-//		,
+		{text: "SEND_MESSAGE"}
+		,
 		{text: "FOCUSING", action: "centreOnNode"}
-//		,
-//		{text: "GOTO_PAGE"}
-//		,
-//		{text: "GOTO_FAMILY_LIST"}
+		,
+		{text: "GOTO_PAGE"}
+		,
+		{text: "GOTO_FAMILY_LIST"}
 	];
 
 	public function NoteContextMenu(note:PersonNoteItem){
