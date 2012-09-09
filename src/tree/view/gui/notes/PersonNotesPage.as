@@ -132,6 +132,7 @@ package tree.view.gui.notes {
 				note.y = scroller.y - note.height;
 				note.visible = true;
 				note.addEventListener(Event.RESIZE, onFirstNoteResized);
+				selectNote(note);
 			}else{
 				var index:int = notes.length;
 				var notesLen:int = notes.length;

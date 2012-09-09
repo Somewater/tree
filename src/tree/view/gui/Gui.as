@@ -19,6 +19,8 @@ package tree.view.gui {
 		private var page:PageBase;
 		private var pageHolder:Sprite;
 		private var switcher:ProfileSwitcher;
+		private var pageWidth:int;
+		private var pageHeight:int;
 
 		public function Gui() {
 			background = Config.loader.createMc('assets.GuiBack');
@@ -42,8 +44,10 @@ package tree.view.gui {
 		public function setSize(w:int, h:int):void {
 			background.height = h;
 			foreground.height = h;
+			pageWidth = w;
+			pageHeight = h - pageHolder.y;
 			if(page)
-				page.setSize(w, h - pageHolder.y);
+				page.setSize(pageWidth, pageHeight);
 		}
 
 		public function setPage(name:String):void{
@@ -56,6 +60,7 @@ package tree.view.gui {
 
 				var cl:Class = PAGES_CLASSES_BY_NAME[name];
 				page = new cl();
+				page.setSize(pageWidth, pageHeight);
 				pageHolder.addChild(page);
 			}
 		}
