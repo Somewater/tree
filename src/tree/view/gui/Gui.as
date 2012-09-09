@@ -7,18 +7,21 @@ package tree.view.gui {
 	import tree.common.Bus;
 	import tree.common.Config;
 	import tree.view.gui.notes.PersonNotesPage;
+	import tree.view.gui.profile.PersonProfilePage;
 
 	public class Gui extends Sprite{
 
 		public static var PAGES_CLASSES_BY_NAME:Object = {
 															PersonNotesPage: PersonNotesPage
+															,
+															PersonProfilePage: PersonProfilePage
 														};
 
 		private var background:Sprite;
 		private var foreground:Sprite;
 		private var page:PageBase;
 		private var pageHolder:Sprite;
-		private var switcher:ProfileSwitcher;
+		public var switcher:ProfileSwitcher;
 		private var pageWidth:int;
 		private var pageHeight:int;
 

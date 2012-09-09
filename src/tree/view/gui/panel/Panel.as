@@ -64,6 +64,7 @@ package tree.view.gui.panel {
 			addChild(zoomSlider);
 
 			saveTreeButton = new BlueButton();
+			saveTreeButton.width = 160;
 			addChild(saveTreeButton);
 			saveTreeButton.label = I18n.t('SAVE_TREE');
 

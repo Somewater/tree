@@ -6,6 +6,7 @@ package tree.model {
 
 	import tree.common.Bus;
 	import tree.model.base.ModelCollection;
+	import tree.signal.ViewSignal;
 
 	public class Model {
 
@@ -29,6 +30,7 @@ package tree.model {
 		public var animationTime:Number = 1;// время, отводимое на анимацию появления-скрытия отдельной ноды
 		private var _treeViewConstructed:Boolean = false;
 		private var _constructionInProcess:Boolean = false;
+		private var _selectedPerson:Person;
 
 		public var joinsQueue:Array = [];
 
@@ -49,6 +51,8 @@ package tree.model {
 			trees = new TreesCollection(bus);
 			matrixes = new MatrixCollection();
 			generations = new GenerationsCollection(bus, matrixes);
+
+			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 		}
 
 		/**
@@ -118,10 +122,30 @@ package tree.model {
 			_constructionInProcess = false;
 			joinsQueue = [];
 			drawedNodesUids = [];
+			_selectedPerson = null;
 
 			trees = new TreesCollection(bus);
 			matrixes = new MatrixCollection();
 			generations = new GenerationsCollection(bus, matrixes);
+		}
+
+		private function onPersonSelected(person:Person):void{
+			_selectedPerson = person;
+		}
+
+
+		public function get selectedPerson():Person {
+			return _selectedPerson;
+		}
+
+		public function set selectedPerson(value:Person):void {
+			if(value != _selectedPerson){
+				if(_selectedPerson)
+					bus.dispatch(ViewSignal.PERSON_DESELECTED, _selectedPerson);
+				_selectedPerson = value;
+				if(_selectedPerson)
+					bus.dispatch(ViewSignal.PERSON_SELECTED, _selectedPerson);
+			}
 		}
 	}
 }

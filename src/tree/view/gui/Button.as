@@ -7,7 +7,7 @@ package tree.view.gui {
 
 	public class Button extends UIComponent{
 
-		private var _movie:MovieClip;
+		protected var _movie:MovieClip;
 		protected var upFrame:int = 0;
 		protected var overFrame:int = 0;
 		protected var downFrame:int = 0;

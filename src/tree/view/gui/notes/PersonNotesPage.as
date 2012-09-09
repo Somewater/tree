@@ -28,7 +28,6 @@ package tree.view.gui.notes {
 		public static const CHANGE_TIME:Number = 0.3;
 
 
-		private var model:Model;
 		private var notesHolder:Sprite;
 		private var firstNote:PersonNoteItem;
 		private var notes:Array = [];
@@ -67,6 +66,12 @@ package tree.view.gui.notes {
 			model.bus.addNamed(ViewSignal.DRAW_JOIN, addNote)
 			model.bus.addNamed(ViewSignal.REMOVE_JOIN, removeNote)
 			model.bus.addNamed(ViewSignal.PERSON_SELECTED, onSelectNodeSignal);
+			onSelectNodeSignal(model.selectedPerson);
+		}
+
+
+		override public function get pageName():String {
+			return 'PersonNotesPage';
 		}
 
 		private function onResize(event:Event):void{
@@ -132,7 +137,8 @@ package tree.view.gui.notes {
 				note.y = scroller.y - note.height;
 				note.visible = true;
 				note.addEventListener(Event.RESIZE, onFirstNoteResized);
-				selectNote(note);
+				if(!model.selectedPerson)
+					selectNote(note);
 			}else{
 				var index:int = notes.length;
 				var notesLen:int = notes.length;
@@ -180,6 +186,12 @@ package tree.view.gui.notes {
 		}
 
 		private function onSelectNodeSignal(person:Person):void {
+			if(!person) {
+				if(selectedNote)
+					deselectNote(selectedNote)
+				selectedNote = null;
+				return;
+			}
 			var note:PersonNoteItem;
 			for each(var n:PersonNoteItem in notes.concat(firstNote))
 				if(n.data.id == person.id){

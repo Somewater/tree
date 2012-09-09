@@ -10,5 +10,11 @@ package tree.view.gui.panel {
 			super(Config.loader.createMc('assets.SaveButtonBackground'));
 			textField = new EmbededTextField(null, 0xFFFFFF, 13, true);
 		}
+
+		override protected function refresh():void {
+			_movie.width = _width;
+			_movie.height = _height;
+			super.refresh();
+		}
 	}
 }

@@ -12,6 +12,7 @@ package tree.view.gui {
 		public function GuiController(gui:Gui) {
 			this.gui = gui;
 			bus.addNamed(ViewSignal.CANVAS_READY_FOR_START, onStart);
+			gui.switcher.change.add(onSwitcherChanged);
 		}
 
 
@@ -35,6 +36,13 @@ package tree.view.gui {
 
 		private function onStart():void{
 			gui.setPage('PersonNotesPage');
+		}
+
+		private function onSwitcherChanged(switcher:ProfileSwitcher):void{
+			if(switcher.list)
+				gui.setPage('PersonNotesPage');
+			else
+				gui.setPage('PersonProfilePage');
 		}
 	}
 }
