@@ -18,3 +18,7 @@ HUSBAND=Муж
 WIFE=Жена
 EX_HUSBAND=Бывший муж
 EX_WIFE=Бывшая жена
+SEND_MESSAGE=Отрпавить сообщение
+FOCUSING=Показать
+GOTO_PAGE=На страницу
+GOTO_FAMILY_LIST=На список семьи

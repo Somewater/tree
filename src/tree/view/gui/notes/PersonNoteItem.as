@@ -224,14 +224,20 @@ package tree.view.gui.notes {
 
 import com.gskinner.motion.GTween;
 import com.gskinner.motion.GTweener;
+import com.somewater.display.CorrectSizeDefinerSprite;
+import com.somewater.storage.I18n;
+import com.somewater.text.LinkLabel;
 
 import flash.display.DisplayObject;
 
 import flash.display.Sprite;
+import flash.events.Event;
 
 import tree.common.Config;
 
 import tree.common.IClear;
+import tree.model.Model;
+import tree.signal.ViewSignal;
 
 import tree.view.gui.notes.PersonNoteItem;
 import tree.view.gui.notes.PersonNotesPage;
@@ -240,6 +246,17 @@ class NoteContextMenu extends Sprite implements IClear{
 
 	private var note:PersonNoteItem;
 	private var background:DisplayObject;
+	private var actionsHolder:Sprite;
+
+	private static const ACTIONS:Array = [
+		{text: "SEND_MESSAGE"}
+		,
+		{text: "FOCUSING", action: "centreOnNode"}
+		,
+		{text: "GOTO_PAGE"}
+		,
+		{text: "GOTO_FAMILY_LIST"}
+	];
 
 	public function NoteContextMenu(note:PersonNoteItem){
 		this.note = note;
@@ -247,10 +264,15 @@ class NoteContextMenu extends Sprite implements IClear{
 
 		background = Config.loader.createMc('assets.PersonNoteContextMenuBg');
 		addChild(background);
+
+		actionsHolder = new CorrectSizeDefinerSprite();
+		actionsHolder.y = 30;
+		addChild(actionsHolder);
 	}
 
 	public function clear():void {
 		note = null;
+		clearActions();
 	}
 
 	public function show():void{
@@ -258,6 +280,7 @@ class NoteContextMenu extends Sprite implements IClear{
 		visible = true;
 		GTweener.removeTweens(this);
 		alpha = 0.25;
+		background.height = actionsHolder.y + actionsHolder.height + 10;
 		y = PersonNotesPage.NOTE_ICON_Y - this.height;
 		GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha:1, y:PersonNotesPage.NOTE_ICON_Y});
 	}
@@ -272,6 +295,38 @@ class NoteContextMenu extends Sprite implements IClear{
 	}
 
 	private function constructLabels():void{
+		clearActions();
+		var l:LinkLabel;
+		var nextY:int;
+		for each(var data:Object in ACTIONS){
+			l = new LinkLabel(null, 0x2881C6, 11);
+			actionsHolder.addChild(l);
+			l.x = 14;
+			l.y = nextY;
+			l.text = I18n.t(data['text']);
+			l.data = data;
+			l.addEventListener(LinkLabel.LINK_CLICK, onAction);
+			nextY += l.height;
+		}
+	}
 
+	private function clearActions():void{
+		var l:LinkLabel;
+		while(actionsHolder.numChildren){
+			l = actionsHolder.removeChildAt(0) as LinkLabel;
+			l.clear();
+			l.removeEventListener(LinkLabel.LINK_CLICK, onAction);
+		}
+	}
+
+	private function onAction(event:Event):void {
+		var l:LinkLabel = event.currentTarget as LinkLabel;
+		var data:Object = l.data;
+		if(data && data.action && this.hasOwnProperty(data.action))
+			this[data.action]();
+	}
+
+	private function centreOnNode():void{
+		Model.instance.bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
 	}
 }
