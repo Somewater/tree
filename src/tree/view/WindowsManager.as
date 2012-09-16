@@ -7,6 +7,7 @@ package tree.view {
 	import tree.common.Bus;
 
 	import tree.common.Config;
+	import tree.common.IClear;
 	import tree.signal.ViewSignal;
 
 	public class WindowsManager {
@@ -85,6 +86,8 @@ package tree.view {
 				if(w.window == window)
 				{
 					windows.splice(windows.indexOf(w), 1);
+					if(w.window is IClear)
+						IClear(w.window).clear();
 					if((w.window as DisplayObject).parent == windowsLayer)
 						windowsLayer.removeChild(w.window as DisplayObject);
 					break;

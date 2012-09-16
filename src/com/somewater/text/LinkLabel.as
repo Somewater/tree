@@ -4,6 +4,9 @@ package com.somewater.text
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 
+	import org.osflash.signals.ISignal;
+	import org.osflash.signals.Signal;
+
 	import tree.view.gui.Helper;
 
 	[Event(name="linkClick",type="com.somewater.text.LinkLabel")]
@@ -19,6 +22,8 @@ package com.somewater.text
 		public var linkClick:Function;
 		public var data:Object;
 		public var textField:EmbededTextField;
+
+		public var link:ISignal;
 		
 		public function LinkLabel(font:String=null, color:*=null, size:int=12, bold:Boolean=false, align:String="left",bitmapText:Boolean = false)
 		{
@@ -28,11 +33,13 @@ package com.somewater.text
 			_linked = false;// иначе не сработает linked = true;
 			linked = true;
 			Helper.stylizeText(this);
+			link = new Signal(LinkLabel);
 		}
 		
 		public function clear():void{
 			removeAllListeners();
 			textField.hint = null;
+			link.removeAll();
 		}
 		
 		public function set linked(flag:Boolean):void{
@@ -72,7 +79,7 @@ package com.somewater.text
 				var event:TextEvent = new TextEvent(LinkLabel.LINK_CLICK,false,false,text);
 				dispatchEvent(event);	
 			}
-			
+			link.dispatch(this);
 		}
 
 		public function set text(value:String):void{

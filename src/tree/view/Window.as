@@ -3,7 +3,9 @@ package tree.view {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
-	public class Window extends Sprite implements IWindow{
+	import tree.common.IClear;
+
+	public class Window extends Sprite implements IWindow, IClear{
 
 		protected var _width:int = 400;
 		protected var _height:int = 200;
@@ -68,6 +70,10 @@ package tree.view {
 
 			graphics.beginFill(0xFFFF88);
 			graphics.drawRect(0, 0, _width, 20);
+		}
+
+		public function clear():void{
+
 		}
 	}
 }

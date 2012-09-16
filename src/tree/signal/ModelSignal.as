@@ -12,6 +12,8 @@ package tree.signal {
 		public static const REMOVE_PERSON:String = 'removePerson';// person
 		public static const CHANGE_PERSON_JOINS:String = 'changePersonJoins';// person
 
+		public static const EDIT_PROFILE:String = 'editProfile';// person
+
 		public function ModelSignal() {
 		}
 	}

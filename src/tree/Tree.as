@@ -6,6 +6,10 @@ package tree {
 	import com.somewater.text.EmbededTextField;
 	import com.somewater.text.Hint;
 
+	import fl.controls.ComboBox;
+
+	import fl.managers.StyleManager;
+
 	import flash.display.DisplayObject;
 
 	import flash.display.Sprite;
@@ -16,6 +20,7 @@ package tree {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.text.Font;
+	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 
 	import org.osflash.signals.ISignal;
@@ -30,6 +35,7 @@ package tree {
 	import tree.command.RemovePerson;
 
 	import tree.command.ResponseRouter;
+	import tree.command.edit.EditProfile;
 	import tree.command.view.CalculateNextNodeRollUnroll;
 	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
@@ -150,6 +156,12 @@ package tree {
 			Font.registerFont(Config.loader.createMc('font.ArialBold_font', null, false));
 			Font.registerFont(Config.loader.createMc('font.Arial_font', null, false));
 
+			var textFormat:TextFormat = EmbededTextField.getEmbededFormat(null, null, 0x525252, 13);
+			StyleManager.setStyle('textFormat', textFormat);
+			StyleManager.setStyle('embedFonts', true);
+			StyleManager.setComponentStyle(ComboBox, 'buttonWidth', 10);
+			StyleManager.setComponentStyle(ComboBox, 'downSkin', 'ComboBox_overSkin');
+
 			addChild(Config.content = new Sprite());
 			addChild(Config.windows = new Sprite());
 			new WindowsManager(bus, Config.windows, new Preloader());
@@ -205,6 +217,8 @@ package tree {
 			//stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void{if(e.keyCode == Keyboard.N) new ContinueTreeDraw().execute()})
 			bus.addCommand(ViewSignal.JOIN_DRAWED, ContinueTreeDraw);
 			bus.addCommand(AppSignal.RELOAD_TREE, ReloadTree);
+
+			bus.addCommand(ModelSignal.EDIT_PROFILE, EditProfile);
 		}
 
 

@@ -39,7 +39,7 @@ package tree.view.gui.profile {
 			clearItems();
 		}
 
-		public function setPerson(person:Person):void {
+		public function setPerson(person:Person, editable:Boolean):void {
 			clearItems();
 
 			var i:FamilyBlockItem;
@@ -54,13 +54,18 @@ package tree.view.gui.profile {
 				nextY += i.height;
 				items.push(i);
 			}
+			if(i)
+				scroller.verticalLineScrollSize = i.height * 3;
+			itemsHolder.graphics.clear()
+			itemsHolder.graphics.beginFill(0,0);
+			itemsHolder.graphics.drawRect(0,0,width,nextY)
 			refresh();
 		}
 
 		override protected function refresh():void {
 			super.refresh();
 
-			scroller.setSize(_width, _maxHeight);
+			scroller.setSize(_width, Math.max(30,_maxHeight - 10 - scroller.y));
 			scroller.update();
 
 			var _height:int = calculatedHeight;

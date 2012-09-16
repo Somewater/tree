@@ -5,6 +5,8 @@ package tree.view.gui.profile {
 	import com.somewater.text.EmbededTextField;
 	import com.somewater.text.LinkLabel;
 
+	import flash.display.DisplayObject;
+
 	import flash.events.Event;
 
 	import tree.model.Person;
@@ -18,15 +20,20 @@ package tree.view.gui.profile {
 
 	public class PersonProfilePage extends PageBase{
 
-		private var photo:Photo;
-		private var editProfileButton:Button;
-		private var profileLink:LinkLabel;
-		private var familyTreeLink:LinkLabel;
+		internal var photo:Photo;
+		internal var editProfileButton:Button;
+		internal var profileLink:LinkLabel;
+		internal var familyTreeLink:LinkLabel;
+		internal var editPhotoLink:LinkLabel;
+		internal var deletePhotoLink:LinkLabel;
 
-		private var nameTF:EmbededTextField;
-		private var birthdayTF:EmbededTextField;
-		private var familyBlock:FamilyBlock;
-		private var createProfileButton:Button;
+		internal var readonlyInfo:ReadonlyInfo;
+		internal var editableInfo:EditableInfo;
+		internal var familyBlock:FamilyBlock;
+		internal var saveButtonBlock:SaveButtonBlock;
+		internal var editable:Boolean;
+
+		private var controller:ProfileController;
 
 		public function PersonProfilePage() {
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 90, 90);
@@ -41,26 +48,32 @@ package tree.view.gui.profile {
 			familyTreeLink.text = I18n.t('FAMILY_TREE');
 			addChild(familyTreeLink);
 
+			editPhotoLink = new LinkLabel(null, 0x2881C6, 11, true);
+			editPhotoLink.text = I18n.t('EDIT_PHOTO');
+			addChild(editPhotoLink);
+
+			deletePhotoLink = new LinkLabel(null, 0xc72928, 11, true);
+			deletePhotoLink.text = I18n.t('DELETE_PHOTO');
+			addChild(deletePhotoLink);
+
 			profileLink = new LinkLabel(null, 0x2881C6, 11, true);
 			profileLink.text = I18n.t('PROFILE');
 			addChild(profileLink);
 
-			nameTF = new EmbededTextField(null, 0, 17, true, true);
-			addChild(nameTF);
+			readonlyInfo = new ReadonlyInfo();
+			addChild(readonlyInfo);
 
-			birthdayTF = new EmbededTextField(null, 0x5B5B5B, 13);
-			addChild(birthdayTF);
+			editableInfo = new EditableInfo();
+			addChild(editableInfo);
 
 			familyBlock = new FamilyBlock();
 			addChild(familyBlock);
 			familyBlock.addEventListener(Event.RESIZE, onFamilyBlockResized);
 
-			createProfileButton = new StandartButton();
-			createProfileButton.label = I18n.t('CREATE_NEW_PROFILE');
-			addChild(createProfileButton);
+			saveButtonBlock = new SaveButtonBlock();
+			addChild(saveButtonBlock);
 
-			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
-			onPersonSelected(model.selectedPerson);
+			this.controller = new ProfileController(this);
 		}
 
 		override public function get pageName():String {
@@ -76,7 +89,11 @@ package tree.view.gui.profile {
 
 			familyBlock.clear();
 			familyBlock.removeEventListener(Event.RESIZE, onFamilyBlockResized);
-			createProfileButton.clear();
+			saveButtonBlock.clear();
+			readonlyInfo.clear();
+			editableInfo.clear();
+			controller.clear();
+			controller = null;
 		}
 
 		override protected function refresh():void {
@@ -93,34 +110,52 @@ package tree.view.gui.profile {
 			editProfileButton.y = photo.y;
 			editProfileButton.setSize(contentWidth - editProfileButton.x + contentX, 45);
 
+			editPhotoLink.x = editProfileButton.x;
+			editPhotoLink.y = editProfileButton.y;
+
+			deletePhotoLink.x = editPhotoLink.x;
+			deletePhotoLink.y = editPhotoLink.y + editPhotoLink.height;
+
 			profileLink.x = familyTreeLink.x = editProfileButton.x;
 
 			familyTreeLink.y = photo.y + photo.height - familyTreeLink.textField.textHeight;
 			profileLink.y = familyTreeLink.y - familyTreeLink.textField.textHeight - profileLink.textField.textHeight;
 
-			nameTF.x = contentX;
-			nameTF.y = photo.y + photo.height + 15;
-			nameTF.width = contentWidth;
+			var info:DisplayObject = readonlyInfo.visible ? readonlyInfo : editableInfo;
+			info.x = contentX;
+			info.y = photo.y + photo.height + 15;
+			info.width = contentWidth;
 
-			birthdayTF.x = contentX;
-			birthdayTF.y = nameTF.y + nameTF.textHeight + 10;
+			log("INFO HEIGHT: " + info.height);
 
 			familyBlock.x = contentX;
-			familyBlock.y = birthdayTF.y + birthdayTF.textHeight + 10;
+			familyBlock.y = info.y + info.height + 10;
 			familyBlock.width = contentWidth;
-			familyBlock.maxHeight = _height - familyBlock.y - 80;
+			familyBlock.maxHeight = _height - familyBlock.y - saveButtonBlock.calculatedHeight - 20;
 
-			createProfileButton.x = contentX;
-			createProfileButton.y = familyBlock.y + familyBlock.calculatedHeight + 10;
-			createProfileButton.setSize(contentWidth, 27);
+			saveButtonBlock.x = contentX;
+			saveButtonBlock.y = familyBlock.y + familyBlock.calculatedHeight + 10;
+			saveButtonBlock.width = contentWidth;
 		}
 
-		private function onPersonSelected(person:Person):void{
+		internal function onPersonSelected(person:Person, editable:Boolean = false):void{
 			if(!person) return;
+			this.editable = editable;
 			photo.source = person.photo;
-			nameTF.text = person.fullname;
-			birthdayTF.text = I18n.t('BIRTHDAY_LABEL', {birthday: (person.birthday ? formattedBirthday(person.birthday) : '    ---')});
-			familyBlock.setPerson(person);
+			if(editable){
+				editableInfo.setPerson(person);
+			}else{
+				readonlyInfo.setPerson(person);
+			}
+
+			readonlyInfo.visible = !editable;
+			editableInfo.visible = editable;
+			editPhotoLink.visible = editable;
+			deletePhotoLink.visible = editable && person.photo;
+			editProfileButton.visible = !editable;
+
+			familyBlock.setPerson(person, editable);
+			saveButtonBlock.editable = editable;
 
 			refresh();
 		}
@@ -129,7 +164,8 @@ package tree.view.gui.profile {
 			refresh();
 		}
 
-		private function formattedBirthday(date:Date):String{
+		internal static function formattedBirthday(date:Date):String{
+			if(!date) return '    ---';
 			return date.date + ' ' + I18n.t('MONTH_GENETIVE_' + date.month) + ' ' + date.fullYear;
 		}
 	}

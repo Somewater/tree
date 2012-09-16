@@ -59,5 +59,9 @@ package tree.model {
 		public function get died():Boolean{
 			return deathday != null;
 		}
+
+		public function get readonly():Boolean{
+			return false;
+		}
 	}
 }

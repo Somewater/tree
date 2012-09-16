@@ -171,14 +171,15 @@ package com.somewater.display
 		 */
 		private var _source:*;
 		public function set source(value:*):void
-		{	
+		{
+			if(_source == value) return;
 			_source = value;
 			if (value == null || value == ""){
 				cls();
 				return;
 			}			
-			if (value is String){	
-				cls();			
+			if (value is String){
+				cls();
 				_source = value;
 				var pictureRequest:URLRequest = new URLRequest(value);
 				if (pictureLoader == null) {
