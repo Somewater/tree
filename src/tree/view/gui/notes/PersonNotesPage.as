@@ -28,19 +28,17 @@ package tree.view.gui.notes {
 		public static const CHANGE_TIME:Number = 0.3;
 
 
-		private var notesHolder:Sprite;
-		private var firstNote:PersonNoteItem;
-		private var notes:Array = [];
-		private var vbox:VBoxController;
+		public var notesHolder:Sprite;
+		public var firstNote:PersonNoteItem;
+		public var notes:Array = [];
+		public var vbox:VBoxController;
 
-		private var selectedNote:PersonNoteItem;
+		public var selectedNote:PersonNoteItem;
 
-		private var searchField:SearchField;
-		private var scroller:ScrollPane;
+		public var searchField:SearchField;
+		public var scroller:ScrollPane;
 
 		public function PersonNotesPage() {
-			this.model = Config.inject(Model);
-
 			searchField = new SearchField();
 			searchField.x = (Config.GUI_WIDTH - searchField.width) * 0.5;
 			searchField.addEventListener(Event.CHANGE, onSearchWordChanged);
@@ -60,13 +58,6 @@ package tree.view.gui.notes {
 			addChild(scroller);
 			scroller.source = notesHolder;
 			scroller.verticalLineScrollSize = PersonNotesPage.NOTE_HEIGHT * 3;
-
-			constructNotes();
-
-			model.bus.addNamed(ViewSignal.DRAW_JOIN, addNote)
-			model.bus.addNamed(ViewSignal.REMOVE_JOIN, removeNote)
-			model.bus.addNamed(ViewSignal.PERSON_SELECTED, onSelectNodeSignal);
-			onSelectNodeSignal(model.selectedPerson);
 		}
 
 
@@ -80,10 +71,6 @@ package tree.view.gui.notes {
 
 		override public function clear():void {
 			super.clear();
-			model.bus.removeNamed(ViewSignal.DRAW_JOIN, addNote);
-			model.bus.removeNamed(ViewSignal.REMOVE_JOIN, removeNote);
-			model.bus.removeNamed(ViewSignal.PERSON_SELECTED, onSelectNodeSignal);
-			model = null;
 
 			vbox.removeEventListener(Event.CHANGE, onResize);
 			searchField.removeEventListener(Event.CHANGE, onSearchWordChanged);
@@ -109,21 +96,17 @@ package tree.view.gui.notes {
 			scroller.update();
 		}
 
-		private function constructNotes():void {
+		public function removeAllNotes():void{
 			var note:PersonNoteItem;
 			while(notesHolder.numChildren){
-				note =notesHolder.removeChildAt(0) as PersonNoteItem;
+				note = notesHolder.removeChildAt(0) as PersonNoteItem;
 				note.clear();
 			}
 
 			notes = [];
-
-			for each(var j:Join in model.joinsQueue){
-				addNote(j)
-			}
 		}
 
-		private function addNote(data:ModelBase):void {
+		public function addNote(data:ModelBase):PersonNoteItem {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			var note:PersonNoteItem = new PersonNoteItem();
 
@@ -137,8 +120,6 @@ package tree.view.gui.notes {
 				note.y = scroller.y - note.height;
 				note.visible = true;
 				note.addEventListener(Event.RESIZE, onFirstNoteResized);
-				if(!model.selectedPerson)
-					selectNote(note);
 			}else{
 				var index:int = notes.length;
 				var notesLen:int = notes.length;
@@ -153,16 +134,13 @@ package tree.view.gui.notes {
 				vbox.addChildAt(note, index);
 			}
 
-			//note.over.add(selectNote);
-			//note.out.add(deselectNote);
-			note.click.add(selectNote);
-			note.dblClick.add(centreNote);
-			note.actionClick.add(openNote);
 			vbox.refresh();
 			fireResize();
+
+			return note;
 		}
 
-		private function removeNote(data:ModelBase):void {
+		public function removeNote(data:ModelBase):void {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			for (var i:int = 0; i < notes.length; i++) {
 				var note:PersonNoteItem = notes[i];
@@ -177,65 +155,6 @@ package tree.view.gui.notes {
 				}
 			}
 			vbox.refresh();
-			fireResize();
-		}
-
-		private function selectNote(note:PersonNoteItem):void {
-			bus.dispatch(ViewSignal.PERSON_SELECTED, note.data.associate);
-			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
-		}
-
-		private function onSelectNodeSignal(person:Person):void {
-			if(!person) {
-				if(selectedNote)
-					deselectNote(selectedNote)
-				selectedNote = null;
-				return;
-			}
-			var note:PersonNoteItem;
-			for each(var n:PersonNoteItem in notes.concat(firstNote))
-				if(n.data.id == person.id){
-					note = n;
-				}
-
-			if(selectedNote != note){
-				if(selectedNote){
-					deselectNote(selectedNote);
-				}
-				selectedNote = note;
-				if(note){
-					note.selected = true;
-
-					if(note != firstNote){
-						// перематываем, чтобы note была в области видимости
-						if(note.y + note.height > scroller.verticalScrollPosition + scroller.height)
-							scroller.verticalScrollPosition = note.y + note.height - scroller.height;
-						else if(scroller.verticalScrollPosition > note.y)
-							scroller.verticalScrollPosition = note.y;
-					}
-				}
-			}
-		}
-
-		private function deselectNote(note:PersonNoteItem):void {
-			if(selectedNote == note){
-				if(note){
-					note.selected = false;
-					bus.dispatch(ViewSignal.PERSON_DESELECTED, note.data.associate);
-				}
-				selectedNote = null;
-			}
-		}
-
-		private function centreNote(note:PersonNoteItem):void{
-			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
-		}
-
-		private function openNote(note:PersonNoteItem):void{
-			var open:Boolean = !note.opened;
-			if(open)
-				selectNote(note);
-			note.opened = open;
 			fireResize();
 		}
 
@@ -260,7 +179,7 @@ package tree.view.gui.notes {
 		}
 
 		private function onFirstNoteResized(event:Event):void{
-			scroller.y = firstNote.y + firstNote.calculatedHeight;
+			scroller.y = (firstNote ? firstNote.y + firstNote.calculatedHeight : searchField.y + searchField.height + 8 + PersonNotesPage.NOTE_HEIGHT);
 			refresh();
 		}
 	}

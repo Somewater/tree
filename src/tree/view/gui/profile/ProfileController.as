@@ -3,13 +3,15 @@ package tree.view.gui.profile {
 	import tree.common.IClear;
 	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
+	import tree.view.gui.GuiControllerBase;
 
-	public class ProfileController extends Actor implements IClear{
+	public class ProfileController extends GuiControllerBase implements IClear{
 
 		private var page:PersonProfilePage;
 
 		public function ProfileController(page:PersonProfilePage) {
 			this.page = page;
+			super(page);
 
 			// edit/read switch mode
 			page.editProfileButton.click.add(onEditProfile);
@@ -17,11 +19,15 @@ package tree.view.gui.profile {
 			page.saveButtonBlock.saveProfileButton.click.add(onSaveEditedData);
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, page.onPersonSelected);
-			page.onPersonSelected(model.selectedPerson);
 		}
 
-		public function clear():void{
+		override public function clear():void{
 			page = null;
+			super.clear();
+		}
+
+		override public function start():void {
+			page.onPersonSelected(model.selectedPerson);
 		}
 
 		private function onEditProfile(...args):void {

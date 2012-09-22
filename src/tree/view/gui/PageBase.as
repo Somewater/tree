@@ -9,12 +9,7 @@ package tree.view.gui {
 
 	public class PageBase extends UIComponent implements IClear{
 
-		protected var bus:Bus;
-		protected var model:Model;
-
 		public function PageBase() {
-			this.bus = Config.inject(Bus);
-			this.model = Config.inject(Model);
 		}
 
 		public function get pageName():String{

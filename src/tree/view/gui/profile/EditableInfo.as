@@ -115,5 +115,9 @@ package tree.view.gui.profile {
 				nextY += maxControlHeight + 8;
 			}
 		}
+
+		override public function get calculatedHeight():int {
+			return died.y + died.height;
+		}
 	}
 }

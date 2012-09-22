@@ -17,6 +17,7 @@ package tree.view.gui.profile {
 
 	import tree.view.gui.PageBase;
 	import tree.view.gui.StandartButton;
+	import tree.view.gui.UIComponent;
 
 	public class PersonProfilePage extends PageBase{
 
@@ -32,8 +33,6 @@ package tree.view.gui.profile {
 		internal var familyBlock:FamilyBlock;
 		internal var saveButtonBlock:SaveButtonBlock;
 		internal var editable:Boolean;
-
-		private var controller:ProfileController;
 
 		public function PersonProfilePage() {
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 90, 90);
@@ -72,8 +71,6 @@ package tree.view.gui.profile {
 
 			saveButtonBlock = new SaveButtonBlock();
 			addChild(saveButtonBlock);
-
-			this.controller = new ProfileController(this);
 		}
 
 		override public function get pageName():String {
@@ -92,8 +89,6 @@ package tree.view.gui.profile {
 			saveButtonBlock.clear();
 			readonlyInfo.clear();
 			editableInfo.clear();
-			controller.clear();
-			controller = null;
 		}
 
 		override protected function refresh():void {
@@ -121,7 +116,7 @@ package tree.view.gui.profile {
 			familyTreeLink.y = photo.y + photo.height - familyTreeLink.textField.textHeight;
 			profileLink.y = familyTreeLink.y - familyTreeLink.textField.textHeight - profileLink.textField.textHeight;
 
-			var info:DisplayObject = readonlyInfo.visible ? readonlyInfo : editableInfo;
+			var info:UIComponent = readonlyInfo.visible ? readonlyInfo : editableInfo;
 			info.x = contentX;
 			info.y = photo.y + photo.height + 15;
 			info.width = contentWidth;
@@ -129,7 +124,7 @@ package tree.view.gui.profile {
 			log("INFO HEIGHT: " + info.height);
 
 			familyBlock.x = contentX;
-			familyBlock.y = info.y + info.height + 10;
+			familyBlock.y = info.y + info.calculatedHeight + 10;
 			familyBlock.width = contentWidth;
 			familyBlock.maxHeight = _height - familyBlock.y - saveButtonBlock.calculatedHeight - 20;
 

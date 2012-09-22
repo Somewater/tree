@@ -34,5 +34,9 @@ package tree.view.gui.profile {
 		override protected function refresh():void {
 			birthdayTF.y = nameTF.y + nameTF.textHeight + 10;
 		}
+
+		override public function get calculatedHeight():int {
+			return birthdayTF.y + birthdayTF.textHeight + 10;
+		}
 	}
 }

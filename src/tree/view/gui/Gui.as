@@ -6,20 +6,26 @@ package tree.view.gui {
 
 	import tree.common.Bus;
 	import tree.common.Config;
+	import tree.view.gui.notes.PersonNotesController;
 	import tree.view.gui.notes.PersonNotesPage;
 	import tree.view.gui.profile.PersonProfilePage;
+	import tree.view.gui.profile.ProfileController;
 
 	public class Gui extends Sprite{
 
-		public static var PAGES_CLASSES_BY_NAME:Object = {
-															PersonNotesPage: PersonNotesPage
-															,
-															PersonProfilePage: PersonProfilePage
-														};
+		public static var PAGES_CLASSES_BY_NAME:Object =
+		{
+			PersonNotesPage: {page: PersonNotesPage, controller: PersonNotesController}
+			,
+			PersonProfilePage: {page: PersonProfilePage, controller: ProfileController}
+		};
 
 		private var background:Sprite;
 		private var foreground:Sprite;
+
 		private var page:PageBase;
+		private var controller:GuiControllerBase;
+
 		private var pageHolder:Sprite;
 		public var switcher:ProfileSwitcher;
 		private var pageWidth:int;
@@ -56,15 +62,26 @@ package tree.view.gui {
 		public function setPage(name:String):void{
 			if(!page || page.pageName != name){
 				if(page){
+					if(controller)
+						controller.stop();
 					page.clear();
 					pageHolder.removeChild(page);
+					controller = null;
 					page = null;
 				}
 
-				var cl:Class = PAGES_CLASSES_BY_NAME[name];
+				var data:Object = PAGES_CLASSES_BY_NAME[name];
+				var cl:Class = data['page'];
+				var controllerCl:Class = data['controller'];
 				page = new cl();
 				page.setSize(pageWidth, pageHeight);
 				pageHolder.addChild(page);
+
+				if(controllerCl){
+					controller = new controllerCl(page);
+					controller.gui = this;
+					controller.start();
+				}
 			}
 		}
 
