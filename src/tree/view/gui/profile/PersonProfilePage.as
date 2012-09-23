@@ -9,6 +9,8 @@ package tree.view.gui.profile {
 
 	import flash.events.Event;
 
+	import tree.common.Config;
+
 	import tree.model.Person;
 
 	import tree.signal.ViewSignal;
@@ -133,12 +135,14 @@ package tree.view.gui.profile {
 			saveButtonBlock.width = contentWidth;
 		}
 
-		internal function onPersonSelected(person:Person, editable:Boolean = false):void{
+		internal function onPersonSelected(person:Person, editable:Boolean = false,
+										   joinSuperType:String = null, from:Person = null):void{
 			if(!person) return;
 			this.editable = editable;
 			photo.source = person.photo;
+			if(!photo.source) setDefaultPhoto();
 			if(editable){
-				editableInfo.setPerson(person);
+				editableInfo.setPerson(person, joinSuperType, from);
 			}else{
 				readonlyInfo.setPerson(person);
 			}
@@ -146,13 +150,17 @@ package tree.view.gui.profile {
 			readonlyInfo.visible = !editable;
 			editableInfo.visible = editable;
 			editPhotoLink.visible = editable;
-			deletePhotoLink.visible = editable && person.photo;
-			editProfileButton.visible = !editable;
+			deletePhotoLink.visible = editable && person.photo && person.visible;
+			editProfileButton.visible = !editable && person.visible;
 
 			familyBlock.setPerson(person, editable);
 			saveButtonBlock.editable = editable;
 
 			refresh();
+		}
+
+		public function setDefaultPhoto():void {
+			photo.source = Config.loader.createMc('assets.DefaultPhoto_male');
 		}
 
 		private function onFamilyBlockResized(event:Event):void{

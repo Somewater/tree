@@ -20,7 +20,7 @@ package tree.command {
 		}
 
 		protected function message(text:String):void{
-			Config.ticker.callLater(new MessageWindow(text).open);
+			new MessageWindow(text).open();
 		}
 
 	}

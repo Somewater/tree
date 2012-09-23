@@ -59,7 +59,7 @@ package tree.view.gui {
 				page.setSize(pageWidth, pageHeight);
 		}
 
-		public function setPage(name:String):void{
+		public function setPage(name:String, ...args):void{
 			if(!page || page.pageName != name){
 				if(page){
 					if(controller)
@@ -80,7 +80,7 @@ package tree.view.gui {
 				if(controllerCl){
 					controller = new controllerCl(page);
 					controller.gui = this;
-					controller.start();
+					controller.start.apply(null, args);
 				}
 			}
 		}

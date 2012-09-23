@@ -361,6 +361,8 @@ package tree.view.canvas {
 		private function showArrows():void{
 			deleteArrows();
 			for (var i:int = 1; i <= 3; i++) {
+				if(i == NodeArrow.PARENT && _data.node.person.father && _data.node.person.mother)
+					continue;
 				var a:NodeArrow = new NodeArrow(this._data.node.person, i);
 				addChildAt(a, 0);
 				a.showed.add(onArrowShowed);

@@ -28,6 +28,7 @@ package tree.signal {
 		public static const PERSON_CENTERED:String = 'personCentered';// запрос на центровку на персоне (person:Person)
 
 		public static const NEED_CENTRE_CANVAS:String = 'needCentreCanvas';
+		public static const EDIT_PERSON:String = 'editNode';// нужно перейти в режим редактирования выбранной ноды (person:Person, joinSuperType:String = null, from:Person = null)
 
 
 		public function ViewSignal() {

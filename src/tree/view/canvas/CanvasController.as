@@ -33,6 +33,7 @@ package tree.view.canvas {
 
 			canvas.out.add(onCanvasDeselect);
 			canvas.click.add(onCanvasDeselect);
+			canvas.arrowMenu.actionClick.add(onAddNewPersonClick)
 			bus.constructionInProcess.add(onConstructionStatusChanged);
 		}
 
@@ -244,6 +245,11 @@ package tree.view.canvas {
 				// ноды в процессе построения или анимации
 				lineController.stop();
 			}
+		}
+
+		private function onAddNewPersonClick(from:Person, joinType:JoinType):void{
+			var newPerson:Person = model.trees.first.persons.allocate(model.trees.first.nodes);
+			bus.dispatch(ViewSignal.EDIT_PERSON, newPerson, joinType, from);
 		}
 	}
 }

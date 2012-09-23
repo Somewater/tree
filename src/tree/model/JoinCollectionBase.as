@@ -128,5 +128,19 @@ package tree.model {
 		public function get joins():Array {
 			return array;
 		}
+
+		public function get father():Person{
+			for each(var j:Join in array)
+				if(j.type == Join.FATHER)
+					return j.associate;
+			return null;
+		}
+
+		public function get mother():Person{
+			for each(var j:Join in array)
+				if(j.type == Join.MOTHER)
+					return j.associate;
+			return null;
+		}
 	}
 }

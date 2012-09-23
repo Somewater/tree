@@ -25,6 +25,7 @@ package tree.model {
 		public var deathday:Date;
 		public var email:String;
 		public var post:String;
+		public var profileUrl:String;
 
 		public function Person(nodes:NodesCollection) {
 			this.nodes = nodes;
@@ -62,6 +63,10 @@ package tree.model {
 
 		public function get readonly():Boolean{
 			return false;
+		}
+
+		public function get visible():Boolean {
+			return node && node.visible;
 		}
 	}
 }

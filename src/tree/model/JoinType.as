@@ -1,4 +1,6 @@
 package tree.model {
+	import com.somewater.storage.I18n;
+
 	public class JoinType {
 
 		public static var SUPER_TYPE_PARENT:String = 'parent';
@@ -30,6 +32,10 @@ package tree.model {
 
 		public function toString():String {
 			return name;
+		}
+
+		public function toLocaleString(_case:String):String{
+			return I18n.t(name.toUpperCase() + (_case ? '_' + _case.toUpperCase() : ''));
 		}
 
 		public static var FIRST_JOIN:JoinType = new JoinType(0, 'start', null, int.MAX_VALUE - 1000000);

@@ -64,6 +64,7 @@ package tree.command {
 					personModel.birthday = databaseFormatToDate(person.fields.field.(@name == "birthday"));
 					personModel.deathday = databaseFormatToDate(person.fields.field.(@name == "deathday"));
 					personModel.post = String(person.fields.field.(@name == "rel_label"));
+					personModel.profileUrl = String(person.fields.field.(@name == "url"));
 
 					nodeModel = treeModel.nodes.allocate(personModel) ;
 					treeModel.nodes.add(nodeModel);

@@ -13,7 +13,7 @@ package tree.view.gui {
 			this.view = view;
 		}
 
-		public function start():void{
+		public function start(...args):void{
 
 		}
 

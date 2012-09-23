@@ -1,6 +1,7 @@
 package tree.view.gui.notes {
 	import tree.model.GenNode;
 	import tree.model.Join;
+	import tree.model.ModelBase;
 	import tree.model.Person;
 	import tree.signal.ViewSignal;
 	import tree.view.gui.GuiControllerBase;
@@ -30,7 +31,7 @@ package tree.view.gui.notes {
 			super.clear();
 		}
 
-		override public function start():void {
+		override public function start(...args):void {
 			constructNotes();
 			onSelectNodeSignal(model.selectedPerson);
 		}
@@ -38,16 +39,8 @@ package tree.view.gui.notes {
 		private function constructNotes():void {
 			page.removeAllNotes();
 
-			var firstNote:Boolean = false;
-			var note:PersonNoteItem;
 			for each(var j:Join in model.joinsQueue){
-				note = page.addNote(j)
-				note.click.add(selectNote);
-				//note.over.add(selectNote);
-				//note.out.add(deselectNote);
-				note.dblClick.add(centreNote);
-				note.actionClick.add(openNote);
-				firstNote = false;
+				addNote(j)
 			}
 		}
 
@@ -111,13 +104,27 @@ package tree.view.gui.notes {
 		}
 
 		private function onAddNoteSignal(g:GenNode):void{
-			var note:PersonNoteItem = page.addNote(g);
-			if(page.firstNote == note && !model.selectedPerson)
-				selectNote(note);
+			addNote(g);
 		}
 
 		private function onRemoveNoteSignal(g:GenNode):void{
-			page.removeNote(g);
+			removeNote(g);
+		}
+
+		private function addNote(m:ModelBase):void{
+			var note:PersonNoteItem = page.addNote(m);
+			if(page.firstNote == note && !model.selectedPerson)
+				selectNote(note);
+
+			note.click.add(selectNote);
+			//note.over.add(selectNote);
+			//note.out.add(deselectNote);
+			note.dblClick.add(centreNote);
+			note.actionClick.add(openNote);
+		}
+
+		private function removeNote(m:ModelBase):void{
+			page.removeNote(m);
 		}
 	}
 }

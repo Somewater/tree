@@ -8,6 +8,8 @@ package tree.view.window {
 
 	import tree.common.Config;
 
+	import tree.common.Config;
+
 	import tree.view.Window;
 	import tree.view.WindowsManager;
 
@@ -29,8 +31,12 @@ package tree.view.window {
 		}
 
 		override public function open():void {
-			super.open();
+			Config.ticker.callLater(callOpen);
 			Config.stage.addEventListener(MouseEvent.CLICK, onStageClick);
+		}
+
+		private function callOpen():void{
+			super.open();
 		}
 
 		override public function clear():void {

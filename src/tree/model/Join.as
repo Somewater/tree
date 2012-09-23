@@ -1,4 +1,6 @@
 package tree.model {
+	import com.somewater.storage.I18n;
+
 	import flash.utils.Dictionary;
 
 	import tree.model.base.IModel;
@@ -233,6 +235,25 @@ package tree.model {
 
 		public function get name():String {
 			return type.name;
+		}
+
+		public function toLocaleString(_case:String = null):String{
+			return type.toLocaleString(_case);
+		}
+
+		public static function joinBy(superJoinType:String, targetMale:Boolean):JoinType{
+			if(superJoinType == JoinType.SUPER_TYPE_BREED){
+				return targetMale ? SON : SISTER;
+			}else if(superJoinType == JoinType.SUPER_TYPE_BRO){
+				return targetMale ? BROTHER : SISTER;
+			}else if(superJoinType == JoinType.SUPER_TYPE_EX_MARRY){
+				return targetMale ? EX_HUSBAND : EX_WIFE;
+			}else if(superJoinType == JoinType.SUPER_TYPE_MARRY){
+				return targetMale ? HUSBAND : WIFE;
+			}else if(superJoinType == JoinType.SUPER_TYPE_PARENT){
+				return targetMale ? FATHER : MOTHER;
+			}
+			throw new Error('Undefined combination');
 		}
 	}
 }

@@ -140,7 +140,7 @@ package tree.view.gui.notes {
 			return note;
 		}
 
-		public function removeNote(data:ModelBase):void {
+		public function removeNote(data:ModelBase):PersonNoteItem {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			for (var i:int = 0; i < notes.length; i++) {
 				var note:PersonNoteItem = notes[i];
@@ -156,6 +156,7 @@ package tree.view.gui.notes {
 			}
 			vbox.refresh();
 			fireResize();
+			return note;
 		}
 
 		private function onSearchWordChanged(event:Event):void{
