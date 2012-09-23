@@ -4,11 +4,13 @@ package tree.view.gui.profile {
 
 	import tree.command.Actor;
 	import tree.common.IClear;
+	import tree.model.JoinType;
 	import tree.model.Person;
 	import tree.model.TreeModel;
 	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
 	import tree.view.gui.GuiControllerBase;
+	import tree.view.gui.notes.PersonNotesPage;
 	import tree.view.window.MessageWindow;
 
 	public class ProfileController extends GuiControllerBase implements IClear{
@@ -23,6 +25,7 @@ package tree.view.gui.profile {
 			page.familyTreeLink.link.add(onFamilyTreeClick)
 			page.editPhotoLink.link.add(onEditPhotoClick)
 			page.deletePhotoLink.link.add(onDeletePhotoClick);
+			page.editableInfo.sexChange.add(onSexChanged);
 
 			// edit/read switch mode
 			page.editProfileButton.click.add(onEditProfile);
@@ -34,12 +37,11 @@ package tree.view.gui.profile {
 		}
 
 		private function onCreateNewProfile(...args):void {
-			var newPerson:Person = model.trees.first.persons.allocate(model.trees.first.nodes);
-			bus.dispatch(ViewSignal.EDIT_PERSON, newPerson, null, null);
+			bus.dispatch(ViewSignal.START_EDIT_PERSON, null, null, null);
 		}
 
 		private function onDeletePhotoClick(...args):void {
-			page.setDefaultPhoto();
+			page.setDefaultPhoto(model.editing.edited.male);
 			new MessageWindow('TODO: послать запрос на удаление фото').open();
 		}
 
@@ -59,27 +61,69 @@ package tree.view.gui.profile {
 			page = null;
 			super.clear();
 			bus.removeNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
+			model.editing.editEnabled = false;
 		}
 
 		override public function start(...args):void {
-			onPersonSelected(model.selectedPerson);
+			super.start(args);
+			gui.switcher.profile = true;
+			var person:Person = args[0] || model.selectedPerson;
+			var joinType:JoinType = args[1];
+			var from:Person = args[2];
+			if(args.length > 1 || person.isNew || joinType){
+				// редактирование
+				model.editing.editEnabled = true;
+				page.onPersonSelected(person, true, joinType, from);
+			}else{
+				// промотр профиля
+				model.editing.editEnabled = false;
+				page.onPersonSelected(person);
+			}
 		}
 
 		private function onEditProfile(...args):void {
-			page.onPersonSelected(model.selectedPerson, true);
+			bus.dispatch(ViewSignal.START_EDIT_PERSON, model.selectedPerson)
 		}
 
 		private function onCancelEditProfile(...args):void {
-			page.onPersonSelected(model.selectedPerson);
+			goBack();
 		}
 
 		private function onSaveEditedData(...args):void {
 			bus.dispatch(ModelSignal.EDIT_PROFILE, model.selectedPerson);
-			page.onPersonSelected(model.selectedPerson);
+			goBack();
 		}
 
 		private function onPersonSelected(person:Person):void{
 			page.onPersonSelected(person);
+		}
+
+		private function onSexChanged(male:Boolean):void{
+			model.editing.edited.male = male;
+			page.editableInfo.setSex(male, model.editing.joinType, model.editing.from);
+			if(!model.editing.edited.photo)
+				page.setDefaultPhoto(model.editing.edited.male);
+		}
+
+		/**
+		 * Предпринять действие после того, как редактирование персоны закончено (отменено или успешно сохранено)
+		 */
+		private function goBack():void{
+			var edited:Person = model.editing.edited;
+			var joinType:JoinType = model.editing.joinType;
+			var from:Person = model.editing.from;
+
+			model.editing.editEnabled = false;
+			model.editing.edited = null;
+			model.editing.joinType = null;
+			model.editing.from = null;
+
+			if(edited.isNew){
+				if(model.selectedPerson == edited)
+					model.selectedPerson = null;
+				gui.setPage(PersonNotesPage.NAME);
+			}else
+				page.onPersonSelected(model.selectedPerson);
 		}
 	}
 }

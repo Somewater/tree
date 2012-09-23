@@ -10,7 +10,11 @@ package tree.view.gui.profile {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 
+	import org.osflash.signals.ISignal;
+	import org.osflash.signals.Signal;
+
 	import tree.model.Join;
+	import tree.model.JoinType;
 
 	import tree.model.Person;
 	import tree.view.gui.TreeComboBox;
@@ -38,9 +42,7 @@ package tree.view.gui.profile {
 		private var sexSelectorLabel:EmbededTextField;
 		private var sexSelector:SexSelector;
 
-		// model
-		private var joinSuperType:String;
-		private var fromPerson:Person;
+		public var sexChange:ISignal;
 
 		public function EditableInfo() {
 			joinTypeSelector = new TreeComboBox();
@@ -88,13 +90,17 @@ package tree.view.gui.profile {
 			sexSelector = new SexSelector();
 			sexSelector.change.add(onSexChanged);
 			addChild(sexSelector);
+
+			sexChange = new Signal(Boolean);
 		}
 
 		override public function clear():void {
 			super.clear();
+			sexChange.removeAll();
+			sexSelector.clear();
 		}
 
-		public function setPerson(person:Person, joinSuperType:String = null, from:Person = null):void {
+		public function setPerson(person:Person, joinType:JoinType = null, from:Person = null):void {
 			firstNameInput.text = person.firstName;
 			lastNameInput.text = person.lastName;
 			middleNameInput.text = person.middleName;
@@ -103,15 +109,14 @@ package tree.view.gui.profile {
 			joinTypeSelector.removeAll();
 			//joinTypeSelector.dataProvider = new DataProvider(['родственная связь 1','родственная связь 2','родственная связь 3'])
 
-			this.joinSuperType = joinSuperType;
-			this.fromPerson = from;
-			if(joinSuperType){
+			if(joinType){
 				joinTypeLabel.visible = true;
 			}else
 				joinTypeLabel.visible = false;
 
 			sexSelector.male = person.male;
-			onSexChanged();
+			setSex(person.male, joinType, from);
+			sexSelector.visible = sexSelectorLabel.visible = person.isNew && !joinType;
 
 			refresh();
 		}
@@ -119,20 +124,21 @@ package tree.view.gui.profile {
 		override protected function refresh():void {
 			super.refresh();
 
-			var controls:Array = joinTypeLabel.visible ? [[joinTypeLabel]] : [];
-
-			controls = controls.concat([
+			var controls:Array = [
+				(joinTypeLabel.visible ? [joinTypeLabel] : null),
 				[firstNameLabel, firstNameInput],
 				[lastNameLabel, lastNameInput],
 				[middleNameLabel, middleNameInput],
 				[birthdayLabel, birthdayInput],
-				[sexSelectorLabel, sexSelector],
+				(sexSelector.visible ? [sexSelectorLabel, sexSelector] : null),
 				[null, died]
-			]);
+			];
 
 			var nextY:int = 0;
 			var nextX:int = 0;
 			for each(var line:* in controls){
+				if(!line)
+					continue;
 				if(!(line is Array))
 					line = [line];
 				nextX = 0;
@@ -155,12 +161,17 @@ package tree.view.gui.profile {
 		}
 
 		private function onSexChanged(...args):void{
-			if(joinSuperType){
+			sexChange.dispatch(sexSelector.male);
+		}
+
+		public function setSex(male:Boolean, joinType:JoinType = null, fromPerson:Person = null):void{
+			if(joinType){
 				joinTypeLabel.text = I18n.t('RELATIVE_BY',
-						{relative : Join.joinBy(joinSuperType, sexSelector.male), name: fromPerson.fullname});
+						{relative : Join.joinBy(joinType.superType, male).toLocaleString(), name: fromPerson.fullname});
 			}
-			birthdayLabel.text = I18n.t(sexSelector.male ? 'MALE_BORN_FROM' : 'FEMALE_BORN_FROM');
-			died.label = I18n.t(sexSelector.male ? 'MALE_DEAD_QUESTION' : 'FEMALE_DEAD_QUESTION');
+			birthdayLabel.text = I18n.t(male ? 'MALE_BORN_FROM' : 'FEMALE_BORN_FROM');
+			died.label = I18n.t(male ? 'MALE_DEAD_QUESTION' : 'FEMALE_DEAD_QUESTION');
+			sexSelector.male = male;
 		}
 	}
 }

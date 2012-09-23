@@ -1,5 +1,6 @@
 package tree.view.gui.notes {
 	import com.somewater.storage.I18n;
+	import com.somewater.text.EmbededTextField;
 
 	import tree.common.Config;
 
@@ -22,6 +23,9 @@ package tree.view.gui.notes {
 
 	public class PersonNotesPage extends PageBase{
 
+		public static const NAME:String = 'PersonNotesPage';
+		public static const NAME_MODE_SELECT:String = 'PersonNotesPage_modeEditSelect';
+
 		public static const NOTE_WIDTH:int = Config.GUI_WIDTH;
 		public static const NOTE_HEIGHT:int = 65;
 		public static const NOTE_ICON_Y:int = 30;
@@ -29,7 +33,9 @@ package tree.view.gui.notes {
 
 
 		public var notesHolder:Sprite;
+		public var notesHolderEmptyLabel:EmbededTextField;
 		public var firstNote:PersonNoteItem;
+		public var useFirstNote:Boolean = true;
 		public var notes:Array = [];
 		public var vbox:VBoxController;
 
@@ -49,6 +55,9 @@ package tree.view.gui.notes {
 			vbox.addEventListener(Event.CHANGE, onResize);
 
 			notesHolder = new NotesHolder(vbox);
+			notesHolderEmptyLabel = new EmbededTextField(null, 0x799919, 13, false, false, false, false, 'center');
+			notesHolderEmptyLabel.text = I18n.t('EMPTY');
+			addChild(notesHolderEmptyLabel);
 
 			scroller = new ScrollPane();
 			scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
@@ -62,7 +71,7 @@ package tree.view.gui.notes {
 
 
 		override public function get pageName():String {
-			return 'PersonNotesPage';
+			return NAME;
 		}
 
 		private function onResize(event:Event):void{
@@ -94,6 +103,8 @@ package tree.view.gui.notes {
 			super.refresh();
 			scroller.height = _height - scroller.y;
 			scroller.update();
+			notesHolderEmptyLabel.width = _width || 100;
+			notesHolderEmptyLabel.y = searchField.y + searchField.height + PersonNotesPage.NOTE_HEIGHT * 0.5;
 		}
 
 		public function removeAllNotes():void{
@@ -102,6 +113,7 @@ package tree.view.gui.notes {
 				note = notesHolder.removeChildAt(0) as PersonNoteItem;
 				note.clear();
 			}
+			notesHolderEmptyLabel.visible = true;
 
 			notes = [];
 		}
@@ -110,10 +122,10 @@ package tree.view.gui.notes {
 			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
 			var note:PersonNoteItem = new PersonNoteItem();
 
-			note.data = join;
+			note.data = join.associate;
 			var noteName:String = join.associate.fullname;
 
-			if(!firstNote){
+			if(!firstNote && useFirstNote){
 				firstNote = note;
 				addChildAt(note, getChildIndex(scroller));
 				note.x = scroller.x;
@@ -124,7 +136,7 @@ package tree.view.gui.notes {
 				var index:int = notes.length;
 				var notesLen:int = notes.length;
 				for(var i:int = 0;i<notesLen;i++)
-					if(noteName < (notes[i] as PersonNoteItem).data.associate.fullname){
+					if(noteName < (notes[i] as PersonNoteItem).data.fullname){
 						index = i;
 						break;
 					}
@@ -136,15 +148,16 @@ package tree.view.gui.notes {
 
 			vbox.refresh();
 			fireResize();
+			notesHolderEmptyLabel.visible = notes.length == 0 && !firstNote;
 
 			return note;
 		}
 
 		public function removeNote(data:ModelBase):PersonNoteItem {
-			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
+			var p:Person = Join(data is GenNode ? GenNode(data).join : data as Join).associate;
 			for (var i:int = 0; i < notes.length; i++) {
 				var note:PersonNoteItem = notes[i];
-				if(note.data == join){
+				if(note.data == p){
 					notes.splice(i, 1);
 					notesHolder.removeChild(note);
 					vbox.removeChild(note);
@@ -156,6 +169,7 @@ package tree.view.gui.notes {
 			}
 			vbox.refresh();
 			fireResize();
+			notesHolderEmptyLabel.visible = notes.length == 0 && !firstNote;
 			return note;
 		}
 
@@ -167,7 +181,7 @@ package tree.view.gui.notes {
 			var search:String = searchField.search.toLowerCase();
 			var spaces:RegExp = /^\s+$/;
 			if(search && search.length && !spaces.test(search)){
-				var p:Person = note.data.associate;
+				var p:Person = note.data;
 				if(p.firstName.toLowerCase().indexOf(search) != -1)
 					return true;
 				if(p.lastName.toLowerCase().indexOf(search) != -1)

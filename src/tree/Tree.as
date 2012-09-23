@@ -36,6 +36,7 @@ package tree {
 
 	import tree.command.ResponseRouter;
 	import tree.command.edit.EditProfile;
+	import tree.command.edit.StartProfileEditing;
 	import tree.command.view.CalculateNextNodeRollUnroll;
 	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
@@ -177,6 +178,7 @@ package tree {
 
 			Config.content.addChild(gui = new Gui());
 			new GuiMediator(gui);
+			Config.reject(Gui, gui);
 
 			Config.content.addChild(panel = new Panel());
 			new PanelMediator(panel);
@@ -219,6 +221,7 @@ package tree {
 			bus.addCommand(AppSignal.RELOAD_TREE, ReloadTree);
 
 			bus.addCommand(ModelSignal.EDIT_PROFILE, EditProfile);
+			bus.addCommand(ViewSignal.START_EDIT_PERSON, StartProfileEditing);
 		}
 
 

@@ -28,8 +28,8 @@ package tree.model {
 		public var joinsForDraw:Array = [];
 		public var joinsForRemove:Array = [];
 		public var animationTime:Number = 1;// время, отводимое на анимацию появления-скрытия отдельной ноды
-		private var _treeViewConstructed:Boolean = false;
-		private var _constructionInProcess:Boolean = false;
+		private var _treeViewConstructed:Boolean = false;// первоначальное построение дерева завершено
+		private var _constructionInProcess:Boolean = false;// произвоится анимация (построение дерева или сворачивание-разворачивание)
 		private var _selectedPerson:Person;
 
 		public var joinsQueue:Array = [];
@@ -42,6 +42,7 @@ package tree.model {
 		public var bus:Bus;
 
 		public static var instance:Model;
+		public var editing:ProfileEditingModel;
 
 		public function Model(bus:Bus) {
 			if(instance)
@@ -51,6 +52,7 @@ package tree.model {
 			trees = new TreesCollection(bus);
 			matrixes = new MatrixCollection();
 			generations = new GenerationsCollection(bus, matrixes);
+			editing = new ProfileEditingModel();
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 		}

@@ -17,9 +17,9 @@ package tree.model {
 
 		public var tree:TreeModel;
 
-		public var firstName:String;
-		public var lastName:String;
-		public var middleName:String;
+		public var firstName:String = '';
+		public var lastName:String = '';
+		public var middleName:String = '';
 		public var maidenName:String;
 		public var birthday:Date = new Date();
 		public var deathday:Date;
@@ -42,7 +42,7 @@ package tree.model {
 		}
 
 		public function get node():Node {
-			return nodes.get(this.uid + '');
+			return nodes ? nodes.get(this.uid + '') : null;
 		}
 
 		public function dirtyMattyCache():void {
@@ -61,12 +61,20 @@ package tree.model {
 			return deathday != null;
 		}
 
+		public function set died(value:Boolean):void{
+			deathday = value ? new Date() : null;
+		}
+
 		public function get readonly():Boolean{
 			return false;
 		}
 
 		public function get visible():Boolean {
 			return node && node.visible;
+		}
+
+		public function get isNew():Boolean{
+			return !visible && !node
 		}
 	}
 }

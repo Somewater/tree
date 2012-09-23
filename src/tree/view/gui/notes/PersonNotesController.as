@@ -6,6 +6,7 @@ package tree.view.gui.notes {
 	import tree.signal.ViewSignal;
 	import tree.view.gui.GuiControllerBase;
 	import tree.view.gui.notes.PersonNoteItem;
+	import tree.view.gui.notes.PersonNoteItem;
 
 	public class PersonNotesController extends GuiControllerBase{
 
@@ -32,6 +33,9 @@ package tree.view.gui.notes {
 		}
 
 		override public function start(...args):void {
+			super.start(args);
+			gui.switcher.list = true;
+			model.editing.editEnabled = false;
 			constructNotes();
 			onSelectNodeSignal(model.selectedPerson);
 		}
@@ -40,17 +44,25 @@ package tree.view.gui.notes {
 			page.removeAllNotes();
 
 			for each(var j:Join in model.joinsQueue){
-				addNote(j)
+				if(j.associate.visible && !hasNote(j.associate))
+					addNote(j)
 			}
 		}
 
+		private function hasNote(person:Person):Boolean {
+			for each(var n:PersonNoteItem in page.notes)
+				if(n.data == person)
+					return true;
+			return false;
+		}
+
 		private function selectNote(note:PersonNoteItem):void {
-			bus.dispatch(ViewSignal.PERSON_SELECTED, note.data.associate);
-			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
+			bus.dispatch(ViewSignal.PERSON_SELECTED, note.data);
+			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data);
 		}
 		
 		private function centreNote(note:PersonNoteItem):void{
-			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
+			bus.dispatch(ViewSignal.PERSON_CENTERED, note.data);
 		}
 
 		private function openNote(note:PersonNoteItem):void{
@@ -69,7 +81,8 @@ package tree.view.gui.notes {
 				return;
 			}
 			var note:PersonNoteItem;
-			for each(var n:PersonNoteItem in page.notes.concat(page.firstNote))
+			var notesQueue:Array = page.firstNote ? page.notes.concat(page.firstNote) : page.notes;
+			for each(var n:PersonNoteItem in notesQueue)
 				if(n.data.id == person.id){
 					note = n;
 				}
@@ -97,7 +110,7 @@ package tree.view.gui.notes {
 			if(page.selectedNote == note){
 				if(note){
 					note.selected = false;
-					bus.dispatch(ViewSignal.PERSON_DESELECTED, note.data.associate);
+					bus.dispatch(ViewSignal.PERSON_DESELECTED, note.data);
 				}
 				page.selectedNote = null;
 			}

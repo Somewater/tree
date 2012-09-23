@@ -4,6 +4,8 @@ package tree.view.gui {
 	import tree.model.Person;
 	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
+	import tree.view.gui.notes.PersonNotesPage;
+	import tree.view.gui.profile.PersonProfilePage;
 
 	public class GuiController extends Actor{
 
@@ -17,6 +19,7 @@ package tree.view.gui {
 
 
 		public function addPerson():void {
+			// TODO TODO TODO
 			var p:Person = model.trees.first.persons.allocate(model.trees.first.nodes);
 			p.uid = (int.MAX_VALUE * Math.random()) | 536870912;
 			p.firstName = 'Ребенок ' + int(Math.random() * 10);
@@ -35,14 +38,25 @@ package tree.view.gui {
 		}
 
 		private function onStart():void{
-			gui.setPage('PersonNotesPage');
+			gui.setPage(PersonNotesPage.NAME);
 		}
 
 		private function onSwitcherChanged(switcher:ProfileSwitcher):void{
-			if(switcher.list)
-				gui.setPage('PersonNotesPage');
-			else
-				gui.setPage('PersonProfilePage');
+			if(model.editing.editEnabled){
+				if(switcher.list){
+					// показываем лист выбора только в случае, если редактируется персона, имеющая прикрепление
+					if(model.editing.joinType)
+						gui.setPage(PersonNotesPage.NAME_MODE_SELECT, model.editing.edited, model.editing.joinType, model.editing.from)
+					else
+						gui.setPage(PersonNotesPage.NAME);
+				}else
+					gui.setPage(PersonProfilePage.NAME, model.editing.edited, model.editing.joinType, model.editing.from)
+			}else{
+				if(switcher.list)
+					gui.setPage(PersonNotesPage.NAME);
+				else
+					gui.setPage(PersonProfilePage.NAME);
+			}
 		}
 	}
 }

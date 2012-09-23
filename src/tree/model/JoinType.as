@@ -34,7 +34,7 @@ package tree.model {
 			return name;
 		}
 
-		public function toLocaleString(_case:String):String{
+		public function toLocaleString(_case:String = null):String{
 			return I18n.t(name.toUpperCase() + (_case ? '_' + _case.toUpperCase() : ''));
 		}
 

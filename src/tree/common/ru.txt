@@ -62,3 +62,4 @@ SEX=Пол
 MALE_CHAR=М
 FEMALE_CHAR=Ж
 ADD_RELATIVE=Добавить {name}
+EMPTY=Пусто

@@ -5,7 +5,11 @@ package tree.command {
 	import tree.signal.RequestSignal;
 
 	public class StartupCommand extends Command{
-		public function StartupCommand() {
+
+		private var requiredId:int;
+
+		public function StartupCommand(requiredId:int = 0) {
+			this.requiredId = requiredId;
 		}
 
 		override public function execute():void {
@@ -22,7 +26,7 @@ package tree.command {
 				var v:URLVariables = new URLVariables(get);
 				uid = v.uid;
 			}
-			request.uid = uid || 18985299;// 18985299 36007
+			request.uid = requiredId || uid || 18985299;// 18985299 36007
 			call(request);
 		}
 	}

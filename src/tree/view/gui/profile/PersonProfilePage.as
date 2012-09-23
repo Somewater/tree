@@ -10,6 +10,7 @@ package tree.view.gui.profile {
 	import flash.events.Event;
 
 	import tree.common.Config;
+	import tree.model.JoinType;
 
 	import tree.model.Person;
 
@@ -22,6 +23,8 @@ package tree.view.gui.profile {
 	import tree.view.gui.UIComponent;
 
 	public class PersonProfilePage extends PageBase{
+
+		public static const NAME:String = 'PersonProfilePage';
 
 		internal var photo:Photo;
 		internal var editProfileButton:Button;
@@ -76,7 +79,7 @@ package tree.view.gui.profile {
 		}
 
 		override public function get pageName():String {
-			return 'PersonProfilePage';
+			return NAME;
 		}
 
 		override public function clear():void {
@@ -136,13 +139,13 @@ package tree.view.gui.profile {
 		}
 
 		internal function onPersonSelected(person:Person, editable:Boolean = false,
-										   joinSuperType:String = null, from:Person = null):void{
+										   joinType:JoinType = null, from:Person = null):void{
 			if(!person) return;
 			this.editable = editable;
 			photo.source = person.photo;
-			if(!photo.source) setDefaultPhoto();
+			if(!photo.source) setDefaultPhoto(person.male);
 			if(editable){
-				editableInfo.setPerson(person, joinSuperType, from);
+				editableInfo.setPerson(person, joinType, from);
 			}else{
 				readonlyInfo.setPerson(person);
 			}
@@ -150,8 +153,8 @@ package tree.view.gui.profile {
 			readonlyInfo.visible = !editable;
 			editableInfo.visible = editable;
 			editPhotoLink.visible = editable;
-			deletePhotoLink.visible = editable && person.photo && person.visible;
-			editProfileButton.visible = !editable && person.visible;
+			deletePhotoLink.visible = editable && person.photo;
+			editProfileButton.visible = !editable && !person.isNew;
 
 			familyBlock.setPerson(person, editable);
 			saveButtonBlock.editable = editable;
@@ -159,8 +162,8 @@ package tree.view.gui.profile {
 			refresh();
 		}
 
-		public function setDefaultPhoto():void {
-			photo.source = Config.loader.createMc('assets.DefaultPhoto_male');
+		public function setDefaultPhoto(male:Boolean):void {
+			photo.source = Config.loader.createMc('assets.DefaultPhoto_' + (male ? 'male' : 'female'));
 		}
 
 		private function onFamilyBlockResized(event:Event):void{

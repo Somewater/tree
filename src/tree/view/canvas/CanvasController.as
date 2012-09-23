@@ -248,8 +248,7 @@ package tree.view.canvas {
 		}
 
 		private function onAddNewPersonClick(from:Person, joinType:JoinType):void{
-			var newPerson:Person = model.trees.first.persons.allocate(model.trees.first.nodes);
-			bus.dispatch(ViewSignal.EDIT_PERSON, newPerson, joinType, from);
+			bus.dispatch(ViewSignal.START_EDIT_PERSON, null, joinType, from);
 		}
 	}
 }

@@ -12,6 +12,7 @@ package tree.view.gui.profile {
 
 	public class SexSelector extends UIComponent{
 
+		private var supressChange:Boolean = false;
 		public var change:ISignal;
 
 		private var maleRadio:RadioButton;
@@ -33,7 +34,8 @@ package tree.view.gui.profile {
 		}
 
 		private function onChange(event:Event):void {
-			change.dispatch(this);
+			if(!supressChange)
+				change.dispatch(this);
 		}
 
 		override public function clear():void {
@@ -47,8 +49,11 @@ package tree.view.gui.profile {
 		}
 
 		public function set male(value:Boolean):void{
+			// при выставлении значний извне не диспатчить сигнал изменения
+			supressChange = true;
 			maleRadio.selected = value;
 			femaleRadio.selected = !value;
+			supressChange = false;
 		}
 
 		override protected function refresh():void {

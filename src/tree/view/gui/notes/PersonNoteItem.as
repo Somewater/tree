@@ -6,6 +6,8 @@ package tree.view.gui.notes {
 
 	import flash.geom.Matrix;
 
+	import tree.model.Person;
+
 	import tree.view.gui.*;
 	import com.gskinner.motion.GTweener;
 	import com.somewater.storage.I18n;
@@ -29,7 +31,7 @@ package tree.view.gui.notes {
 
 	public class PersonNoteItem extends UIComponent implements ISize, IClear, IShowable{
 
-		private var _data:Join;
+		private var _data:Person;
 		private var nameTF:EmbededTextField;
 		private var postTF:TruncatedTextField;
 		private var actionsTF:LinkLabel;
@@ -135,14 +137,14 @@ package tree.view.gui.notes {
 			GTweener.removeTweens(this);
 		}
 
-		public function set data(data:Join):void {
+		public function set data(data:Person):void {
 			_data = data;
-			nameTF.text = data.associate.fullname;
-			postTF.text = data.associate.post;
+			nameTF.text = data.fullname;
+			postTF.text = data.post;
 			refresh();
 		}
 
-		public function get data():Join{
+		public function get data():Person{
 			return _data;
 		}
 
@@ -327,6 +329,6 @@ class NoteContextMenu extends Sprite implements IClear{
 	}
 
 	private function centreOnNode():void{
-		Model.instance.bus.dispatch(ViewSignal.PERSON_CENTERED, note.data.associate);
+		Model.instance.bus.dispatch(ViewSignal.PERSON_CENTERED, note.data);
 	}
 }

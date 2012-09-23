@@ -8,6 +8,7 @@ package tree.view.gui {
 	import tree.common.Config;
 	import tree.view.gui.notes.PersonNotesController;
 	import tree.view.gui.notes.PersonNotesPage;
+	import tree.view.gui.notes.SelectNoteController;
 	import tree.view.gui.profile.PersonProfilePage;
 	import tree.view.gui.profile.ProfileController;
 
@@ -17,14 +18,16 @@ package tree.view.gui {
 		{
 			PersonNotesPage: {page: PersonNotesPage, controller: PersonNotesController}
 			,
+			PersonNotesPage_modeEditSelect: {page: PersonNotesPage, controller: SelectNoteController}
+			,
 			PersonProfilePage: {page: PersonProfilePage, controller: ProfileController}
 		};
 
 		private var background:Sprite;
 		private var foreground:Sprite;
 
-		private var page:PageBase;
-		private var controller:GuiControllerBase;
+		public var page:PageBase;
+		public var controller:GuiControllerBase;
 
 		private var pageHolder:Sprite;
 		public var switcher:ProfileSwitcher;
@@ -60,28 +63,26 @@ package tree.view.gui {
 		}
 
 		public function setPage(name:String, ...args):void{
-			if(!page || page.pageName != name){
-				if(page){
-					if(controller)
-						controller.stop();
-					page.clear();
-					pageHolder.removeChild(page);
-					controller = null;
-					page = null;
-				}
+			if(page){
+				if(controller)
+					controller.stop();
+				page.clear();
+				pageHolder.removeChild(page);
+				controller = null;
+				page = null;
+			}
 
-				var data:Object = PAGES_CLASSES_BY_NAME[name];
-				var cl:Class = data['page'];
-				var controllerCl:Class = data['controller'];
-				page = new cl();
-				page.setSize(pageWidth, pageHeight);
-				pageHolder.addChild(page);
+			var data:Object = PAGES_CLASSES_BY_NAME[name];
+			var cl:Class = data['page'];
+			var controllerCl:Class = data['controller'];
+			page = new cl();
+			page.setSize(pageWidth, pageHeight);
+			pageHolder.addChild(page);
 
-				if(controllerCl){
-					controller = new controllerCl(page);
-					controller.gui = this;
-					controller.start.apply(null, args);
-				}
+			if(controllerCl){
+				controller = new controllerCl(page);
+				controller.gui = this;
+				controller.start.apply(null, args);
 			}
 		}
 
