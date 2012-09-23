@@ -114,9 +114,6 @@ package tree.view.gui.profile {
 			var from:Person = model.editing.from;
 
 			model.editing.editEnabled = false;
-			model.editing.edited = null;
-			model.editing.joinType = null;
-			model.editing.from = null;
 
 			if(edited.isNew){
 				if(model.selectedPerson == edited)

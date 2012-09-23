@@ -142,5 +142,12 @@ package tree.model {
 					return j.associate;
 			return null;
 		}
+
+		public function relation(person:Person):Join {
+			for each(var j:Join in array)
+				if(j.associate == person)
+					return j;
+			return null;
+		}
 	}
 }

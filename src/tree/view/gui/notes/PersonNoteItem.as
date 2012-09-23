@@ -33,7 +33,7 @@ package tree.view.gui.notes {
 
 		private var _data:Person;
 		private var nameTF:EmbededTextField;
-		private var postTF:TruncatedTextField;
+		public var postTF:TruncatedTextField;
 		private var actionsTF:LinkLabel;
 		private var actionMark:DisplayObject;
 
@@ -220,6 +220,11 @@ package tree.view.gui.notes {
 			this.visible = false;
 			//this.actionsTF.visible = false;
 			//this.actionMark.visible = false;
+		}
+
+		public function hideActions():void {
+			actionMark.visible = false;
+			actionsTF.visible = false;
 		}
 	}
 }

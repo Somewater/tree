@@ -35,7 +35,7 @@ package tree.view.gui.notes {
 		public var notesHolder:Sprite;
 		public var notesHolderEmptyLabel:EmbededTextField;
 		public var firstNote:PersonNoteItem;
-		public var useFirstNote:Boolean = true;
+		private var _useFirstNote:Boolean = true;
 		public var notes:Array = [];
 		public var vbox:VBoxController;
 
@@ -119,11 +119,11 @@ package tree.view.gui.notes {
 		}
 
 		public function addNote(data:ModelBase):PersonNoteItem {
-			var join:Join = data is GenNode ? GenNode(data).join : data as Join;
+			var p:Person = data is GenNode ? GenNode(data).join.associate : (data is Join ? Join(data).associate : data as Person);
 			var note:PersonNoteItem = new PersonNoteItem();
 
-			note.data = join.associate;
-			var noteName:String = join.associate.fullname;
+			note.data = p;
+			var noteName:String = p.fullname;
 
 			if(!firstNote && useFirstNote){
 				firstNote = note;
@@ -146,6 +146,7 @@ package tree.view.gui.notes {
 				vbox.addChildAt(note, index);
 			}
 
+			onFirstNoteResized(null);
 			vbox.refresh();
 			fireResize();
 			notesHolderEmptyLabel.visible = notes.length == 0 && !firstNote;
@@ -154,7 +155,7 @@ package tree.view.gui.notes {
 		}
 
 		public function removeNote(data:ModelBase):PersonNoteItem {
-			var p:Person = Join(data is GenNode ? GenNode(data).join : data as Join).associate;
+			var p:Person = data is GenNode ? GenNode(data).join.associate : (data is Join ? Join(data).associate : data as Person);
 			for (var i:int = 0; i < notes.length; i++) {
 				var note:PersonNoteItem = notes[i];
 				if(note.data == p){
@@ -194,8 +195,19 @@ package tree.view.gui.notes {
 		}
 
 		private function onFirstNoteResized(event:Event):void{
-			scroller.y = (firstNote ? firstNote.y + firstNote.calculatedHeight : searchField.y + searchField.height + 8 + PersonNotesPage.NOTE_HEIGHT);
+			scroller.y = (firstNote ? firstNote.y + firstNote.calculatedHeight : searchField.y + searchField.height + 8);
 			refresh();
+		}
+
+		public function get useFirstNote():Boolean {
+			return _useFirstNote;
+		}
+
+		public function set useFirstNote(value:Boolean):void {
+			if(_useFirstNote != value){
+				_useFirstNote = value
+				scroller.y = searchField.y + searchField.height + 8 + (value ? PersonNotesPage.NOTE_HEIGHT : 0);
+			}
 		}
 	}
 }
