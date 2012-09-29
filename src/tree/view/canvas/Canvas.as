@@ -4,11 +4,13 @@ package tree.view.canvas {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 
 	import tree.common.Config;
 
 	import tree.model.GenNode;
 	import tree.model.Join;
+	import tree.model.Model;
 	import tree.model.Node;
 	import tree.view.gui.UIComponent;
 
@@ -50,7 +52,7 @@ package tree.view.canvas {
 		}
 
 		override public function setSize(w:int, h:int):void {
-
+			refreshNodesVisibility();
 		}
 
 		public function onNodeIconComplete(n:NodeIcon):void {
@@ -67,7 +69,6 @@ package tree.view.canvas {
 				n = new NodeIcon();
 				setNodeIcon(g.node.uid, n);
 				n.data = g;
-				nodesHolder.addChild(n);
 
 				var generation:int = g.generation.generation;
 				var h:GenerationBackground = generationHolders[generation];
@@ -75,6 +76,9 @@ package tree.view.canvas {
 					generationHolders[generation] = h = new GenerationBackground(g.generation);
 					generationsHolder.addChild(h);
 				}
+
+				n.visible = false;
+				refreshNodeVisibility(n);
 			}
 			return n;
 		}
@@ -212,6 +216,65 @@ package tree.view.canvas {
 			highlightedNode = null;
 			arrowMenu.visible = false;
 			GTweener.removeTweens(this);
+		}
+
+		public function refreshNodesVisibility(now:Boolean = false):void {
+			if(!now){
+				Config.ticker.callLater(refreshNodesVisibility, 2, [true]);
+				return;
+			}
+
+			var scale:Number = this.scaleX;
+			var minX:int = -this.x / scale;
+			var minY:int = -this.y / scale;
+			var maxX:int = minX + (Config.WIDTH - Config.GUI_WIDTH) / scale;
+			var maxY:int = minY + Config.HEIGHT / scale;
+
+			minX -= Canvas.ICON_WIDTH;
+			minY -= Canvas.ICON_HEIGHT;
+
+			for each(var n:NodeIcon in nodesByUid){
+				var nx:int = n.x;
+				var ny:int = n.y;
+				var nv:Boolean = nx < maxX && nx > minX && ny < maxY && ny > minY;
+				if(nv){
+					if(!n.visible){
+						n.visible = true;
+						nodesHolder.addChild(n);
+					}
+				} else {
+					if(n.visible){
+						n.visible = false;
+						nodesHolder.removeChild(n);
+					}
+				}
+			}
+		}
+
+		private function refreshNodeVisibility(n:NodeIcon):void{
+			var scale:Number = this.scaleX;
+			var minX:int = -this.x / scale;
+			var minY:int = -this.y / scale;
+			var maxX:int = minX + (Config.WIDTH - Config.GUI_WIDTH) / scale;
+			var maxY:int = minY + Config.HEIGHT / scale;
+
+			minX -= Canvas.ICON_WIDTH;
+			minY -= Canvas.ICON_HEIGHT;
+
+			var nx:int = n.x;
+			var ny:int = n.y;
+			var nv:Boolean = nx < maxX && nx > minX && ny < maxY && ny > minY;
+			if(nv){
+				if(!n.visible){
+					n.visible = true;
+					nodesHolder.addChild(n);
+				}
+			} else {
+				if(n.visible){
+					n.visible = false;
+					nodesHolder.removeChild(n);
+				}
+			}
 		}
 	}
 }

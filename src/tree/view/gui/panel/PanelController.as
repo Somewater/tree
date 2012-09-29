@@ -17,6 +17,7 @@ package tree.view.gui.panel {
 	import tree.signal.AppSignal;
 	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
+	import tree.view.Tweener;
 	import tree.view.gui.Button;
 
 	public class PanelController extends Actor{
@@ -61,14 +62,14 @@ package tree.view.gui.panel {
 				data.sort(function(p1:Person, p2:Person):int{return p1.name < p2.name ? -1 : 1});
 				panel.treeSelectorPopup.refreshData(data);
 				panel.treeSelectorPopup.visible = true;
-				GTweener.to(panel.treeSelectorPopup, 0.3, {scaleX: 1, scaleY: 1, alpha: 1});
+				Tweener.to(panel.treeSelectorPopup, 0.3, {scaleX: 1, scaleY: 1, alpha: 1});
 				panel.treeOwnerMark.rotation = 0;
 			}
 		}
 
 		private function hideTreeOwnerSelectorPopup():void{
-			GTweener.to(panel.treeSelectorPopup, 0.3, {scaleX: 0.1, scaleY: 0.1, alpha: 0},
-					{onComplete: function(g:GTween):void{panel.treeSelectorPopup.visible = false;}})
+			Tweener.to(panel.treeSelectorPopup, 0.3, {scaleX: 0.1, scaleY: 0.1, alpha: 0},
+					{onComplete: function(g:GTween = null):void{panel.treeSelectorPopup.visible = false;}})
 			panel.treeOwnerMark.rotation = 180;
 		}
 

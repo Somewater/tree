@@ -30,6 +30,7 @@ package tree.view.canvas {
 
 		public function JoinLine(collection:INodeViewCollection) {
 			this.collection = collection;
+			cacheAsBitmap = true;
 		}
 
 		override public function clear():void {

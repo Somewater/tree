@@ -81,9 +81,13 @@ package tree.view.canvas {
 			var centreY:Number = view.y + model.zoomCenter.y * (currentZoom - zoom);
 
 			if(zoomTween)GTweener.remove(zoomTween);
-			zoomTween = GTweener.to(view, 0.2, {x : centreX, y : centreY, scaleX : zoom, scaleY : zoom});
+			zoomTween = GTweener.to(view, 0.2, {x : centreX, y : centreY, scaleX : zoom, scaleY : zoom}, {onComplete: onZoomCompleted});
 
 			controller.onCanvasDeselect();
+		}
+
+		private function onZoomCompleted(g:GTween = null):void{
+			canvas.refreshNodesVisibility(true);
 		}
 
 		private function onMouseWheel(delta:int):void {
@@ -103,6 +107,7 @@ package tree.view.canvas {
 			canvas.x += signal.delta.x;
 			canvas.y += signal.delta.y;
 			controller.onCanvasDragged();
+			canvas.refreshNodesVisibility();
 		}
 
 		private function onStopDrag(signal:DragSignal):void{
@@ -159,6 +164,7 @@ package tree.view.canvas {
 			if(!isNaN(centreY)) obj['y'] = Config.PANEL_HEIGHT - centreY;
 			if(!isNaN(centreX) || !isNaN(centreY))
 				GTweener.to(view, 0.3, obj);
+			canvas.refreshNodesVisibility();
 		}
 
 		private function onCanvasComplete(event:Event):void {

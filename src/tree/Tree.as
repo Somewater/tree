@@ -2,6 +2,7 @@ package tree {
 	import com.gskinner.motion.GTweener;
 	import com.junkbyte.console.Cc;
 	import com.junkbyte.console.KeyBind;
+	import com.somewater.display.Stats;
 	import com.somewater.storage.I18n;
 	import com.somewater.text.EmbededTextField;
 	import com.somewater.text.Hint;
@@ -11,6 +12,7 @@ package tree {
 	import fl.managers.StyleManager;
 
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -119,6 +121,9 @@ package tree {
 				Cc.bindKey(new KeyBind('~'), showHideConsole);
 				Cc.bindKey(new KeyBind('`'), showHideConsole);
 				Cc.bindKey(new KeyBind('ё'), showHideConsole);
+				Cc.addSlashCommand('stats', function():void{
+					(Config.loader as DisplayObjectContainer).addChild(new Stats());
+				})
 			}
 
 			configurateInjections();
@@ -127,6 +132,7 @@ package tree {
 			configurateCommands();
 
 			bus.dispatch(AppSignal.STARTUP);
+			//(Config.loader as DisplayObjectContainer).addChild(new Stats());
 		}
 
 		private function configurateInjections():void{

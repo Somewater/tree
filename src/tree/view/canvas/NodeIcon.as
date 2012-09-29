@@ -3,6 +3,10 @@ package tree.view.canvas {
 	import com.gskinner.motion.GTweener;
 	import com.somewater.display.Photo;
 
+	import flash.display.Bitmap;
+
+	import flash.display.BitmapData;
+
 	import flash.display.DisplayObject;
 
 	import flash.display.Sprite;
@@ -25,6 +29,7 @@ package tree.view.canvas {
 
 	import tree.model.Node;
 	import tree.model.Person;
+	import tree.view.Tweener;
 	import tree.view.canvas.Canvas;
 	import tree.view.gui.Helper;
 
@@ -63,12 +68,18 @@ package tree.view.canvas {
 
 		private var arrows:Array = [];
 
+		private var bitmap:Bitmap;
+		private var bitmapData:BitmapData;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			maleHighlight = skin.getChildByName('male_back_hl');
 			femaleHighlight = skin.getChildByName('female_back_hl');
 			maleHighlight.visible = femaleHighlight.visible = false;
 			addChild(skin);
+
+			//bitmap = new Bitmap()
+			//addChild(bitmap);
 
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER);
 			photo.photoMask = skin.getChildByName('photo_mask');
@@ -87,7 +98,7 @@ package tree.view.canvas {
 				debugTrace.selectable = false;
 				debugTrace.width = Canvas.ICON_WIDTH;
 				debugTrace.filters = [new DropShadowFilter(1, 45, 0xFFFFFF, 1, 1, 1, 2)]
-				addChild(debugTrace);
+				skin.addChild(debugTrace);
 
 				addEventListener(MouseEvent.CLICK, function(ev:Event):void{
 					refreshData();
@@ -108,7 +119,7 @@ package tree.view.canvas {
 			deleteButton = new RollUnrollButton();
 			deleteButton.x = 90;
 			deleteButton.y = 10;
-			addChild(deleteButton);
+			//skin.addChild(deleteButton);
 			deleteButton.addEventListener(MouseEvent.CLICK, onDeletButtonClicked);
 			deleteButton.visible = false;
 
@@ -116,6 +127,10 @@ package tree.view.canvas {
 
 			showArrowMenu = new Signal(NodeArrow);
 			hideArrowMenu = new Signal();
+
+			cacheAsBitmap = true;
+			//graphics.beginFill(0xFF0000);
+			//graphics.drawRect(0, 0, Canvas.ICON_WIDTH, Canvas.ICON_HEIGHT);
 		}
 
 		private function onClicked(event:MouseEvent):void {
@@ -159,10 +174,12 @@ package tree.view.canvas {
 						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
 						+ "\ndist=" + p.node.dist;
 			}
+			//draw();
 		}
 
 		private function onPhotoDownloaded(photo:*):void {
 			this.photo.source = photo;
+			//draw();
 		}
 
 		public function refreshPosition(animated:Boolean = true):void {
@@ -171,7 +188,7 @@ package tree.view.canvas {
 			if(animated){
 				GTweener.removeTweens(this);
 				this.alpha = 1;
-				GTweener.to(this, Model.instance.animationTime * 0.5, {'x':p.x, 'y':p.y}, {onComplete: dispatchOnComplete });
+				Tweener.to(this, Model.instance.animationTime * 0.5, {'x':p.x, 'y':p.y}, {onComplete: dispatchOnComplete });
 			}else{
 				this.x = p.x;
 				this.y = p.y;
@@ -217,14 +234,14 @@ package tree.view.canvas {
 
 		public function hide(animated:Boolean = true):void {
 			if(animated)
-				GTweener.to(this, Model.instance.animationTime * 0.3, {"alpha":0}, {onComplete: dispatchOnComplete })
+				Tweener.to(this, Model.instance.animationTime * 0.3, {"alpha":0}, {onComplete: dispatchOnComplete })
 			else
 				alpha = 0;
 		}
 
 		public function show(animated:Boolean = true):void {
 			if(animated)
-				GTweener.to(this, Model.instance.animationTime * 0.3, {"alpha":1}, {onComplete: dispatchOnComplete })
+				Tweener.to(this, Model.instance.animationTime * 0.3, {"alpha":1}, {onComplete: dispatchOnComplete })
 			else
 				alpha = 1;
 		}
@@ -327,7 +344,7 @@ package tree.view.canvas {
 		public function showRollUnroll():void{
 			rollUnrollButton.visible = true;
 			rollUnrollButton.alpha = 0;
-			GTweener.to(rollUnrollButton, 0.3, {alpha: 1});
+			Tweener.to(rollUnrollButton, 0.3, {alpha: 1});
 			rollUnrollButton.rollState = data.node.slavesUnrolled;
 		}
 
@@ -398,6 +415,14 @@ package tree.view.canvas {
 
 		private function onArrowOut(a:NodeArrow):void{
 
+		}
+
+		private function draw():void{
+			if(bitmapData)
+				bitmapData.dispose();
+			bitmapData = new BitmapData(Canvas.ICON_WIDTH + 5, Canvas.ICON_HEIGHT + 5, false, 0);
+			bitmapData.draw(skin);
+			bitmap.bitmapData = bitmapData;
 		}
 	}
 }

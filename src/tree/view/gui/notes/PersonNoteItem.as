@@ -7,6 +7,7 @@ package tree.view.gui.notes {
 	import flash.geom.Matrix;
 
 	import tree.model.Person;
+	import tree.view.Tweener;
 
 	import tree.view.gui.*;
 	import com.gskinner.motion.GTweener;
@@ -188,9 +189,9 @@ package tree.view.gui.notes {
 				this.visible = true;
 				this.y = y;
 				alpha = 0;
-				GTweener.to(this, time, {alpha: 1})
+				Tweener.to(this, time, {alpha: 1})
 			}else if(this.y != y)
-				GTweener.to(this, time, {y: y});
+				Tweener.to(this, time, {y: y});
 			newItem = false;
 		}
 
@@ -204,19 +205,19 @@ package tree.view.gui.notes {
 
 		public function show():void {
 			this.visible = true;
-			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {scaleY: 1, alpha:1}, {onComplete: onShowComplete})
+			Tweener.to(this, PersonNotesPage.CHANGE_TIME, {scaleY: 1, alpha:1}, {onComplete: onShowComplete})
 		}
 
 		public function hide():void {
-			GTweener.to(this, PersonNotesPage.CHANGE_TIME, {scaleY: 0, alpha:0.2}, {onComplete: onHideComplete})
+			Tweener.to(this, PersonNotesPage.CHANGE_TIME, {scaleY: 0, alpha:0.2}, {onComplete: onHideComplete})
 		}
 
-		private function onShowComplete(g:GTween):void{
+		private function onShowComplete(g:GTween = null):void{
 			//this.actionsTF.visible = true;
 			//this.actionMark.visible = true;
 		}
 
-		private function onHideComplete(g:GTween):void{
+		private function onHideComplete(g:GTween = null):void{
 			this.visible = false;
 			//this.actionsTF.visible = false;
 			//this.actionMark.visible = false;
@@ -245,6 +246,7 @@ import tree.common.Config;
 import tree.common.IClear;
 import tree.model.Model;
 import tree.signal.ViewSignal;
+import tree.view.Tweener;
 
 import tree.view.gui.notes.PersonNoteItem;
 import tree.view.gui.notes.PersonNotesPage;
@@ -289,15 +291,15 @@ class NoteContextMenu extends Sprite implements IClear{
 		alpha = 0.25;
 		background.height = actionsHolder.y + actionsHolder.height + 10;
 		y = PersonNotesPage.NOTE_ICON_Y - this.height;
-		GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha:1, y:PersonNotesPage.NOTE_ICON_Y});
+		Tweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha:1, y:PersonNotesPage.NOTE_ICON_Y});
 	}
 
 	public function hide():void{
 		GTweener.removeTweens(this);
-		GTweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha:0.25, y:PersonNotesPage.NOTE_ICON_Y - this.height}, {onComplete: onHided});
+		Tweener.to(this, PersonNotesPage.CHANGE_TIME, {alpha:0.25, y:PersonNotesPage.NOTE_ICON_Y - this.height}, {onComplete: onHided});
 	}
 
-	private function onHided(g:GTween):void{
+	private function onHided(g:GTween = null):void{
 		visible = true;
 	}
 

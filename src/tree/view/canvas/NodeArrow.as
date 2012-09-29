@@ -67,11 +67,11 @@ package tree.view.canvas {
 			animate(false);
 		}
 
-		private function onShowed(g:GTween):void {
+		private function onShowed(g:GTween = null):void {
 			showed.dispatch(this);
 		}
 
-		private function onHided(g:GTween):void {
+		private function onHided(g:GTween = null):void {
 			hided.dispatch(this);
 		}
 

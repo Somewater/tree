@@ -11,6 +11,7 @@ package tree.view.gui.panel {
 
 	import tree.common.Config;
 	import tree.manager.ITick;
+	import tree.view.Tweener;
 
 	import tree.view.gui.UIComponent;
 	import tree.view.gui.Button;
@@ -123,7 +124,7 @@ package tree.view.gui.panel {
 				}
 			}
 			thumbX = selectedX;
-			GTweener.to(thumb, 0.2, {x: selectedX});
+			Tweener.to(thumb, 0.2, {x: selectedX});
 		}
 
 		private function onClick(u:UIComponent):void{

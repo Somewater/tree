@@ -10,6 +10,7 @@ package tree.view.canvas {
 
 	import tree.common.IClear;
 	import tree.model.Model;
+	import tree.view.Tweener;
 
 	/**
 	 * Умеет анимированно строить ломаную линию
@@ -49,7 +50,7 @@ package tree.view.canvas {
 
 		public function hide(animated:Boolean = true):void {
 			if(animated){
-				GTweener.to(this, Model.instance.animationTime * 0.5, {"alpha": 0},{onComplete: dispatchHideComplete});
+				Tweener.to(this, Model.instance.animationTime * 0.5, {"alpha": 0},{onComplete: dispatchHideComplete});
 			}else{
 				alpha = 0;
 			}
@@ -62,7 +63,7 @@ package tree.view.canvas {
 		 */
 		public function show(animated:Boolean = true):void {
 			if(animated){
-				GTweener.to(this, Model.instance.animationTime * 0.3, {"alpha": 1});
+				Tweener.to(this, Model.instance.animationTime * 0.3, {"alpha": 1});
 			}else{
 				alpha = 1;
 			}
@@ -79,18 +80,18 @@ package tree.view.canvas {
 			refreshLines();
 			this.progress = from;
 			this.alpha = 1;
-			GTweener.to(this, Model.instance.animationTime * 0.4, {"progress": to}, {onComplete: dispatchPlayComplete})
+			Tweener.to(this, Model.instance.animationTime * 0.4, {"progress": to}, {onComplete: dispatchPlayComplete})
 		}
 
 		protected function refreshLines():void {
 			throw new Error('Override me');
 		}
 
-		private function dispatchPlayComplete(g:GTween):void {
+		private function dispatchPlayComplete(g:GTween = null):void {
 			complete.dispatch(this);
 		}
 
-		private function dispatchHideComplete(g:GTween):void {
+		private function dispatchHideComplete(g:GTween = null):void {
 			hided.dispatch(this);
 		}
 
