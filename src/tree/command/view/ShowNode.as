@@ -40,22 +40,27 @@ package tree.command.view {
 				sourceNode = source.node;
 
 			var node:Node = join.associate.node;
+			var hasLegitimateBreed:Boolean;
 
 			switch(join.type ? join.type.superType : null) {
 				case JoinType.SUPER_TYPE_MARRY:
 					node.x = sourceNode.x + (join.type == Join.WIFE ? 2 : -2);
+					node.oddX = sourceNode.oddX;
 					break;
 				case JoinType.SUPER_TYPE_BREED:
-					node.x = sourceNode.x + (sourceNode.person.hasLegitimateBreed() ?
-																	(sourceNode.person.male ? 1 : -1) : 0);
+					hasLegitimateBreed = sourceNode.person.hasLegitimateBreed()
+					node.x = sourceNode.x + (hasLegitimateBreed ? (sourceNode.person.male ? 1 : -1) : 0);
+					node.oddX = hasLegitimateBreed ? !sourceNode.oddX : sourceNode.oddX;
 					break;
 				case JoinType.SUPER_TYPE_PARENT:
-					node.x = sourceNode.x + (node.person.hasLegitimateBreed() ?
-																	(node.person.male ? -1 : 1) : 0);
+					hasLegitimateBreed = node.person.hasLegitimateBreed()
+					node.x = sourceNode.x + (hasLegitimateBreed ? (node.person.male ? -1 : 1) : 0);
+					node.oddX = hasLegitimateBreed ? !sourceNode.oddX : sourceNode.oddX;
 					break;
 				case JoinType.SUPER_TYPE_BRO:
 				case JoinType.SUPER_TYPE_EX_MARRY:
 					node.x = sourceNode.x + (source.male ? -2 : 2);
+					node.oddX = sourceNode.oddX;
 					break;
 				default:
 					if(source)
@@ -63,6 +68,7 @@ package tree.command.view {
 
 					// мы имеем перво с самой первой нодой дерева (относительно которой строится всё дерево)
 					node.x = 0;
+					node.oddX = true;
 			}
 		}
 	}

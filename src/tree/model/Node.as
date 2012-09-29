@@ -19,6 +19,7 @@ package tree.model {
 		public var join:Join;
 
 		public var x:Number = 0;
+		public var oddX:Boolean = true;
 		public var y:Number = 0;
 
 		public var dist:int = 0;// кратчайшее расстояние до центра дерева
@@ -55,7 +56,7 @@ package tree.model {
 		}
 
 		public function get level():int {
-			return vector * vectCount;
+			return (vector * vectCount) * 2 + (oddX ? 0 : 1);
 		}
 
 		public function firePositionChange():void {
