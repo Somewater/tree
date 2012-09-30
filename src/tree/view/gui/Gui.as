@@ -51,6 +51,8 @@ package tree.view.gui {
 			foreground = Config.loader.createMc('assets.GuiForeground');
 			foreground.mouseEnabled = foreground.mouseChildren = false;
 			addChild(foreground);
+
+			cacheAsBitmap = true;
 		}
 
 		public function setSize(w:int, h:int):void {

@@ -36,6 +36,11 @@
             <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
             var swfVersionStr = "0.0.0";
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
+
+			var versionNumber = window.location.search.match(/version=(\d)/)
+			if(versionNumber) versionNumber = versionNumber[1]
+			var swfName = versionNumber ? ("TreeLoader_" + versionNumber + ".swf") : "TreeLoader.swf"
+
             var xiSwfUrlStr = "playerProductInstall.swf";
             var flashvars = {};
 			flashvars.get = window.location.search.replace( "?", "" );
@@ -45,12 +50,13 @@
             params.allowscriptaccess = "sameDomain";
             params.allowfullscreen = "true";
 			params.allowFullScreenInteractive = "true";
+			params.wmode = "direct";
             var attributes = {};
             attributes.id = "TreeLoader";
             attributes.name = "TreeLoader";
             attributes.align = "middle";
             swfobject.embedSWF(
-                "TreeLoader.swf", "flashContent", 
+                swfName, "flashContent",
                 "100%", "100%",
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
@@ -82,6 +88,7 @@
                 <param name="bgcolor" value="#ffffff" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
+				<param name="wmode" value="direct" />
                 <!--[if !IE]>-->
                 <object type="application/x-shockwave-flash" data="TreeLoader.swf" width="100%" height="100%">
                     <param name="quality" value="high" />
@@ -89,6 +96,7 @@
                     <param name="allowScriptAccess" value="sameDomain" />
                     <param name="allowFullScreen" value="true" />
 					<param name="allowFullScreenInteractive" value="true" />
+					<param name="wmode" value="direct" />
                 <!--<![endif]-->
                 <!--[if gte IE 6]>-->
                 	<p> 

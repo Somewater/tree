@@ -84,7 +84,11 @@ package tree.view.canvas {
 		}
 
 		private function setNodeIcon(uid:int, n:NodeIcon):NodeIcon {
-			return nodesByUid[uid] = n;
+			if(n)
+				nodesByUid[uid] = n;
+			else
+				delete(nodesByUid[uid])
+			return n;
 		}
 
 		public function getJoinLine(from:int, to:int):JoinLine {
@@ -218,11 +222,17 @@ package tree.view.canvas {
 			GTweener.removeTweens(this);
 		}
 
+		private var callRefreshVisibilityDelayed:Boolean = false;
 		public function refreshNodesVisibility(now:Boolean = false):void {
 			if(!now){
-				Config.ticker.callLater(refreshNodesVisibility, 2, [true]);
+				if(!callRefreshVisibilityDelayed){
+					Config.ticker.callLater(refreshNodesVisibility, 2, [true]);
+					callRefreshVisibilityDelayed = true;
+				}
 				return;
 			}
+			//Config.ticker.removeByCallback(refreshNodesVisibility);
+			callRefreshVisibilityDelayed = false;
 
 			var scale:Number = this.scaleX;
 			var minX:int = -this.x / scale;

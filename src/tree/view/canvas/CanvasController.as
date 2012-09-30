@@ -1,4 +1,5 @@
 package tree.view.canvas {
+	import com.gskinner.motion.GTween;
 	import com.gskinner.motion.GTweener;
 
 	import flash.events.Event;
@@ -208,12 +209,16 @@ package tree.view.canvas {
 				}
 			}
 			if(animated){
-				GTweener.to(canvas, 0.3, {x:x, y:y});
+				GTweener.to(canvas, 0.3, {x:x, y:y}, {onComplete: onCentreOnCompleted});
 			}else{
 				canvas.x = x;
 				canvas.y = y;
+				canvas.refreshNodesVisibility()
 			}
-			canvas.setSize(Config.WIDTH - Config.GUI_WIDTH, Config.HEIGHT - Config.PANEL_HEIGHT);
+		}
+
+		private function onCentreOnCompleted(g:GTween = null):void{
+			canvas.refreshNodesVisibility(true);
 		}
 
 		private function onShowArrowMenu(arrow:NodeArrow):void{
@@ -250,5 +255,72 @@ package tree.view.canvas {
 		private function onAddNewPersonClick(from:Person, joinType:JoinType):void{
 			bus.dispatch(ViewSignal.START_EDIT_PERSON, null, joinType, from);
 		}
+
+		public function align():void{
+			var rect:Rect = new Rect();
+			for each(var node:NodeIcon in canvas.iterator){
+				if(!node)
+					continue;
+				var x:int = node.x;
+				var y:int = node.y;
+				if(x < rect.x)
+					rect.x = x;
+				else if(x > rect.right)
+					rect.right = x;
+				if(y < rect.y)
+					rect.y = y;
+				else if(y > rect.bottom)
+					rect.bottom = y;
+			}
+
+			var zoom:Number = model.zoom;
+			const PADDING_X:int = Canvas.ICON_WIDTH;
+			const PADDING_Y:int = Canvas.ICON_HEIGHT;
+
+			rect.right += Canvas.ICON_WIDTH - PADDING_X;
+			rect.bottom += Canvas.ICON_HEIGHT - PADDING_Y;
+			rect.x += PADDING_X;
+			rect.y += PADDING_Y;
+			rect.x *= zoom;
+			rect.y *= zoom;
+			rect.right *= zoom;
+			rect.bottom *= zoom;
+
+			var screen:Rect = new Rect();
+			screen.x = -canvas.x;
+			screen.y = -canvas.y + Config.PANEL_HEIGHT;
+			screen.right = screen.x + Config.WIDTH - Config.GUI_WIDTH;
+			screen.bottom = screen.y + Config.HEIGHT - Config.PANEL_HEIGHT;
+
+			var centreX:Number = NaN;
+			var centreY:Number = NaN;
+
+			if(screen.right < rect.x)
+				centreX = rect.x - Config.WIDTH + Config.GUI_WIDTH;
+			else if(screen.x > rect.right)
+				centreX = rect.right;
+
+			if(screen.bottom < rect.y)
+				centreY = rect.y - Config.HEIGHT + Config.PANEL_HEIGHT;
+			else if(screen.y > rect.bottom)
+				centreY = rect.bottom;
+
+			var obj:Object = {};
+			if(!isNaN(centreX)) obj['x'] = -centreX;
+			if(!isNaN(centreY)) obj['y'] = Config.PANEL_HEIGHT - centreY;
+			if(!isNaN(centreX) || !isNaN(centreY)){
+				GTweener.to(canvas, 0.3, obj, {onComplete: onStopDragAlignComplete});
+			}
+		}
+
+		private function onStopDragAlignComplete(g:GTween = null):void{
+			canvas.refreshNodesVisibility(true);
+		}
 	}
+}
+class Rect{
+			public var x:Number = 0;
+	public var y:Number = 0;
+	public var right:Number = 0;
+	public var bottom:Number = 0;
 }

@@ -35,7 +35,7 @@ package tree.view.canvas {
 			//graphics.beginFill(generation.generation == 0 ? 0xccFFcc: 0xCCCCCC + this.generation.generation * 0x111111)
 			graphics.beginFill(odd ? 0xFBFFFB : 0xFAFAE0);
 
-			graphics.drawRect(Config.WIDTH * -2, 0, Config.WIDTH * 4, generation.levelNum * Canvas.LEVEL_HEIGHT);
+			graphics.drawRect(Config.WIDTH * -200, 0, Config.WIDTH * 400, generation.levelNum * Canvas.LEVEL_HEIGHT);
 		}
 	}
 }

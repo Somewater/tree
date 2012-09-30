@@ -67,6 +67,17 @@ package tree.manager {
 			deferredCallbacksByFrames.push(dc);
 		}
 
+		public function removeByCallback(callback:Function):void{
+			var i:int = 0;
+			while(deferredCallbacksByFrames.length < i){
+				var dc:DC = deferredCallbacksByFrames[i];
+				if(dc.callback == callback)
+					deferredCallbacksByFrames.splice(i, 1);
+				else
+					i++;
+			}
+		}
+
 		public function defer(callback:Function, ms:int, args:Array = null):void {
 			var dc:DC = new DC();
 			dc.callback = callback;

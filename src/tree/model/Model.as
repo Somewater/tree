@@ -5,6 +5,7 @@ package tree.model {
 	import tree.Tree;
 
 	import tree.common.Bus;
+	import tree.common.Config;
 	import tree.model.base.ModelCollection;
 	import tree.signal.ViewSignal;
 
@@ -69,12 +70,22 @@ package tree.model {
 			return _zoom;
 		}
 
+
+		private var _zoomDispatchOrdered:Boolean = false;
 		public function set zoom(value:Number):void {
 			value = Math.max(0.1, Math.min(1, value));
 			if(value != _zoom) {
 				_zoom = value;
-				bus.zoom.dispatch(value);
+				if(!_zoomDispatchOrdered){
+					Config.ticker.callLater(dispatchZoomChange, 5);
+					_zoomDispatchOrdered = true;
+				}
 			}
+		}
+
+		private function dispatchZoomChange():void{
+			bus.zoom.dispatch(_zoom);
+			_zoomDispatchOrdered = false;
 		}
 
 		public function get mousePosition():Point {
