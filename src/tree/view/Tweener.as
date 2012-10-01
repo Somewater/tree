@@ -21,7 +21,7 @@ package tree.view {
 				for(var propName:String in values)
 					target[propName] = values[propName];
 				if(props && props['onComplete'])
-					Config.ticker.callLater(props['onComplete'], 2)
+					Config.ticker.callLater(props['onComplete'], 1)
 				return null;
 			}else
 				return GTweener.to(target, duration, values, props);

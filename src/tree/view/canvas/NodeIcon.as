@@ -167,7 +167,7 @@ package tree.view.canvas {
 			skin.getChildByName('female_back').visible = !p.male;
 			(skin.getChildByName('name_tf') as TextField).text = p.name;
 			if(p.photo)
-				Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace);
+				Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace, null);
 			rollUnrollButton.male = _data.node.person.male;
 			CONFIG::debug{
 				debugTrace.text = p.node.id + "\nx=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="

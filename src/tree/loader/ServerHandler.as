@@ -23,10 +23,9 @@ package tree.loader {
 			loader = new UrlQueueLoader();
 		}
 
-		public function call(params:Object, onComplete:Function, onError:Function):void {
+		public function call(params:Object, onComplete:Function, onError:Function, onProgress:Function):void {
 			var urlRequest:URLRequest
 
-			log("Debug!");
 			if(params && params.action == 'q_tree' && params.uid == 0)
 				urlRequest = new URLRequest(scriptPath);
 			else
@@ -36,18 +35,18 @@ package tree.loader {
 			urlRequest.method = URLRequestMethod.GET;
 			for(var key:String in params)
 				urlRequest.data[key] = params[key];
-			handle(urlRequest, onComplete, onError, false);
+			handle(urlRequest, onComplete, onError, onProgress, false);
 		}
 
-		public function download(file:String, onComplete:Function, onError:Function):void {
+		public function download(file:String, onComplete:Function, onError:Function, onProgress:Function):void {
 			var urlRequest:URLRequest = new URLRequest(file);
-			handle(urlRequest, onComplete, onError, true);
+			handle(urlRequest, onComplete, onError, onProgress, true);
 		}
 
-		private function handle(urlRequest:URLRequest, onComplete:Function, onError:Function, binary:Boolean):void {
+		private function handle(urlRequest:URLRequest, onComplete:Function, onError:Function, onProgress:Function, binary:Boolean):void {
 			loader.load({'file':{'url':urlRequest, 'binary': binary}}, function(files:Object):void{
 				onComplete(files['file']);
-			}, onError);
+			}, onError, onProgress);
 		}
 	}
 }

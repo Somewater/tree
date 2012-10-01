@@ -18,6 +18,7 @@ fi
 compile()
 {
 	rm bin-debug/$CLASSNAME.swf
+	echo Compile start. Params DEBUG=$DEBUG, MXMLC=$MXMLC
 	$MXMLC \
 	-warnings=false \
 	-static-link-runtime-shared-libraries \

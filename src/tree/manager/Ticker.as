@@ -11,6 +11,8 @@ package tree.manager {
 		protected var deferredCallbacksByMS:Vector.<DC>;
 		protected var tickers:Vector.<ITick>;
 
+		private var queueAddDeferredCallbacksByFrames:Vector.<DC>;
+
 		public function Ticker(stage:Stage) {
 			deferredCallbacksByFrames = new Vector.<DC>();
 			deferredCallbacksByMS = new Vector.<DC>();
@@ -24,6 +26,7 @@ package tree.manager {
 			lastTickTIme = getTimer;
 
 			var i:int = 0;
+			var counter:int = 0;
 			var dc:DC;
 			while(i < deferredCallbacksByFrames.length) {
 				dc = deferredCallbacksByFrames[i];
@@ -38,8 +41,11 @@ package tree.manager {
 				}
 				else
 					i++;
+				if(counter++ > 300)
+					break;
 			}
 
+			counter = 0;
 			while(i < deferredCallbacksByMS.length) {
 				dc = deferredCallbacksByMS[i];
 				dc.ms -= delta;
@@ -53,10 +59,18 @@ package tree.manager {
 				}
 				else
 					i++;
+				if(counter++ > 300)
+					break;
 			}
 
 			for each(var tick:ITick in tickers)
 				tick.tick(delta);
+
+			if(queueAddDeferredCallbacksByFrames){
+				for each(dc in queueAddDeferredCallbacksByFrames)
+					deferredCallbacksByFrames.push(dc);
+				queueAddDeferredCallbacksByFrames = null;
+			}
 		}
 
 		public function callLater(callback:Function, frames:int = 1, args:Array = null):void {
@@ -64,7 +78,9 @@ package tree.manager {
 			dc.callback = callback;
 			dc.frames = frames;
 			dc.args = args;
-			deferredCallbacksByFrames.push(dc);
+			if(!queueAddDeferredCallbacksByFrames)
+				queueAddDeferredCallbacksByFrames = new Vector.<DC>();
+			queueAddDeferredCallbacksByFrames.push(dc);
 		}
 
 		public function removeByCallback(callback:Function):void{

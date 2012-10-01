@@ -103,9 +103,12 @@ package tree.model.lines {
 
 					if(intersection){
 						step++
-						if(step * 0.5 > MAX_SHIFT)
+						if(step * 0.5 > MAX_SHIFT){
 							shift = Math.random() * (MAX_SHIFT * 2 + 1) - MAX_SHIFT;
-						else
+							if(horizontal) tmpPoint.y = shift; else tmpPoint.x = shift;
+							otherShift = shift;
+							break;
+						}else
 							shift = -(step > MAX_SHIFT ? MAX_SHIFT - step : step);//Math.ceil(step / 2) * (step % 2 == 0 ? 1 : -1);
 					}else{
 						if(horizontal) tmpPoint.y = shift; else tmpPoint.x = shift;

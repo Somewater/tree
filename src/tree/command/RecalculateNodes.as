@@ -1,4 +1,8 @@
 package tree.command {
+	import flash.utils.getTimer;
+
+	import tree.common.Config;
+
 	import tree.model.TreeModel;
 	import tree.model.process.PersonsProcessor;
 	import tree.model.Join;
@@ -14,19 +18,39 @@ package tree.command {
 	 * (т.е. связи между Persons уже должны быть готовы)
 	 */
 	public class RecalculateNodes extends Command{
+
+		private var precessors:Array = [];
+
 		public function RecalculateNodes() {
 		}
 
 		override public function execute():void {
 			for each(var tree:TreeModel in model.trees.iterator){
 				var proc:PersonsProcessor = new PersonsProcessor(tree, tree.owner, calculateNode);
+				precessors.push(proc);
+			}
+			Config.ticker.callLater(tick);
+		}
+
+		private function tick():void{
+			var counter:int = 1;
+			var time:Number = getTimer();
+
+			while(precessors.length){
+				var proc:PersonsProcessor = precessors[0];
 				while(proc.process())
 				{
-
+					if(counter++ % 100 == 0 && (getTimer() - time) > 200){
+						Config.ticker.callLater(tick);
+						return;
+					}
 				}
 				proc.clear();
+				this.precessors.shift()
 			}
-			bus.dispatch(ModelSignal.NODES_RECALCULATED);
+
+			detain();
+			Config.ticker.callLater(bus.dispatch, 1, [ModelSignal.NODES_RECALCULATED]);
 		}
 
 		private function calculateNode(response:NodesProcessorResponse):void {

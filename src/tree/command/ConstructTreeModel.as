@@ -1,4 +1,9 @@
 package tree.command {
+	import flash.system.System;
+	import flash.utils.getTimer;
+
+	import tree.common.Config;
+
 	import tree.model.Join;
 	import tree.model.Join;
 	import tree.model.JoinType;
@@ -13,11 +18,23 @@ package tree.command {
 	 */
 	public class ConstructTreeModel extends ResponseHandlerBase{
 
+		private var xml:XML;
+		private var xmlTrees:Array = [];
+		private var currentXmlTree:XML;
+		private var currentTreeModel:TreeModel;
+		private var xmlPersons:Array = [];
+		private var treePosition:int;
+		private var personPosition:int;
+		private var personsNumber:int = 0;
+		private var relativePersonsCounter:int = 0;// для отображения прогресса по шагу 3
+
+		private const STEP_FRAME_PADDING:int = 2;
+
 		public function ConstructTreeModel() {
 		}
 
 		override public function execute():void {
-			var xml:XML = response.toXml();
+			this.xml = response.toXml();
 			var tree:XML;
 			var person:XML;
 			var treeModel:TreeModel;
@@ -25,7 +42,18 @@ package tree.command {
 
 			model.clear();
 
-			// прогон для построения Person
+			detain();
+			Config.ticker.callLater(createTreeModelsPrepareXmlTrees, STEP_FRAME_PADDING);
+			progress(0, 1);
+		}
+
+		/**
+		 * Шаг 1: создать деревья, подготовить xml-деревья для итерации
+		 */
+		private function createTreeModelsPrepareXmlTrees():void{
+			var tree:XML;
+			var treeModel:TreeModel;
+
 			for each(tree in xml.trees.*)
 			{
 				treeModel = model.trees.get(String(tree.@uid));
@@ -44,10 +72,53 @@ package tree.command {
 					model.trees.add(treeModel);
 				}
 
-				for each(person in tree.*)
+				xmlTrees.push(tree);
+			}
+
+			treePosition = 0;
+			Config.ticker.callLater(createPersonsinXmlTree, STEP_FRAME_PADDING);
+			progress(1, 1)
+		}
+
+		/**
+		 * Шаг 2: создать персон в одном из подготовленных xml-деревьев
+		 */
+		private function createPersonsinXmlTree():void{
+			var tree:XML;
+			var person:XML;
+			var treeModel:TreeModel;
+			var nodeModel:Node;
+			var personModel:Person
+
+			var counter:int = 1;
+			var time:Number = getTimer();
+
+			for(; treePosition < xmlTrees.length; treePosition++)
+			{
+				tree = xmlTrees[treePosition]
+				treeModel = model.trees.get(String(tree.@uid));
+
+				if(treeModel != currentTreeModel){
+					// перестановка дерева
+					currentTreeModel = treeModel;
+					currentXmlTree = tree;
+					xmlPersons = [];
+					for each(person in tree.*)
+						xmlPersons.push(person);
+					personPosition = 0;
+				}
+
+				for(; personPosition < xmlPersons.length; personPosition++, counter++)
 				{
-					var nodeModel:Node;
-					var personModel:Person = treeModel.persons.get(String(person.@uid));
+					// может хватит?
+					if(counter % 10 == 0 && (getTimer() - time) > 50){
+						Config.ticker.callLater(createPersonsinXmlTree);
+						progress(2, ((personPosition + 1) / xmlPersons.length) * ((treePosition + 1) / xmlTrees.length))
+						return;
+					}
+
+					person =  xmlPersons[personPosition]
+					personModel = treeModel.persons.get(String(person.@uid));
 					if(personModel == null)
 					{
 						personModel = treeModel.persons.allocate(treeModel.nodes);
@@ -68,16 +139,57 @@ package tree.command {
 
 					nodeModel = treeModel.nodes.allocate(personModel) ;
 					treeModel.nodes.add(nodeModel);
+
+					personsNumber++;
 				}
 			}
 
-			// прогон для построения двусторонних связей между Person
-			for each(tree in xml.trees.*)
+			treePosition = 0;
+			currentTreeModel = null;
+			currentXmlTree = null;
+			xmlPersons = null;
+			Config.ticker.callLater(createRelationsInXmlTree, STEP_FRAME_PADDING);
+		}
+
+		/**
+		 * Шаг 3: создать связи в персонах xml-дерева
+		 */
+		private function createRelationsInXmlTree():void{
+			var tree:XML;
+			var person:XML;
+			var treeModel:TreeModel;
+			var join:Join;
+			var nodeModel:Node;
+			var personModel:Person
+
+			var counter:int = 1;
+			var time:Number = getTimer();
+
+			for(; treePosition < xmlTrees.length; treePosition++)
 			{
+				tree = xmlTrees[treePosition]
 				treeModel = model.trees.get(String(tree.@uid));
 
-				for each(person in tree.*)
+				if(treeModel != currentTreeModel){
+					// перестановка дерева
+					currentTreeModel = treeModel;
+					currentXmlTree = tree;
+					xmlPersons = [];
+					for each(person in tree.*)
+						xmlPersons.push(person);
+					personPosition = 0;
+				}
+
+				for(; personPosition < xmlPersons.length; personPosition++, counter++)
 				{
+					// может хватит?
+					if(counter % 10 == 0 && (getTimer() - time) > 50){
+						Config.ticker.callLater(createRelationsInXmlTree);
+						progress(3, (relativePersonsCounter / personsNumber))
+						return;
+					}
+
+					person =  xmlPersons[personPosition]
 					personModel = treeModel.persons.get(String(person.@uid));
 
 					for each(var group:XML in person.relatives.*)
@@ -126,16 +238,44 @@ package tree.command {
 								if(join2.associate == null || join2.from == null)
 									throw new Error('Incomplete join ' + join)
 
-								log(personModel + ' ~> ' + associate + ';; ' + join + '; ' + join2);
+								//log(personModel + ' ~> ' + associate + ';; ' + join + '; ' + join2);
 							}
 
 						}
 					}
+
+					relativePersonsCounter++;
 				}
 			}
 
-			// всё требует пересчёта
-			bus.dispatch(ModelSignal.NODES_NEED_CALCULATE);
+			Config.ticker.callLater(clearReleaseAndDispatchComplete);
+		}
+
+		/**
+		 * Шаг 4: удалить все ранее созданные вспомогательные структуры и задиспатчить конец обработки
+		 */
+		private function clearReleaseAndDispatchComplete():void{
+			clear();
+			release();
+			Config.ticker.callLater(bus.dispatch, 1, [ModelSignal.NODES_NEED_CALCULATE])
+			progress(4, 1);
+		}
+
+		public function clear():void{
+			try{
+				var xml:XML
+				for each(xml in xmlTrees)
+					System.disposeXML(xml);
+				for each(xml in xmlPersons)
+					System.disposeXML(xml);
+				System.disposeXML(this.xml);
+			}catch(err:Error){
+				error(err);
+			}
+			xmlTrees = null;
+			currentXmlTree = null;
+			currentTreeModel = null;
+			xmlPersons = null;
 		}
 
 		private function databaseFormatToDate(string:String):Date{
@@ -143,6 +283,12 @@ package tree.command {
 			if(parseInt(data[0]) == 0)
 				return null;
 			return new Date(parseInt(data[0]), parseInt(data[1]) - 1, parseInt(data[2]));
+		}
+
+		private function progress(step:int, value:Number):void{
+			value = (step/5) + 0.2 * value
+
+			bus.loaderProgress.dispatch(value);
 		}
 	}
 }

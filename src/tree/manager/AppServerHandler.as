@@ -1,5 +1,6 @@
 package tree.manager {
 	import tree.common.Bus;
+	import tree.common.Config;
 	import tree.model.Join;
 	import tree.signal.RequestSignal;
 	import tree.loader.IServerHandler;
@@ -22,11 +23,11 @@ package tree.manager {
 			switch(request.type)
 			{
 				case RequestSignal.USER_TREE:
-					handler.call({"action":"q_tree", "taction":"userlist", "uid":request.uid}, processTree, onError);
+					handler.call({"action":"q_tree", "taction":"userlist", "uid":request.uid}, processTree, onError, onProgress);
 				break;
 
 				case RequestSignal.DELETE_USER:
-					handler.call({'action': 'q_tree', 'taction':'<undefined>', 'uid': request.uid}, checkResponse, onError);
+					handler.call({'action': 'q_tree', 'taction':'<undefined>', 'uid': request.uid}, checkResponse, onError, onProgress);
 				break;
 
 				case RequestSignal.ADD_USER:
@@ -45,7 +46,7 @@ package tree.manager {
 									'deathday': dateToDatabaseFormat(request.addedJoin.associate.deathday),
 									'died': request.addedJoin.associate.died,
 									'email': request.addedJoin.associate.email
-								}, checkResponse, onError);
+								}, checkResponse, onError, onProgress);
 				break;
 
 				default:
@@ -62,16 +63,27 @@ package tree.manager {
 			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, null));
 		}
 
+		private function onProgress(progress:Number):void{
+			bus.loaderProgress.dispatch(progress);
+		}
+
 		private function processTree(data:String):void {
+			Config.ticker.callLater(processTree_createXML, 1, [data])
+		}
+
+		private function processTree_createXML(data:String):void{
 			var xml:XML
 			try{
 				xml = new XML(data);
+				Config.ticker.callLater(processTree_dispatchComplete, 1, [xml])
 			}catch(err:Error){
 				error(err);
 				onError(err);
 				return;
 			}
+		}
 
+		private function processTree_dispatchComplete(xml:XML):void{
 			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(RequestSignal.USER_TREE, xml));
 		}
 
