@@ -7,6 +7,8 @@ package tree.command {
 	import tree.model.Join;
 	import tree.model.Join;
 	import tree.model.JoinType;
+	import tree.model.Model;
+	import tree.model.ModelBase;
 	import tree.model.Node;
 	import tree.model.Person;
 	import tree.model.PersonsCollection;
@@ -41,6 +43,7 @@ package tree.command {
 			var join:Join;
 
 			model.clear();
+			ModelBase.radioSilence = true;
 
 			detain();
 			Config.ticker.callLater(createTreeModelsPrepareXmlTrees, STEP_FRAME_PADDING);

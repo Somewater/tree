@@ -89,7 +89,11 @@ package tree.view.canvas {
 				return;
 			}
 
-			if(!n.positionIsDirty()) return;// обновление координат не требуется
+			if(!n.positionIsDirty()){
+				warn("Position refresh cancelled");
+				// обновление координат не требуется
+				return;
+			}
 
 			// все joinline переанимировать
 			for each(var j:Join in node.iterator)

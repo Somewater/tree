@@ -26,7 +26,7 @@ package tree.view.canvas {
 		protected var shiftX:int = 0;
 		protected var shiftY:int = 0;
 
-
+		private var playComplete:Boolean = false;// ф-я play была запущена и отыграла (любая линия связи появляется только так)
 
 		public function LineBase() {
 			complete = new Signal(LineBase);
@@ -63,6 +63,8 @@ package tree.view.canvas {
 		 * assets.HartLineIcon
 		 */
 		public function show(animated:Boolean = true):void {
+			if(!playComplete) return;// анимация play релевантнее чем вызов show
+
 			if(animated){
 				GTweener.removeTweens(this);
 				Tweener.to(this, Model.instance.animationTime * 0.3, {"alpha": 1});
@@ -82,6 +84,7 @@ package tree.view.canvas {
 			refreshLines();
 			this.progress = from;
 			this.alpha = 1;
+			playComplete = false;
 			Tweener.to(this, Model.instance.animationTime * 0.4, {"progress": to}, {onComplete: dispatchPlayComplete})
 		}
 
@@ -90,6 +93,7 @@ package tree.view.canvas {
 		}
 
 		private function dispatchPlayComplete(g:GTween = null):void {
+			playComplete = true;
 			complete.dispatch(this);
 		}
 

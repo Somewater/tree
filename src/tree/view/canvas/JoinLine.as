@@ -27,6 +27,8 @@ package tree.view.canvas {
 		private var lineMask:int;
 		private var _highlighted:Boolean = false;
 
+		private var animationHash:String;// hash ранее построенной геометрии линии
+
 
 		public function JoinLine(collection:INodeViewCollection) {
 			this.collection = collection;
@@ -55,7 +57,11 @@ package tree.view.canvas {
 		}
 
 		override public function draw():void {
-			drawLine(lines, linesLength * _progress);
+			var newHash:String = _progress + ':' + lines.join(',') + ':' + shiftX + ':' + shiftY;
+			if(animationHash != newHash){
+				drawLine(lines, linesLength * _progress);
+				animationHash = newHash;
+			}
 		}
 
 

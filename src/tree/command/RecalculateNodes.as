@@ -2,6 +2,7 @@ package tree.command {
 	import flash.utils.getTimer;
 
 	import tree.common.Config;
+	import tree.model.ModelBase;
 
 	import tree.model.TreeModel;
 	import tree.model.process.PersonsProcessor;
@@ -20,6 +21,9 @@ package tree.command {
 	public class RecalculateNodes extends Command{
 
 		private var precessors:Array = [];
+		private var farPersonsForDelete:Array = [];
+		private var nearPersonCounterPerTree:int
+		private var currentTree:TreeModel;
 
 		public function RecalculateNodes() {
 		}
@@ -49,7 +53,27 @@ package tree.command {
 				this.precessors.shift()
 			}
 
+			Config.ticker.callLater(removeFarPersons);
+		}
+
+		private function removeFarPersons():void{
+			var p:Person;
+			var counter:int = 1;
+			var time:Number = getTimer();
+
+			while(farPersonsForDelete.length){
+				p = farPersonsForDelete.pop();
+				deletePerson(p);
+
+				if(counter++ % 100 == 0 && (getTimer() - time) > 200){
+					Config.ticker.callLater(removeFarPersons);
+					return;
+				}
+			}
+
 			detain();
+			clear();
+			ModelBase.radioSilence = false;
 			Config.ticker.callLater(bus.dispatch, 1, [ModelSignal.NODES_RECALCULATED]);
 		}
 
@@ -58,6 +82,18 @@ package tree.command {
 				calculate(response.node, response.source, response.fromSource.flatten, response.fromSource.breed);
 			else
 				calculate(response.node, null, false, false);
+
+			if((nearPersonCounterPerTree > 500 && currentTree == response.node.person.tree)
+					|| response.node.dist > 6
+					|| Math.abs(response.node.generation) > 6){
+				farPersonsForDelete.push(response.node.person);
+			}else
+				nearPersonCounterPerTree++;
+
+			if(currentTree != response.node.person.tree){
+				currentTree = response.node.person.tree
+				nearPersonCounterPerTree = 0;
+			}
 		}
 
 		public static function calculate(node:Node, source:Node, flatten:Boolean, breed:Boolean):void{
@@ -87,6 +123,21 @@ package tree.command {
 				node.vector = 0;
 				node.vectCount = 0;
 			}
+		}
+
+		private function clear():void{
+			farPersonsForDelete = null;
+			precessors = null;
+		}
+
+		private function deletePerson(p:Person):void {
+			for each(var j:Join in p.iterator){
+				j.associate.remove(j.associate.relation(p))
+			}
+			p.tree.nodes.remove(p.node);
+			p.tree.persons.remove(p);
+			p.tree = null;
+			p.clear();
 		}
 	}
 }
