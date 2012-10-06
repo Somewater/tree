@@ -25,6 +25,10 @@ package tree.command {
 		private var nearPersonCounterPerTree:int
 		private var currentTree:TreeModel;
 
+		private var nodesPersentCounter:int = 0;
+		private var nodesPersentQuantity:int
+		private var nodesForDeletePersentQuantity:int;
+
 		public function RecalculateNodes() {
 		}
 
@@ -33,6 +37,8 @@ package tree.command {
 				var proc:PersonsProcessor = new PersonsProcessor(tree, tree.owner, calculateNode);
 				precessors.push(proc);
 			}
+			nodesPersentQuantity = model.trees.personQuantity;
+			bus.initialLoadingProgress.dispatch(3, 0);
 			Config.ticker.callLater(tick);
 		}
 
@@ -45,6 +51,7 @@ package tree.command {
 				while(proc.process())
 				{
 					if(counter++ % 100 == 0 && (getTimer() - time) > 200){
+						bus.initialLoadingProgress.dispatch(3, 0.8 * (nodesPersentCounter / nodesPersentQuantity));
 						Config.ticker.callLater(tick);
 						return;
 					}
@@ -53,6 +60,7 @@ package tree.command {
 				this.precessors.shift()
 			}
 
+			nodesForDeletePersentQuantity = farPersonsForDelete.length;
 			Config.ticker.callLater(removeFarPersons);
 		}
 
@@ -66,6 +74,7 @@ package tree.command {
 				deletePerson(p);
 
 				if(counter++ % 100 == 0 && (getTimer() - time) > 200){
+					bus.initialLoadingProgress.dispatch(3, 0.8 + 0.2 * (farPersonsForDelete.length / nodesForDeletePersentQuantity));
 					Config.ticker.callLater(removeFarPersons);
 					return;
 				}
@@ -74,10 +83,14 @@ package tree.command {
 			detain();
 			clear();
 			ModelBase.radioSilence = false;
+
+			bus.initialLoadingProgress.dispatch(3, 1);
 			Config.ticker.callLater(bus.dispatch, 1, [ModelSignal.NODES_RECALCULATED]);
 		}
 
 		private function calculateNode(response:NodesProcessorResponse):void {
+			nodesPersentCounter++;
+
 			if(response.fromSource)
 				calculate(response.node, response.source, response.fromSource.flatten, response.fromSource.breed);
 			else

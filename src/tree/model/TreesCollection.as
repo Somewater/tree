@@ -128,7 +128,7 @@ package tree.model {
 			var l:int = 0;
 			for each(var t:TreeModel in array)
 				l += t.persons.length;
-			return l;
+			return Math.max(1,l);
 		}
 	}
 }

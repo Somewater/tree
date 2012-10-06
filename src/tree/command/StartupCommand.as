@@ -14,7 +14,6 @@ package tree.command {
 
 		override public function execute():void {
 
-			bus.loaderProgress.dispatch(0);
 
 			// начать загрузку дерева, в соответствии с flashVars
 			var request:RequestSignal = new RequestSignal(RequestSignal.USER_TREE);

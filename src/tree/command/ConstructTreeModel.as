@@ -291,7 +291,7 @@ package tree.command {
 		private function progress(step:int, value:Number):void{
 			value = (step/5) + 0.2 * value
 
-			bus.loaderProgress.dispatch(value);
+			bus.initialLoadingProgress.dispatch(2, value);
 		}
 	}
 }

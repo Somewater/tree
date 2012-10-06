@@ -23,7 +23,8 @@ package tree.manager {
 			switch(request.type)
 			{
 				case RequestSignal.USER_TREE:
-					handler.call({"action":"q_tree", "taction":"userlist", "uid":request.uid}, processTree, onError, onProgress);
+					bus.initialLoadingProgress.dispatch(0, 0);
+					handler.call({"action":"q_tree", "taction":"userlist", "uid":request.uid}, processTree, onError, xmlDataLoadingProgress);
 				break;
 
 				case RequestSignal.DELETE_USER:
@@ -63,11 +64,16 @@ package tree.manager {
 			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, null));
 		}
 
+		private function xmlDataLoadingProgress(progress:Number):void{
+			bus.initialLoadingProgress.dispatch(0, progress);
+		}
+
 		private function onProgress(progress:Number):void{
 			bus.loaderProgress.dispatch(progress);
 		}
 
 		private function processTree(data:String):void {
+			bus.initialLoadingProgress.dispatch(1, 0);
 			Config.ticker.callLater(processTree_createXML, 1, [data])
 		}
 
@@ -75,6 +81,7 @@ package tree.manager {
 			var xml:XML
 			try{
 				xml = new XML(data);
+				bus.initialLoadingProgress.dispatch(1, 1);
 				Config.ticker.callLater(processTree_dispatchComplete, 1, [xml])
 			}catch(err:Error){
 				error(err);

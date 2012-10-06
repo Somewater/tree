@@ -29,6 +29,7 @@ package tree.common {
 		 * <= 0 - если не надо показывать прогресс
 		 */
 		public var loaderProgress:IPrioritySignal;// callback(progress:Number)
+		public var initialLoadingProgress:IPrioritySignal;// callback(step:int, progress:Number)
 
 		public var mouseWheel:IPrioritySignal;// callback(delta:int)
 
@@ -61,6 +62,7 @@ package tree.common {
 			stage.addEventListener(Event.RESIZE, onResize);
 
 			loaderProgress = new BusSignal(this, 'loaderProgress');
+			initialLoadingProgress = new BusSignal(this, 'initialLoadingProgress');
 
 			mouseWheel = new BusSignal(this, 'mouseWheel');
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);

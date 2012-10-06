@@ -98,6 +98,8 @@ package tree {
 
 		public var mediators:Array = [];
 
+		private var _initialLoadingProgressMin:Number = -1;
+
 		[Embed(source='common/ru.txt', mimeType='application/octet-stream')]
 		private var i18nText:Class;
 
@@ -155,6 +157,7 @@ package tree {
 			AppServerHandler.instance = new AppServerHandler(Config.loader.serverHandler, bus);
 			bus.addNamed(RequestSignal.SIGNAL, AppServerHandler.instance.call);
 			Config.reject(AppServerHandler, AppServerHandler.instance);
+			bus.initialLoadingProgress.add(onInitialLoadingProgress);
 
 			Join.initializeConstants();
 		}
@@ -260,6 +263,32 @@ package tree {
 			gui.utilize();
 			panel.utilize();
 			model.utilize();
+		}
+
+		/**
+		 * steps:
+		 * 0 - загрузка
+		 * 1 - парсинз xml (нативно)
+		 * 2 - парсинг xml и построение дерева Persons
+		 * 3 - расчет Nodes
+		 */
+		private function onInitialLoadingProgress(step:int, value:Number):void{
+			if(step == 0 && value == 0)
+				_initialLoadingProgressMin = -1;
+
+			if(step == 0)
+				value = value * 0.4;
+			else if(step == 1)
+				value = 0.4 + value * 0.2;
+			else if(step == 2)
+				value = 0.6 + value * 0.2;
+			else
+				value = 0.9 + value * 0.1;
+
+			if(value > _initialLoadingProgressMin){
+				bus.loaderProgress.dispatch(Math.max(0, value));
+				_initialLoadingProgressMin = value;
+			}
 		}
 	}
 }

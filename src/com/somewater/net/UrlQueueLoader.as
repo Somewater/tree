@@ -120,7 +120,7 @@ package com.somewater.net
 			if(currentJob[3])
 			{
 				var value:Number = 1 / currentTasksQuantity;
-				currentJob[3](	value * (e && e.bytesTotal?(e.bytesLoaded/e.bytesTotal):0) + value * currentTasksCounter	);
+				currentJob[3](	(e && e.bytesTotal?(e.bytesLoaded/e.bytesTotal):0) );
 			}
 		}
 		
