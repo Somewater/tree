@@ -97,8 +97,8 @@ package tree.command {
 				calculate(response.node, null, false, false);
 
 			if((nearPersonCounterPerTree > 500 && currentTree == response.node.person.tree)
-					|| response.node.dist > 6
-					|| Math.abs(response.node.generation) > 6){
+					|| response.node.dist > 10
+					|| Math.abs(response.node.generation) > 10){
 				farPersonsForDelete.push(response.node.person);
 			}else
 				nearPersonCounterPerTree++;
