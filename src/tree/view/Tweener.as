@@ -17,7 +17,9 @@ package tree.view {
 						   duration:Number=1,
 						   values:Object=null,
 						   props:Object=null):GTween {
-			if(duration < 0.1 || (Model.instance.constructionInProcess && duration < 0.4)){
+			var m:Model = Model.instance;
+			var minDuration:Number = m.animationQuality == 0 ? 10 : (m.animationQuality == 1 ? 0.4 : 0.05);
+			if(duration < minDuration){
 				for(var propName:String in values)
 					target[propName] = values[propName];
 				if(props && props['onComplete'])

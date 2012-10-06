@@ -89,6 +89,8 @@ package tree.view.canvas {
 				return;
 			}
 
+			if(!n.positionIsDirty()) return;// обновление координат не требуется
+
 			// все joinline переанимировать
 			for each(var j:Join in node.iterator)
 			{
@@ -160,10 +162,12 @@ package tree.view.canvas {
 			canvas.refreshGenerations();
 
 			// надо обновить ноды текущей generation и всех нижележащих
+			var generationNumber:int = generation.generation;
 			for each(var gener:Generation in model.generations.iterator)
-				//if(gener.generation <= generation.generation)
-					for each(var g:GenNode in gener.iterator)
+				if(generationNumber < 0 ? gener.generation <= generationNumber : gener.generation >= generationNumber)
+					for each(var g:GenNode in gener.iterator){
 						onNodePositionChanged(g.node);
+					}
 		}
 
 		private function onNodeClicked(node:NodeIcon):void{
@@ -171,7 +175,8 @@ package tree.view.canvas {
 		}
 
 		private function onNodeRolUnrollClicked(node:NodeIcon):void{
-			bus.dispatch(ViewSignal.NODE_ROLL_UNROLL, node.data.node);
+			if(!model.constructionInProcess)
+				bus.dispatch(ViewSignal.NODE_ROLL_UNROLL, node.data.node);
 		}
 
 		private function onNodeDeleteClicked(node:NodeIcon):void{

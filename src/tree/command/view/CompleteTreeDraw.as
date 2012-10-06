@@ -7,7 +7,7 @@ package tree.command.view {
 		}
 
 		override public function execute():void {
-			log('Дерево построено');
+			log('Дерево построено. Персон: ' + model.trees.personQuantity);
 			model.treeViewConstructed = true;
 			model.constructionInProcess = false;
 

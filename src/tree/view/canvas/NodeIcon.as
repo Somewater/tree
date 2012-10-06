@@ -312,6 +312,11 @@ package tree.view.canvas {
 			return tmpPoint;
 		}
 
+		public function positionIsDirty():Boolean{
+			var p:Point = this.position();
+			return int(x) != int(p.x) || int(y) != int(p.y);
+		}
+
 		private function onDeletButtonClicked(event:MouseEvent):void {
 			deleteClick.dispatch(this);
 		}

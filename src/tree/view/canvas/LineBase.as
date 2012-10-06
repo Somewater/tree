@@ -50,6 +50,7 @@ package tree.view.canvas {
 
 		public function hide(animated:Boolean = true):void {
 			if(animated){
+				GTweener.removeTweens(this);
 				Tweener.to(this, Model.instance.animationTime * 0.5, {"alpha": 0},{onComplete: dispatchHideComplete});
 			}else{
 				alpha = 0;
@@ -63,6 +64,7 @@ package tree.view.canvas {
 		 */
 		public function show(animated:Boolean = true):void {
 			if(animated){
+				GTweener.removeTweens(this);
 				Tweener.to(this, Model.instance.animationTime * 0.3, {"alpha": 1});
 			}else{
 				alpha = 1;

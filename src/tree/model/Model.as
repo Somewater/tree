@@ -33,6 +33,8 @@ package tree.model {
 		private var _constructionInProcess:Boolean = false;// произвоится анимация (построение дерева или сворачивание-разворачивание)
 		private var _selectedPerson:Person;
 
+		public var animationQuality:int = 2;// "0" - без анимации, "2" - полная анимация, "1" - зарезервировано
+
 		public var joinsQueue:Array = [];
 
 		/**

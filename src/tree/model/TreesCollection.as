@@ -123,5 +123,12 @@ package tree.model {
 				persons = persons.concat(t.persons.iterator);
 			return persons;
 		}
+
+		public function get personQuantity():int{
+			var l:int = 0;
+			for each(var t:TreeModel in array)
+				l += t.persons.length;
+			return l;
+		}
 	}
 }

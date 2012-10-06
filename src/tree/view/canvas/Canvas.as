@@ -4,6 +4,7 @@ package tree.view.canvas {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
 	import tree.common.Config;
@@ -222,17 +223,18 @@ package tree.view.canvas {
 			GTweener.removeTweens(this);
 		}
 
-		private var callRefreshVisibilityDelayed:Boolean = false;
+		private var callRefreshVisibilityDelayed:uint = 0;
 		public function refreshNodesVisibility(now:Boolean = false):void {
 			if(!now){
-				if(!callRefreshVisibilityDelayed){
+				if(callRefreshVisibilityDelayed != Config.ticker.getTimer){
+					if(callRefreshVisibilityDelayed)
+						Config.ticker.removeByCallback(refreshNodesVisibility);
 					Config.ticker.callLater(refreshNodesVisibility, 2, [true]);
-					callRefreshVisibilityDelayed = true;
+					callRefreshVisibilityDelayed = Config.ticker.getTimer;
 				}
 				return;
 			}
-			//Config.ticker.removeByCallback(refreshNodesVisibility);
-			callRefreshVisibilityDelayed = false;
+			callRefreshVisibilityDelayed = 0;
 
 			var scale:Number = this.scaleX;
 			var minX:int = -this.x / scale;
@@ -271,8 +273,9 @@ package tree.view.canvas {
 			minX -= Canvas.ICON_WIDTH;
 			minY -= Canvas.ICON_HEIGHT;
 
-			var nx:int = n.x;
-			var ny:int = n.y;
+			var np:Point = n.position();
+			var nx:int = np.x;
+			var ny:int = np.y;
 			var nv:Boolean = nx < maxX && nx > minX && ny < maxY && ny > minY;
 			if(nv){
 				if(!n.visible){
