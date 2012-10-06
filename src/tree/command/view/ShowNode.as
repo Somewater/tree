@@ -16,6 +16,9 @@ package tree.command.view {
 		}
 
 		override public function execute():void {
+			if(model.selectedPerson == null)
+				model.selectedPerson = join.associate;
+
 			model.drawedNodesUids[join.uid] = true;
 
 			calculateRelativePosition(join);

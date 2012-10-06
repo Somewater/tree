@@ -185,12 +185,12 @@ package tree {
 			Config.reject(Canvas, canvas);
 			Config.reject(INodeViewCollection, canvas);
 
+			Config.content.addChild(panel = new Panel());
+			new PanelMediator(panel);
+
 			Config.content.addChild(gui = new Gui());
 			new GuiMediator(gui);
 			Config.reject(Gui, gui);
-
-			Config.content.addChild(panel = new Panel());
-			new PanelMediator(panel);
 
 			//bus.sceneResize.add(onSceneResize);
 			onSceneResize();

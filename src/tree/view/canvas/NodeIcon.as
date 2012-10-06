@@ -52,10 +52,8 @@ package tree.view.canvas {
 		public var out:ISignal;
 
 		public var rollUnrollClick:ISignal;
-		public var rollUnrollButton:RollUnrollButton;
-
-		public var deleteClick:ISignal;
-		private var deleteButton:RollUnrollButton;
+		private var rollUnrollButton:RollUnrollButton;
+		private var rollUnrollButtonSwitched:Boolean = false;
 
 		public var showArrowMenu:ISignal;
 		public var hideArrowMenu:ISignal;
@@ -88,7 +86,6 @@ package tree.view.canvas {
 			click = new Signal(NodeIcon);
 			over = new Signal(NodeIcon);
 			out = new Signal(NodeIcon);
-			deleteClick = new Signal(NodeIcon);
 
 			tmpPoint = new Point();
 
@@ -116,13 +113,6 @@ package tree.view.canvas {
 			rollUnrollButton.addEventListener(MouseEvent.CLICK, onRollUnrollClicked);
 			addChild(rollUnrollButton);
 
-			deleteButton = new RollUnrollButton();
-			deleteButton.x = 90;
-			deleteButton.y = 10;
-			//skin.addChild(deleteButton);
-			deleteButton.addEventListener(MouseEvent.CLICK, onDeletButtonClicked);
-			deleteButton.visible = false;
-
 			Helper.stylizeText((skin.getChildByName('name_tf') as TextField));
 
 			showArrowMenu = new Signal(NodeArrow);
@@ -139,6 +129,9 @@ package tree.view.canvas {
 
 		private function onOver(event:MouseEvent):void {
 			over.dispatch(this);
+			if(rollUnrollButtonSwitched && rollUnrollButton.rollState){
+				animateRollUnrollButton(true);
+			}
 		}
 
 		private function onOut(event:MouseEvent):void {
@@ -146,6 +139,9 @@ package tree.view.canvas {
 				return;
 
 			out.dispatch(this);
+			if(rollUnrollButtonSwitched && rollUnrollButton.rollState){
+				rollUnrollButton.visible = false;
+			}
 		}
 
 		public function set data(value:GenNode):void {
@@ -219,9 +215,6 @@ package tree.view.canvas {
 			removeEventListener(MouseEvent.MOUSE_OUT, onOut);
 			rollUnrollButton.clear();
 			rollUnrollButton.removeEventListener(MouseEvent.CLICK, onRollUnrollClicked);
-
-			deleteButton.removeEventListener(MouseEvent.CLICK, onDeletButtonClicked);
-			deleteClick.removeAll();
 			click.removeAll();
 			complete.removeAll();
 			rollUnrollClick.removeAll()
@@ -317,10 +310,6 @@ package tree.view.canvas {
 			return int(x) != int(p.x) || int(y) != int(p.y);
 		}
 
-		private function onDeletButtonClicked(event:MouseEvent):void {
-			deleteClick.dispatch(this);
-		}
-
 		private function onRollUnrollClicked(event:MouseEvent):void {
 			rollUnrollClick.dispatch(this);
 		}
@@ -343,14 +332,30 @@ package tree.view.canvas {
 
 		public function hideRollUnroll():void{
 			rollUnrollButton.visible = false;
-			rollUnrollButton.alpha = 0;
+			rollUnrollButtonSwitched = false;
 		}
 
 		public function showRollUnroll():void{
-			rollUnrollButton.visible = true;
-			rollUnrollButton.alpha = 0;
-			Tweener.to(rollUnrollButton, 0.3, {alpha: 1});
 			rollUnrollButton.rollState = data.node.slavesUnrolled;
+			rollUnrollButtonSwitched = true;
+			if(!rollUnrollButton.rollState)
+				animateRollUnrollButton(true);
+		}
+
+		private function animateRollUnrollButton(show:Boolean):void{
+			if(rollUnrollButton.rollState){
+				if(!rollUnrollButton.visible){
+					rollUnrollButton.visible = true;
+					rollUnrollButton.scaleX = rollUnrollButton.scaleY = 0.2;
+				}
+				rollUnrollButton.alpha = 1;
+				Tweener.to(rollUnrollButton, 0.3, {scaleX: 1, scaleY: 1});
+			}else{
+				rollUnrollButton.visible = true;
+				rollUnrollButton.alpha = 0;
+				rollUnrollButton.scaleX = rollUnrollButton.scaleY = 1;
+				Tweener.to(rollUnrollButton, 0.3, {alpha: 1});
+			}
 		}
 
 		public function get selected():Boolean {

@@ -6,6 +6,7 @@ package tree.view.gui.profile {
 	import com.somewater.text.LinkLabel;
 
 	import flash.display.DisplayObject;
+	import flash.display.Shape;
 
 	import flash.events.Event;
 
@@ -27,6 +28,7 @@ package tree.view.gui.profile {
 		public static const NAME:String = 'PersonProfilePage';
 
 		internal var photo:Photo;
+		internal var photoMask:Shape;
 		internal var editProfileButton:Button;
 		internal var profileLink:LinkLabel;
 		internal var familyTreeLink:LinkLabel;
@@ -41,7 +43,12 @@ package tree.view.gui.profile {
 
 		public function PersonProfilePage() {
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 90, 90);
+			photoMask = new Shape();
+			photoMask.graphics.beginFill(0);
+			photoMask.graphics.drawRoundRectComplex(0,0,90,90,5,5,5,5);
+			photo.mask = photoMask
 			addChild(photo);
+			addChild(photoMask);
 
 			editProfileButton = new StandartButton();
 			editProfileButton.textField.multiline = true;
@@ -103,8 +110,8 @@ package tree.view.gui.profile {
 			var contentWidth:int = _width - contentX - 20;
 			var contentHeight:int = _height - contentY - 20;;
 
-			photo.x = contentX;
-			photo.y = contentY;
+			photoMask.x = photo.x = contentX;
+			photoMask.y = photo.y = contentY;
 
 			editProfileButton.x = photo.x + photo.width + 8;
 			editProfileButton.y = photo.y;
@@ -141,6 +148,7 @@ package tree.view.gui.profile {
 		internal function onPersonSelected(person:Person, editable:Boolean = false,
 										   joinType:JoinType = null, from:Person = null):void{
 			if(!person) return;
+			this.visible = true;
 			this.editable = editable;
 			photo.source = person.photo;
 			if(!photo.source) setDefaultPhoto(person.male);

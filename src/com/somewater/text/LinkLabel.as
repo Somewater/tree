@@ -24,6 +24,8 @@ package com.somewater.text
 		public var textField:EmbededTextField;
 
 		public var link:ISignal;
+
+		public var defaultUnderline:Boolean = false;// т.е. без наведения подчеркнут, при навдеении полоса исчезает (если флаг true)
 		
 		public function LinkLabel(font:String=null, color:*=null, size:int=12, bold:Boolean=false, align:String="left",bitmapText:Boolean = false)
 		{
@@ -44,7 +46,8 @@ package com.somewater.text
 		
 		public function set linked(flag:Boolean):void{
 			if (flag == _linked) return;
-			underline = useHandCursor = buttonMode = mouseEnabled = underline = _linked = flag;
+			useHandCursor = buttonMode = mouseEnabled = underline = _linked = flag;
+			underline = flag ? defaultUnderline : false;
 			if (flag){
 				addEventListener(MouseEvent.MOUSE_OVER,headerLabelMouseOverEvent,false,0,true);
 				addEventListener(MouseEvent.MOUSE_OUT,headerLabelMouseOutEvent,false,0,true);
@@ -65,11 +68,11 @@ package com.somewater.text
 		}
 		
 		private function headerLabelMouseOverEvent(e:MouseEvent):void{
-			underline = false;
+			underline = !defaultUnderline;
 		}
 		
 		private function headerLabelMouseOutEvent(e:MouseEvent):void{
-			underline = true;
+			underline = defaultUnderline;
 		}
 		
 		private function headerLabelMouseClick(e:MouseEvent):void{

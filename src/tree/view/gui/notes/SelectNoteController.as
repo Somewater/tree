@@ -6,6 +6,7 @@ package tree.view.gui.notes {
 	import tree.model.Person;
 	import tree.signal.ViewSignal;
 	import tree.view.gui.GuiControllerBase;
+	import tree.view.gui.profile.PersonProfilePage;
 	import tree.view.window.MessageWindow;
 
 	/**
@@ -39,7 +40,7 @@ package tree.view.gui.notes {
 		}
 
 		private function onSelectNodeSignal(person:Person):void {
-			gui.setPage(PersonNotesPage.NAME);// т.е. выключить режим редактирования ноды
+			gui.setPage(PersonProfilePage.NAME);// т.е. выключить режим редактирования ноды
 		}
 
 		private function constructNotes():void {
@@ -108,7 +109,7 @@ package tree.view.gui.notes {
 			if(model.selectedPerson == model.editing.edited)
 				model.selectedPerson = null;
 			new MessageWindow('TODO: спросить подтверждение и отправить на сервер новую связь').open();
-			gui.setPage(PersonNotesPage.NAME);
+			gui.setPage(PersonProfilePage.NAME);
 		}
 	}
 }

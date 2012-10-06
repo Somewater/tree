@@ -38,7 +38,7 @@ package tree.view.gui {
 		}
 
 		private function onStart():void{
-			gui.setPage(PersonNotesPage.NAME);
+			gui.setPage(PersonProfilePage.NAME);
 		}
 
 		private function onSwitcherChanged(switcher:ProfileSwitcher):void{

@@ -19,14 +19,14 @@ package tree.view.gui {
 		public var blocked:Boolean = false;// переключение невозможно
 
 		public function ProfileSwitcher() {
-			personList = new SwitchButton(Config.loader.createMc('assets.ProfileSwitcher_left'));
-			personList.label = I18n.t('RELATIVES');
-			addChild(personList);
-
-			personProfile = new SwitchButton(Config.loader.createMc('assets.ProfileSwitcher_right'));
-			personProfile.x = personList.width;
+			personProfile = new SwitchButton(Config.loader.createMc('assets.ProfileSwitcher_left'));
 			personProfile.label = I18n.t('PROFILE');
 			addChild(personProfile);
+
+			personList = new SwitchButton(Config.loader.createMc('assets.ProfileSwitcher_right'));
+			personList.label = I18n.t('RELATIVES');
+			personList.x = personProfile.width;
+			addChild(personList);
 
 			personList.click.add(onClicked);
 			personProfile.click.add(onClicked);

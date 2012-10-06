@@ -96,7 +96,7 @@ package tree.view.gui.notes {
 			addChild(menuMask);
 			menu.mask = menuMask;
 			menuMask.graphics.beginFill(0);
-			menuMask.graphics.drawRect(135, menu.y, PersonNotesPage.NOTE_WIDTH - 135, 25);
+			menuMask.graphics.drawRect(160, menu.y, PersonNotesPage.NOTE_WIDTH - 160, 25);
 			menuMask.graphics.drawRect(0, menu.y + 25, PersonNotesPage.NOTE_WIDTH, 500);
 
 			actionsTF = new LinkLabel(null, 0, 11, false);
@@ -315,7 +315,7 @@ class NoteContextMenu extends Sprite implements IClear{
 			l.text = I18n.t(data['text']);
 			l.data = data;
 			l.addEventListener(LinkLabel.LINK_CLICK, onAction);
-			nextY += l.height;
+			nextY += l.height + 5;
 		}
 	}
 

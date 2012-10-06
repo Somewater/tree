@@ -68,6 +68,11 @@ package tree.view.gui.profile {
 			super.start(args);
 			gui.switcher.profile = true;
 			var person:Person = args[0] || model.selectedPerson;
+			if(!person){
+				page.visible = false;
+				return;
+			}
+			page.visible = true;
 			var joinType:JoinType = args[1];
 			var from:Person = args[2];
 			if(args.length > 1 || person.isNew || joinType){
@@ -118,7 +123,7 @@ package tree.view.gui.profile {
 			if(edited.isNew){
 				if(model.selectedPerson == edited)
 					model.selectedPerson = null;
-				gui.setPage(PersonNotesPage.NAME);
+				gui.setPage(PersonProfilePage.NAME);
 			}else
 				page.onPersonSelected(model.selectedPerson);
 		}

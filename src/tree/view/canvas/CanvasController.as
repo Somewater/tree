@@ -45,7 +45,6 @@ package tree.view.canvas {
 				n.complete.addOnce(onNodeCompleteOnce);
 				n.click.add(onNodeClicked);
 				n.rollUnrollClick.add(onNodeRolUnrollClicked);
-				n.deleteClick.add(onNodeDeleteClicked);
 				n.over.add(onNodeOver);
 				n.out.add(onNodeOut);
 				n.showArrowMenu.add(onShowArrowMenu);

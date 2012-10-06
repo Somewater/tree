@@ -4,9 +4,11 @@ package tree.view.gui.panel {
 	import com.somewater.text.LinkLabel;
 
 	import flash.display.DisplayObject;
+	import flash.display.Shape;
 
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
@@ -18,6 +20,7 @@ package tree.view.gui.panel {
 
 	public class Panel extends Sprite{
 
+		private var background:Sprite;
 		public var titleTF:EmbededTextField;
 		public var treeOwnerNameTF:LinkLabel;
 		public var treeOwnerMark:DisplayObject;
@@ -32,7 +35,13 @@ package tree.view.gui.panel {
 		public var ownerNameClick:ISignal;
 		public var treeSelectorPopup:TreeSelectorPopup;
 
+		private var mouseOverPanel:Boolean = false;
+
 		public function Panel() {
+			background = new Sprite();
+			addChild(background);
+			alpha = 0.5;
+
 			titleTF = new EmbededTextField(null, 0, 19, true);
 			titleTF.text = I18n.t('FAMILY');
 			addChild(titleTF);
@@ -72,6 +81,9 @@ package tree.view.gui.panel {
 			Config.tooltips.addChild(treeSelectorPopup);
 			treeSelectorPopup.visible = false;
 			treeSelectorPopup.alpha = 0;
+
+			this.addEventListener(MouseEvent.ROLL_OVER, onMouseOver);
+			this.addEventListener(MouseEvent.ROLL_OUT, onMouseOut);
 		}
 
 		private function onLinkClicked(event:Event):void {
@@ -79,9 +91,9 @@ package tree.view.gui.panel {
 		}
 
 		public function setSize(w:int, h:int):void {
-			graphics.clear();
-			graphics.beginFill(0xEEEEEE);
-			graphics.drawRect(0, 0, w, h);
+			background.graphics.clear();
+			background.graphics.beginFill(0xEEEEEE);
+			background.graphics.drawRect(0, 0, Config.WIDTH, h);
 
 			titleTF.x = 30;
 			titleTF.y = 15;
@@ -89,6 +101,8 @@ package tree.view.gui.panel {
 
 			saveTreeButton.x = w - 30 - saveTreeButton.width;
 			saveTreeButton.y = 15;
+			saveTreeButton.addEventListener(MouseEvent.ROLL_OVER, onMouseOverElement);
+			saveTreeButton.addEventListener(MouseEvent.ROLL_OUT, onMouseOutElement);
 
 			var nextX:int = 30;
 			var nextY:int = 65;
@@ -100,6 +114,8 @@ package tree.view.gui.panel {
 					c.x = nextX;
 					c.y = nextY;
 					nextX += c.width + 10;
+					c.addEventListener(MouseEvent.ROLL_OVER, onMouseOverElement);
+					c.addEventListener(MouseEvent.ROLL_OUT, onMouseOutElement);
 				}else{
 					c.visible = false;
 				}
@@ -124,6 +140,28 @@ package tree.view.gui.panel {
 
 		public function utilize():void {
 			setOwnerName('...')
+		}
+
+		private function onMouseOver(event:MouseEvent):void {
+			alpha = 1;
+			background.alpha = 0.75;
+			mouseOverPanel = true;
+		}
+
+		private function onMouseOut(event:MouseEvent):void {
+			alpha = 0.5;
+			background.alpha = 1;
+			mouseOverPanel = false;
+		}
+
+		private function onMouseOverElement(e:MouseEvent):void{
+			if(mouseOverPanel)
+				background.alpha = 1;
+		}
+
+		private function onMouseOutElement(e:MouseEvent):void{
+			if(mouseOverPanel)
+				background.alpha = 0.75;
 		}
 	}
 }
