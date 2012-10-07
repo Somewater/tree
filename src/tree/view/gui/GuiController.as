@@ -1,9 +1,13 @@
 package tree.view.gui {
+	import com.gskinner.motion.GTween;
+
 	import tree.command.Actor;
+	import tree.common.Config;
 	import tree.model.Join;
 	import tree.model.Person;
 	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
+	import tree.view.Tweener;
 	import tree.view.gui.notes.PersonNotesPage;
 	import tree.view.gui.profile.PersonProfilePage;
 
@@ -15,6 +19,7 @@ package tree.view.gui {
 			this.gui = gui;
 			bus.addNamed(ViewSignal.CANVAS_READY_FOR_START, onStart);
 			gui.switcher.change.add(onSwitcherChanged);
+			gui.fold.click.add(onGuiOpenChanged)
 		}
 
 
@@ -57,6 +62,28 @@ package tree.view.gui {
 				else
 					gui.setPage(PersonProfilePage.NAME);
 			}
+		}
+
+		private var guiAnimInProcess:Boolean = false;
+		private function onGuiOpenChanged(f:Fold):void{
+			if(guiAnimInProcess) return;
+			guiAnimInProcess = true;
+			// сначала анимация, затем фактическое переставление свойств
+			var x:int;
+			var open:Boolean = !f.open;
+			if(open){
+				gui.contentVisibility = true;
+				x = Config.WIDTH - Config.GUI_WIDTH;
+			}else{
+				x = Config.WIDTH;
+			}
+
+			Tweener.to(gui, 0.2, {'x': x}, {onComplete: onGuiOpenAnimComplete})
+		}
+
+		private function onGuiOpenAnimComplete(g:GTween = null):void{
+			model.guiOpen = !gui.fold.open;
+			guiAnimInProcess = false;
 		}
 	}
 }

@@ -76,6 +76,7 @@ package tree {
 	import tree.view.canvas.CanvasMediator;
 	import tree.view.canvas.ConsoleWindow;
 	import tree.view.canvas.INodeViewCollection;
+	import tree.view.gui.Fold;
 	import tree.view.gui.Gui;
 	import tree.view.Preloader;
 	import tree.view.WindowsManager;
@@ -249,13 +250,20 @@ package tree {
 		}
 
 		public function mouseOnCanvas():Boolean{
+			var mouseX:int = stage.mouseX;
+			var mouseY:int = stage.mouseY;
+
 			if(panel.treeSelectorPopup.visible){
 				var popup:DisplayObject = panel.treeSelectorPopup;
-				if(stage.mouseX > popup.x && stage.mouseX < popup.x + popup.width &&
-						stage.mouseY > popup.y && stage.mouseY < popup.y + popup.height)
+				if(mouseX > popup.x && mouseX < popup.x + popup.width &&
+						mouseY > popup.y && mouseY < popup.y + popup.height)
 					return false;
 			}
-			return stage.mouseX <= (Config.WIDTH - Config.GUI_WIDTH) && stage.stage.mouseY > Config.PANEL_HEIGHT;
+			if(!model.guiOpen && mouseX > Config.WIDTH - Fold.WIDTH && mouseY > (Config.HEIGHT - Fold.HEIGHT) * 0.5
+					&& mouseY < (Config.HEIGHT + Fold.HEIGHT) * 0.5)// мышь над "застежкой" gui
+				return false;
+
+			return mouseX <= (model.contentWidth) && mouseY > Config.PANEL_HEIGHT;
 		}
 
 		public function utilize():void {

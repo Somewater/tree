@@ -239,7 +239,7 @@ package tree.view.canvas {
 			var scale:Number = this.scaleX;
 			var minX:int = -this.x / scale;
 			var minY:int = -this.y / scale;
-			var maxX:int = minX + (Config.WIDTH - Config.GUI_WIDTH) / scale;
+			var maxX:int = minX + Model.instance.contentWidth / scale;
 			var maxY:int = minY + Config.HEIGHT / scale;
 
 			minX -= Canvas.ICON_WIDTH;
@@ -267,7 +267,7 @@ package tree.view.canvas {
 			var scale:Number = this.scaleX;
 			var minX:int = -this.x / scale;
 			var minY:int = -this.y / scale;
-			var maxX:int = minX + (Config.WIDTH - Config.GUI_WIDTH) / scale;
+			var maxX:int = minX + Model.instance.contentWidth / scale;
 			var maxY:int = minY + Config.HEIGHT / scale;
 
 			minX -= Canvas.ICON_WIDTH;

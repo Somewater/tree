@@ -26,8 +26,12 @@ package tree.view.gui {
 			if(Config.WIDTH > Config.GUI_WIDTH)
 			{
 				gui.setSize(Config.GUI_WIDTH, Config.HEIGHT);
-				gui.x = Config.WIDTH - Config.GUI_WIDTH;
+				if(model.guiOpen)
+					gui.x = Config.WIDTH - Config.GUI_WIDTH;
+				else
+					gui.x = Config.WIDTH;
 				gui.visible = true;
+				gui.contentVisibility = model.guiOpen;
 			}
 			else
 				gui.visible = false;

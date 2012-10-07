@@ -207,7 +207,7 @@ package tree.view.canvas {
 		}
 
 		public function centreOn(person:Person = null, animated:Boolean = false):void{
-			var x:int = (Config.WIDTH - Config.GUI_WIDTH) * 0.5 - Canvas.ICON_WIDTH * 0.5;
+			var x:int = model.contentWidth * 0.5 - Canvas.ICON_WIDTH * 0.5;
 			var y:int = Config.PANEL_HEIGHT + (Config.HEIGHT - Config.PANEL_HEIGHT) * 0.5 - Canvas.ICON_HEIGHT;
 			if(person){
 				var node:NodeIcon = canvas.getNodeIcon(person.uid);
@@ -297,14 +297,14 @@ package tree.view.canvas {
 			var screen:Rect = new Rect();
 			screen.x = -canvas.x;
 			screen.y = -canvas.y + Config.PANEL_HEIGHT;
-			screen.right = screen.x + Config.WIDTH - Config.GUI_WIDTH;
+			screen.right = screen.x + model.contentWidth;
 			screen.bottom = screen.y + Config.HEIGHT - Config.PANEL_HEIGHT;
 
 			var centreX:Number = NaN;
 			var centreY:Number = NaN;
 
 			if(screen.right < rect.x)
-				centreX = rect.x - Config.WIDTH + Config.GUI_WIDTH;
+				centreX = rect.x - model.contentWidth;
 			else if(screen.x > rect.right)
 				centreX = rect.right;
 

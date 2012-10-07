@@ -198,7 +198,7 @@ class ZoomSliderComponent extends ZoomSlider{
 
 	private function onValueChanged(value:Number):void {
 		var canvas:DisplayObject = Config.inject(Canvas);
-		model.zoomCenter = canvas.globalToLocal(new Point((Config.WIDTH - Config.GUI_WIDTH) * 0.5,
+		model.zoomCenter = canvas.globalToLocal(new Point(model.contentWidth * 0.5,
 															(Config.HEIGHT - Config.PANEL_HEIGHT) * 0.5));
 		model.zoom = value;
 	}

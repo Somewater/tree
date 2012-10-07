@@ -58,7 +58,7 @@ package tree.view.canvas {
 		}
 
 		private function onResize(size:Point):void{
-			canvas.setSize(Config.WIDTH - Config.GUI_WIDTH, Config.HEIGHT - Config.PANEL_HEIGHT);
+			canvas.setSize(model.contentWidth, Config.HEIGHT - Config.PANEL_HEIGHT);
 		}
 
 		private function onModelChanged():void {

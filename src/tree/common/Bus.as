@@ -53,6 +53,8 @@ package tree.common {
 		public var treeViewConstructed:ISignal;
 		public var constructionInProcess:ISignal;
 
+		public var guiChanged:ISignal;// callback(open:Boolean)
+
 		public function Bus(stage:Stage) {
 			super(null, '');
 			this.stage = stage;
@@ -90,9 +92,11 @@ package tree.common {
 
 			treeViewConstructed = new Signal();
 			constructionInProcess = new Signal();
+
+			guiChanged = new Signal();
 		}
 
-		private function onResize(event:Event):void {
+		public function onResize(event:Event):void {
 			if(event == null || event.target == stage){
 				tmpPoint.x = Config.WIDTH = stage.stageWidth;
 				tmpPoint.y = Config.HEIGHT = stage.stageHeight;

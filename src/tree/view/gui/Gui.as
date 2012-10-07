@@ -28,6 +28,7 @@ package tree.view.gui {
 
 		public var page:PageBase;
 		public var controller:GuiControllerBase;
+		public var fold:Fold;
 
 		private var pageHolder:Sprite;
 		public var switcher:ProfileSwitcher;
@@ -52,6 +53,9 @@ package tree.view.gui {
 			foreground.mouseEnabled = foreground.mouseChildren = false;
 			addChild(foreground);
 
+			fold = new Fold();
+			addChild(fold);
+
 			cacheAsBitmap = true;
 		}
 
@@ -62,6 +66,7 @@ package tree.view.gui {
 			pageHeight = h - pageHolder.y;
 			if(page)
 				page.setSize(pageWidth, pageHeight);
+			fold.y = h * 0.5;
 		}
 
 		public function setPage(name:String, ...args):void{
@@ -94,6 +99,13 @@ package tree.view.gui {
 				pageHolder.removeChild(page);
 				page = null;
 			}
+		}
+
+		public function set contentVisibility(visible:Boolean):void{
+			pageHolder.visible = visible;
+			switcher.visible = visible;
+			background.visible = visible;
+			foreground.visible = visible;
 		}
 	}
 }

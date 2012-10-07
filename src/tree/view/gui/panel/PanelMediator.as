@@ -20,7 +20,7 @@ package tree.view.gui.panel {
 		}
 
 		override protected function refresh():void {
-			panel.setSize(Config.WIDTH - Config.GUI_WIDTH, Config.PANEL_HEIGHT);
+			panel.setSize(model.contentWidth, Config.PANEL_HEIGHT);
 		}
 
 		private function onFullscreenClicked(b:Button):void {

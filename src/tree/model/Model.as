@@ -17,6 +17,7 @@ package tree.model {
 		private var _zoom:Number = 1;
 		public var zoomCenter:Point = new Point();
 		private var _mousePosition:Point = new Point();
+		private var _guiOpen:Boolean = true;
 
 		//////////////////////////
 		//                      //
@@ -161,6 +162,22 @@ package tree.model {
 				if(_selectedPerson)
 					bus.dispatch(ViewSignal.PERSON_SELECTED, _selectedPerson);
 			}
+		}
+
+		public function get guiOpen():Boolean {
+			return _guiOpen;
+		}
+
+		public function set guiOpen(value:Boolean):void {
+			if(value != _guiOpen){
+				_guiOpen = value;
+				bus.guiChanged.dispatch(_guiOpen);
+				bus.onResize(null);
+			}
+		}
+
+		public function get contentWidth():int{
+			return _guiOpen ? Config.WIDTH - Config.GUI_WIDTH : Config.WIDTH;
 		}
 	}
 }
