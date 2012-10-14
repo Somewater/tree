@@ -29,7 +29,7 @@ package tree.view.gui {
 				if(model.guiOpen)
 					gui.x = Config.WIDTH - Config.GUI_WIDTH;
 				else
-					gui.x = Config.WIDTH;
+					gui.x = Config.WIDTH - Fold.BACKGROUND_WIDTH;
 				gui.visible = true;
 				gui.contentVisibility = model.guiOpen;
 			}

@@ -48,6 +48,7 @@ package tree.view.canvas {
 		private var debugTrace:TextField;
 
 		public var click:ISignal;
+		public var dblClick:ISignal;
 		public var over:ISignal;
 		public var out:ISignal;
 
@@ -84,6 +85,7 @@ package tree.view.canvas {
 
 			complete = new Signal(NodeIcon);
 			click = new Signal(NodeIcon);
+			dblClick = new Signal(NodeIcon);
 			over = new Signal(NodeIcon);
 			out = new Signal(NodeIcon);
 
@@ -103,6 +105,8 @@ package tree.view.canvas {
 			}
 
 			addEventListener(MouseEvent.CLICK, onClicked);
+			addEventListener(MouseEvent.DOUBLE_CLICK, onDblCliced);
+			this.doubleClickEnabled = true;
 			addEventListener(MouseEvent.MOUSE_OVER, onOver);
 			addEventListener(MouseEvent.MOUSE_OUT, onOut);
 
@@ -125,6 +129,10 @@ package tree.view.canvas {
 
 		private function onClicked(event:MouseEvent):void {
 			click.dispatch(this);
+		}
+
+		private function onDblCliced(event:MouseEvent):void {
+			dblClick.dispatch(this);
 		}
 
 		private function onOver(event:MouseEvent):void {
@@ -211,11 +219,13 @@ package tree.view.canvas {
 			}
 			photo.clear();
 			removeEventListener(MouseEvent.CLICK, onClicked);
+			removeEventListener(MouseEvent.DOUBLE_CLICK, onDblCliced);
 			removeEventListener(MouseEvent.MOUSE_OVER, onOver);
 			removeEventListener(MouseEvent.MOUSE_OUT, onOut);
 			rollUnrollButton.clear();
 			rollUnrollButton.removeEventListener(MouseEvent.CLICK, onRollUnrollClicked);
 			click.removeAll();
+			dblClick.removeAll()
 			complete.removeAll();
 			rollUnrollClick.removeAll()
 			over.removeAll();

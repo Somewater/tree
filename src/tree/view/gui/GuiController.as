@@ -75,7 +75,7 @@ package tree.view.gui {
 				gui.contentVisibility = true;
 				x = Config.WIDTH - Config.GUI_WIDTH;
 			}else{
-				x = Config.WIDTH;
+				x = Config.WIDTH - Fold.BACKGROUND_WIDTH;
 			}
 
 			Tweener.to(gui, 0.2, {'x': x}, {onComplete: onGuiOpenAnimComplete})

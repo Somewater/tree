@@ -67,6 +67,7 @@ package tree.view.gui {
 			if(page)
 				page.setSize(pageWidth, pageHeight);
 			fold.y = h * 0.5;
+			fold.setSize(w, h);
 		}
 
 		public function setPage(name:String, ...args):void{

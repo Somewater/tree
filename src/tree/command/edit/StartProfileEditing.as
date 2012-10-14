@@ -41,6 +41,7 @@ package tree.command.edit {
 			model.editing.edited = person;
 			model.editing.joinType = joinType;
 			model.editing.from = from;
+			model.guiOpen = true;
 
 			var gui:Gui = Config.inject(Gui);
 			gui.setPage(PersonProfilePage.NAME, person, joinType, from)

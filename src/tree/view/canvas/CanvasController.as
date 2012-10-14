@@ -44,6 +44,7 @@ package tree.view.canvas {
 				n = canvas.getNodeIconAndCreate(g);
 				n.complete.addOnce(onNodeCompleteOnce);
 				n.click.add(onNodeClicked);
+				n.dblClick.add(onNodeBldClicked);
 				n.rollUnrollClick.add(onNodeRolUnrollClicked);
 				n.over.add(onNodeOver);
 				n.out.add(onNodeOut);
@@ -175,6 +176,11 @@ package tree.view.canvas {
 
 		private function onNodeClicked(node:NodeIcon):void{
 			bus.dispatch(ViewSignal.PERSON_SELECTED, node.data.node.person);
+		}
+
+		private function onNodeBldClicked(node:NodeIcon):void{
+			bus.dispatch(ViewSignal.PERSON_SELECTED, node.data.node.person);
+			model.guiOpen = true;
 		}
 
 		private function onNodeRolUnrollClicked(node:NodeIcon):void{
