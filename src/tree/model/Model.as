@@ -51,6 +51,8 @@ package tree.model {
 
 		public var depthIndex:int = 0;
 
+		public var treesBorders:TreesBorders;
+
 		public function Model(bus:Bus) {
 			if(instance)
 				throw new Error('Must be only one');
@@ -60,6 +62,7 @@ package tree.model {
 			matrixes = new MatrixCollection();
 			generations = new GenerationsCollection(bus, matrixes);
 			editing = new ProfileEditingModel();
+			treesBorders = new TreesBorders(Config.loader.flashVars);
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 		}

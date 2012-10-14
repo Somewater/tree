@@ -41,8 +41,17 @@
 			if(versionNumber) versionNumber = versionNumber[1]
 			var swfName = versionNumber ? ("TreeLoader_" + versionNumber + ".swf") : "TreeLoader.swf"
 
+			var prmstr = window.location.search.substr(1);
+			var prmarr = prmstr.split ("&");
+			var params = {};
+
+			for ( var i = 0; i < prmarr.length; i++) {
+				var tmparr = prmarr[i].split("=");
+				params[tmparr[0]] = tmparr[1];
+			}
+
             var xiSwfUrlStr = "playerProductInstall.swf";
-            var flashvars = {};
+            var flashvars = params;
 			flashvars.get = window.location.search.replace( "?", "" );
             var params = {};
             params.quality = "high";

@@ -15,6 +15,7 @@ package tree.view.gui.panel {
 
 	import tree.common.Config;
 	import tree.model.Person;
+	import tree.view.Tweener;
 
 	import tree.view.gui.Button;
 	import tree.view.gui.UIComponent;
@@ -110,7 +111,7 @@ package tree.view.gui.panel {
 			saveTreeButton.y = 15;
 
 			var nextX:int = 30;
-			var nextY:int = 65;
+			var nextY:int = 50;
 			var components:Array = [depthSelector, savePrintButton, centreRotateButton, zoomSlider, optionsButton, fullscreenButton]
 
 			for each(var c:UIComponent in components){
@@ -150,14 +151,14 @@ package tree.view.gui.panel {
 		}
 
 		private function onMouseOver(event:MouseEvent):void {
-			alpha = 1;
-			background.alpha = 0.75;
+			Tweener.to(this, 0.3, {alpha: 1});
+			Tweener.to(background, 0.3, {alpha: 0.75});
 			mouseOverPanel = true;
 		}
 
 		private function onMouseOut(event:MouseEvent):void {
-			alpha = 0.5;
-			background.alpha = 1;
+			Tweener.to(this, 0.3, {alpha: 0.5});
+			Tweener.to(background, 0.3, {alpha: 1});
 			mouseOverPanel = false;
 		}
 	}

@@ -16,7 +16,7 @@ package tree.common {
 		public static var HEIGHT:int;
 
 		public static var GUI_WIDTH:int = 240;
-		public static var PANEL_HEIGHT:int = 130;
+		public static var PANEL_HEIGHT:int = 90;
 
 		public static var DESCENDING:Boolean = true;// нисходящее дерево (дети ниже родителей)
 		public static var DESCENDING_INT:int = 1;// нисходящее дерево (дети ниже родителей)

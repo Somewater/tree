@@ -96,9 +96,9 @@ package tree.command {
 			else
 				calculate(response.node, null, false, false);
 
-			if((nearPersonCounterPerTree > 500 && currentTree == response.node.person.tree)
-					|| response.node.dist > 10
-					|| Math.abs(response.node.generation) > 10){
+			if((nearPersonCounterPerTree > model.treesBorders.maxNodesQuantity && currentTree == response.node.person.tree)
+					|| response.node.dist > model.treesBorders.maxDepth
+					|| Math.abs(response.node.generation) > model.treesBorders.maxGenerationsDepth){
 				farPersonsForDelete.push(response.node.person);
 			}else
 				nearPersonCounterPerTree++;
