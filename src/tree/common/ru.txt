@@ -63,3 +63,7 @@ MALE_CHAR=М
 FEMALE_CHAR=Ж
 ADD_RELATIVE=Добавить {name}
 EMPTY=Пусто
+# depth labels
+DEPTH_ALL=Все
+DEPTH_PARENTS=Родители и дети
+DEPTH_BRO=Братья и сестры

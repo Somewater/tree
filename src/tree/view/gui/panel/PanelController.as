@@ -11,6 +11,7 @@ package tree.view.gui.panel {
 	import tree.Tree;
 
 	import tree.command.Actor;
+	import tree.command.view.DepthIndexChanged;
 	import tree.common.Config;
 	import tree.model.Person;
 	import tree.model.TreeModel;
@@ -32,6 +33,7 @@ package tree.view.gui.panel {
 			panel.ownerNameClick.add(onOwnerNameClicked);
 			panel.treeSelectorPopup.linkClick.add(onNewOwnerClicked);
 			panel.centreRotateButton.left.click.add(onCentre);
+			panel.depthSelector.indexChanged.add(onDepthIndexChanged);
 		}
 
 		private function onNewOwnerClicked(person:Person):void {
@@ -77,6 +79,13 @@ package tree.view.gui.panel {
 
 		private function onTreeSelected(_tree:TreeModel):void{
 			panel.setOwner(_tree.owner);
+		}
+
+		private function onDepthIndexChanged(index:int):void{
+			if(!model.constructionInProcess){
+				panel.depthSelector.index = index
+				new DepthIndexChanged(index).execute();
+			}
 		}
 	}
 }

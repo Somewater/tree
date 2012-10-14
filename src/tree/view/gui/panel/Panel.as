@@ -29,7 +29,7 @@ package tree.view.gui.panel {
 		public var centreRotateButton:DoubleButton;
 		public var optionsButton:Button;
 		public var fullscreenButton:Button;
-		public var densitySelector:DensitySelector;
+		public var depthSelector:DepthSelector;
 		public var zoomSlider:ZoomSlider;
 		public var saveTreeButton:BlueButton;
 
@@ -68,8 +68,8 @@ package tree.view.gui.panel {
 			fullscreenButton = new Button(Config.loader.createMc('assets.FullscreenButton'));
 			addChild(fullscreenButton);
 
-			densitySelector = new DensitySelector();
-			addChild(densitySelector);
+			depthSelector = new DepthSelector();
+			addChild(depthSelector);
 
 			zoomSlider = new ZoomSliderComponent();
 			addChild(zoomSlider);
@@ -108,12 +108,10 @@ package tree.view.gui.panel {
 
 			saveTreeButton.x = w - 30 - saveTreeButton.width;
 			saveTreeButton.y = 15;
-			saveTreeButton.addEventListener(MouseEvent.ROLL_OVER, onMouseOverElement);
-			saveTreeButton.addEventListener(MouseEvent.ROLL_OUT, onMouseOutElement);
 
 			var nextX:int = 30;
 			var nextY:int = 65;
-			var components:Array = [densitySelector, savePrintButton, centreRotateButton, zoomSlider, optionsButton, fullscreenButton]
+			var components:Array = [depthSelector, savePrintButton, centreRotateButton, zoomSlider, optionsButton, fullscreenButton]
 
 			for each(var c:UIComponent in components){
 				if(nextX + c.width < w){
@@ -121,8 +119,6 @@ package tree.view.gui.panel {
 					c.x = nextX;
 					c.y = nextY;
 					nextX += c.width + 10;
-					c.addEventListener(MouseEvent.ROLL_OVER, onMouseOverElement);
-					c.addEventListener(MouseEvent.ROLL_OUT, onMouseOutElement);
 				}else{
 					c.visible = false;
 				}
@@ -163,16 +159,6 @@ package tree.view.gui.panel {
 			alpha = 0.5;
 			background.alpha = 1;
 			mouseOverPanel = false;
-		}
-
-		private function onMouseOverElement(e:MouseEvent):void{
-			if(mouseOverPanel)
-				background.alpha = 1;
-		}
-
-		private function onMouseOutElement(e:MouseEvent):void{
-			if(mouseOverPanel)
-				background.alpha = 0.75;
 		}
 	}
 }

@@ -270,7 +270,6 @@ package tree {
 			canvas.utilize();
 			gui.utilize();
 			panel.utilize();
-			model.utilize();
 		}
 
 		/**

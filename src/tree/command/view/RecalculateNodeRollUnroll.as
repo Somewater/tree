@@ -22,7 +22,8 @@ package tree.command.view {
 				node.data.node.fireRollChange();
 			}
 
-			bus.dispatch(ViewSignal.CALCULATE_NEXT_ROLL_UNROLL);
+			if(model.depthIndex == 0)
+				bus.dispatch(ViewSignal.CALCULATE_NEXT_ROLL_UNROLL);
 		}
 	}
 }

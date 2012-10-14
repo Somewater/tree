@@ -49,6 +49,8 @@ package tree.model {
 		public static var instance:Model;
 		public var editing:ProfileEditingModel;
 
+		public var depthIndex:int = 0;
+
 		public function Model(bus:Bus) {
 			if(instance)
 				throw new Error('Must be only one');

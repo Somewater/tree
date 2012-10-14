@@ -34,12 +34,16 @@ package tree.command.view {
 			firstJoin.type = JoinType.FIRST_JOIN;// т.е. не имеет типа, не на кого ссылаться
 
 			joinsForDraw.push(firstJoin);
+			var depthIndex:int = model.depthIndex;
 
 			var proc:PersonsProcessor = new SortedPersonsProcessor(tree, firstPerson,
 					function(response:NodesProcessorResponse):void{
 						var j:Join = response.fromSource;
 						if(j)
 						{
+							if(depthIndex && response.node.dist > depthIndex)
+								return;
+
 							// если это братская связь и родители тоже есть, то игнорировать (братья-сестры будут построены от родителей)
 							if(j.type.superType == JoinType.SUPER_TYPE_BRO
 									&& breedOfSome(response.source.person.parents, j.associate))

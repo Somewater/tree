@@ -10,6 +10,7 @@ package tree.command {
 
 		override public function execute():void {
 			Tree.instance.utilize();
+			model.utilize();
 		}
 	}
 }

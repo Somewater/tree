@@ -217,6 +217,7 @@ package tree.view.canvas {
 			var y:int = Config.PANEL_HEIGHT + (Config.HEIGHT - Config.PANEL_HEIGHT) * 0.5 - Canvas.ICON_HEIGHT;
 			if(person){
 				var node:NodeIcon = canvas.getNodeIcon(person.uid);
+				if(!node || !node.visible) return;
 				if(node){
 					x -= node.x * model.zoom;
 					y -= node.y * model.zoom;
