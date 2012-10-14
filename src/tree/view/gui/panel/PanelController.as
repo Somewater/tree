@@ -27,7 +27,7 @@ package tree.view.gui.panel {
 		public function PanelController(panel:Panel) {
 			this.panel = panel;
 
-			bus.addNamed(ModelSignal.TREE_NEED_CONSTRUCT, onTreeConstructionStarted);
+			bus.addNamed(ViewSignal.TREE_SELECTED, onTreeSelected);
 			Config.stage.addEventListener(MouseEvent.CLICK, onMouseDown);
 			panel.ownerNameClick.add(onOwnerNameClicked);
 			panel.treeSelectorPopup.linkClick.add(onNewOwnerClicked);
@@ -37,19 +37,16 @@ package tree.view.gui.panel {
 		private function onNewOwnerClicked(person:Person):void {
 			hideTreeOwnerSelectorPopup();
 			//bus.dispatch(AppSignal.RELOAD_TREE, person.uid);
+			model.editing.editEnabled = false;
 			bus.dispatch(ViewSignal.PERSON_SELECTED, person);
 			bus.dispatch(ViewSignal.PERSON_CENTERED, person);
-			panel.setOwnerName(person.name)
+			model.selectedTree = person.tree;
 		}
 
 		private function onMouseDown(event:MouseEvent):void {
 			var target:DisplayObject = event.target as DisplayObject;
 			if(Tree.instance.mouseOnCanvas())
 				hideTreeOwnerSelectorPopup();
-		}
-
-		private function onTreeConstructionStarted(tree:TreeModel):void {
-			panel.setOwnerName(model.owner.name);
 		}
 
 		private function onOwnerNameClicked():void {
@@ -74,7 +71,12 @@ package tree.view.gui.panel {
 		}
 
 		private function onCentre(b:Button):void{
-			bus.dispatch(ViewSignal.NEED_CENTRE_CANVAS);
+			model.selectedPerson = model.selectedTree.owner;
+			bus.dispatch(ViewSignal.PERSON_CENTERED, model.selectedTree.owner);
+		}
+
+		private function onTreeSelected(_tree:TreeModel):void{
+			panel.setOwner(_tree.owner);
 		}
 	}
 }

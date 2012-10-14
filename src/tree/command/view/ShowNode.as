@@ -18,6 +18,8 @@ package tree.command.view {
 		override public function execute():void {
 			if(model.selectedPerson == null)
 				model.selectedPerson = join.associate;
+			if(model.selectedTree == null)
+				model.selectedTree = join.associate.tree;
 
 			model.drawedNodesUids[join.uid] = true;
 

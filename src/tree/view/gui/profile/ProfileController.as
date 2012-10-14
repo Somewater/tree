@@ -26,6 +26,7 @@ package tree.view.gui.profile {
 			page.editPhotoLink.link.add(onEditPhotoClick)
 			page.deletePhotoLink.link.add(onDeletePhotoClick);
 			page.editableInfo.sexChange.add(onSexChanged);
+			page.familyBlock.itemClick.add(onFamalyBlockItemClicked);
 
 			// edit/read switch mode
 			page.editProfileButton.click.add(onEditProfile);
@@ -126,6 +127,12 @@ package tree.view.gui.profile {
 				gui.setPage(PersonProfilePage.NAME);
 			}else
 				page.onPersonSelected(model.selectedPerson);
+		}
+
+		private function onFamalyBlockItemClicked(person:Person):void{
+			model.editing.editEnabled = false;
+			bus.dispatch(ViewSignal.PERSON_SELECTED, person);
+			bus.dispatch(ViewSignal.PERSON_CENTERED, person);
 		}
 	}
 }

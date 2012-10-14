@@ -66,7 +66,6 @@ package tree.view.gui.notes {
 			scroller.y = searchField.y + searchField.height + 8 + PersonNotesPage.NOTE_HEIGHT;
 			addChild(scroller);
 			scroller.source = notesHolder;
-			scroller.verticalLineScrollSize = PersonNotesPage.NOTE_HEIGHT * 3;
 		}
 
 
@@ -105,6 +104,9 @@ package tree.view.gui.notes {
 			scroller.update();
 			notesHolderEmptyLabel.width = _width || 100;
 			notesHolderEmptyLabel.y = searchField.y + searchField.height + PersonNotesPage.NOTE_HEIGHT * 0.5;
+
+			scroller.verticalLineScrollSize = PersonNotesPage.NOTE_HEIGHT * Math.max(1,
+					int((Config.HEIGHT - scroller.y - this.y - (this.parent ? this.parent.y : 0)) * 0.3 / PersonNotesPage.NOTE_HEIGHT));
 		}
 
 		public function removeAllNotes():void{

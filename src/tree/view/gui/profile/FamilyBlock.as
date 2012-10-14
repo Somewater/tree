@@ -4,8 +4,12 @@ package tree.view.gui.profile {
 	import com.somewater.text.EmbededTextField;
 
 	import fl.containers.ScrollPane;
+	import fl.controls.ScrollPolicy;
 
 	import flash.display.Sprite;
+
+	import org.osflash.signals.ISignal;
+	import org.osflash.signals.Signal;
 
 	import tree.model.Join;
 
@@ -21,6 +25,8 @@ package tree.view.gui.profile {
 
 		private var _maxHeight:int;
 
+		public var itemClick:ISignal = new Signal(Person);
+
 		public function FamilyBlock() {
 			familyLabel = new EmbededTextField(null, 0, 17);
 			familyLabel.text = I18n.t('FAMILY');
@@ -28,6 +34,7 @@ package tree.view.gui.profile {
 
 			scroller = new ScrollPane();
 			scroller.y = familyLabel.y + familyLabel.height + 5;
+			scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
 			addChild(scroller);
 
 			itemsHolder = new CorrectSizeDefinerSprite();
@@ -37,6 +44,7 @@ package tree.view.gui.profile {
 		override public function clear():void {
 			super.clear();
 			clearItems();
+			itemClick.removeAll();
 		}
 
 		public function setPerson(person:Person, editable:Boolean):void {
@@ -91,7 +99,7 @@ package tree.view.gui.profile {
 		}
 
 		private function onItemClicked(item:FamilyBlockItem):void{
-
+			itemClick.dispatch(item.data.associate);
 		}
 
 		public function set maxHeight(value:int):void{

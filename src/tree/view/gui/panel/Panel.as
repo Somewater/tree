@@ -14,6 +14,7 @@ package tree.view.gui.panel {
 	import org.osflash.signals.Signal;
 
 	import tree.common.Config;
+	import tree.model.Person;
 
 	import tree.view.gui.Button;
 	import tree.view.gui.UIComponent;
@@ -128,8 +129,8 @@ package tree.view.gui.panel {
 			}
 		}
 
-		public function setOwnerName(name:String):void {
-			treeOwnerNameTF.text = name;
+		public function setOwner(owner:Person = null):void {
+			treeOwnerNameTF.text = owner ? owner.name : '...';
 			refreshOwnerName();
 		}
 
@@ -149,7 +150,7 @@ package tree.view.gui.panel {
 		}
 
 		public function utilize():void {
-			setOwnerName('...')
+			setOwner(null)
 		}
 
 		private function onMouseOver(event:MouseEvent):void {

@@ -32,6 +32,7 @@ package tree.view.gui.profile {
 
 
 		override protected function refresh():void {
+			nameTF.width = _width - 10;
 			birthdayTF.y = nameTF.y + nameTF.textHeight + 10;
 		}
 

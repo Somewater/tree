@@ -33,6 +33,7 @@ package tree.model {
 		private var _treeViewConstructed:Boolean = false;// первоначальное построение дерева завершено
 		private var _constructionInProcess:Boolean = false;// произвоится анимация (построение дерева или сворачивание-разворачивание)
 		private var _selectedPerson:Person;
+		private var _selectedTree:TreeModel;
 
 		public var animationQuality:int = 2;// "0" - без анимации, "2" - полная анимация, "1" - зарезервировано
 
@@ -139,6 +140,7 @@ package tree.model {
 			joinsQueue = [];
 			drawedNodesUids = [];
 			_selectedPerson = null;
+			_selectedTree = null;
 
 			trees = new TreesCollection(bus);
 			matrixes = new MatrixCollection();
@@ -178,6 +180,20 @@ package tree.model {
 
 		public function get contentWidth():int{
 			return _guiOpen ? Config.WIDTH - Config.GUI_WIDTH : Config.WIDTH;
+		}
+
+		public function get selectedTree():TreeModel {
+			return _selectedTree;
+		}
+
+		public function set selectedTree(value:TreeModel):void {
+			if(value != _selectedTree){
+				if(_selectedTree)
+					bus.dispatch(ViewSignal.TREE_DESELECTED, _selectedTree);
+				_selectedTree = value;
+				if(_selectedTree)
+					bus.dispatch(ViewSignal.TREE_SELECTED, _selectedTree);
+			}
 		}
 	}
 }
