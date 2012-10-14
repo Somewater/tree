@@ -59,7 +59,7 @@ package tree.view.gui.notes {
 			notesHolderEmptyLabel.text = I18n.t('EMPTY');
 			addChild(notesHolderEmptyLabel);
 
-			scroller = new ScrollPane();
+			scroller = new AnimatedScrollPane();
 			scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
 			scroller.width = Config.GUI_WIDTH;
 			scroller.height = 400;
