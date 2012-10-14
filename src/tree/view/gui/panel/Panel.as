@@ -34,6 +34,7 @@ package tree.view.gui.panel {
 
 		public var ownerNameClick:ISignal;
 		public var treeSelectorPopup:TreeSelectorPopup;
+		private var treeSelectorPopupMask:Shape = new Shape();
 
 		private var mouseOverPanel:Boolean = false;
 
@@ -81,6 +82,11 @@ package tree.view.gui.panel {
 			Config.tooltips.addChild(treeSelectorPopup);
 			treeSelectorPopup.visible = false;
 			treeSelectorPopup.alpha = 0;
+
+			treeSelectorPopupMask = new Shape();
+			addChild(treeSelectorPopupMask);
+			treeSelectorPopup.mask = treeSelectorPopupMask;
+
 
 			this.addEventListener(MouseEvent.ROLL_OVER, onMouseOver);
 			this.addEventListener(MouseEvent.ROLL_OUT, onMouseOut);
@@ -134,8 +140,12 @@ package tree.view.gui.panel {
 			treeOwnerMark.x = treeOwnerNameTF.x + treeOwnerNameTF.width + 10;
 			treeOwnerMark.y = treeOwnerNameTF.y + treeOwnerNameTF.height * 0.5;
 
-			treeSelectorPopup.x = treeOwnerNameTF.x;
-			treeSelectorPopup.y = treeOwnerNameTF.y + treeOwnerNameTF.height;
+			treeSelectorPopupMask.x = treeSelectorPopup.openedX = treeSelectorPopup.x = treeOwnerNameTF.x;
+			treeSelectorPopupMask.y = treeSelectorPopup.openedY = treeSelectorPopup.y = treeOwnerNameTF.y + treeOwnerNameTF.height;
+
+			treeSelectorPopupMask.graphics.clear();
+			treeSelectorPopupMask.graphics.beginFill(0);
+			treeSelectorPopupMask.graphics.drawRect(-10, -10, 300, Config.HEIGHT);
 		}
 
 		public function utilize():void {

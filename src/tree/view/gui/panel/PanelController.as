@@ -36,7 +36,10 @@ package tree.view.gui.panel {
 
 		private function onNewOwnerClicked(person:Person):void {
 			hideTreeOwnerSelectorPopup();
-			bus.dispatch(AppSignal.RELOAD_TREE, person.uid);
+			//bus.dispatch(AppSignal.RELOAD_TREE, person.uid);
+			bus.dispatch(ViewSignal.PERSON_SELECTED, person);
+			bus.dispatch(ViewSignal.PERSON_CENTERED, person);
+			panel.setOwnerName(person.name)
 		}
 
 		private function onMouseDown(event:MouseEvent):void {
@@ -56,20 +59,17 @@ package tree.view.gui.panel {
 			}else{
 				var data:Array = [];
 				var owner:Person = model.owner;
-				for each(var p:Person in model.trees.iteratorForAllPersons())
-					if(p != owner)
-						data.push(p);
-				data.sort(function(p1:Person, p2:Person):int{return p1.name < p2.name ? -1 : 1});
+				for each(var t:TreeModel in model.trees.iterator)
+					if(t.owner.node.visible)
+						data.push(t.owner);
 				panel.treeSelectorPopup.refreshData(data);
-				panel.treeSelectorPopup.visible = true;
-				Tweener.to(panel.treeSelectorPopup, 0.3, {scaleX: 1, scaleY: 1, alpha: 1});
+				panel.treeSelectorPopup.show()
 				panel.treeOwnerMark.rotation = 0;
 			}
 		}
 
 		private function hideTreeOwnerSelectorPopup():void{
-			Tweener.to(panel.treeSelectorPopup, 0.3, {scaleX: 0.1, scaleY: 0.1, alpha: 0},
-					{onComplete: function(g:GTween = null):void{panel.treeSelectorPopup.visible = false;}})
+			panel.treeSelectorPopup.hide();
 			panel.treeOwnerMark.rotation = 180;
 		}
 

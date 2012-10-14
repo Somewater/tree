@@ -1,4 +1,5 @@
 package tree.view.gui.panel {
+	import com.gskinner.motion.GTween;
 	import com.somewater.display.CorrectSizeDefinerSprite;
 	import com.somewater.text.LinkLabel;
 	import com.somewater.text.LinkLabel;
@@ -15,16 +16,21 @@ package tree.view.gui.panel {
 
 	import tree.common.Config;
 	import tree.model.Person;
+	import tree.view.Tweener;
+	import tree.view.gui.IShowable;
 
 	import tree.view.gui.UIComponent;
 
-	public class TreeSelectorPopup extends UIComponent{
+	public class TreeSelectorPopup extends UIComponent implements IShowable{
 
 		private var ground:DisplayObject;
 		private var labelsHolder:Sprite;
 		private var scroller:ScrollPane = new ScrollPane();
 
 		public var linkClick:ISignal;// (person:Person)
+
+		public var openedX:int;
+		public var openedY:int;
 
 		public function TreeSelectorPopup() {
 			ground = Config.loader.createMc('assets.OwnerNamePopupGround');
@@ -81,6 +87,21 @@ package tree.view.gui.panel {
 			var l:LinkLabel = event.currentTarget as LinkLabel;
 			var person:Person = l.data as Person;
 			linkClick.dispatch(person);
+		}
+
+		public function show():void {
+			this.y = -this.calculatedHeight;
+			this.alpha = 0.3;
+			this.visible = true;
+			Tweener.to(this, 0.3, {y: openedY, alpha: 1});
+		}
+
+		public function hide():void {
+			Tweener.to(this, 0.3, {y: -this.calculatedHeight, alpha: 0.3}, {onComplete: onHideComplete});
+		}
+
+		private function onHideComplete(g:GTween = null):void {
+			this.visible = false;
 		}
 	}
 }

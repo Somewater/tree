@@ -54,7 +54,6 @@ package tree.view.canvas {
 		}
 
 		override protected function refresh():void {
-			controller.centreOn();
 		}
 
 		private function onResize(size:Point):void{
