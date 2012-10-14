@@ -16,7 +16,7 @@ package tree.view.gui {
 
 		public static var PAGES_CLASSES_BY_NAME:Object =
 		{
-			PersonNotesPage: {page: PersonNotesPage, controller: PersonNotesController}
+			PersonNotesPage: {page: PersonNotesPage, controller: PersonNotesController, cachedPage: true}
 			,
 			PersonNotesPage_modeEditSelect: {page: PersonNotesPage, controller: SelectNoteController}
 			,
@@ -34,6 +34,8 @@ package tree.view.gui {
 		public var switcher:ProfileSwitcher;
 		private var pageWidth:int;
 		private var pageHeight:int;
+
+		private var pageName:String;
 
 		public function Gui() {
 			background = Config.loader.createMc('assets.GuiBack');
@@ -74,16 +76,23 @@ package tree.view.gui {
 			if(page){
 				if(controller)
 					controller.stop();
-				page.clear();
+				if(!(pageName && PAGES_CLASSES_BY_NAME[pageName] && PAGES_CLASSES_BY_NAME[pageName]['cachedPage']))
+					page.clear();
 				pageHolder.removeChild(page);
 				controller = null;
 				page = null;
 			}
 
 			var data:Object = PAGES_CLASSES_BY_NAME[name];
-			var cl:Class = data['page'];
-			var controllerCl:Class = data['controller'];
-			page = new cl();
+			if(data['cachedPage'] is DisplayObject){
+				page = data['cachedPage'];
+			}else{
+				var cl:Class = data['page'];
+				var controllerCl:Class = data['controller'];
+				page = new cl();
+				if(data['cachedPage'])
+					data['cachedPage'] = page;
+			}
 			page.setSize(pageWidth, pageHeight);
 			pageHolder.addChild(page);
 
@@ -92,6 +101,8 @@ package tree.view.gui {
 				controller.gui = this;
 				controller.start.apply(null, args);
 			}
+
+			pageName = name;
 		}
 
 		public function utilize():void {

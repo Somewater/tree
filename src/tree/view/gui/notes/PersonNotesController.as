@@ -41,11 +41,27 @@ package tree.view.gui.notes {
 		}
 
 		private function constructNotes():void {
-			page.removeAllNotes();
+			var j:Join;
+			// проверить, вдруг все необходимые ноты уже построены
+			var allNotesCreated:Boolean = model.joinsQueue.length == page.notes.length;
+			if(allNotesCreated){
+				var notesIds:Array = [];
+				for each(var n:PersonNoteItem in page.notes)
+					notesIds[n.data.uid] = true;
 
-			for each(var j:Join in model.joinsQueue){
-				if(j.associate.visible && !hasNote(j.associate))
-					addNote(j)
+				for each(j in model.joinsQueue)
+					if(!notesIds[j.uid]){
+						allNotesCreated = false;
+						break;
+					}
+			}
+
+			if(!allNotesCreated){
+				page.removeAllNotes();
+				for each(j in model.joinsQueue){
+					if(j.associate.visible && !hasNote(j.associate))
+						addNote(j)
+				}
 			}
 		}
 
