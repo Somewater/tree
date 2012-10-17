@@ -198,6 +198,7 @@ package tree.command {
 					for each(var group:XML in person.relatives.*)
 					{
 						var type:JoinType = Join.serverToType(String(group.@type));
+						if(type == null) throw new Error("Undefined join identifier '" + group + "'")
 						for each(var node:XML in group.*)
 						{
 							join = personModel.get(node.@uid)
@@ -293,7 +294,7 @@ package tree.command {
 			to.add(join2);
 
 			if(join.type == null || join2.type == null)
-				throw new Error('Undefined join type');
+				throw new Error('Undefined join type. Type ' + type + ' from ' + from + ' to ' + to);
 
 			if(join.associate == null || join.from == null)
 				throw new Error('Incomplete join ' + join)

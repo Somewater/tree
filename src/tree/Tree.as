@@ -94,7 +94,7 @@ package tree {
 
 		public var detainedCommands:Array = [];
 
-		private var canvas:Canvas;
+		public var canvas:Canvas;
 		private var gui:Gui;
 		private var panel:Panel;
 

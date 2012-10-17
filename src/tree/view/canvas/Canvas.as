@@ -1,10 +1,15 @@
 package tree.view.canvas {
 	import com.gskinner.motion.GTweener;
 
+	import flash.display.Bitmap;
+
+	import flash.display.BitmapData;
+
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
+import flash.geom.Matrix;
+import flash.geom.Point;
 	import flash.geom.Rectangle;
 
 	import tree.common.Config;
@@ -306,6 +311,55 @@ package tree.view.canvas {
 		public function refreshAllGenerations():void {
 			for each(var h:GenerationBackground in generationsHolder)
 				h.refresh();
+		}
+
+		public function getPrintArea():Sprite{
+			var minX:int = int.MAX_VALUE;
+			var minY:int = int.MAX_VALUE;
+			var maxX:int = int.MIN_VALUE;
+			var maxY:int = int.MIN_VALUE;
+
+			for each(var n:NodeIcon in nodesByUid){
+				var v:int;
+				v = n.x; if(v < minX) minX = v;
+				v = n.y; if(v < minY) minY = v;
+				v = n.x + Canvas.ICON_WIDTH; if(v > maxX) maxX = v;
+				v = n.y + Canvas.ICON_HEIGHT; if(v > maxY) maxY = v;
+				if(!n.visible){
+					n.visible = true;
+					nodesHolder.addChild(n);
+				}
+			}
+
+			const PADDING:int = 5;
+			maxX += PADDING; maxY += PADDING;
+			minX -= PADDING; minY -=PADDING;
+
+			var s:Sprite = new Sprite();
+			var w:int = (maxX - minX);
+			var h:int = (maxY - minY);
+			var landscape:Boolean = w > h;
+			const MAX_W:int = landscape ? 1200 : 850;
+			const MAX_H:int = landscape ? 850 : 1200;
+			var scale:Number = Math.min(MAX_W/ w, MAX_H / h);
+			w *= scale; h *= scale;
+			var bmp:BitmapData = new BitmapData(w, h, false, 0xFFFFFFFF);
+
+			generationsHolder.visible = false;
+
+			var m:Matrix = new Matrix(scale, 0.2, 0.2, scale, -minX * scale,  -minY * scale)
+			if(landscape) m.rotate( Math.PI * 0.5);
+			bmp.draw(this, m, null, null, new Rectangle(0, 0, w / scale, h / scale));
+			generationsHolder.visible = true;
+
+			s.addChild(new Bitmap(bmp));
+			s.graphics.beginFill(0)
+			s.graphics.drawRect(0,0,1200, 850)
+			return s;
+		}
+
+		public function getPrintSize(area:Sprite):Rectangle{
+			return new Rectangle(-1000, -1000, 1000, 1000);
 		}
 	}
 }

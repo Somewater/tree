@@ -11,6 +11,7 @@ package tree.view.gui.panel {
 	import tree.Tree;
 
 	import tree.command.Actor;
+	import tree.command.PrintTree;
 	import tree.command.view.DepthIndexChanged;
 	import tree.common.Config;
 	import tree.model.Person;
@@ -35,6 +36,7 @@ package tree.view.gui.panel {
 			panel.centreRotateButton.left.click.add(onCentre);
 			panel.centreRotateButton.right.click.add(onRotateTree);
 			panel.depthSelector.indexChanged.add(onDepthIndexChanged);
+			panel.savePrintButton.right.click.add(onPrintClicked)
 		}
 
 		private function onNewOwnerClicked(person:Person):void {
@@ -92,6 +94,10 @@ package tree.view.gui.panel {
 		private function onRotateTree(b:Button):void{
 			if(!model.constructionInProcess)
 				model.descending = !model.descending;
+		}
+
+		private function onPrintClicked(b:Button):void{
+			new PrintTree().execute();
 		}
 	}
 }
