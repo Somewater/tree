@@ -43,6 +43,8 @@ package tree.signal {
 
 		public static const REFRESH_GENERATIONS:String = 'RefreshGenerations';// перерисовать все фоны поколений
 
+		public static const REDRAW_JOIN_LINES:String = 'RedrawJoinLines';// обновить линии связей отдельной ноды callback(p:Person)
+
 
 
 

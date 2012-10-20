@@ -40,6 +40,7 @@ package tree.view.canvas {
 			bus.addNamed(ViewSignal.REFRESH_NODE_POSITIONS, refreshAllNodePositions);
 			bus.addNamed(ViewSignal.REFRESH_JOIN_LINES, refreshAllJoinLines);
 			bus.addNamed(ViewSignal.REFRESH_GENERATIONS, refreshAllGenerations);
+			bus.addNamed(ViewSignal.REDRAW_JOIN_LINES, refreshPersonJoinLines);
 		}
 
 		public function drawJoin(g:GenNode):void {
@@ -135,6 +136,10 @@ package tree.view.canvas {
 		private function onNodeCompleteOnce(n:NodeIcon):void {
 			refreshNodeJoinLines(n.data.node);
 			canvas.fireComplete();
+		}
+
+		private function refreshPersonJoinLines(person:Person):void{
+			refreshNodeJoinLines(person.node);
 		}
 
 		private function refreshNodeJoinLines(node:Node):void {

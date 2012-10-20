@@ -12,6 +12,7 @@ package tree.command.edit {
 	import tree.model.TreeModel;
 	import tree.signal.ModelSignal;
 	import tree.signal.RequestSignal;
+	import tree.signal.ViewSignal;
 
 	public class EditProfile extends Command{
 
@@ -124,7 +125,9 @@ package tree.command.edit {
 				newTree = true;
 			}
 
-			if(newTree)
+			if(person.node.visible)
+				bus.dispatch(ViewSignal.REDRAW_JOIN_LINES, person);
+			else if(newTree)
 				bus.dispatch(ModelSignal.TREE_NEED_CONSTRUCT, person.tree);
 			else
 				bus.dispatch(ModelSignal.SHOW_NODE, join);

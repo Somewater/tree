@@ -115,8 +115,8 @@ package tree.view.gui.notes {
 			model.editing.editEnabled = false;
 			if(model.selectedPerson == model.editing.edited)
 				model.selectedPerson = null;
-			new MessageWindow('TODO: спросить подтверждение и отправить на сервер новую связь').open();
-			//bus.dispatch(ModelSignal.EDIT_PROFILE, note.data, model.editing.joinType, model.editing.from);
+			//new MessageWindow('TODO: спросить подтверждение и отправить на сервер новую связь').open();
+			bus.dispatch(ModelSignal.EDIT_PROFILE, note.data, model.editing.joinType, model.editing.from);
 			gui.setPage(PersonProfilePage.NAME);
 		}
 	}
