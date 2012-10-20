@@ -100,7 +100,10 @@ package tree.view.canvas {
 
 		private function setJoinLine(from:int, to:int, line:JoinLine):void {
 			if(from > to) {var tmp:int = from; from = to; to = tmp;}
-			joindByUid[from + '->' + to] = line;
+			if(line)
+				joindByUid[from + '->' + to] = line;
+			else
+				delete joindByUid[from + '->' + to];
 			//joindByUid[from << 0xFFFF + to] = line;
 		}
 
@@ -288,6 +291,21 @@ package tree.view.canvas {
 					nodesHolder.removeChild(n);
 				}
 			}
+		}
+
+		public function refreshAllNodePositions():void {
+			for each(var n:NodeIcon in nodesByUid)
+				n.refreshPosition(false);
+		}
+
+		public function refreshAllJoinLines():void {
+			for each(var j:JoinLine  in joindByUid)
+				j.show(false)
+		}
+
+		public function refreshAllGenerations():void {
+			for each(var h:GenerationBackground in generationsHolder)
+				h.refresh();
 		}
 	}
 }

@@ -10,6 +10,7 @@ package tree.view.canvas {
 	import tree.common.IClear;
 	import tree.model.GenNode;
 	import tree.model.Generation;
+	import tree.model.Model;
 
 	public class GenerationBackground extends Sprite implements IClear{
 
@@ -30,7 +31,7 @@ package tree.view.canvas {
 		}
 
 		public function refresh():void {
-			this.y = generation.y * Canvas.LEVEL_HEIGHT;
+			this.y = generation.getY(Model.instance.descending) * Canvas.LEVEL_HEIGHT;
 			graphics.clear();
 			//graphics.beginFill(generation.generation == 0 ? 0xccFFcc: 0xCCCCCC + this.generation.generation * 0x111111)
 			graphics.beginFill(odd ? 0xFBFFFB : 0xFAFAE0);

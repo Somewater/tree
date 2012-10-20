@@ -10,6 +10,7 @@ package tree.view.canvas {
 
 	import tree.model.Join;
 	import tree.model.JoinType;
+	import tree.model.Model;
 	import tree.model.lines.LineMatrixCollection;
 	import tree.model.Node;
 
@@ -125,7 +126,7 @@ package tree.view.canvas {
 					p2 = n2.parentPoint(node1);
 
 					addToLines(p1);
-					p1.y += -Config.DESCENDING_INT * Canvas.JOIN_BREED_STICK;
+					p1.y += -Model.instance.descendingInt * Canvas.JOIN_BREED_STICK;
 					addToLines(p1);
 					p1.x = p2.x;
 					addToLines(p1);
@@ -135,7 +136,7 @@ package tree.view.canvas {
 					p2 = n2.breedPoint();
 
 					addToLines(p1);
-					p1.y = p2.y - Config.DESCENDING_INT * Canvas.JOIN_BREED_STICK;
+					p1.y = p2.y - Model.instance.descendingInt * Canvas.JOIN_BREED_STICK;
 					addToLines(p1);
 					p1.x = p2.x;
 					addToLines(p1);
@@ -145,7 +146,7 @@ package tree.view.canvas {
 				p1 = n1.broPoint();
 				p2 = n2.broPoint();
 				addToLines(p1);
-				p1.y += -Config.DESCENDING_INT * Canvas.JOIN_STICK;
+				p1.y += -1 * Canvas.JOIN_STICK;
 				addToLines(p1);
 				p1.x = p2.x;
 				addToLines(p1);
@@ -155,7 +156,7 @@ package tree.view.canvas {
 				p1 = n1.exMarryPoint();
 				p2 = n2.exMarryPoint();
 				addToLines(p1);
-				p1.y += -Config.DESCENDING_INT * Canvas.JOIN_STICK;
+				p1.y += -1 * Canvas.JOIN_STICK;
 				addToLines(p1);
 				p1.x = p2.x;
 				addToLines(p1);

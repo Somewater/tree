@@ -131,16 +131,30 @@ package tree.model {
 			return _levelNum;
 		}
 
-		public function get y():int {
+		public function getY(desc:Boolean):int {
 			if(generation == 0) return 0;
-			var value:int = generation > 0 ? collection.get(0)._levelNum : 0;
-			var vector:int = value > 0 ? -1 : 1;
-			for (var i:int = generation < 0 ? generation : generation - 1;
-				 i != 0;
-				 i += vector) {
-				value += collection.get(i)._levelNum;
+			var value:int;
+			var vector:int;
+			var i:int;
+			if(desc){
+				value = generation > 0 ? collection.get(0)._levelNum : 0;
+				vector = value > 0 ? -1 : 1;
+				for (i = generation < 0 ? generation : generation - 1;
+					 i != 0;
+					 i += vector) {
+					value += collection.get(i)._levelNum;
+				}
+				return generation < 0 ? -value : value;
+			}else{
+				value = generation < 0 ? collection.get(0)._levelNum : 0;
+				vector = value > 0 ? 1 : -1;
+				for (i = generation < 0 ? generation + 1 : generation;
+					 i != 0;
+					 i += vector) {
+					value += collection.get(i)._levelNum;
+				}
+				return generation > 0 ? -value : value;
 			}
-			return generation < 0 ? -value : value;
 		}
 
 		/**

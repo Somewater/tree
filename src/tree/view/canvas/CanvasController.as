@@ -15,6 +15,7 @@ package tree.view.canvas {
 	import tree.model.Join;
 	import tree.model.Join;
 	import tree.model.JoinType;
+	import tree.model.Model;
 	import tree.model.Node;
 	import tree.model.Person;
 	import tree.signal.ModelSignal;
@@ -36,6 +37,9 @@ package tree.view.canvas {
 			canvas.click.add(onCanvasDeselect);
 			canvas.arrowMenu.actionClick.add(onAddNewPersonClick)
 			bus.constructionInProcess.add(onConstructionStatusChanged);
+			bus.addNamed(ViewSignal.REFRESH_NODE_POSITIONS, refreshAllNodePositions);
+			bus.addNamed(ViewSignal.REFRESH_JOIN_LINES, refreshAllJoinLines);
+			bus.addNamed(ViewSignal.REFRESH_GENERATIONS, refreshAllGenerations);
 		}
 
 		public function drawJoin(g:GenNode):void {
@@ -167,8 +171,10 @@ package tree.view.canvas {
 
 			// надо обновить ноды текущей generation и всех нижележащих
 			var generationNumber:int = generation.generation;
+			var des:Boolean = Model.instance.descending;
 			for each(var gener:Generation in model.generations.iterator)
-				if(generationNumber < 0 ? gener.generation <= generationNumber : gener.generation >= generationNumber)
+				if(des ? (generationNumber < 0 ? gener.generation <= generationNumber : gener.generation >= generationNumber) :
+						 (generationNumber > 0 ? gener.generation >= generationNumber : gener.generation <= generationNumber))
 					for each(var g:GenNode in gener.iterator){
 						onNodePositionChanged(g.node);
 					}
@@ -330,6 +336,19 @@ package tree.view.canvas {
 
 		private function onStopDragAlignComplete(g:GTween = null):void{
 			canvas.refreshNodesVisibility(true);
+		}
+
+		private function refreshAllNodePositions():void{
+			canvas.refreshAllNodePositions();
+			canvas.refreshNodesVisibility(true);
+		}
+
+		private function refreshAllJoinLines():void{
+			canvas.refreshAllJoinLines();
+		}
+
+		private function refreshAllGenerations():void{
+			canvas.refreshGenerations();
 		}
 	}
 }

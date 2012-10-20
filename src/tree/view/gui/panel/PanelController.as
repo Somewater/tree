@@ -33,6 +33,7 @@ package tree.view.gui.panel {
 			panel.ownerNameClick.add(onOwnerNameClicked);
 			panel.treeSelectorPopup.linkClick.add(onNewOwnerClicked);
 			panel.centreRotateButton.left.click.add(onCentre);
+			panel.centreRotateButton.right.click.add(onRotateTree);
 			panel.depthSelector.indexChanged.add(onDepthIndexChanged);
 		}
 
@@ -86,6 +87,11 @@ package tree.view.gui.panel {
 				panel.depthSelector.index = index
 				new DepthIndexChanged(index).execute();
 			}
+		}
+
+		private function onRotateTree(b:Button):void{
+			if(!model.constructionInProcess)
+				model.descending = !model.descending;
 		}
 	}
 }

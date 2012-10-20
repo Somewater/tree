@@ -53,6 +53,8 @@ package tree.model {
 
 		public var treesBorders:TreesBorders;
 
+		private var _descending:Boolean = true;// нисходящее дерево (дети ниже родителей)
+
 		public function Model(bus:Bus) {
 			if(instance)
 				throw new Error('Must be only one');
@@ -199,6 +201,22 @@ package tree.model {
 				if(_selectedTree)
 					bus.dispatch(ViewSignal.TREE_SELECTED, _selectedTree);
 			}
+		}
+
+
+		public function get descending():Boolean {
+			return _descending;
+		}
+
+		public function set descending(value:Boolean):void {
+			if(value != _descending){
+				_descending = value;
+				bus.dispatch(ViewSignal.DESCENDING_CHANGED);
+			}
+		}
+
+		public function get descendingInt():int{
+			return _descending ? 1 : -1
 		}
 	}
 }

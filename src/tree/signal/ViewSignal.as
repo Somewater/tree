@@ -35,6 +35,16 @@ package tree.signal {
 
 		public static const START_EDIT_PERSON:String = 'startEditPerson';// нужно перейти в режим редактирования выбранной ноды (person:Person, joinType:JoinType = null, from:Person = null)
 
+		public static const DESCENDING_CHANGED:String = 'DescendingChanged';// правило (родители выше детей/ родители ниже детей) изменено
+
+		public static const REFRESH_NODE_POSITIONS:String = 'RefreshNodePositions';// мгновенно обновить позиционирование всех нод дерева
+
+		public static const REFRESH_JOIN_LINES:String = 'RefreshJoinLines';// мгновенно перерисовать все линии связей дерева
+
+		public static const REFRESH_GENERATIONS:String = 'RefreshGenerations';// перерисовать все фоны поколений
+
+
+
 
 		public function ViewSignal() {
 		}

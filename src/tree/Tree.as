@@ -43,6 +43,7 @@ package tree {
 	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
 	import tree.command.view.RecalculateNodeRollUnroll;
+	import tree.command.view.RefreshNodePositions;
 	import tree.command.view.ShowNode;
 	import tree.command.view.HideNode;
 	import tree.command.view.RollUnrollNode;
@@ -232,6 +233,7 @@ package tree {
 
 			bus.addCommand(ModelSignal.EDIT_PROFILE, EditProfile);
 			bus.addCommand(ViewSignal.START_EDIT_PERSON, StartProfileEditing);
+			bus.addCommand(ViewSignal.DESCENDING_CHANGED, RefreshNodePositions);
 		}
 
 

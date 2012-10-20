@@ -270,6 +270,7 @@ package tree.view.canvas {
 		public function breedPoint():Point{
 			position();
 			tmpPoint.x += Canvas.ICON_WIDTH * 0.5;
+			tmpPoint.y += Model.instance.descending ? 0 : Canvas.ICON_HEIGHT;
 			return tmpPoint;
 		}
 
@@ -279,10 +280,10 @@ package tree.view.canvas {
 			{
 				var halfSpase:int = (Canvas.ICON_WIDTH_SPACE * 2 - Canvas.ICON_WIDTH) * 0.5;
 				tmpPoint.x += (_data.node.person.male ? halfSpase + Canvas.ICON_WIDTH: -halfSpase);
-				tmpPoint.y += Canvas.ICON_HEIGHT * 0.5 + 6.5;//  поправка на полуразмер сердечка
+				tmpPoint.y += Canvas.ICON_HEIGHT * 0.5 + (Model.instance.descending ? 6.5 : -6.5 );//  поправка на полуразмер сердечка
 			}else{
 				tmpPoint.x += Canvas.ICON_WIDTH * 0.5;
-				tmpPoint.y += Canvas.ICON_HEIGHT;
+				tmpPoint.y += Model.instance.descending ? Canvas.ICON_HEIGHT : 0;
 			}
 			return tmpPoint;
 		}
@@ -311,7 +312,7 @@ package tree.view.canvas {
 			var node:Node = this._data.node;
 			var generation:Generation = this._data.generation;
 			tmpPoint.x = (node.x + node.person.tree.shiftX) * Canvas.ICON_WIDTH_SPACE;
-			tmpPoint.y = (generation.y + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
+			tmpPoint.y = (generation.getY(Model.instance.descending) + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
 			return tmpPoint;
 		}
 
