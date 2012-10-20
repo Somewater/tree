@@ -6,6 +6,7 @@ package tree.command {
 
 	import tree.model.Join;
 	import tree.model.Join;
+	import tree.model.JoinCollectionBase;
 	import tree.model.JoinType;
 	import tree.model.Model;
 	import tree.model.ModelBase;
@@ -124,8 +125,7 @@ package tree.command {
 					personModel = treeModel.persons.get(String(person.@uid));
 					if(personModel == null)
 					{
-						personModel = treeModel.persons.allocate(treeModel.nodes);
-						personModel.tree = treeModel;
+						personModel = treeModel.persons.allocate(treeModel);
 						personModel.uid = int(String(person.@uid))
 						personModel.photo = String(person.fields.field.(@name == "photo_small"));
 						treeModel.persons.add(personModel)
@@ -207,39 +207,7 @@ package tree.command {
 								if(!associate)
 									continue;
 
-								join = new Join(treeModel.persons);
-								join.from = personModel;
-								join.associate = associate;
-								join.type = type;
-
-								// одновременно строим другую связь
-								var join2:Join = new Join(treeModel.persons);
-								join2.from = associate;
-								join2.associate = personModel;
-								join2.type = Join.toAlter(type, personModel.male);
-
-								// проверяем, не пропагандируем ли мы многоженство и многомужество  (todo: пофиксить гомосексуализм)
-								if(join.type.superType == JoinType.SUPER_TYPE_MARRY){
-									if(personModel.marry || associate.marry){
-										join.type = Join.toEx(join.type);
-										join2.type = Join.toEx(join2.type);
-									}
-									// в любом случае снова выставляем флаг кэша в false, чтобы не создать женатых, которые урвенеы, что не женаты ни на ком
-									personModel.dirtyMattyCache();
-									associate.dirtyMattyCache();
-								}
-
-								personModel.add(join);
-								associate.add(join2);
-
-								if(join.type == null || join2.type == null)
-									throw new Error('Undefined join type');
-
-								if(join.associate == null || join.from == null)
-									throw new Error('Incomplete join ' + join)
-
-								if(join2.associate == null || join2.from == null)
-									throw new Error('Incomplete join ' + join)
+								join = createJoin(type, personModel, associate);
 
 								//log(personModel + ' ~> ' + associate + ';; ' + join + '; ' + join2);
 							}
@@ -292,6 +260,48 @@ package tree.command {
 			value = (step/5) + 0.2 * value
 
 			bus.initialLoadingProgress.dispatch(2, value);
+		}
+
+		public static function createJoin(type:JoinType, _from:JoinCollectionBase, _to:JoinCollectionBase):Join{
+			var from:Person = _from is Person ? _from as Person : (_from as Node).person;
+			var to:Person = _to is Person ? _to as Person : (_to as Node).person;
+			var tree:TreeModel = from.tree ? from.tree : to.tree;
+
+			var join:Join = new Join(tree.persons);
+			join.from = from;
+			join.associate = to;
+			join.type = type;
+
+			// одновременно строим другую связь
+			var join2:Join = new Join(tree.persons);
+			join2.from = to;
+			join2.associate = from;
+			join2.type = Join.toAlter(type, from.male);
+
+			// проверяем, не пропагандируем ли мы многоженство и многомужество  (todo: пофиксить гомосексуализм)
+			if(join.type.superType == JoinType.SUPER_TYPE_MARRY){
+				if(from.marry || to.marry){
+					join.type = Join.toEx(join.type);
+					join2.type = Join.toEx(join2.type);
+				}
+				// в любом случае снова выставляем флаг кэша в false, чтобы не создать женатых, которые урвенеы, что не женаты ни на ком
+				from.dirtyMattyCache();
+				to.dirtyMattyCache();
+			}
+
+			from.add(join);
+			to.add(join2);
+
+			if(join.type == null || join2.type == null)
+				throw new Error('Undefined join type');
+
+			if(join.associate == null || join.from == null)
+				throw new Error('Incomplete join ' + join)
+
+			if(join2.associate == null || join2.from == null)
+				throw new Error('Incomplete join ' + join)
+
+			return join;
 		}
 	}
 }

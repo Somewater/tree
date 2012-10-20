@@ -34,6 +34,9 @@ package tree.model {
 			if(join.uid == this.uid)
 				throw new Error('Join for me');
 			super.add(model);
+			_marry = null;
+			_marryCalculated = false;
+			_ex_marries = _breeds = _parents = _bros = null;
 		}
 
 
@@ -54,6 +57,19 @@ package tree.model {
 				_marryCalculated = true;
 			}
 			return _marry;
+		}
+
+		public function get legitimateBreed():Array{
+			var legitimateBreed:Array = [];
+			var marry:Person = this.marry;
+			if(marry){
+				var marryBreeds:Array = marry.breeds;
+				var myBreeds:Array = this.breeds;
+				for each(var b:Person in marryBreeds)
+					if(myBreeds.indexOf(b) != -1)
+						legitimateBreed.push(b);
+			}
+			return legitimateBreed;
 		}
 
 		public function hasLegitimateBreed():Boolean{

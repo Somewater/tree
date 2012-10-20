@@ -121,6 +121,14 @@ package tree.view.gui.profile {
 			refresh();
 		}
 
+		public function updatePersonProperties(person:Person):void{
+			person.firstName = firstNameInput.text;
+			person.lastName = lastNameInput.text;
+			person.middleName = middleNameInput.text;
+			person.died = died.selected;
+			person.male = sexSelector.male;
+		}
+
 		override protected function refresh():void {
 			super.refresh();
 

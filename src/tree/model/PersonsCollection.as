@@ -1,6 +1,8 @@
 package tree.model {
 	import org.osflash.signals.ISignal;
 
+	import tree.Tree;
+
 	import tree.common.Bus;
 
 	import tree.model.base.ModelCollection;
@@ -18,8 +20,8 @@ package tree.model {
 			return this.hash[id];
 		}
 
-		public function allocate(nodes:NodesCollection):Person {
-			return new Person(nodes);
+		public function allocate(tree:TreeModel):Person {
+			return new Person(tree);
 		}
 	}
 }

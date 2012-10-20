@@ -1,6 +1,8 @@
 package tree.model {
 	import org.osflash.signals.ISignal;
 
+	import tree.Tree;
+
 	import tree.model.base.ICollection;
 	import tree.model.base.IModel;
 	import tree.model.base.ModelCollection;
@@ -12,7 +14,6 @@ package tree.model {
 
 		public var male:Boolean;
 
-		private var nodes:NodesCollection;
 		public var photo:String;
 
 		public var tree:TreeModel;
@@ -27,8 +28,8 @@ package tree.model {
 		public var post:String;
 		public var profileUrl:String;
 
-		public function Person(nodes:NodesCollection) {
-			this.nodes = nodes;
+		public function Person(tree:TreeModel) {
+			this.tree = tree;
 		}
 
 		override public function get id():String {
@@ -42,7 +43,8 @@ package tree.model {
 		}
 
 		public function get node():Node {
-			return nodes ? nodes.get(this.uid + '') : null;
+			var t:TreeModel = this.tree
+			return t ? t.nodes.get(this.uid + '') : null;
 		}
 
 		public function dirtyMattyCache():void {

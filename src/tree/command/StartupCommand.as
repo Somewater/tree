@@ -25,7 +25,7 @@ package tree.command {
 				var v:URLVariables = new URLVariables(get);
 				uid = v.uid;
 			}
-			request.uid = requiredId || uid || 3;// 18985299 (my), 36007,  84001 (4.5k)
+			request.uid = requiredId || uid || 18985299;// 18985299 (my), 36007,  84001 (4.5k)
 			call(request);
 		}
 	}

@@ -141,7 +141,7 @@ package tree.view.gui.notes {
 		public function set data(data:Person):void {
 			_data = data;
 			nameTF.text = data.fullname;
-			postTF.text = data.post;
+			postTF.text = data.post || '';
 			refresh();
 		}
 

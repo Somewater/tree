@@ -1,9 +1,12 @@
 package tree.view.gui.notes {
+	import com.somewater.storage.I18n;
+
 	import tree.model.Join;
 	import tree.model.JoinType;
 	import tree.model.ModelBase;
 	import tree.model.Node;
 	import tree.model.Person;
+	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
 	import tree.view.gui.GuiControllerBase;
 	import tree.view.gui.profile.PersonProfilePage;
@@ -105,10 +108,15 @@ package tree.view.gui.notes {
 		}
 
 		private function onNoteClicked(note:PersonNoteItem):void{
+			if(model.constructionInProcess){
+				new MessageWindow(I18n.t('CANT_SAVE_PERSON')).open();
+				return;
+			}
 			model.editing.editEnabled = false;
 			if(model.selectedPerson == model.editing.edited)
 				model.selectedPerson = null;
 			new MessageWindow('TODO: спросить подтверждение и отправить на сервер новую связь').open();
+			//bus.dispatch(ModelSignal.EDIT_PROFILE, note.data, model.editing.joinType, model.editing.from);
 			gui.setPage(PersonProfilePage.NAME);
 		}
 	}

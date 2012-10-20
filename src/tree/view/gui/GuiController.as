@@ -25,7 +25,7 @@ package tree.view.gui {
 
 		public function addPerson():void {
 			// TODO TODO TODO
-			var p:Person = model.trees.first.persons.allocate(model.trees.first.nodes);
+			var p:Person = model.trees.first.persons.allocate(model.trees.first);
 			p.uid = (int.MAX_VALUE * Math.random()) | 536870912;
 			p.firstName = 'Ребенок ' + int(Math.random() * 10);
 			var from:Person = model.trees.first.owner;

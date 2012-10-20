@@ -1,4 +1,6 @@
 package tree.view.gui.profile {
+	import com.somewater.storage.I18n;
+
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 
@@ -96,7 +98,12 @@ package tree.view.gui.profile {
 		}
 
 		private function onSaveEditedData(...args):void {
-			bus.dispatch(ModelSignal.EDIT_PROFILE, model.selectedPerson);
+			if(model.constructionInProcess){
+				new MessageWindow(I18n.t('CANT_SAVE_PERSON')).open();
+				return;
+			}
+			page.editableInfo.updatePersonProperties(model.editing.edited)
+			bus.dispatch(ModelSignal.EDIT_PROFILE, model.editing.edited, model.editing.joinType, model.editing.from);
 			goBack();
 		}
 

@@ -1,4 +1,5 @@
 package tree.command.edit {
+	import tree.Tree;
 	import tree.command.Command;
 	import tree.common.Config;
 	import tree.model.Join;
@@ -25,7 +26,9 @@ package tree.command.edit {
 		override public function execute():void {
 			if(!person){
 				//person = model.trees.first.persons.allocate(model.trees.first.nodes);
-				person = new Person(null);
+				person = new Person(from ? from.tree : null);
+				person.uid = Tree.instance.getTmpPersonUid()
+				person.tree = from ? from.tree : null;
 				// настроить
 				if(joinType){
 					person.male = joinType.manAssoc;

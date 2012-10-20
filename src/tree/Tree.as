@@ -299,5 +299,9 @@ package tree {
 				_initialLoadingProgressMin = value;
 			}
 		}
+
+		public function getTmpPersonUid():int {
+			return int.MAX_VALUE * Math.random();
+		}
 	}
 }

@@ -148,6 +148,12 @@ package tree.view.canvas {
 				l = canvas.getJoinLine(j.from.uid, j.uid);
 				if(l)
 					linetToRefresh.push(l);
+				else if(j.type.superType == JoinType.SUPER_TYPE_BREED || j.type.superType == JoinType.SUPER_TYPE_PARENT){
+					// надо создать связь (при условии что это важная связь)
+					l = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
+					l.data = j;
+					l.play();
+				}
 			}
 
 			// если рассматриваемая нода имеет супруга, обновить джоин-лайны детей
@@ -164,6 +170,8 @@ package tree.view.canvas {
 			for each(l in linetToRefresh){
 				l.show();
 			}
+
+			// TODO: удалить ненужные связи типа bro
 		}
 
 		private function onGenerationChanged(generation:Generation):void {
