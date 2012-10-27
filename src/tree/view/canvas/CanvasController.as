@@ -153,7 +153,7 @@ package tree.view.canvas {
 				l = canvas.getJoinLine(j.from.uid, j.uid);
 				if(l)
 					linetToRefresh.push(l);
-				else if(j.type.superType == JoinType.SUPER_TYPE_BREED || j.type.superType == JoinType.SUPER_TYPE_PARENT){
+				else{
 					// надо создать связь (при условии что это важная связь)
 					l = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
 					l.data = j;

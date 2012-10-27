@@ -114,10 +114,14 @@ package tree.view.canvas {
 			if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
 				p1 = node1.person.male ? n1.husbandPoint() : n1.wifePoint();
 				p2 = node2.person.male ? n2.husbandPoint() : n2.wifePoint();
-				addToLines(p1);
-				p1.x = (p1.x + p2.x) * 0.5 + shiftX;
-				addToLines(p1);
-				addToLines(p2);
+				if(p1.y != p2.y || (node1.person.male && p1.x > p2.x) || (node2.person.male && p2.x > p1.x)){
+					addExMarryLine(n1,  n2);
+				}else{
+					addToLines(p1);
+					p1.x = (p1.x + p2.x) * 0.5 + shiftX;
+					addToLines(p1);
+					addToLines(p2);
+				}
 			}else if(joinSuperType == JoinType.SUPER_TYPE_PARENT || joinSuperType == JoinType.SUPER_TYPE_BREED){
 				var p2IsParent:Boolean = (int(this.fromStart) ^ int(joinSuperType == JoinType.SUPER_TYPE_PARENT)) == 0;
 
@@ -153,15 +157,7 @@ package tree.view.canvas {
 				addToLines(p2);
 				lineMask = 1
 			}else if(joinSuperType == JoinType.SUPER_TYPE_EX_MARRY){
-				p1 = n1.exMarryPoint();
-				p2 = n2.exMarryPoint();
-				addToLines(p1);
-				p1.y += -1 * Canvas.JOIN_STICK;
-				addToLines(p1);
-				p1.x = p2.x;
-				addToLines(p1);
-				addToLines(p2);
-				lineMask = 2;
+                addExMarryLine(n1,  n2);
 			}else
 				throw new Error('Undefined Join type: ' + joinSuperType)
 
@@ -169,6 +165,19 @@ package tree.view.canvas {
 			var shift:Point = lineModelCollection.align(lines, _data, lineMask)
 			shiftX = shift.x;
 			shiftY = shift.y;
+		}
+
+		private function  addExMarryLine(n1:NodeIcon, n2: NodeIcon):void{
+			drawIcon = false;
+			var p1:Point = n1.exMarryPoint();
+			var p2:Point = n2.exMarryPoint();
+			addToLines(p1);
+			p1.y += -1 * Canvas.JOIN_STICK;
+			addToLines(p1);
+			p1.x = p2.x;
+			addToLines(p1);
+			addToLines(p2);
+			lineMask = 2;
 		}
 
 		private function addToLines(p:Point):void{

@@ -31,12 +31,14 @@ package tree.command.edit {
 			bus.loaderProgress.dispatch(0);
 			detain();
 
-			createJoinAndTree();
+			if(joinType.superType == JoinType.SUPER_TYPE_MARRY && (person.marry || from.marry))
+				joinType = Join.joinBy(JoinType.SUPER_TYPE_EX_MARRY, person.male)
+
 			var request:RequestSignal = new RequestSignal(RequestSignal.ADD_USER);
-			request.addedJoin = join;
 
 			// todo: послать запрос на сервер и дождаться положительного ответа
 			//call(request);
+            createJoinAndTree();
 			onResponseSuccess();
 		}
 
@@ -112,10 +114,12 @@ package tree.command.edit {
 				var alterJoin:Join = new Join(tree.persons);
 				alterJoin.associate = join.from;
 				alterJoin.from = join.associate;
-				alterJoin.type = Join.toAlter(join.type, join.associate.male);
+				alterJoin.type = Join.toAlter(join.type, join.from.male);
 
 				join.associate.add(alterJoin);
+				join.associate.node.add(alterJoin);
 				join.from.add(join);
+				join.from.node.add(join)
 			}
 
 			var newTree:Boolean = false;
@@ -136,10 +140,11 @@ package tree.command.edit {
 			bus.loaderProgress.dispatch();
 		}
 
-		private function createJoin(type:JoinType, _from:Person, _to:Person):void{
+		private function createJoin(type:JoinType, _from:Person, _to:Person):Join{
 			var j:Join = ConstructTreeModel.createJoin(type, _from, _to);
 			_from.node.add(j);
 			_to.node.add(_to.relation(_from));
+			return j
 		}
 	}
 }
