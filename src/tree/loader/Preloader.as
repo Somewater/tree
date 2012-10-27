@@ -18,8 +18,6 @@ package tree.loader {
 	import flash.text.TextFormat;
 	import flash.utils.getDefinitionByName;
 
-	import spark.primitives.Graphic;
-
 	public class Preloader extends MovieClip{
 
 		public var loaderName:String = 'TreeLoader';
