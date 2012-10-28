@@ -139,6 +139,7 @@ package tree.command {
 					personModel.deathday = databaseFormatToDate(person.fields.field.(@name == "deathday"));
 					personModel.post = String(person.fields.field.(@name == "rel_label"));
 					personModel.profileUrl = String(person.fields.field.(@name == "url"));
+					personModel.open = String(person.@open) == '1';
 
 					nodeModel = treeModel.nodes.allocate(personModel) ;
 					treeModel.nodes.add(nodeModel);
@@ -207,6 +208,12 @@ package tree.command {
 								var associate:Person = treeModel.persons.get(node.@uid);
 								if(!associate)
 									continue;
+
+								// в ручную выставляем пол на основе конфига
+								if(!associate.open)associate.male = type.manAssoc;
+								if(!personModel.open && (type.superType == JoinType.SUPER_TYPE_MARRY
+														|| type.superType == JoinType.SUPER_TYPE_EX_MARRY))
+									personModel.male = !type.manAssoc;
 
 								join = createJoin(type, personModel, associate);
 

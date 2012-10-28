@@ -28,6 +28,8 @@ package tree.model {
 		public var post:String;
 		public var profileUrl:String;
 
+		public  var open:Boolean;
+
 		public function Person(tree:TreeModel) {
 			this.tree = tree;
 		}
@@ -39,7 +41,7 @@ package tree.model {
 		public function get female():Boolean{return !male;}
 
 		public function toString():String {
-			return '[' + this.name + ' ' + uid + ']';
+			return '[' + this.name + ' ' + uid + ' (' + (this.male ? 'male' : 'female') + ')]';
 		}
 
 		public function get node():Node {
@@ -52,7 +54,7 @@ package tree.model {
 		}
 
 		public function get name():String {
-			return lastName + ' ' + firstName;
+			return lastName || firstName ? lastName + ' ' + firstName : uid.toString();
 		}
 
 		public function get fullname():String {

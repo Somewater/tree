@@ -22,7 +22,8 @@ package tree.view.canvas {
 
 	import tree.common.Config;
 	import tree.common.IClear;
-	import tree.model.GenNode;
+import tree.loader.Lib;
+import tree.model.GenNode;
 	import tree.model.Generation;
 	import tree.model.Join;
 	import tree.model.Model;
@@ -170,7 +171,9 @@ package tree.view.canvas {
 			skin.getChildByName('male_back').visible = p.male;
 			skin.getChildByName('female_back').visible = !p.male;
 			(skin.getChildByName('name_tf') as TextField).text = p.name;
-			if(p.photo)
+			if(!p.open)
+				this.photo.source = Config.loader.createMc('assets.LockPhoto')
+			else if(p.photo)
 				Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace, null);
 			rollUnrollButton.male = _data.node.person.male;
 			CONFIG::debug{

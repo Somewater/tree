@@ -205,28 +205,24 @@ package tree.model {
 			EX_WIFE.associatedTypeForFemale = null;
 
 			_serverToType = [];
-			_serverToType[FATHER.name] 		= _serverToType[1] 	= FATHER;
-			_serverToType[MOTHER.name] 		= _serverToType[2] 	= MOTHER;
-			_serverToType[BROTHER.name] 	= _serverToType[3] 	= BROTHER;
-			_serverToType[SISTER.name] 		= _serverToType[4] 	= SISTER;
-			_serverToType[SON.name] 		= _serverToType[5] 	= SON;
-			_serverToType[DAUGHTER.name] 	= _serverToType[6] 	= DAUGHTER;
-			_serverToType[HUSBAND.name] 	= _serverToType[7] 	= HUSBAND;
-			_serverToType[WIFE.name] 		= _serverToType[8] 	= WIFE;
-			_serverToType[EX_HUSBAND.name] 	= _serverToType[9] 	= EX_HUSBAND;
-			_serverToType[EX_WIFE.name] 	= _serverToType[10] = EX_WIFE;
-
 			_typeToServer = [];
-			_typeToServer[FATHER] = 1;
-			_typeToServer[MOTHER] = 2;
-			_typeToServer[BROTHER] = 3;
-			_typeToServer[SISTER] = 4;
-			_typeToServer[SON] = 5;
-			_typeToServer[DAUGHTER] = 6;
-			_typeToServer[HUSBAND] = 7;
-			_typeToServer[WIFE] = 8;
-			_typeToServer[EX_HUSBAND] = 9;
-			_typeToServer[EX_WIFE] = 10;
+
+			configurateServerType(FATHER, 1);
+			configurateServerType(MOTHER, 2);
+			configurateServerType(BROTHER, 3);
+			configurateServerType(SISTER, 4);
+			configurateServerType(SON, 5);
+			configurateServerType(DAUGHTER, 6);
+			configurateServerType(HUSBAND, 7);
+			configurateServerType(WIFE, 8);
+			configurateServerType(EX_HUSBAND, 9);
+			configurateServerType(EX_WIFE, 10);
+
+			function configurateServerType(type:JoinType, server:int):void{
+				_serverToType[server] = type;
+				_serverToType[type.name] = type;
+				_typeToServer[type] = server;
+			}
 		}
 
 		public function toString():String {
