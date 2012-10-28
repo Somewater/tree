@@ -339,22 +339,26 @@ import flash.geom.Point;
 			var w:int = (maxX - minX);
 			var h:int = (maxY - minY);
 			var landscape:Boolean = w > h;
-			const MAX_W:int = landscape ? 1200 : 850;
-			const MAX_H:int = landscape ? 850 : 1200;
+			const W:int = 297 * 10;
+			const H:int = 210 * 10;
+			const MAX_W:int = landscape ? W : H;
+			const MAX_H:int = landscape ? H : W;
 			var scale:Number = Math.min(MAX_W/ w, MAX_H / h);
 			w *= scale; h *= scale;
 			var bmp:BitmapData = new BitmapData(w, h, false, 0xFFFFFFFF);
 
-			generationsHolder.visible = false;
+			//generationsHolder.visible = false;
 
-			var m:Matrix = new Matrix(scale, 0.2, 0.2, scale, -minX * scale,  -minY * scale)
-			if(landscape) m.rotate( Math.PI * 0.5);
-			bmp.draw(this, m, null, null, new Rectangle(0, 0, w / scale, h / scale));
-			generationsHolder.visible = true;
+			var m:Matrix = new Matrix(scale, 0, 0, scale, -minX * scale,  -minY * scale)
+			bmp.draw(this, m, null, null, new Rectangle(0, 0, w, h));
+			//generationsHolder.visible = true;
 
-			s.addChild(new Bitmap(bmp));
-			s.graphics.beginFill(0)
-			s.graphics.drawRect(0,0,1200, 850)
+			var b:Bitmap = new Bitmap(bmp);
+			s.addChild(b);
+			if(!landscape){
+				b.rotation = 90;
+				b.x = b.width;
+			}
 			return s;
 		}
 
