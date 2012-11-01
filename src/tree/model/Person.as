@@ -78,7 +78,7 @@ package tree.model {
 		}
 
 		public function get isNew():Boolean{
-			return !visible && !node
+			return !node
 		}
 	}
 }

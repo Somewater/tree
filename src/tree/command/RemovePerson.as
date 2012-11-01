@@ -22,7 +22,7 @@ package tree.command {
 			var join:Join
 
 			var request:RequestSignal = new RequestSignal(RequestSignal.DELETE_USER);
-			request.removedPerson = person;
+			request.person = person;
 			call(request);
 
 			// todo: всем нодам затронутым в удалении джоинов пересчитать джоины (возможно изменится их статус в дереве)

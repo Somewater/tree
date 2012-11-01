@@ -156,7 +156,7 @@ package tree {
 			model = new Model(bus);
 			Config.reject(Model, model);
 
-			AppServerHandler.instance = new AppServerHandler(Config.loader.serverHandler, bus);
+			AppServerHandler.instance = new AppServerHandler(Config.loader.serverHandler, bus, model);
 			bus.addNamed(RequestSignal.SIGNAL, AppServerHandler.instance.call);
 			Config.reject(AppServerHandler, AppServerHandler.instance);
 			bus.initialLoadingProgress.add(onInitialLoadingProgress);

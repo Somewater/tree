@@ -1,6 +1,7 @@
 package tree.signal {
 	import tree.model.Join;
-	import tree.model.Person;
+import tree.model.JoinType;
+import tree.model.Person;
 
 	public class RequestSignal {
 
@@ -12,12 +13,16 @@ package tree.signal {
 
 		public static const ADD_USER:String = 'addUser';
 
+		public static const EDIT_USER:String = 'editUser';
+
 		public var type:String
 
 		public var uid:int;
 
-		public var addedJoin:Join;
-		public var removedPerson:Person;
+		public var person:Person;
+
+		public var joinFrom:Person;
+		public var joinType:JoinType;
 
 		public function RequestSignal(type:String) {
 			this.type = type;

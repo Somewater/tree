@@ -2,52 +2,82 @@ package tree.manager {
 	import tree.common.Bus;
 	import tree.common.Config;
 	import tree.model.Join;
-	import tree.signal.RequestSignal;
+import tree.model.Model;
+import tree.signal.RequestSignal;
 	import tree.loader.IServerHandler;
 	import tree.signal.ResponseSignal;
+import tree.view.window.MessageWindow;
 
-	public class AppServerHandler {
+public class AppServerHandler {
 
 		public static var instance:AppServerHandler;
 
 		private var handler:IServerHandler;
 		private var bus:Bus;
+		private var model:Model;
 
-		public function AppServerHandler(handler:IServerHandler, bus:Bus) {
+		public function AppServerHandler(handler:IServerHandler, bus:Bus, model:Model) {
 			this.handler = handler;
 			this.bus = bus;
+			this.model = model;
 		}
 
 		public function call(request:RequestSignal):void
 		{
+			var data:Object;
 			switch(request.type)
 			{
 				case RequestSignal.USER_TREE:
 					bus.initialLoadingProgress.dispatch(0, 0);
-					handler.call({"action":"q_tree", "taction":"userlist", "uid":request.uid}, processTree, onError, xmlDataLoadingProgress);
+					handler.call({"action":"q_tree", "taction":"userlist", "uid":request.uid}, processTree, onError(request), xmlDataLoadingProgress);
 				break;
 
 				case RequestSignal.DELETE_USER:
-					handler.call({'action': 'q_tree', 'taction':'<undefined>', 'uid': request.uid}, checkResponse, onError, onProgress);
+					handler.call({
+						'action': 'q_tree',
+						'taction':'delete_user',
+						'uid': model.trees.first.owner.uid,
+						'user_id': request.person.uid
+					}, delegate(request, processDelete), onError(request), onProgress);
 				break;
 
 				case RequestSignal.ADD_USER:
-					handler.call({
-									'action': 'q_tree',
-									'uid': request.addedJoin.associate.tree.uid,
-									'for': request.addedJoin.from.uid,
-									'rel': Join.typeToServer(request.addedJoin.type),
-									'taction': 'add_user',
-									'last_name': request.addedJoin.associate.lastName,
-									'first_name': request.addedJoin.associate.firstName,
-									'middle_name': request.addedJoin.associate.middleName,
-									'maiden_name': request.addedJoin.associate.maidenName,
-									'sex': (request.addedJoin.associate.male ? 1 : 0),
-									'birthday': dateToDatabaseFormat(request.addedJoin.associate.birthday),
-									'deathday': dateToDatabaseFormat(request.addedJoin.associate.deathday),
-									'died': request.addedJoin.associate.died,
-									'email': request.addedJoin.associate.email
-								}, checkResponse, onError, onProgress);
+					data = {
+						'action': 'q_tree',
+						'uid': model.trees.first.owner.uid,
+						'taction': 'add_user',
+						'last_name': request.person.lastName,
+						'first_name': request.person.firstName,
+						'middle_name': request.person.middleName,
+						'maiden_name': request.person.maidenName,
+						'sex': (request.person.male ? 1 : 0),
+						'birthday': dateToDatabaseFormat(request.person.birthday),
+						'deathday': dateToDatabaseFormat(request.person.deathday),
+						'died': request.person.died ? 1 : 0,
+						'email': request.person.email
+					};
+					if(request.joinFrom) data['for'] = request.joinFrom.uid;
+					if(request.joinType) data['rel'] = Join.typeToServer(request.joinType);
+					handler.call(deleteNullFields(data), delegate(request, processAddPerson), onError(request), onProgress);
+				break;
+
+				case RequestSignal.EDIT_USER:
+					data = {
+						'action': 'q_tree',
+						'uid': model.trees.first.owner.uid,
+						'user_id': request.person.uid,
+						'taction': 'edit_user',
+						'last_name': request.person.lastName,
+						'first_name': request.person.firstName,
+						'middle_name': request.person.middleName,
+						'maiden_name': request.person.maidenName,
+						'sex': (request.person.male ? 1 : 0),
+						'birthday': dateToDatabaseFormat(request.person.birthday),
+						'deathday': dateToDatabaseFormat(request.person.deathday),
+						'died': request.person.died ? 1 : 0,
+						'email': request.person.email
+					}
+					handler.call(deleteNullFields(data), delegate(request, processEdit), onError(request), onProgress);
 				break;
 
 				default:
@@ -56,12 +86,19 @@ package tree.manager {
 			}
 		}
 
-		private function checkResponse(...args):void{
-			// todo
+		private function delegate(request:RequestSignal, cb:Function):Function{
+			return function(response:Object):void{
+				cb(request, new ResponseSignal(ResponseSignal.SUCCESS, response, request))
+			}
 		}
 
-		private function onError(...args):void {
-			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, null));
+		private function onError(request:RequestSignal):Function {
+			return function(response:Object = null):void{
+				bus.loaderProgress.dispatch();
+				bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, response, request));
+				if(response)
+					new MessageWindow(response.toString()).open();
+			}
 		}
 
 		private function xmlDataLoadingProgress(progress:Number):void{
@@ -85,24 +122,50 @@ package tree.manager {
 				Config.ticker.callLater(processTree_dispatchComplete, 1, [xml])
 			}catch(err:Error){
 				error(err);
-				onError(err);
+				bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(ResponseSignal.ERROR, data, null));
 				return;
 			}
 		}
 
 		private function processTree_dispatchComplete(xml:XML):void{
-			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(RequestSignal.USER_TREE, xml));
+			bus.dispatch(ResponseSignal.SIGNAL, new ResponseSignal(RequestSignal.USER_TREE, xml, null));
 		}
+
+		private  function processEdit(request:RequestSignal, response:ResponseSignal):void{
+			bus.loaderProgress.dispatch();
+		}
+
+		private  function processAddPerson(request:RequestSignal, response:ResponseSignal):void{
+			bus.loaderProgress.dispatch();
+		}
+
+		private  function processDelete(request:RequestSignal, response:ResponseSignal):void{
+			bus.loaderProgress.dispatch();
+		}
+
+		/////////////////////////////////
+		//                             //
+		//   U T I L S  M E T H O D S  //
+		//                             //
+		/////////////////////////////////
 
 		private function dateToDatabaseFormat(date:Date):String {
 			if(date)
 				return date.getFullYear() + '-' + toDouble(date.getMonth() + 1) + '-' + toDouble(date.getDate());
 			else
-				return '0000-00-00';
+				return '';
 		}
 
 		private function toDouble(data:int):String{
 			return (data < 10 ? '0' + data : data + '');
+		}
+
+		private function deleteNullFields(data:Object):Object{
+			var newData:Object = {};
+			for(var key:String in data)
+				if(data[key] !== null)
+					newData[key] = data[key];
+			return newData;
 		}
 	}
 }

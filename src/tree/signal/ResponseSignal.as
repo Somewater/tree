@@ -5,14 +5,17 @@ package tree.signal {
 
 		public static const SIGNAL:String = 'response';
 
+		public static const SUCCESS:String = 'success';
 		public static const ERROR:String = 'error';
 
 		public var type:String;
 		public var data:*;
+		public var request:RequestSignal;
 
-		public function ResponseSignal(type:String, data:*) {
+		public function ResponseSignal(type:String, data:*, request:RequestSignal) {
 			this.type = type;
 			this.data = data;
+			this.request = request;
 		}
 
 		public function toXml():XML {

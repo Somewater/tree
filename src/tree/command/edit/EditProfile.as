@@ -31,14 +31,20 @@ package tree.command.edit {
 			bus.loaderProgress.dispatch(0);
 			detain();
 
-			if(joinType.superType == JoinType.SUPER_TYPE_MARRY && (person.marry || from.marry))
+			if(joinType && joinType.superType == JoinType.SUPER_TYPE_MARRY && (person.marry || from.marry))
 				joinType = Join.joinBy(JoinType.SUPER_TYPE_EX_MARRY, person.male)
 
-			var request:RequestSignal = new RequestSignal(RequestSignal.ADD_USER);
+
+
+			var request:RequestSignal = new RequestSignal(person.isNew ? RequestSignal.ADD_USER : RequestSignal.EDIT_USER);
+			request.person = person;
+			request.joinFrom = from;
+			request.joinType = joinType;
 
 			// todo: послать запрос на сервер и дождаться положительного ответа
-			//call(request);
-            createJoinAndTree();
+			call(request);
+
+			createJoinAndTree();
 			onResponseSuccess();
 		}
 

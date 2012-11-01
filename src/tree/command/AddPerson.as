@@ -30,7 +30,7 @@ package tree.command {
 			join.from.add(join);
 
 			var request:RequestSignal = new RequestSignal(RequestSignal.ADD_USER);
-			request.addedJoin = join;
+			request.person = join.associate;
 			call(request);
 
 			RecalculateNodes.calculate(node, join.associate.node, join.flatten, join.breed);

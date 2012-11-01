@@ -2,9 +2,12 @@ package tree.view {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
-	import flash.geom.Point;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.utils.getTimer;
 
-	import tree.common.Bus;
+import tree.common.Bus;
 
 	import tree.common.Config;
 	import tree.common.IClear;
@@ -18,6 +21,7 @@ package tree.view {
 		private var windowsLayer:DisplayObjectContainer;
 		private var splashScreen:Sprite;
 		private var preloader:Preloader;
+		private var preloaderShowTime:uint;
 
 		private var windows:Array = [];
 		private var supressRefresh:int = 0;
@@ -31,6 +35,7 @@ package tree.view {
 			this.windowsLayer = windowsLayer;
 
 			this.preloader = preloader;
+			preloader.addEventListener(MouseEvent.CLICK, hideLoader);
 			splashScreen = new Sprite();
 			onSceneResize(null);
 
@@ -139,6 +144,7 @@ package tree.view {
 			{
 				if(preloader.parent == null)
 				{
+					preloaderShowTime = getTimer();
 					Config.tooltips.addChildAt(preloader, 0);
 					preloader.setSize(Config.WIDTH, Config.HEIGHT);
 				}
@@ -147,7 +153,8 @@ package tree.view {
 			}
 		}
 
-		private function hideLoader():void {
+		private function hideLoader(ev:Event = null):void {
+			if(ev && (getTimer() - preloaderShowTime) < 3000) return;// если прошло менее 3 сек не разрешаем скрывать по клику
 			if(preloader.parent)
 					Config.tooltips.removeChild(preloader);
 		}
