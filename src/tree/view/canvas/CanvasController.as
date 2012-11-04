@@ -37,6 +37,7 @@ public class CanvasController extends Actor{
 
 			canvas.out.add(onCanvasDeselect);
 			canvas.click.add(onCanvasDeselect);
+			canvas.arrowMenu.visible = false;
 			canvas.arrowMenu.actionClick.add(onAddNewPersonClick)
 			canvas.arrowMenu.menuHided.add(onHideArrowMenuFromMenu)
 			canvas.arrowMenu.editPersonClick.add(onPersonEditClick);
