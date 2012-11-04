@@ -20,10 +20,12 @@ package tree.view.canvas {
 	import tree.model.Person;
 	import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
-	import tree.view.canvas.JoinLine;
+import tree.view.Tweener;
+import tree.view.canvas.JoinLine;
 	import tree.view.canvas.NodeIcon;
+import tree.view.window.MessageWindow;
 
-	public class CanvasController extends Actor{
+public class CanvasController extends Actor{
 
 		private var canvas:Canvas;
 		private var lineController:LineHighlightController;
@@ -36,6 +38,10 @@ package tree.view.canvas {
 			canvas.out.add(onCanvasDeselect);
 			canvas.click.add(onCanvasDeselect);
 			canvas.arrowMenu.actionClick.add(onAddNewPersonClick)
+			canvas.arrowMenu.menuHided.add(onHideArrowMenuFromMenu)
+			canvas.arrowMenu.editPersonClick.add(onPersonEditClick);
+			canvas.arrowMenu.addPhotoClick.add(onAddPhotoEditClick);
+			canvas.arrowMenu.deletePersonClick.add(onDeletePersonEditClick);
 			bus.constructionInProcess.add(onConstructionStatusChanged);
 			bus.addNamed(ViewSignal.REFRESH_NODE_POSITIONS, refreshAllNodePositions);
 			bus.addNamed(ViewSignal.REFRESH_JOIN_LINES, refreshAllJoinLines);
@@ -222,8 +228,6 @@ package tree.view.canvas {
 		public function onNodeOut(node:NodeIcon):void{
 			lineController.clearHighlighted();
 			lineController.supressMouseMoveAction = false;
-			if(canvas.arrowMenu.arrow && canvas.arrowMenu.arrow.data == node.data.node.person)
-				return;// если для ноды открыто меню, то не сниаем выделение запросто
 			canvas.unhighlightNode(node);
 		}
 
@@ -243,7 +247,7 @@ package tree.view.canvas {
 				}
 			}
 			if(animated){
-				GTweener.to(canvas, 0.3, {x:x, y:y}, {onComplete: onCentreOnCompleted});
+				Tweener.to(canvas, 0.3, {x:x, y:y}, {onComplete: onCentreOnCompleted, onChange: onChangeForCentre});
 			}else{
 				canvas.x = x;
 				canvas.y = y;
@@ -251,29 +255,40 @@ package tree.view.canvas {
 			}
 		}
 
+		private function onChangeForCentre(g:GTween = null):void{
+			onCanvasMove();
+		}
+
 		private function onCentreOnCompleted(g:GTween = null):void{
 			canvas.refreshNodesVisibility(true);
 		}
 
-		private function onShowArrowMenu(arrow:NodeArrow):void{
-			canvas.arrowMenu.show(arrow);
+		private function onShowArrowMenu(node:NodeIcon):void{
+			centreOn(node.data.join.associate, true)
+			Config.content.addChild(canvas.arrowMenu);
+			canvas.arrowMenu.visible = true;
+			canvas.arrowMenu.show(node);
 		}
 
 		private function onHideArrowMenu():void{
+			if(canvas.arrowMenu.parent)
+				canvas.arrowMenu.parent.removeChild(canvas.arrowMenu);
+			canvas.arrowMenu.visible = false;
 			canvas.arrowMenu.hide()
+		}
+
+		private function onHideArrowMenuFromMenu(m:ContextMenu):void{
+			onHideArrowMenu();
 		}
 
 		public function onCanvasDeselect(c:Canvas = null):void{
 			if(canvas.highlightedNode)
 				canvas.unhighlightNode(canvas.highlightedNode);
-			canvas.arrowMenu.hide()
+			//canvas.arrowMenu.hide()
 		}
 
 		public function onCanvasDragged():void{
-			if(!canvas.arrowMenu.visible)
-				return;
-
-			canvas.arrowMenu.refreshPosition();
+			onCanvasMove();
 		}
 
 		private function onConstructionStatusChanged():void{
@@ -362,6 +377,23 @@ package tree.view.canvas {
 
 		private function refreshAllGenerations():void{
 			canvas.refreshGenerations();
+		}
+
+		private function onCanvasMove():void{
+			if(canvas.arrowMenu.visible)
+				canvas.arrowMenu.refreshPosition();
+		}
+
+		private function onPersonEditClick(p:Person):void{
+			bus.dispatch(ViewSignal.START_EDIT_PERSON, p);
+		}
+
+		private function onAddPhotoEditClick(p:Person):void{
+			new MessageWindow('TODO: не реализовано').open();
+		}
+
+		private function onDeletePersonEditClick(p:Person):void{
+			new MessageWindow('TODO: не реализовано').open();
 		}
 	}
 }

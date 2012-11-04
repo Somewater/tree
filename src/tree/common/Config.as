@@ -18,6 +18,7 @@ package tree.common {
 		public static var GUI_WIDTH:int = 240;
 		public static var PANEL_HEIGHT:int = 90;
 
+		public static var canvasHolder:DisplayObjectContainer;
 		public static var content:DisplayObjectContainer;
 		public static var windows:DisplayObjectContainer;
 		public static var tooltips:DisplayObjectContainer;

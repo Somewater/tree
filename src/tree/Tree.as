@@ -174,13 +174,14 @@ package tree {
 			StyleManager.setComponentStyle(ComboBox, 'buttonWidth', 10);
 			StyleManager.setComponentStyle(ComboBox, 'downSkin', 'ComboBox_overSkin');
 
+			addChild(Config.canvasHolder = new Sprite());
 			addChild(Config.content = new Sprite());
 			addChild(Config.windows = new Sprite());
 			new WindowsManager(bus, Config.windows, new Preloader());
 			addChild(Config.tooltips = new Sprite());
 			Hint.init(Config.tooltips);
 
-			Config.content.addChild(canvas = new Canvas());
+			Config.canvasHolder.addChild(canvas = new Canvas());
 			var canvasController:CanvasController = new CanvasController(canvas)
 			new CanvasMediator(canvas, canvasController);
 			Config.reject(CanvasController, canvasController);

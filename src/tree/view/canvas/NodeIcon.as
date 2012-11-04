@@ -32,7 +32,8 @@ import tree.model.GenNode;
 	import tree.model.Person;
 	import tree.view.Tweener;
 	import tree.view.canvas.Canvas;
-	import tree.view.gui.Helper;
+import tree.view.gui.Button;
+import tree.view.gui.Helper;
 
 	public class NodeIcon extends Sprite implements IClear{
 
@@ -66,10 +67,10 @@ import tree.model.GenNode;
 		private var _highlighted:Boolean = false;// рамка (при наведении мышкой)
 		private var _selected:Boolean = false;// glow (при выборе в GUI)
 
-		private var arrows:Array = [];
-
 		private var bitmap:Bitmap;
 		private var bitmapData:BitmapData;
+
+		private var contextMenuBtn:ContextMenuBtn;
 
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
@@ -120,8 +121,15 @@ import tree.model.GenNode;
 
 			Helper.stylizeText((skin.getChildByName('name_tf') as TextField));
 
-			showArrowMenu = new Signal(NodeArrow);
+			showArrowMenu = new Signal(NodeIcon);
 			hideArrowMenu = new Signal();
+
+			contextMenuBtn = new ContextMenuBtn();
+			contextMenuBtn.x = 8;
+			contextMenuBtn.y = 62;
+			contextMenuBtn.click.add(onContextMenuBtnClicked);
+			contextMenuBtn.visible = false;
+			addChild(contextMenuBtn);
 
 			cacheAsBitmap = true;
 			//graphics.beginFill(0xFF0000);
@@ -235,6 +243,7 @@ import tree.model.GenNode;
 			out.removeAll();
 			showArrowMenu.removeAll();
 			hideArrowMenu.removeAll();
+			contextMenuBtn.clear();
 			GTweener.removeTweens(this);
 		}
 
@@ -338,9 +347,9 @@ import tree.model.GenNode;
 				femaleHighlight.visible = value && _data && _data.node.person.female;
 				maleHighlight.visible = value && _data && _data.node.person.male;
 				if(value)
-					showArrows();
+					showContextMenuBtn();
 				else
-					hideArrows();
+					hideContextMenuBtn();
 			}
 		}
 
@@ -388,57 +397,20 @@ import tree.model.GenNode;
 			}
 		}
 
-		public function deleteArrows():void{
-			for each(var a:NodeArrow in arrows)
-			{
-				a.clear();
-				if(a.parent)
-					a.parent.removeChild(a);
-			}
-			arrows = [];
-			hideArrowMenu.dispatch();
+		private function showContextMenuBtn():void{
+			contextMenuBtn.visible = true;
+			Tweener.to(contextMenuBtn, 0.2, {alpha: 1}, {onComplete: onArrowShowed});
 		}
 
-		private function showArrows():void{
-			deleteArrows();
-			for (var i:int = 1; i <= 3; i++) {
-				if(i == NodeArrow.PARENT && _data.node.person.father && _data.node.person.mother)
-					continue;
-				var a:NodeArrow = new NodeArrow(this._data.node.person, i);
-				addChildAt(a, 0);
-				a.showed.add(onArrowShowed);
-				a.hided.add(onArrowHided);
-				a.over.add(onArrowOver);
-				a.out.add(onArrowOut);
-				a.show();
-				arrows.push(a);
-			}
+		private function onArrowShowed(g:GTween = null):void {
 		}
 
-		private function onArrowShowed(a:NodeArrow):void {
-
+		private function onArrowHided(g:GTween = null):void {
+			contextMenuBtn.visible = false;
 		}
 
-		private function onArrowHided(a:NodeArrow):void {
-			var idx:int = arrows.indexOf(a);
-			if(idx != -1)
-				arrows.splice(idx, 1);
-			a.clear();
-			if(a.parent)
-				a.parent.removeChild(a);
-		}
-
-		private function hideArrows():void{
-			for each(var a:NodeArrow in arrows)
-				a.hide();
-		}
-
-		private function onArrowOver(a:NodeArrow):void{
-			showArrowMenu.dispatch(a);
-		}
-
-		private function onArrowOut(a:NodeArrow):void{
-
+		private function hideContextMenuBtn():void{
+			Tweener.to(contextMenuBtn, 0.2, {alpha: 0}, {onComplete: onArrowHided});
 		}
 
 		private function draw():void{
@@ -447,6 +419,22 @@ import tree.model.GenNode;
 			bitmapData = new BitmapData(Canvas.ICON_WIDTH + 5, Canvas.ICON_HEIGHT + 5, false, 0);
 			bitmapData.draw(skin);
 			bitmap.bitmapData = bitmapData;
+		}
+
+		private function onContextMenuBtnClicked(b:Button):void{
+			showArrowMenu.dispatch(this);
+		}
+
+		public function drawBitmap():BitmapData{
+			var cmbVicible:Boolean = contextMenuBtn.visible;
+			var rubVisible:Boolean = rollUnrollButton.visible;
+			contextMenuBtn.visible = false;
+			rollUnrollButton.visible = false;
+			var bmp:BitmapData = new BitmapData(this.width, this.height, true, 0);
+			bmp.draw(this);
+			contextMenuBtn.visible = cmbVicible;
+			rollUnrollButton.visible = rubVisible;
+			return bmp;
 		}
 	}
 }

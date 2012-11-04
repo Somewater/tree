@@ -40,7 +40,7 @@ import flash.geom.Point;
 
 		private var selectedNode:NodeIcon;
 		public var highlightedNode:NodeIcon;
-		public var arrowMenu:ArrowMenu;
+		public var arrowMenu:ContextMenu;
 
 		public function Canvas() {
 			generationsHolder = new Sprite();
@@ -52,9 +52,7 @@ import flash.geom.Point;
 			nodesHolder = new Sprite();
 			addChild(nodesHolder);
 
-			arrowMenu = new ArrowMenu();
-			Config.tooltips.addChild(arrowMenu);
-			arrowMenu.visible = false;
+			arrowMenu = new ContextMenu();
 		}
 
 		override public function setSize(w:int, h:int):void {
@@ -183,7 +181,6 @@ import flash.geom.Point;
 		public function highlightNode(node:NodeIcon):void{
 			if(highlightedNode != node){
 				if(highlightedNode){
-					highlightedNode.deleteArrows();
 					unhighlightNode(highlightedNode);
 				}
 				highlightedNode = node;
