@@ -58,7 +58,7 @@ package tree.model {
 		}
 
 		public function get fullname():String {
-			return lastName + ' ' + firstName + ' ' + middleName;
+			return (lastName || firstName || middleName) ? lastName + ' ' + firstName + ' ' + middleName : uid.toString();
 		}
 
 		public function get died():Boolean{
@@ -79,6 +79,14 @@ package tree.model {
 
 		public function get isNew():Boolean{
 			return !node
+		}
+
+		public function get age():int {
+			if(birthday){
+				var d:Date = deathday ? deathday : Model.instance.currentDate;
+				return (d.time - birthday.time) / (1000 * 60 * 60 * 24 * 365);
+			}else
+				return -1;
 		}
 	}
 }

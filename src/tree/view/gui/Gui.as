@@ -9,7 +9,9 @@ package tree.view.gui {
 	import tree.view.gui.notes.PersonNotesController;
 	import tree.view.gui.notes.PersonNotesPage;
 	import tree.view.gui.notes.SelectNoteController;
-	import tree.view.gui.profile.PersonProfilePage;
+import tree.view.gui.profile.EditPersonProfilePage;
+import tree.view.gui.profile.EditProfileController;
+import tree.view.gui.profile.PersonProfilePage;
 	import tree.view.gui.profile.ProfileController;
 
 	public class Gui extends Sprite{
@@ -21,6 +23,8 @@ package tree.view.gui {
 			PersonNotesPage_modeEditSelect: {page: PersonNotesPage, controller: SelectNoteController}
 			,
 			PersonProfilePage: {page: PersonProfilePage, controller: ProfileController}
+			,
+			EditPersonProfilePage: {page: EditPersonProfilePage, controller: EditProfileController}
 		};
 
 		private var background:Sprite;

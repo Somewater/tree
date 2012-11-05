@@ -19,6 +19,8 @@ package tree.model {
 		private var _mousePosition:Point = new Point();
 		private var _guiOpen:Boolean = true;
 
+		public var currentDate:Date = new Date();
+
 		//////////////////////////
 		//                      //
 		//      view data       //

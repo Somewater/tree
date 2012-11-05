@@ -10,7 +10,7 @@ package tree.view.gui.profile {
 
 		internal var createProfileButton:Button;
 		internal var saveProfileButton:Button;
-		internal var cancelEditLink:LinkLabel;
+		internal var cancelEditLink:com.somewater.text.LinkLabel;
 
 		public function SaveButtonBlock() {
 			createProfileButton = new StandartButton();
@@ -21,7 +21,7 @@ package tree.view.gui.profile {
 			saveProfileButton.label = I18n.t('SAVE_PROFILE');
 			addChild(saveProfileButton);
 
-			cancelEditLink = new LinkLabel(null, 0x2881C6, 11, true);
+			cancelEditLink = new com.somewater.text.LinkLabel(null, 0x2881C6, 11, true);
 			cancelEditLink.text = I18n.t('CANCEL_EDIT');
 			addChild(cancelEditLink);
 		}

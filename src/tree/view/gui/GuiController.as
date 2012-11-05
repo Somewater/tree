@@ -9,7 +9,8 @@ package tree.view.gui {
 	import tree.signal.ViewSignal;
 	import tree.view.Tweener;
 	import tree.view.gui.notes.PersonNotesPage;
-	import tree.view.gui.profile.PersonProfilePage;
+import tree.view.gui.profile.EditPersonProfilePage;
+import tree.view.gui.profile.PersonProfilePage;
 
 	public class GuiController extends Actor{
 
@@ -20,6 +21,7 @@ package tree.view.gui {
 			bus.addNamed(ViewSignal.CANVAS_READY_FOR_START, onStart);
 			gui.switcher.change.add(onSwitcherChanged);
 			gui.fold.click.add(onGuiOpenChanged)
+			bus.addNamed(ViewSignal.START_EDIT_PERSON, onEditingStarted)
 		}
 
 
@@ -84,6 +86,10 @@ package tree.view.gui {
 		private function onGuiOpenAnimComplete(g:GTween = null):void{
 			model.guiOpen = !gui.fold.open;
 			guiAnimInProcess = false;
+		}
+
+		private function onEditingStarted(person:Person):void{
+			gui.setPage(EditPersonProfilePage.NAME)
 		}
 	}
 }

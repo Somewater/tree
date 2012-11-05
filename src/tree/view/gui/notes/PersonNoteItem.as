@@ -35,7 +35,7 @@ package tree.view.gui.notes {
 		private var _data:Person;
 		private var nameTF:EmbededTextField;
 		public var postTF:TruncatedTextField;
-		private var actionsTF:LinkLabel;
+		private var actionsTF:com.somewater.text.LinkLabel;
 		private var actionMark:DisplayObject;
 
 		private var bottomBorder:DisplayObject;
@@ -99,7 +99,7 @@ package tree.view.gui.notes {
 			menuMask.graphics.drawRect(160, menu.y, PersonNotesPage.NOTE_WIDTH - 160, 25);
 			menuMask.graphics.drawRect(0, menu.y + 25, PersonNotesPage.NOTE_WIDTH, 500);
 
-			actionsTF = new LinkLabel(null, 0, 11, false);
+			actionsTF = new com.somewater.text.LinkLabel(null, 0, 11, false);
 			actionsTF.text = I18n.t('ACTIONS')
 			actionsTF.x = Config.GUI_WIDTH - 25 - actionsTF.width;
 			actionsTF.y = postTF.y;
@@ -112,7 +112,7 @@ package tree.view.gui.notes {
 			addChild(actionMark);
 
 			actionClick = new Signal(PersonNoteItem);
-			actionsTF.addEventListener(LinkLabel.LINK_CLICK, onActionClicked);
+			actionsTF.addEventListener(com.somewater.text.LinkLabel.LINK_CLICK, onActionClicked);
 
 			this.visible = false;
 			this.buttonMode = this.useHandCursor = !selected;
@@ -132,7 +132,7 @@ package tree.view.gui.notes {
 			menu.clear();
 			menu = null;
 			super.clear();
-			actionsTF.removeEventListener(LinkLabel.LINK_CLICK, onActionClicked);
+			actionsTF.removeEventListener(com.somewater.text.LinkLabel.LINK_CLICK, onActionClicked);
 			actionClick.removeAll();
 			actionClick = null;
 			GTweener.removeTweens(this);

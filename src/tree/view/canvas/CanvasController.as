@@ -7,7 +7,8 @@ package tree.view.canvas {
 
 	import tree.command.Actor;
 	import tree.command.Command;
-	import tree.common.Config;
+import tree.command.RemovePerson;
+import tree.common.Config;
 	import tree.common.Config;
 	import tree.model.GenNode;
 	import tree.model.Generation;
@@ -394,7 +395,7 @@ public class CanvasController extends Actor{
 		}
 
 		private function onDeletePersonEditClick(p:Person):void{
-			new MessageWindow('TODO: не реализовано').open();
+			new RemovePerson(p).execute();
 		}
 	}
 }

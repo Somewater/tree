@@ -223,7 +223,7 @@ import tree.model.JoinType;
 
 import tree.view.gui.Button;
 
-class ArrowMenuAction extends LinkLabel{
+class ArrowMenuAction extends com.somewater.text.LinkLabel{
 
 	public function ArrowMenuAction(){
 		super(null, 0x2881c6, 12);

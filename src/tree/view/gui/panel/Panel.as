@@ -24,7 +24,7 @@ package tree.view.gui.panel {
 
 		private var background:Sprite;
 		public var titleTF:EmbededTextField;
-		public var treeOwnerNameTF:LinkLabel;
+		public var treeOwnerNameTF:com.somewater.text.LinkLabel;
 		public var treeOwnerMark:DisplayObject;
 		public var savePrintButton:DoubleButton;
 		public var centreRotateButton:DoubleButton;
@@ -49,9 +49,9 @@ package tree.view.gui.panel {
 			titleTF.text = I18n.t('FAMILY');
 			addChild(titleTF);
 
-			treeOwnerNameTF = new LinkLabel(null,0x2682c5, 19, true);
+			treeOwnerNameTF = new com.somewater.text.LinkLabel(null,0x2682c5, 19, true);
 			addChild(treeOwnerNameTF);
-			treeOwnerNameTF.addEventListener(LinkLabel.LINK_CLICK, onLinkClicked);
+			treeOwnerNameTF.addEventListener(com.somewater.text.LinkLabel.LINK_CLICK, onLinkClicked);
 			ownerNameClick = new Signal();
 			treeOwnerMark = Config.loader.createMc('assets.TriangleMarkLink');
 			treeOwnerMark.rotation = 180;

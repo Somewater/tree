@@ -18,8 +18,9 @@ package tree.view.gui.profile {
 	import tree.signal.ViewSignal;
 
 	import tree.view.gui.Button;
+import tree.view.gui.IconButton;
 
-	import tree.view.gui.PageBase;
+import tree.view.gui.PageBase;
 	import tree.view.gui.StandartButton;
 	import tree.view.gui.UIComponent;
 
@@ -27,62 +28,86 @@ package tree.view.gui.profile {
 
 		public static const NAME:String = 'PersonProfilePage';
 
-		internal var photo:Photo;
-		internal var photoMask:Shape;
-		internal var editProfileButton:Button;
-		internal var profileLink:LinkLabel;
-		internal var familyTreeLink:LinkLabel;
-		internal var editPhotoLink:LinkLabel;
-		internal var deletePhotoLink:LinkLabel;
+		private var photo:Photo;
 
-		internal var readonlyInfo:ReadonlyInfo;
-		internal var editableInfo:EditableInfo;
-		internal var familyBlock:FamilyBlock;
-		internal var saveButtonBlock:SaveButtonBlock;
-		internal var editable:Boolean;
+		private var nameField:EmbededTextField;
+		private var postField:EmbededTextField;
+
+		internal var editProfile:Button;
+		internal var viewProfile:Button;
+		internal var viewTree:Button;
+		internal var addPhoto:Button;
+		internal var sendMessage:Button;
+		internal var invite:Button;
+		internal var deleteProfile:Button;
+
+		private var bornLabels:Labels;
+		private var diedLabels:Labels;
+
+		private var bornPlaceLabels:Labels;
+		private var livePlaceLabels:Labels;
+		private var ageLabels:Labels;
+
+		private var phoneLabels:Labels;
+		private var icqLabels:Labels;
+		private var skypeLabels:Labels;
 
 		public function PersonProfilePage() {
-			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 90, 90);
-			photoMask = new Shape();
-			photoMask.graphics.beginFill(0);
-			photoMask.graphics.drawRoundRectComplex(0,0,90,90,5,5,5,5);
-			photo.mask = photoMask
+			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 200, 200);
 			addChild(photo);
-			addChild(photoMask);
 
-			editProfileButton = new StandartButton();
-			editProfileButton.textField.multiline = true;
-			editProfileButton.label = I18n.t('EDIT_DATA');
-			addChild(editProfileButton);
+			nameField = new EmbededTextField(null, 0, 17, true, true);
+			addChild(nameField);
 
-			familyTreeLink = new LinkLabel(null, 0x2881C6, 11, true);
-			familyTreeLink.text = I18n.t('FAMILY_TREE');
-			addChild(familyTreeLink);
+			postField = new EmbededTextField(null, 0, 15);
+			addChild(postField);
 
-			editPhotoLink = new LinkLabel(null, 0x2881C6, 11, true);
-			editPhotoLink.text = I18n.t('EDIT_PHOTO');
-			addChild(editPhotoLink);
+			editProfile = new IconButton(Config.loader.createMc('assets.IconEdit'))
+			editProfile.label = I18n.t('EDIT_PROFILE');
+			addChild(editProfile);
 
-			deletePhotoLink = new LinkLabel(null, 0xc72928, 11, true);
-			deletePhotoLink.text = I18n.t('DELETE_PHOTO');
-			addChild(deletePhotoLink);
+			viewTree = new IconButton(Config.loader.createMc('assets.IconTree'))
+			viewTree.label = I18n.t('VIEW_TREE');
+			addChild(viewTree);
 
-			profileLink = new LinkLabel(null, 0x2881C6, 11, true);
-			profileLink.text = I18n.t('PROFILE');
-			addChild(profileLink);
+			addPhoto = new IconButton(Config.loader.createMc('assets.IconAddPhoto'))
+			addPhoto.label = I18n.t('ADD_PHOTO');
+			addChild(addPhoto);
 
-			readonlyInfo = new ReadonlyInfo();
-			addChild(readonlyInfo);
+			viewProfile = new IconButton(Config.loader.createMc('assets.IconProfile'))
+			viewProfile.label = I18n.t('VIEW_PROFILE');
+			addChild(viewProfile);
 
-			editableInfo = new EditableInfo();
-			addChild(editableInfo);
+			deleteProfile = new IconButton(Config.loader.createMc('assets.IconDelete'))
+			deleteProfile.label = I18n.t('DELETE_PROFILE');
+			addChild(deleteProfile);
 
-			familyBlock = new FamilyBlock();
-			addChild(familyBlock);
-			familyBlock.addEventListener(Event.RESIZE, onFamilyBlockResized);
+			sendMessage = new IconButton(Config.loader.createMc('assets.IconMail'))
+			sendMessage.label = I18n.t('SEND_MESSAGE');
+			addChild(sendMessage);
 
-			saveButtonBlock = new SaveButtonBlock();
-			addChild(saveButtonBlock);
+			invite = new IconButton(Config.loader.createMc('assets.IconInvite'))
+			invite.label = I18n.t('INVITE');
+			addChild(invite);
+
+			bornLabels = new Labels();
+			addChild(bornLabels);
+			diedLabels = new Labels();
+			addChild(diedLabels);
+
+			bornPlaceLabels = new Labels();
+			addChild(bornPlaceLabels);
+			livePlaceLabels = new Labels();
+			addChild(livePlaceLabels);
+			ageLabels = new Labels();
+			addChild(ageLabels);
+
+			phoneLabels = new Labels();
+			addChild(phoneLabels);
+			icqLabels = new Labels();
+			addChild(icqLabels);
+			skypeLabels = new Labels();
+			addChild(skypeLabels);
 		}
 
 		override public function get pageName():String {
@@ -92,80 +117,97 @@ package tree.view.gui.profile {
 		override public function clear():void {
 			super.clear();
 			photo.clear();
-			editProfileButton.clear();
-			profileLink.clear();
-			familyTreeLink.clear();
-
-			familyBlock.clear();
-			familyBlock.removeEventListener(Event.RESIZE, onFamilyBlockResized);
-			saveButtonBlock.clear();
-			readonlyInfo.clear();
-			editableInfo.clear();
+			editProfile.clear();
+			viewProfile.clear();
+			viewTree.clear();
 		}
 
 		override protected function refresh():void {
-			super.refresh();
-			var contentX:int = 20;
-			var contentY:int = 0;
-			var contentWidth:int = _width - contentX - 20;
-			var contentHeight:int = _height - contentY - 20;;
+			const PADDING:int = 10;
 
-			photoMask.x = photo.x = contentX;
-			photoMask.y = photo.y = contentY;
+			var elements:Array = [
+					nameField,
+					editProfile,
+					photo,
 
-			editProfileButton.x = photo.x + photo.width + 8;
-			editProfileButton.y = photo.y;
-			editProfileButton.setSize(contentWidth - editProfileButton.x + contentX, 45);
+					postField,
+					bornLabels,
+					diedLabels,
 
-			editPhotoLink.x = editProfileButton.x;
-			editPhotoLink.y = editProfileButton.y;
+					10,
+					// actions
+					sendMessage,
+					viewProfile,
+					addPhoto,
+					invite,
+					viewTree,
+					deleteProfile,
+					10,
 
-			deletePhotoLink.x = editPhotoLink.x;
-			deletePhotoLink.y = editPhotoLink.y + editPhotoLink.height;
+					bornPlaceLabels,
+					livePlaceLabels,
+					ageLabels,
+					10,
+					phoneLabels,
+					icqLabels,
+					skypeLabels
+			];
 
-			profileLink.x = familyTreeLink.x = editProfileButton.x;
+			nameField.width = _width - 2 * PADDING;
 
-			familyTreeLink.y = photo.y + photo.height - familyTreeLink.textField.textHeight;
-			profileLink.y = familyTreeLink.y - familyTreeLink.textField.textHeight - profileLink.textField.textHeight;
-
-			var info:UIComponent = readonlyInfo.visible ? readonlyInfo : editableInfo;
-			info.x = contentX;
-			info.y = photo.y + photo.height + 15;
-			info.width = contentWidth;
-
-			log("INFO HEIGHT: " + info.height);
-
-			familyBlock.x = contentX;
-			familyBlock.y = info.y + info.calculatedHeight + 10;
-			familyBlock.width = contentWidth;
-			familyBlock.maxHeight = _height - familyBlock.y - saveButtonBlock.calculatedHeight - 20;
-
-			saveButtonBlock.x = contentX;
-			saveButtonBlock.y = familyBlock.y + familyBlock.calculatedHeight + 10;
-			saveButtonBlock.width = contentWidth;
-		}
-
-		internal function onPersonSelected(person:Person, editable:Boolean = false,
-										   joinType:JoinType = null, from:Person = null):void{
-			if(!person) return;
-			this.visible = true;
-			this.editable = editable;
-			photo.source = person.photo;
-			if(!photo.source) setDefaultPhoto(person.male);
-			if(editable){
-				editableInfo.setPerson(person, joinType, from);
-			}else{
-				readonlyInfo.setPerson(person);
+			var nextY:int = 0;
+			var paddingX:int = 20;
+			for each(var elem:Object in elements){
+				if(elem is DisplayObject){
+					if(!DisplayObject(elem).visible) continue;
+					DisplayObject(elem).x = paddingX;
+					DisplayObject(elem).y = nextY;
+					nextY += DisplayObject(elem).height + PADDING;
+					addChild(elem as DisplayObject);
+				}else
+					nextY += int(elem);
 			}
 
-			readonlyInfo.visible = !editable;
-			editableInfo.visible = editable;
-			editPhotoLink.visible = editable;
-			deletePhotoLink.visible = editable && person.photo;
-			editProfileButton.visible = !editable && !person.isNew;
+			super.refresh();
+		}
 
-			familyBlock.setPerson(person, editable);
-			saveButtonBlock.editable = editable;
+		internal function onPersonSelected(person:Person):void{
+			const SHOW_ALL_IF_DIE:Boolean = false;
+
+			if(!person) return;
+			photo.source = person.photo;
+			if(!photo.source) setDefaultPhoto(person.male);
+
+			editProfile.visible = deleteProfile.visible = person.open;
+
+			nameField.text = formattedIfEmpty(person.fullname);
+			postField.visible = !!person.post || SHOW_ALL_IF_DIE;
+			postField.text = formattedIfEmpty(person.post);
+
+			bornLabels.title = (person.male ? I18n.t('MALE_BORN_FROM') : I18n.t('FEMALE_BORN_FROM')) + ':';
+			bornLabels.value = formattedBirthday(person.birthday);
+
+			diedLabels.visible = person.died || SHOW_ALL_IF_DIE;
+			diedLabels.title = (person.male ? I18n.t('MALE_DEAD') : I18n.t('FEMALE_DEAD')) + ':';
+			diedLabels.value = formattedBirthday(person.deathday);
+
+			bornPlaceLabels.title = (person.male ? I18n.t('BORN_PLACE_MALE') : I18n.t('BORN_PLACE_FEMALE'));
+			bornPlaceLabels.value = formattedIfEmpty(null);
+
+			livePlaceLabels.title = person.died ? (person.male ? I18n.t('LIVED_PLACE_MALE') : I18n.t('LIVED_PLACE_FEMALE')) : (person.male ? I18n.t('LIVE_PLACE_MALE') : I18n.t('LIVE_PLACE_FEMALE'));
+			livePlaceLabels.value = formattedIfEmpty(null);
+
+			ageLabels.title = (person.male ? I18n.t('AGE_MALE') : I18n.t('AGE_FEMALE'));
+			ageLabels.value = formattedIfEmpty(person.age > 0 ? person.age.toString() : null);
+
+			phoneLabels.title = I18n.t('MOBILE_PHONE');
+			phoneLabels.value = formattedIfEmpty(null);
+
+			icqLabels.title = I18n.t('ICQ');
+			icqLabels.value = formattedIfEmpty(null);
+
+			skypeLabels.title = I18n.t('SKYPE');
+			skypeLabels.value = formattedIfEmpty(null);
 
 			refresh();
 		}
@@ -179,8 +221,51 @@ package tree.view.gui.profile {
 		}
 
 		internal static function formattedBirthday(date:Date):String{
-			if(!date) return '    ---';
+			if(!date || isNaN(date.date)) return '    ---';
 			return date.date + ' ' + I18n.t('MONTH_GENETIVE_' + date.month) + ' ' + date.fullYear;
 		}
+
+		internal static function formattedIfEmpty(value:String):String{
+			return value ? value : ''
+		}
+	}
+}
+
+import com.somewater.text.EmbededTextField;
+
+import tree.view.gui.UIComponent;
+
+class Labels extends UIComponent{
+
+	private var _label1_tf:EmbededTextField;
+	private var _label2_tf:EmbededTextField;
+
+	public function Labels(){
+		_label1_tf = new EmbededTextField(null, 0, 11, true);
+		addChild(_label1_tf);
+		_label2_tf = new EmbededTextField(null, 0, 11, false);
+		addChild(_label2_tf);
+	}
+
+	public function set title(v:String):void{
+		_label1_tf.text = v;
+		refresh();
+	}
+
+	public function set value(v:String):void{
+		_label2_tf.text = v;
+		refresh();
+	}
+
+	public function get title():String {return _label1_tf.text;}
+
+	public function get value():String {return _label2_tf.text;}
+
+	override protected function refresh():void {
+		const L1_WIDTH:int = 80;
+		if(_label1_tf.width > L1_WIDTH)
+			_label2_tf.x = _label1_tf.x + _label1_tf.width + 5;
+		else
+			_label2_tf.x = L1_WIDTH;
 	}
 }

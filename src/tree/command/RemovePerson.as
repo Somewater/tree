@@ -1,6 +1,9 @@
 package tree.command {
-	import tree.model.Join;
-	import tree.model.Person;
+import tree.common.Config;
+import tree.model.Join;
+import tree.model.JoinCollectionBase;
+import tree.model.Node;
+import tree.model.Person;
 	import tree.model.TreeModel;
 	import tree.signal.ModelSignal;
 	import tree.signal.RequestSignal;
@@ -14,12 +17,11 @@ package tree.command {
 		}
 
 		override public function execute():void {
-			var tree:TreeModel = person.tree;
-			tree.nodes.remove(person.node);
-			tree.persons.remove(person);
-
 			// todo: отовсюду (nodes, persons) удалить джоины, в nodes отыскать  join, которая ссылается на удаляемую person
-			var join:Join
+			var join:Join;
+			for each(join in model.joinsQueue)
+				if(join.associate == person)
+					break;
 
 			var request:RequestSignal = new RequestSignal(RequestSignal.DELETE_USER);
 			request.person = person;
@@ -29,6 +31,19 @@ package tree.command {
 			//RecalculateNodes.calculate(node, join.associate.node, join.flatten, join.breed);
 
 			bus.dispatch(ModelSignal.HIDE_NODE, join);
+
+			detain();
+			Config.ticker.callLater(removePersonFromModel, 2000);
+			model.treeViewConstructed = false;
+		}
+
+		private function removePersonFromModel():void{
+			release();
+
+			var tree:TreeModel = person.tree;
+			tree.nodes.remove(person.node);
+			tree.persons.remove(person);
+			model.treeViewConstructed = true;
 		}
 	}
 }
