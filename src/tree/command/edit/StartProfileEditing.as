@@ -6,7 +6,8 @@ package tree.command.edit {
 	import tree.model.JoinType;
 	import tree.model.Person;
 	import tree.view.gui.Gui;
-	import tree.view.gui.profile.PersonProfilePage;
+import tree.view.gui.profile.EditPersonProfilePage;
+import tree.view.gui.profile.PersonProfilePage;
 
 	/**
 	 * Открыть интерфейс редактирования персоны (старой либо ново созданной)
@@ -47,7 +48,7 @@ package tree.command.edit {
 			model.guiOpen = true;
 
 			var gui:Gui = Config.inject(Gui);
-			gui.setPage(PersonProfilePage.NAME, person, joinType, from)
+			gui.setPage(EditPersonProfilePage.NAME, person, joinType, from)
 		}
 	}
 }

@@ -3,77 +3,48 @@ import com.somewater.display.Photo;
 import com.somewater.storage.I18n;
 import com.somewater.text.LinkLabel;
 
+import flash.display.DisplayObject;
+
 import flash.display.Shape;
 import flash.events.Event;
 
 import tree.common.Config;
 import tree.model.JoinType;
 import tree.model.Person;
+import tree.view.Tweener;
 import tree.view.gui.Button;
 import tree.view.gui.PageBase;
 import tree.view.gui.StandartButton;
+import tree.view.gui.TreeComboBox;
 import tree.view.gui.UIComponent;
 
 public class EditPersonProfilePage extends PageBase{
 
 		public static const NAME:String = 'EditPersonProfilePage';
 
-		internal var photo:Photo;
-		internal var photoMask:Shape;
-		internal var editProfileButton:Button;
-		internal var profileLink:com.somewater.text.LinkLabel;
-		internal var familyTreeLink:com.somewater.text.LinkLabel;
-		internal var editPhotoLink:com.somewater.text.LinkLabel;
-		internal var deletePhotoLink:com.somewater.text.LinkLabel;
+	    internal var comboBox:TreeComboBox;
 
-		internal var readonlyInfo:ReadonlyInfo;
 		internal var editableInfo:EditableInfo;
-		internal var familyBlock:FamilyBlock;
-		internal var saveButtonBlock:SaveButtonBlock;
-		internal var editable:Boolean;
+		internal var saveProfileButton:Button;
+		private var saveProfileButtonGround:Shape;
+		internal var cancelEditLink:com.somewater.text.LinkLabel;
 
 		public function EditPersonProfilePage() {
-			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 90, 90);
-			photoMask = new Shape();
-			photoMask.graphics.beginFill(0);
-			photoMask.graphics.drawRoundRectComplex(0,0,90,90,5,5,5,5);
-			photo.mask = photoMask
-			addChild(photo);
-			addChild(photoMask);
-
-			editProfileButton = new StandartButton();
-			editProfileButton.textField.multiline = true;
-			editProfileButton.label = I18n.t('EDIT_DATA');
-			addChild(editProfileButton);
-
-			familyTreeLink = new com.somewater.text.LinkLabel(null, 0x2881C6, 11, true);
-			familyTreeLink.text = I18n.t('FAMILY_TREE');
-			addChild(familyTreeLink);
-
-			editPhotoLink = new com.somewater.text.LinkLabel(null, 0x2881C6, 11, true);
-			editPhotoLink.text = I18n.t('EDIT_PHOTO');
-			addChild(editPhotoLink);
-
-			deletePhotoLink = new com.somewater.text.LinkLabel(null, 0xc72928, 11, true);
-			deletePhotoLink.text = I18n.t('DELETE_PHOTO');
-			addChild(deletePhotoLink);
-
-			profileLink = new com.somewater.text.LinkLabel(null, 0x2881C6, 11, true);
-			profileLink.text = I18n.t('PROFILE');
-			addChild(profileLink);
-
-			readonlyInfo = new ReadonlyInfo();
-			addChild(readonlyInfo);
-
 			editableInfo = new EditableInfo();
+			editableInfo.addEventListener(Event.RESIZE, onEditableInfoResized)
 			addChild(editableInfo);
 
-			familyBlock = new FamilyBlock();
-			addChild(familyBlock);
-			familyBlock.addEventListener(Event.RESIZE, onFamilyBlockResized);
+			saveProfileButtonGround = new Shape();
+			addChild(saveProfileButtonGround);
 
-			saveButtonBlock = new SaveButtonBlock();
-			addChild(saveButtonBlock);
+			saveProfileButton = new StandartButton();
+			saveProfileButton.textField.size += 2;
+			saveProfileButton.label = I18n.t('SAVE_PROFILE');
+			addChild(saveProfileButton);
+
+			cancelEditLink = new com.somewater.text.LinkLabel(null, 0x2881C6, 11, true);
+			cancelEditLink.text = I18n.t('CANCEL_EDIT');
+			addChild(cancelEditLink);
 		}
 
 		override public function get pageName():String {
@@ -82,96 +53,62 @@ public class EditPersonProfilePage extends PageBase{
 
 		override public function clear():void {
 			super.clear();
-			photo.clear();
-			editProfileButton.clear();
-			profileLink.clear();
-			familyTreeLink.clear();
-
-			familyBlock.clear();
-			familyBlock.removeEventListener(Event.RESIZE, onFamilyBlockResized);
-			saveButtonBlock.clear();
-			readonlyInfo.clear();
 			editableInfo.clear();
+			saveProfileButton.clear();
+			cancelEditLink.clear();
+			editableInfo.removeEventListener(Event.RESIZE, onEditableInfoResized)
 		}
 
 		override protected function refresh():void {
 			super.refresh();
+
 			var contentX:int = 20;
-			var contentY:int = 0;
+			var contentY:int = 20;
 			var contentWidth:int = _width - contentX - 20;
 			var contentHeight:int = _height - contentY - 20;;
 
-			photoMask.x = photo.x = contentX;
-			photoMask.y = photo.y = contentY;
+			editableInfo.x = contentX;
+			editableInfo.y = contentY;
+			editableInfo.width = contentWidth;
 
-			editProfileButton.x = photo.x + photo.width + 8;
-			editProfileButton.y = photo.y;
-			editProfileButton.setSize(contentWidth - editProfileButton.x + contentX, 45);
-
-			editPhotoLink.x = editProfileButton.x;
-			editPhotoLink.y = editProfileButton.y;
-
-			deletePhotoLink.x = editPhotoLink.x;
-			deletePhotoLink.y = editPhotoLink.y + editPhotoLink.height;
-
-			profileLink.x = familyTreeLink.x = editProfileButton.x;
-
-			familyTreeLink.y = photo.y + photo.height - familyTreeLink.textField.textHeight;
-			profileLink.y = familyTreeLink.y - familyTreeLink.textField.textHeight - profileLink.textField.textHeight;
-
-			var info:UIComponent = readonlyInfo.visible ? readonlyInfo : editableInfo;
-			info.x = contentX;
-			info.y = photo.y + photo.height + 15;
-			info.width = contentWidth;
-
-			log("INFO HEIGHT: " + info.height);
-
-			familyBlock.x = contentX;
-			familyBlock.y = info.y + info.calculatedHeight + 10;
-			familyBlock.width = contentWidth;
-			familyBlock.maxHeight = _height - familyBlock.y - saveButtonBlock.calculatedHeight - 20;
-
-			saveButtonBlock.x = contentX;
-			saveButtonBlock.y = familyBlock.y + familyBlock.calculatedHeight + 10;
-			saveButtonBlock.width = contentWidth;
+			refreshSaveButtonPos();
 		}
 
-		internal function onPersonSelected(person:Person, editable:Boolean = false,
-										   joinType:JoinType = null, from:Person = null):void{
+		internal function onPersonSelected(person:Person, joinType:JoinType = null, from:Person = null):void{
 			if(!person) return;
 			this.visible = true;
-			this.editable = editable;
-			photo.source = person.photo;
-			if(!photo.source) setDefaultPhoto(person.male);
-			if(editable){
-				editableInfo.setPerson(person, joinType, from);
-			}else{
-				readonlyInfo.setPerson(person);
-			}
-
-			readonlyInfo.visible = !editable;
-			editableInfo.visible = editable;
-			editPhotoLink.visible = editable;
-			deletePhotoLink.visible = editable && person.photo;
-			editProfileButton.visible = !editable && !person.isNew;
-
-			familyBlock.setPerson(person, editable);
-			saveButtonBlock.editable = editable;
-
+			editableInfo.setPerson(person, joinType, from);
 			refresh();
 		}
 
-		public function setDefaultPhoto(male:Boolean):void {
-			photo.source = Config.loader.createMc('assets.DefaultPhoto_' + (male ? 'male' : 'female'));
+		private function onEditableInfoResized(event:Event):void{
+			refreshSaveButtonPos(true);
 		}
 
-		private function onFamilyBlockResized(event:Event):void{
-			refresh();
+		private function refreshSaveButtonPos(anim:Boolean = false):void{
+			const PADDING:int = 10;
+
+			saveProfileButton.x = PADDING * 2;
+			var saveButtonY:int = editableInfo.y + editableInfo.calculatedHeight + PADDING * 2
+			setYPos(saveProfileButton, saveButtonY, anim);
+			saveProfileButton.setSize(_width - PADDING * 4, 27);
+
+			saveProfileButtonGround.graphics.clear();
+			saveProfileButtonGround.graphics.beginFill(0xFFFFFF);
+			saveProfileButtonGround.x = saveProfileButton.x;
+			setYPos(saveProfileButtonGround, saveButtonY, anim);
+			saveProfileButtonGround.y = saveProfileButton.y;
+			saveProfileButtonGround.graphics.drawRoundRectComplex(-PADDING * .5, -PADDING * .5, saveProfileButton.width + PADDING, saveProfileButton.height + PADDING, 5,5,5,5);
+
+			cancelEditLink.x = (width - cancelEditLink.width)* 0.5;
+			setYPos(cancelEditLink, saveButtonY + saveProfileButton.height + 10, anim)
 		}
 
-		internal static function formattedBirthday(date:Date):String{
-			if(!date) return '    ---';
-			return date.date + ' ' + I18n.t('MONTH_GENETIVE_' + date.month) + ' ' + date.fullYear;
+		private function setYPos(c:DisplayObject, posY:int, animated:Boolean):void{
+			if(animated)
+				Tweener.to(c, 0.2, {y: posY});
+			else
+				c.y = posY;
 		}
 	}
 }

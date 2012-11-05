@@ -174,7 +174,7 @@ import tree.view.gui.PageBase;
 		internal function onPersonSelected(person:Person):void{
 			const SHOW_ALL_IF_DIE:Boolean = false;
 
-			if(!person) return;
+			if(!person || !person.node) return;
 			photo.source = person.photo;
 			if(!photo.source) setDefaultPhoto(person.male);
 
@@ -221,7 +221,7 @@ import tree.view.gui.PageBase;
 			refresh();
 		}
 
-		internal static function formattedBirthday(date:Date):String{
+		public static function formattedBirthday(date:Date):String{
 			if(!date || isNaN(date.date)) return '    ---';
 			return date.date + ' ' + I18n.t('MONTH_GENETIVE_' + date.month) + ' ' + date.fullYear;
 		}

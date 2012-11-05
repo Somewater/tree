@@ -91,7 +91,7 @@ public class CanvasController extends Actor{
 			n.hide();
 
 			var l:JoinLine = canvas.getJoinLine(g.join.from.uid, g.node.uid);
-			l.hide();
+			if(l) l.hide();
 		}
 
 		private function onNodePositionChanged(node:Node):void {

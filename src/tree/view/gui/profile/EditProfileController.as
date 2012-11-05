@@ -10,47 +10,32 @@ import tree.model.Person;
 import tree.signal.ModelSignal;
 import tree.signal.ViewSignal;
 import tree.view.gui.GuiControllerBase;
+import tree.view.gui.notes.PersonNotesPage;
 import tree.view.window.MessageWindow;
 
 public class EditProfileController extends GuiControllerBase implements IClear{
 
 		private var page:EditPersonProfilePage;
 
+		private var person:Person;
+		private var from:Person;
+		private var joinType:JoinType;
+
 		public function EditProfileController(page:EditPersonProfilePage) {
 			this.page = page;
 			super(page);
 
-			page.deletePhotoLink.link.add(onDeletePhotoClick);
 			page.editableInfo.sexChange.add(onSexChanged);
-			page.familyBlock.itemClick.add(onFamalyBlockItemClicked);
 
 			// edit/read switch mode
-			page.saveButtonBlock.cancelEditLink.link.add(onCancelEditProfile);
-			page.saveButtonBlock.saveProfileButton.click.add(onSaveEditedData);
-			page.saveButtonBlock.createProfileButton.click.add(onCreateNewProfile);
+			page.cancelEditLink.link.add(onCancelEditProfile);
+			page.saveProfileButton.click.add(onSaveEditedData);
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 		}
 
 		private function onCreateNewProfile(...args):void {
 			bus.dispatch(ViewSignal.START_EDIT_PERSON, null, null, null);
-		}
-
-		private function onDeletePhotoClick(...args):void {
-			page.setDefaultPhoto(model.editing.edited.male);
-			new MessageWindow('TODO: послать запрос на удаление фото').open();
-		}
-
-		private function onEditPhotoClick(...args):void {
-			new MessageWindow('TODO: выбрать новый файл фотографии').open();
-		}
-
-		private function onProfileClick(...args):void {
-			navigateToURL(new URLRequest(model.selectedPerson.profileUrl))
-		}
-
-		private function onFamilyTreeClick(...args):void{
-			new MessageWindow('TODO: открыть дерево относительно человека').open()
 		}
 
 		override public function clear():void{
@@ -63,27 +48,17 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 		override public function start(...args):void {
 			super.start(args);
 			gui.switcher.profile = true;
-			var person:Person = args[0] || model.selectedPerson;
+			person = args[0];
 			if(!person){
 				page.visible = false;
 				return;
 			}
 			page.visible = true;
-			var joinType:JoinType = args[1];
-			var from:Person = args[2];
-			if(args.length > 1 || person.isNew || joinType){
-				// редактирование
-				model.editing.editEnabled = true;
-				page.onPersonSelected(person, true, joinType, from);
-			}else{
-				// промотр профиля
-				model.editing.editEnabled = false;
-				page.onPersonSelected(person);
-			}
-		}
+			joinType = args[1];
+			from = args[2];
 
-		private function onEditProfile(...args):void {
-			bus.dispatch(ViewSignal.START_EDIT_PERSON, model.selectedPerson)
+			model.editing.editEnabled = true;
+			page.onPersonSelected(person, joinType, from);
 		}
 
 		private function onCancelEditProfile(...args):void {
@@ -101,14 +76,12 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 		}
 
 		private function onPersonSelected(person:Person):void{
-			page.onPersonSelected(person);
+			page.onPersonSelected(person, joinType, from);
 		}
 
 		private function onSexChanged(male:Boolean):void{
 			model.editing.edited.male = male;
 			page.editableInfo.setSex(male, model.editing.joinType, model.editing.from);
-			if(!model.editing.edited.photo)
-				page.setDefaultPhoto(model.editing.edited.male);
 		}
 
 		/**
@@ -124,15 +97,9 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 			if(edited.isNew){
 				if(model.selectedPerson == edited)
 					model.selectedPerson = null;
-				gui.setPage(PersonProfilePage.NAME);
+				gui.setPage(PersonNotesPage.NAME);
 			}else
-				page.onPersonSelected(model.selectedPerson);
-		}
-
-		private function onFamalyBlockItemClicked(person:Person):void{
-			model.editing.editEnabled = false;
-			bus.dispatch(ViewSignal.PERSON_SELECTED, person);
-			bus.dispatch(ViewSignal.PERSON_CENTERED, person);
+				gui.setPage(PersonProfilePage.NAME)
 		}
 	}
 }

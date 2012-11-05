@@ -28,7 +28,7 @@ package tree.model {
 		public var post:String;
 		public var profileUrl:String;
 
-		public  var open:Boolean;
+		public  var open:Boolean = true;
 
 		public function Person(tree:TreeModel) {
 			this.tree = tree;

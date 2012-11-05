@@ -168,7 +168,7 @@ package tree {
 			Font.registerFont(Config.loader.createMc('font.ArialBold_font', null, false));
 			Font.registerFont(Config.loader.createMc('font.Arial_font', null, false));
 
-			var textFormat:TextFormat = EmbededTextField.getEmbededFormat(null, null, 0x525252, 13);
+			var textFormat:TextFormat = EmbededTextField.getEmbededFormat(null, null, 0x000000, 13);
 			StyleManager.setStyle('textFormat', textFormat);
 			StyleManager.setStyle('embedFonts', true);
 			StyleManager.setComponentStyle(ComboBox, 'buttonWidth', 10);

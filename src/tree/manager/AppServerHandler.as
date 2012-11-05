@@ -33,6 +33,7 @@ public class AppServerHandler {
 				break;
 
 				case RequestSignal.DELETE_USER:
+					bus.loaderProgress.dispatch(0);
 					handler.call({
 						'action': 'q_tree',
 						'taction':'delete_user',
@@ -42,6 +43,7 @@ public class AppServerHandler {
 				break;
 
 				case RequestSignal.ADD_USER:
+					bus.loaderProgress.dispatch(0);
 					data = {
 						'action': 'q_tree',
 						'uid': model.trees.first.owner.uid,
@@ -62,6 +64,7 @@ public class AppServerHandler {
 				break;
 
 				case RequestSignal.EDIT_USER:
+					bus.loaderProgress.dispatch(0);
 					data = {
 						'action': 'q_tree',
 						'uid': model.trees.first.owner.uid,

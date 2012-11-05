@@ -24,7 +24,7 @@ import tree.view.gui.profile.PersonProfilePage;
 			,
 			PersonProfilePage: {page: PersonProfilePage, controller: ProfileController}
 			,
-			EditPersonProfilePage: {page: EditPersonProfilePage, controller: EditProfileController}
+			EditPersonProfilePage: {page: EditPersonProfilePage, controller: EditProfileController, hideSwitcher: true}
 		};
 
 		private var background:Sprite;
@@ -99,6 +99,12 @@ import tree.view.gui.profile.PersonProfilePage;
 			}
 			page.setSize(pageWidth, pageHeight);
 			pageHolder.addChild(page);
+
+			if(data['hideSwitcher']){
+				switcher.visible = false;
+				page.y = -pageHolder.y;
+			}else
+				switcher.visible = true;
 
 			if(controllerCl){
 				controller = new controllerCl(page);
