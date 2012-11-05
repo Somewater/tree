@@ -161,7 +161,7 @@ public class CanvasController extends Actor{
 				l = canvas.getJoinLine(j.from.uid, j.uid);
 				if(l)
 					linetToRefresh.push(l);
-				else{
+				else if(node.visible && canvas.getNodeIcon(j.uid) != null){
 					// надо создать связь (при условии что это важная связь)
 					l = canvas.getJoinLineAndCreate(j.from.uid, j.uid);
 					l.data = j;
@@ -211,7 +211,7 @@ public class CanvasController extends Actor{
 		}
 
 		private function onNodeRolUnrollClicked(node:NodeIcon):void{
-			if(!model.constructionInProcess)
+			if(!model.constructionInProcess && model.treeViewConstructed)
 				bus.dispatch(ViewSignal.NODE_ROLL_UNROLL, node.data.node);
 		}
 

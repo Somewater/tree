@@ -179,6 +179,7 @@ import tree.view.gui.PageBase;
 			if(!photo.source) setDefaultPhoto(person.male);
 
 			editProfile.visible = deleteProfile.visible = person.open;
+			deleteProfile.visible = !(person.node.slaves && person.node.slaves.length)
 
 			nameField.text = formattedIfEmpty(person.fullname);
 			postField.visible = !!person.post || SHOW_ALL_IF_DIE;

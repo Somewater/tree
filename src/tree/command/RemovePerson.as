@@ -33,7 +33,7 @@ import tree.model.Person;
 			bus.dispatch(ModelSignal.HIDE_NODE, join);
 
 			detain();
-			Config.ticker.callLater(removePersonFromModel, 2000);
+			Config.ticker.callLater(removePersonFromModel, 100);
 			model.treeViewConstructed = false;
 		}
 
@@ -41,9 +41,18 @@ import tree.model.Person;
 			release();
 
 			var tree:TreeModel = person.tree;
+			var node:Node = person.node;
 			tree.nodes.remove(person.node);
 			tree.persons.remove(person);
 			model.treeViewConstructed = true;
+
+			for each(var n:Node in tree.nodes.iterator){
+				if(n.slaves){
+					var idx:int = n.slaves.indexOf(node);
+					if(idx != -1)
+						n.slaves.splice(idx, 1);
+				}
+			}
 		}
 	}
 }

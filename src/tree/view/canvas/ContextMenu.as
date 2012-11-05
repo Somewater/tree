@@ -172,6 +172,8 @@ public class ContextMenu extends UIComponent{
 			sonBtn.visible = sonLine.visible = true;
 			daughterBtn.visible = daughterLine.visible = true;
 
+			deleteAction.visible = !(p.node.slaves && p.node.slaves.length)
+
 			refreshPosition();
 		}
 
