@@ -18,6 +18,8 @@ public class DateSelector extends TreeTextInput{
 	private var icon:DisplayObject;
 	private var core:DatePicker;
 
+	private var _date:Date;
+
 	public function DateSelector() {
 		editable = false;
 		icon = Config.loader.createMc('assets.CalendarIcon');
@@ -31,7 +33,7 @@ public class DateSelector extends TreeTextInput{
 		core = new DatePicker();
 		core.dateField.visible = false
 		core.icon = new Shape();
-		core.x = -97;
+		core.x = -80;
 		core.y = 30
 		addChild(core);
 		addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
@@ -43,8 +45,8 @@ public class DateSelector extends TreeTextInput{
 	}
 
 	public function set date(value:Date):void {
-		core.selectedDate = value;
-		onDataChanged(null);
+		_date = core.selectedDate = value;
+		refreshTextField();
 	}
 
 	override protected function draw():void {
@@ -54,11 +56,17 @@ public class DateSelector extends TreeTextInput{
 	}
 
 	private function onClick(ev:Event):void{
+		core.selectedDate = _date;
 		core.showHideCalendar(ev);
 	}
 
 	private function onDataChanged(event:Event):void{
-		text = PersonProfilePage.formattedBirthday(core.selectedDate);
+		_date = core.selectedDate;
+		refreshTextField();
+	}
+
+	private function refreshTextField():void{
+		text = PersonProfilePage.formattedBirthday(_date);
 	}
 }
 }

@@ -5,7 +5,8 @@ import com.somewater.storage.I18n;
 import com.somewater.text.EmbededTextField;
 
 import flash.display.Bitmap;
-	import flash.events.MouseEvent;
+import flash.events.Event;
+import flash.events.MouseEvent;
 	import flash.display.Sprite;
 	import flash.display.MovieClip;
 	import flash.display.GradientType;
@@ -13,12 +14,15 @@ import flash.display.Bitmap;
 	import flash.display.SpreadMethod;
 	import flash.filters.GlowFilter;
 	import flash.display.BlendMode;
-	import flash.text.TextFormat;
+import flash.text.TextFormat;
+import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.AntiAliasType;
 	import flash.geom.Matrix;
 	import flash.filters.ColorMatrixFilter;
 	import nid.events.CalendarEvent;
+
+import tree.model.Model;
 
 import tree.view.gui.TreeTextInput;
 
@@ -37,7 +41,6 @@ import tree.view.gui.TreeTextInput;
 			_startDay = s.toLowerCase();
 			if (_startDay == "monday") _startID = 0;
 			else if (_startDay == "sunday")_startID = 1;
-			weekname.text =	weekdisplay[_startID];
 			ConstructCalendar();
 		}
 		public function set icon(b:Object):void { calendarIcon.configIcon(b); }
@@ -131,7 +134,7 @@ import tree.view.gui.TreeTextInput;
 			  focalPointRatio
 			  );
 			  
-			bg.graphics.drawRect(0,-15,calendarWidth,calendarHeight + 15);
+			bg.graphics.drawRect(0,0,calendarWidth,calendarHeight);
 			bg.graphics.endFill();
 			
 			Calendar.addChild(bg);
@@ -146,7 +149,7 @@ import tree.view.gui.TreeTextInput;
 				currentDateLabel.autoSize		=	TextFieldAutoSize.CENTER;
 				currentDateLabel.selectable 	=	false;
 				currentDateLabel.width			=	66;
-				currentDateLabel.y				=	6;				
+				currentDateLabel.y				=	36;
 				
 			var format:TextFormat 	= 	new TextFormat();
 				format.font			=	_font;
@@ -163,44 +166,47 @@ import tree.view.gui.TreeTextInput;
 			 */
 				format.letterSpacing 			=	letterSpacing;
 				format.size						=	WeekNameFontSize;
-				weekdisplay						=	[I18n.arr('WEEK_DAYS_SINCE_MON').join(''),I18n.arr('WEEK_DAYS_SINCE_SON').join('')]
-				weekname	 					= 	new EmbededTextField();
-				weekname.embedFonts  			=	embedFonts;
-				weekname.blendMode     			=	BlendMode.LAYER;
-				weekname.selectable				=	false;				
-				weekname.antiAliasType			= 	AntiAliasType.ADVANCED;
-				weekname.defaultTextFormat		=	format;
-				if (_startDay == "monday") {
-					_startID = 0;
-				}else if (_startDay == "sunday") {
-					_startID = 1;
-				}
-				weekname.text					=	weekdisplay[_startID];
-				weekname.width					=	165;					
-				weekname.x						=	11;
-				weekname.y 						=	23;
+				weekdisplay						=	[I18n.arr('WEEK_DAYS_SINCE_MON').join(' '),I18n.arr('WEEK_DAYS_SINCE_SON').join(' ')]
 			
 			Calendar.addChild(currentDateLabel);
-			Calendar.addChild(weekname);
+
+			var nextX:int = 8;
+			for each(var dName:String in I18n.arr('WEEK_DAYS_SINCE_MON')){
+				var w:EmbededTextField = new EmbededTextField(null, 0, WeekNameFontSize, true);
+				w.setAbstractFormatField('letterSpacing', letterSpacing)
+				w.x = nextX;
+				w.y = 55;
+				w.text = dName;
+				nextX += 22;
+				Calendar.addChild(w);
+			}
 
 			currentYearLabel = new TreeTextInput();
-			currentYearLabel.width = currentDateLabel.width - 20;
-			currentYearLabel.x = 10;
-			currentYearLabel.y = -15;
+			currentYearLabel.addEventListener(Event.CHANGE, onTextFieldChanged, false, 0, true);
+			currentYearLabel.restrict = '0123456789';
+			currentYearLabel.maxChars = 4;
+			currentYearLabel.setStyle('textPadding', 2);
+			var tf:TextFormat = EmbededTextField.getEmbededFormat();
+			tf.size = 13;
+			tf.align = 'center';
+			currentYearLabel.setStyle('textFormat', tf)
+			currentYearLabel.width = bgWidth - 100;
+			currentYearLabel.x = 50;
+			currentYearLabel.y = 8;
 			Calendar.addChild(currentYearLabel);
 
 			
 		/*
 		 *	MAKE MONTH CHANGER BUTTONS
 		 */
-			var nextBtn:Sprite 	= 	makeBtn(90);
+			var nextBtn:Sprite 	= 	makeBtn(90, false);
 				nextBtn.name 	= 	"NextButton";
 				nextBtn.x 		= 	160; 
-				nextBtn.y 		= 	11;
-			var prevBtn:Sprite 	= 	makeBtn(270);
+				nextBtn.y 		= 	41;
+			var prevBtn:Sprite 	= 	makeBtn(270, false);
 				prevBtn.name 	= 	"PrevButton";
 				prevBtn.x 		= 	5; 
-				prevBtn.y 		=	18;
+				prevBtn.y 		=	48;
 				
 				nextBtn.buttonMode 	= 	true;
 				prevBtn.buttonMode	=	true;
@@ -210,6 +216,25 @@ import tree.view.gui.TreeTextInput;
 			
 			Calendar.addChild(nextBtn);
 			Calendar.addChild(prevBtn);
+
+
+			var prevYearBtn:Sprite = makeBtn(270, true);
+			prevYearBtn.name 	= 	"PrevYearButton";
+			prevYearBtn.x 		= 	5;
+			prevYearBtn.y 		= 	27 - 5;
+			prevYearBtn.buttonMode = true;
+
+			var nextYearBtn:Sprite = makeBtn(90, true);
+			nextYearBtn.name 	= 	"NextYearButton";
+			nextYearBtn.x 		= 	160;
+			nextYearBtn.y 		= 	20 - 5;
+			nextYearBtn.buttonMode = true;
+
+			prevYearBtn.addEventListener(MouseEvent.CLICK, clickHandler, false, 0, true);
+			nextYearBtn.addEventListener(MouseEvent.CLICK, clickHandler, false, 0, true);
+
+			Calendar.addChild(prevYearBtn);
+			Calendar.addChild(nextYearBtn);
 			
 			
 		/*
@@ -222,10 +247,19 @@ import tree.view.gui.TreeTextInput;
 			currentmonth	 =	today.getMonth();
 			DaysinMonth		 =	[31, isLeapYear(currentyear)?29:28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 			
-			currentDateLabel.text	=	Months[currentmonth]+" - "+currentyear;
+			currentDateLabel.text	=	Months[currentmonth];
+			currentYearLabel.text = currentyear.toString();
 			
 			ConstructCalendar();
 			
+		}
+
+		private function onTextFieldChanged(event:Event):void{
+			var year:int = parseInt(currentYearLabel.text);
+			if(year >= 1000 && year <= Model.instance.currentDate.fullYear) {
+				changeYear(year, false, false);
+				ConstructCalendar();
+			}
 		}
 		
 		public function flush():void 
@@ -246,6 +280,18 @@ import tree.view.gui.TreeTextInput;
 				case "NextButton" :
 					{
 						changeMonth(1);
+						break;
+					}
+				case "NextYearButton" :
+					{
+						changeYear(1, true, false);
+						ConstructCalendar();
+						break;
+					}
+				case "PrevYearButton" :
+					{
+						changeYear(-1, true, false);
+						ConstructCalendar();
 						break;
 					}
 			}
@@ -275,9 +321,10 @@ import tree.view.gui.TreeTextInput;
 		/*
 		 * 	YEAR CHANGER FUNCTION
 		 */
-		public function changeYear(yearNum:Number):void {
-			currentyear = currentyear + yearNum;
-			if (yearNum != 1) { currentmonth = 11; } else { currentmonth = 0; }
+		public function changeYear(yearNum:Number, relative:Boolean = true, changeMonth:Boolean = true):void {
+			currentyear = relative ? currentyear + yearNum : yearNum;
+			if(changeMonth)
+				if (yearNum != 1) { currentmonth = 11; } else { currentmonth = 0; }
 			DaysinMonth[1] = isLeapYear(currentyear)?29:28;
 			return;
 		}
@@ -299,11 +346,11 @@ import tree.view.gui.TreeTextInput;
 			var dateBox		:MovieClip;
 			 	cellArray				= 	new Array();
 			var xpos		:Number		=	5;
-			var ypos		:Number		=	40;
+			var ypos		:Number		=	73;
 			var weekCount	:Number		=	0;
 			var endDate		:Date 		=	new Date(currentyear,currentmonth,_startID);			
 			var endDay		:Number		=	endDate.getDay();
-			var locDate		:Date		=	new Date();
+			var locDate		:Date		=	_selectedDate || new Date();
 			isToday						=	false;	
 			inited 						= 	true;
 			
@@ -341,7 +388,8 @@ import tree.view.gui.TreeTextInput;
 			 *	CONSTRUCT DATE ENTRY CELLS
 			 */			
 			var entryNum:int 		= 	1;
-			currentDateLabel.text	=	Months[currentmonth]+" - "+currentyear;
+			currentDateLabel.text	=	Months[currentmonth];
+			currentYearLabel.text = currentyear.toString();
 			
 			var restNum:int = endDay;
 
@@ -428,8 +476,8 @@ import tree.view.gui.TreeTextInput;
 			day_txt.multiline		= false;
 			day_txt.selectable 		= false;
 			day_txt.width 			= cellWidth;
-			day_txt.x 				= 9;
-			day_txt.y 				= 1;
+			day_txt.x 				= 7;
+			day_txt.y 				= 2;
 			
 			var format:TextFormat 			
 			
@@ -472,7 +520,7 @@ import tree.view.gui.TreeTextInput;
 		/*
 		 * BUTTON GRAPHICS CONSTRUCTOR
 		 */
-		private function makeBtn(arg2:Number):Sprite
+		private function makeBtn(arg2:Number, double:Boolean):Sprite
 		{
 			var triangleHeight:uint=6;
 			var triangleShape:Sprite = new Sprite();
@@ -488,6 +536,15 @@ import tree.view.gui.TreeTextInput;
 			triangleShape.graphics.lineTo(triangleHeight, triangleHeight+5);
 			triangleShape.graphics.lineTo(0, triangleHeight+5);
 			triangleShape.graphics.lineTo(triangleHeight/2, 5);
+			if(double){
+				var dy:int = 5;
+				triangleShape.graphics.endFill();
+				triangleShape.graphics.beginFill(buttonColor);
+				triangleShape.graphics.moveTo(triangleHeight/2, 5 + dy);
+				triangleShape.graphics.lineTo(triangleHeight, triangleHeight+5 + dy);
+				triangleShape.graphics.lineTo(0, triangleHeight+5 + dy);
+				triangleShape.graphics.lineTo(triangleHeight/2, 5 + dy);
+			}
 			triangleShape.rotation = arg2;			
 			return(triangleShape);
 		}

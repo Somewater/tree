@@ -4,7 +4,9 @@
 import com.gskinner.motion.GTween;
 
 import fl.core.InvalidationType;
-	import flash.display.Sprite;
+
+import flash.display.DisplayObject;
+import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
@@ -33,7 +35,8 @@ import tree.view.Tweener;
 		
 		public function get selectedDate():Date { return _selectedDate; }		
 		public function set selectedDate(value:Date):void 
-		{ 
+		{
+			if(_selectedDate && _selectedDate.time == value.time) return;
 			_selectedDate = value;
 			if (value == null)
 			{
@@ -62,7 +65,6 @@ import tree.view.Tweener;
 			if (currentDateLabel != null)
 			{
 				currentDateLabel.font = value
-				weekname.font = value;
 				ConstructCalendar();
 			}
 		}
@@ -76,7 +78,6 @@ import tree.view.Tweener;
 		public function set days(value:Array):void 
 		{ 
 			weekdisplay = value; 
-			weekname.text	=	weekdisplay[_startID];
 		}
 		
 		public final function DatePicker() {
@@ -299,13 +300,21 @@ import tree.view.Tweener;
 			if (_alwaysShowCalendar) return;
 			if (e.currentTarget == stage) {
 				//trace(e.target.name);
-				if(e.target.name == "hit" || e.target.name == "NextButton" || e.target.name == "PrevButton" || e.target == calendarIcon ){					
+				if(currentYearLabel && (e.target == currentYearLabel || currentYearLabel.contains(e.target as DisplayObject))) return;
+				if(e.target.name == "hit"
+						|| e.target.name == "NextYearButton" || e.target.name == "PrevYearButton"
+						|| e.target.name == "NextButton" || e.target.name == "PrevButton" || e.target == calendarIcon ){
 					//trace(e.currentTarget);				
 					return;
 				}
 			}
 			if (isHidden) {
 				relocate();
+				if(_selectedDate){
+					currentyear = _selectedDate.fullYear;
+					currentmonth = _selectedDate.month;
+				}
+				ConstructCalendar();
 				stage.addChild(Calendar);
 				Tweener.to(Calendar, 0.3, {alpha: 1});
 				isHidden	=	false;

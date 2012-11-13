@@ -31,9 +31,9 @@ import tree.view.gui.TreeTextInput;
 		public var _font				:String = "Tahoma";
 		public var embedFonts			:Boolean = false;
 		public var bitmapFonts			:Boolean = true;
-		public var letterSpacing		:Number = 13;
+		public var letterSpacing		:Number = 1;// 13 if one letter per day, 1 if double
 		public var MonthAndYearFontSize	:Number = 12;
-		public var WeekNameFontSize		:Number = 12;
+		public var WeekNameFontSize		:Number = 11;
 		public var DayFontSize			:Number = 10;
 		public var hideOnFocusOut		:Boolean = true;
 		public var _alwaysShowCalendar	:Boolean = false;
@@ -42,7 +42,6 @@ import tree.view.gui.TreeTextInput;
 		protected var _prompt_bkp		:String = "Select Date";
 		protected var _dateFormat		:String = "D/M/Y";
 		protected var weekdisplay		:Array;
-		protected var weekname			:EmbededTextField;
 		protected var Days				:Array;
 		protected var Months			:Array	= 	I18n.arr('MONTHS');
 		protected var _iconPosition		:String = "right";
@@ -72,14 +71,14 @@ import tree.view.gui.TreeTextInput;
 		/*
 		 * COLOR VARIABLES
 		 */		
-		protected var backgroundColor			:Array	=	[0xFFFFFF,0xDDDDDD];
+		protected var backgroundColor			:Array	=	[0xFFFFFF,0xe1efb2];
 		protected var backgroundGradientType	:String	=	GradientType.RADIAL;
 		protected var backgroundStrokeColor		:int	=	0xA9A9C2;
-		protected var labelColor				:int	=	0x000000;
-		protected var buttonColor				:int	=	0x000000;
-		protected var disabledCellColor			:int	=	0x999999;
-		protected var enabledCellColor			:int	=	0x000000;
-		protected var TodayCellColor			:int	=	0xFF0000;
+		protected var labelColor				:int	=	0;
+		protected var buttonColor				:int	=	0;
+		protected var disabledCellColor			:int	=	0xc5cbb1;
+		protected var enabledCellColor			:int	=	0x719404;
+		protected var TodayCellColor			:int	=	0x3a8ac0;
 		protected var mouseOverCellColor		:int	=	0x0099FF;
 		protected var entryTextColor			:int	=	0xffffff;
 
@@ -87,7 +86,7 @@ import tree.view.gui.TreeTextInput;
 		 *	CALENDAR DIAMENSIONS VARIABLES		 
 		 */	
 		protected var calendarWidth			:Number		= 165;
-		protected var calendarHeight		:Number		= 178;
+		protected var calendarHeight		:Number		= 210;
 		protected var cellWidth				:Number		= 20
 		protected var cellHeight			:Number		= 20
 		protected var labelWidth			:Number		= 8;
