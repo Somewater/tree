@@ -182,18 +182,7 @@ package tree.view.gui.notes {
 
 		private function filterNotes(note:PersonNoteItem, index:int):Boolean{
 			var search:String = searchField.search.toLowerCase();
-			var spaces:RegExp = /^\s+$/;
-			if(search && search.length && !spaces.test(search)){
-				var p:Person = note.data;
-				if(p.firstName.toLowerCase().indexOf(search) != -1)
-					return true;
-				if(p.lastName.toLowerCase().indexOf(search) != -1)
-					return true;
-				if(note.post.toLowerCase().indexOf(search) != -1)
-					return true;
-				return false;
-			} else
-				return true;
+			return PersonNotesController.filter(note.data, search);
 		}
 
 		private function onFirstNoteResized(event:Event):void{

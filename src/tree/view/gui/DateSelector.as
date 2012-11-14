@@ -45,7 +45,7 @@ public class DateSelector extends TreeTextInput{
 	}
 
 	public function set date(value:Date):void {
-		_date = core.selectedDate = value;
+		_date = core.selectedDate = value && !isNaN(value.date) ? value : null;
 		refreshTextField();
 	}
 

@@ -13,6 +13,7 @@ public class TreeTextInput extends TextInput{
 		textField.defaultTextFormat = format;
 
 		setStyle('textPadding', 4);
+		height = 28;
 	}
 }
 }

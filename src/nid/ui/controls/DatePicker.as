@@ -36,7 +36,7 @@ import tree.view.Tweener;
 		public function get selectedDate():Date { return _selectedDate; }		
 		public function set selectedDate(value:Date):void 
 		{
-			if(_selectedDate && _selectedDate.time == value.time) return;
+			if(_selectedDate && value && _selectedDate.time == value.time) return;
 			_selectedDate = value;
 			if (value == null)
 			{

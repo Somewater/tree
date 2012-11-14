@@ -125,7 +125,7 @@ import tree.view.gui.profile.PersonProfilePage;
 
 		public function set contentVisibility(visible:Boolean):void{
 			pageHolder.visible = visible;
-			switcher.visible = visible;
+			switcher.visible = visible && !(pageName && PAGES_CLASSES_BY_NAME[pageName] && PAGES_CLASSES_BY_NAME[pageName]['hideSwitcher']);
 			background.visible = visible;
 			foreground.visible = visible;
 		}

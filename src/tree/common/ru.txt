@@ -96,3 +96,7 @@ DEPTH_BRO=Братья и сестры
 CANT_SAVE_PERSON=Нельзя сохранить, пока не будет завершено построение дерева
 SEND_MESSAGE=Написать сообщение
 INVITE=Пригласить
+SELECT_FROM_FAMILY=Выбрать из семьи
+CANT_MATCHED_PERSONS=Не обнаружено вариантов
+CREATE_NEW_PROFILE=Создать новый профайл
+FROM_LIST=Из списка

@@ -155,5 +155,21 @@ package tree.view.gui.notes {
 		private function removeNote(m:ModelBase):void{
 			page.removeNote(m);
 		}
+
+		public static function filter(p:Person, search:String):Boolean{
+			var spaces:RegExp = /^\s+$/;
+			if(search && search.length && !spaces.test(search)){
+				if(p.firstName.toLowerCase().indexOf(search) != -1)
+					return true;
+				if(p.lastName.toLowerCase().indexOf(search) != -1)
+					return true;
+				if(p.post.toLowerCase().indexOf(search) != -1)
+					return true;
+				if(p.name.toLowerCase().indexOf(search) != -1)
+					return true;
+				return false;
+			} else
+				return true;
+		}
 	}
 }

@@ -1426,6 +1426,7 @@ package fl.controls {
 				invalidate(InvalidationType.SELECTED, true);
 			}
 			if (isInvalid(InvalidationType.SELECTED)) {
+				clearPrompt();
 				if (_selectedIndex == -1 && editableValue != null) {
 					inputField.text = editableValue;
 				} else if (_selectedIndex > -1) {
@@ -1447,6 +1448,10 @@ package fl.controls {
 			
 			
 			super.draw();
+		}
+
+		protected function clearPrompt():void{
+
 		}
 		
 		/**

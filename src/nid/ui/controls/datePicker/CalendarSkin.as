@@ -446,7 +446,7 @@ import tree.view.gui.TreeTextInput;
 		}
 		public function removeEntry():void{
 			for(var i:int=0;i<42;i++){
-				if (Calendar.contains(cellArray[i])) Calendar.removeChild(cellArray[i]);
+				if (cellArray[i] && Calendar.contains(cellArray[i])) Calendar.removeChild(cellArray[i]);
 			}
 			cellArray = [];
 		}

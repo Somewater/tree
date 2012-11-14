@@ -1302,6 +1302,7 @@ package fl.core {
 			}
 			
 			if (classDef == null) {
+				//throw new Error("UIComponent WARNING: class " + skin + " not created");
 				return null;
 			}
 			return (new classDef()) as DisplayObject;

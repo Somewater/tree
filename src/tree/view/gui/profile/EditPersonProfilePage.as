@@ -3,6 +3,8 @@ import com.somewater.display.Photo;
 import com.somewater.storage.I18n;
 import com.somewater.text.LinkLabel;
 
+import fl.controls.ComboBox;
+
 import flash.display.DisplayObject;
 
 import flash.display.Shape;
@@ -22,7 +24,7 @@ public class EditPersonProfilePage extends PageBase{
 
 		public static const NAME:String = 'EditPersonProfilePage';
 
-	    internal var comboBox:TreeComboBox;
+	    internal var comboBox:PersonComboBox;
 
 		internal var editableInfo:EditableInfo;
 		internal var saveProfileButton:Button;
@@ -30,6 +32,9 @@ public class EditPersonProfilePage extends PageBase{
 		internal var cancelEditLink:com.somewater.text.LinkLabel;
 
 		public function EditPersonProfilePage() {
+			comboBox = new PersonComboBox();
+			addChild(comboBox);
+
 			editableInfo = new EditableInfo();
 			editableInfo.addEventListener(Event.RESIZE, onEditableInfoResized)
 			addChild(editableInfo);
@@ -57,6 +62,7 @@ public class EditPersonProfilePage extends PageBase{
 			saveProfileButton.clear();
 			cancelEditLink.clear();
 			editableInfo.removeEventListener(Event.RESIZE, onEditableInfoResized)
+			comboBox.clear();
 		}
 
 		override protected function refresh():void {
@@ -66,6 +72,13 @@ public class EditPersonProfilePage extends PageBase{
 			var contentY:int = 20;
 			var contentWidth:int = _width - contentX - 20;
 			var contentHeight:int = _height - contentY - 20;;
+
+			if(comboBox.visible){
+				comboBox.x = contentX
+				comboBox.y = contentY;
+				comboBox.setSize(contentWidth, 105)
+				contentY += comboBox.height + 15;
+			}
 
 			editableInfo.x = contentX;
 			editableInfo.y = contentY;
@@ -77,6 +90,12 @@ public class EditPersonProfilePage extends PageBase{
 		internal function onPersonSelected(person:Person, joinType:JoinType = null, from:Person = null):void{
 			if(!person) return;
 			this.visible = true;
+			if(joinType != null && from != null) {
+				comboBox.visible = true;
+				comboBox.setPerson(person, joinType, from);
+			} else
+				comboBox.visible = false;
+
 			editableInfo.setPerson(person, joinType, from);
 			refresh();
 		}
