@@ -85,6 +85,8 @@ public class AppServerHandler {
 						'died': request.person.died ? 1 : 0,
 						'email': request.person.email
 					}
+					if(request.joinFrom) data['for'] = request.joinFrom.uid;
+					if(request.joinType) data['rel'] = Join.typeToServer(request.joinType);
 					handler.call(deleteNullFields(data), delegate(request, processEdit), onError(request), onProgress);
 				break;
 

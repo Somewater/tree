@@ -8,5 +8,12 @@ package tree.model {
 
 		public function ProfileEditingModel() {
 		}
+
+		public function clear():void{
+			edited = null;
+			joinType = null;
+			from = null;
+			editEnabled = false;
+		}
 	}
 }

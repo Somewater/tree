@@ -44,13 +44,15 @@ package tree.command.edit {
 			// todo: послать запрос на сервер и дождаться положительного ответа
 			call(request);
 
-			createJoinAndTree();
 			onResponseSuccess();
 		}
 
-		private function createJoinAndTree():void{
-			var tree:TreeModel = person.tree;
+		private function onResponseSuccess():void{
+			var tree:TreeModel = person.tree || (from ? from.tree : null);
+			var newTree:Boolean = false;
+			var newPerson:Boolean = false;
 			if(!tree){
+				newTree = true;
 				tree = model.trees.allocate();
 				tree.uid = person.uid;
 				model.trees.add(tree);
@@ -58,6 +60,7 @@ package tree.command.edit {
 			}
 
 			if(!person.node){
+				newPerson = true;
 				tree.nodes.add(tree.nodes.allocate(person));
 			}
 
@@ -69,10 +72,15 @@ package tree.command.edit {
 				var p:Person;
 
 				// если добаляется ребенок, актоматически делать ребенком 2-х родитеелй
-				if(joinType.superType == JoinType.SUPER_TYPE_BREED && from.marry){
-					createJoin(joinType, from.marry, person);
+				if(joinType.superType == JoinType.SUPER_TYPE_BREED){
+					var bros:Array = [];
+					if(from.marry){
+						createJoin(joinType, from.marry, person);
+						bros = from.legitimateBreed;
+					}else
+						bros = from.breeds;
 					// сделать детей этих родителей его братьями и сестрами
-					for each(p in from.legitimateBreed)
+					for each(p in bros)
 						createJoin(Join.joinBy(JoinType.SUPER_TYPE_BRO, person.male), p, person);
 				}
 
@@ -107,11 +115,6 @@ package tree.command.edit {
 					for each(p in from.parents)
 						createJoin(Join.joinBy(JoinType.SUPER_TYPE_PARENT, p.male), person, p)
 			}
-		}
-
-		private function onResponseSuccess():void{
-			// добавить персону в модель
-			var tree:TreeModel = person.tree;
 
 			var node:Node = person.node;
 			tree.persons.add(person);
@@ -128,14 +131,11 @@ package tree.command.edit {
 				join.from.node.add(join)
 			}
 
-			var newTree:Boolean = false;
-			if(join)
+			if(join && newPerson){
 				RecalculateNodes.calculate(node, from.node, join.flatten, join.breed);
-			else{
-				newTree = true;
 			}
 
-			if(person.node.visible)
+			if(!newPerson)
 				bus.dispatch(ViewSignal.REDRAW_JOIN_LINES, person);
 			else if(newTree)
 				bus.dispatch(ModelSignal.TREE_NEED_CONSTRUCT, person.tree);
@@ -144,6 +144,8 @@ package tree.command.edit {
 
 			release();
 			bus.loaderProgress.dispatch();
+
+			bus.dispatch(ViewSignal.RECALCULATE_ROLL_UNROLL);
 		}
 
 		private function createJoin(type:JoinType, _from:Person, _to:Person):Join{

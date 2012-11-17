@@ -56,8 +56,10 @@ public class DateSelector extends TreeTextInput{
 	}
 
 	private function onClick(ev:Event):void{
-		core.selectedDate = _date;
-		core.showHideCalendar(ev);
+		if(this.enabled){
+			core.selectedDate = _date;
+			core.showHideCalendar(ev);
+		}
 	}
 
 	private function onDataChanged(event:Event):void{

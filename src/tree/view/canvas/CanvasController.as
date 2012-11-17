@@ -72,7 +72,10 @@ public class CanvasController extends Actor{
 				var l:JoinLine = canvas.getJoinLineAndCreate(g.join.from.uid, g.node.uid);
 				l.data = g.join;
 				l.complete.addOnce(onLineShowedOnce);
-				l.play()
+				if(!l.nodesIsDead())
+					l.play()
+				else
+					onLineShowedOnce(l);
 			}else{
 				// первая нода дерева
 				n.refreshPosition(false);
@@ -181,7 +184,8 @@ public class CanvasController extends Actor{
 			}
 
 			for each(l in linetToRefresh){
-				l.show();
+				if(l.nodesIsDead()) l.hide()
+				else l.show();
 			}
 
 			// TODO: удалить ненужные связи типа bro

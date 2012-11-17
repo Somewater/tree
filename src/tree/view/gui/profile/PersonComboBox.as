@@ -10,6 +10,9 @@ import flash.events.Event;
 
 import nid.ui.controls.datePicker.iconSprite;
 
+import org.osflash.signals.ISignal;
+import org.osflash.signals.Signal;
+
 import tree.model.Join;
 
 import tree.model.JoinType;
@@ -31,6 +34,8 @@ public class PersonComboBox extends UIComponent{
 
 	private var personItems:Array = [];
 
+	public var personChanged:ISignal;
+
 	public function PersonComboBox() {
 		selectFromFamily = new EmbededTextField(null, 0x3a3a3a, 12, true);
 		addChild(selectFromFamily);
@@ -46,6 +51,8 @@ public class PersonComboBox extends UIComponent{
 
 		comboBoxBar = new Shape();
 		addChild(comboBoxBar);
+
+		personChanged = new Signal(DPItem);
 	}
 
 	override public function clear():void {
@@ -54,6 +61,7 @@ public class PersonComboBox extends UIComponent{
 		comboBox.removeEventListener(TreeComboBox.FILTER, onComboBoxEnter)
 		comboBox.clear();
 		personItems = null;
+		personChanged.removeAll();
 	}
 
 	override protected function refresh():void {
@@ -130,8 +138,14 @@ public class PersonComboBox extends UIComponent{
 
 	private function onComboChanged(event:Event):void{
 		var item:DPItem = comboBox.selectedItem as DPItem;
-		if(item && item.newPerson)
+		if(item && item.newPerson){
 			comboBox.selectedIndex = -1;
+		}
+		personChanged.dispatch(item);
+	}
+
+	public function get selectedItem():DPItem{
+		return comboBox.selectedItem as DPItem;
 	}
 
 	private function onComboBoxEnter(event:Event):void{
@@ -152,29 +166,4 @@ public class PersonComboBox extends UIComponent{
 		return result;
 	}
 }
-}
-
-import com.somewater.storage.I18n;
-
-import tree.model.Person;
-
-import tree.view.gui.TreeComboBox;
-
-class DPItem{
-
-	public var person:Person;
-	public var newPerson:Boolean;
-
-	public function DPItem(person:Person, newPerson:Boolean = false){
-		this.person = person;
-		this.newPerson = newPerson;
-	}
-
-	public function get label():String{
-		return newPerson ? I18n.t('CREATE_NEW_PROFILE') : person.name;
-	}
-
-	public function get icon():String {
-		return null;
-	}
 }

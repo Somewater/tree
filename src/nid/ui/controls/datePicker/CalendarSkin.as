@@ -182,6 +182,7 @@ import tree.view.gui.TreeTextInput;
 			}
 
 			currentYearLabel = new TreeTextInput();
+			currentYearLabel.height = 24;
 			currentYearLabel.addEventListener(Event.CHANGE, onTextFieldChanged, false, 0, true);
 			currentYearLabel.restrict = '0123456789';
 			currentYearLabel.maxChars = 4;

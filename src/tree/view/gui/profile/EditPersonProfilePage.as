@@ -129,5 +129,12 @@ public class EditPersonProfilePage extends PageBase{
 			else
 				c.y = posY;
 		}
-	}
+
+		public function getSelectedFromCombo():Person {
+			if(comboBox.visible){
+				return comboBox.selectedItem && !comboBox.selectedItem.newPerson ? comboBox.selectedItem.person : null;
+			}else
+				return null;
+		}
+}
 }

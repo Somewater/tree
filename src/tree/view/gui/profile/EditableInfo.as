@@ -264,5 +264,17 @@ import tree.view.gui.UIComponent;
 			if(event)
 				refresh();
 		}
+
+		public function set enabled(enabled:Boolean):void {
+			firstNameInput.enabled = enabled;
+			lastNameInput.enabled = enabled;
+			middleNameInput.enabled = enabled;
+			maidenNameInput.enabled = enabled;
+			died.enabled = enabled;
+			sexSelector.enabled = enabled;
+			birthdayInput.enabled = enabled;
+			died.enabled = enabled;
+			deathDayInput.enabled = enabled;
+		}
 	}
 }

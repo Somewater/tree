@@ -16,6 +16,8 @@ package tree.command.view {
 		private var joins:Array;
 		private var index:int = 0;
 
+		private var queueForRollUnrollRefresh:Array = []; // array of node
+
 		public function CalculateNextNodeRollUnroll() {
 			if(tick == null)
 				tick = new Tick();
@@ -30,8 +32,18 @@ package tree.command.view {
 		}
 
 		public function calculate():void{
-			var join:Join = joins[index];
-			new RollQueueProcessor(join.associate.tree, join.associate, onCalculated);
+			if(index < joins.length){
+				var join:Join = joins[index];
+				new RollQueueProcessor(join.associate.tree, join.associate, onCalculated);
+			}else{
+				if(queueForRollUnrollRefresh.length > 0){
+					var n:Node = queueForRollUnrollRefresh.shift();
+					n.fireRollChange();
+				}else{
+					tick.stop();
+					release();
+				}
+			}
 		}
 
 		private function onCalculated(array:Array):void{
@@ -46,13 +58,9 @@ package tree.command.view {
 				}
 			}else
 				join.associate.node.slaves = Node.EMPTY_ROLL;
-			join.associate.node.fireRollChange();
+			queueForRollUnrollRefresh.push(join.associate.node);//join.associate.node.fireRollChange();
 
 			index++;
-			if(index >= joins.length){
-				tick.stop();
-				release();
-			}
 		}
 
 		private function joinsToNodes(joins:Array):Array{

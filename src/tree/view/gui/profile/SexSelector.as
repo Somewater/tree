@@ -59,5 +59,10 @@ package tree.view.gui.profile {
 		override protected function refresh():void {
 			femaleRadio.x = 50;
 		}
+
+		public function set enabled(enabled:Boolean):void {
+			maleRadio.enabled = enabled;
+			femaleRadio.enabled = enabled;
+		}
 	}
 }

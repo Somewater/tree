@@ -30,8 +30,7 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 			// edit/read switch mode
 			page.cancelEditLink.link.add(onCancelEditProfile);
 			page.saveProfileButton.click.add(onSaveEditedData);
-
-			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
+			page.comboBox.personChanged.add(onPersonChanged);
 		}
 
 		private function onCreateNewProfile(...args):void {
@@ -41,7 +40,6 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 		override public function clear():void{
 			page = null;
 			super.clear();
-			bus.removeNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 			model.editing.editEnabled = false;
 		}
 
@@ -70,13 +68,14 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 				new MessageWindow(I18n.t('CANT_SAVE_PERSON')).open();
 				return;
 			}
-			page.editableInfo.updatePersonProperties(model.editing.edited)
-			bus.dispatch(ModelSignal.EDIT_PROFILE, model.editing.edited, model.editing.joinType, model.editing.from);
+			var selected:Person = page.getSelectedFromCombo();
+			if(selected){
+				bus.dispatch(ModelSignal.EDIT_PROFILE, selected, model.editing.joinType, model.editing.from);
+			}else{
+				page.editableInfo.updatePersonProperties(model.editing.edited)
+				bus.dispatch(ModelSignal.EDIT_PROFILE, model.editing.edited, model.editing.joinType, model.editing.from);
+			}
 			goBack();
-		}
-
-		private function onPersonSelected(person:Person):void{
-			page.onPersonSelected(person, joinType, from);
 		}
 
 		private function onSexChanged(male:Boolean):void{
@@ -91,15 +90,21 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 			var edited:Person = model.editing.edited;
 			var joinType:JoinType = model.editing.joinType;
 			var from:Person = model.editing.from;
+			model.editing.clear();
 
 			model.editing.editEnabled = false;
+			if(edited.isNew && model.editing.from)
+				edited = model.editing.from;
 
-			if(edited.isNew){
-				if(model.selectedPerson == edited)
-					model.selectedPerson = null;
-				gui.setPage(PersonNotesPage.NAME);
-			}else
-				gui.setPage(PersonProfilePage.NAME)
+			if(model.selectedPerson == null || (edited.isNew && model.selectedPerson == edited)){
+				model.selectedPerson = model.owner;
+			}
+
+			gui.setPage(PersonProfilePage.NAME)
+		}
+
+		private function onPersonChanged(item:DPItem = null):void{
+			page.editableInfo.enabled = item == null || item.newPerson;
 		}
 	}
 }

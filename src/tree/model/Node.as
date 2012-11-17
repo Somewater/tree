@@ -84,5 +84,24 @@ package tree.model {
 					return false;
 			return true;
 		}
+
+		/**
+		 * Есть "рабы" и "лорды" его рабов также входят в число его "рабов"
+		 */
+		public function isLord():Boolean{
+			if(!slaves || slaves.length == 0) return false;
+			var slavesHash:Array = [];
+			var lordsHash:Array = [];
+			var n:Node;
+			for each(n in slaves)
+				slavesHash[n.uid] = true;
+			for each(n in lords)
+				lordsHash[n.uid] = true;
+			for each(n in slaves)
+				for each(var lord2:Node in n.lords)
+					if(lord2 != this && !slavesHash[lord2.uid] && !lordsHash[lord2.uid])
+						return false;// это не единоличный "лорд" "раба" n
+			return true;
+		}
 	}
 }

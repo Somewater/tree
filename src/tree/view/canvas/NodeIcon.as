@@ -211,10 +211,10 @@ import tree.view.gui.Helper;
 		}
 
 		private function refreshRollUnroll(n:Node):void{
-			if(!n.slaves || n.slaves.length == 0)
-				hideRollUnroll();
-			else
+			if(n.isLord())
 				showRollUnroll();
+			else
+				hideRollUnroll();
 		}
 
 		private function dispatchOnComplete(g:GTween = null):void {
@@ -286,7 +286,7 @@ import tree.view.gui.Helper;
 			return tmpPoint;
 		}
 
-		public function parentPoint(forBreed:Node):Point{
+		public function parentPoint(forBreed:Person):Point{
 			position();
 			if(fullParent(forBreed))
 			{
@@ -300,10 +300,10 @@ import tree.view.gui.Helper;
 			return tmpPoint;
 		}
 
-		public function fullParent(forBreed:Node):Boolean{
+		public function fullParent(forBreed:Person):Boolean{
 			var m:Person = _data.node.marry;
 			if(m && m.node.visible)
-				return m.breeds.indexOf(forBreed.person) != -1;
+				return m.breeds.indexOf(forBreed) != -1;
 			else
 				return false;
 		}

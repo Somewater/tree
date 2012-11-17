@@ -11,7 +11,8 @@ package tree.view.canvas {
 	import tree.model.Join;
 	import tree.model.JoinType;
 	import tree.model.Model;
-	import tree.model.lines.LineMatrixCollection;
+import tree.model.Person;
+import tree.model.lines.LineMatrixCollection;
 	import tree.model.Node;
 
 	public class JoinLine extends LineBase{
@@ -92,6 +93,14 @@ package tree.view.canvas {
 			graphics.lineStyle(thickness, color);
 		}
 
+		/**
+		 * Ноды, с которыми асскоциирована связь юыли удалены (хотя бы одна из них)
+		 * (например, в связи с сворачиванием-разворачиванием отредактированного дерева, когда порядок сворачивания-разворачивания не был пересчитан верно)
+		 */
+		public function nodesIsDead():Boolean{
+			return collection.getNodeIcon(_data.from.uid) == null || collection.getNodeIcon(_data.uid) == null;
+		}
+
 		override protected function refreshLines():void {
 			removeFromLineMatrix();
 
@@ -106,15 +115,15 @@ package tree.view.canvas {
 				n2 = tmpN;
 			}
 
-			var node1:Node = n1.data.node;
-			var node2:Node = n2.data.node;
+			var node1:Person = n1.data.join.associate;
+			var node2:Person = n2.data.join.associate;
 			lineMask = 0;
 
 			var joinSuperType:String = _data.type.superType;
 			if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
-				p1 = node1.person.male ? n1.husbandPoint() : n1.wifePoint();
-				p2 = node2.person.male ? n2.husbandPoint() : n2.wifePoint();
-				if(p1.y != p2.y || (node1.person.male && p1.x > p2.x) || (node2.person.male && p2.x > p1.x)){
+				p1 = node1.male ? n1.husbandPoint() : n1.wifePoint();
+				p2 = node2.male ? n2.husbandPoint() : n2.wifePoint();
+				if(p1.y != p2.y || (node1.male && p1.x > p2.x) || (node2.male && p2.x > p1.x)){
 					addExMarryLine(n1,  n2);
 				}else{
 					addToLines(p1);
