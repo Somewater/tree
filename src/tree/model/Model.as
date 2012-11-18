@@ -35,6 +35,7 @@ package tree.model {
 		private var _treeViewConstructed:Boolean = false;// первоначальное построение дерева завершено
 		private var _constructionInProcess:Boolean = false;// произвоится анимация (построение дерева или сворачивание-разворачивание)
 		private var _selectedPerson:Person;
+		private var _highlightedPerson:Person;
 		private var _selectedTree:TreeModel;
 
 		public var animationQuality:int = 2;// "0" - без анимации, "2" - полная анимация, "1" - зарезервировано
@@ -68,6 +69,7 @@ package tree.model {
 			editing = new ProfileEditingModel();
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
+			bus.addNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);
 		}
 
 		/**
@@ -148,6 +150,7 @@ package tree.model {
 			joinsQueue = [];
 			drawedNodesUids = [];
 			_selectedPerson = null;
+			_highlightedPerson = null;
 			_selectedTree = null;
 
 			trees = new TreesCollection(bus);
@@ -159,6 +162,9 @@ package tree.model {
 			_selectedPerson = person;
 		}
 
+		private function onPersonHighlighted(person:Person):void{
+			_highlightedPerson = person;
+		}
 
 		public function get selectedPerson():Person {
 			return _selectedPerson;
@@ -171,6 +177,17 @@ package tree.model {
 				_selectedPerson = value;
 				if(_selectedPerson)
 					bus.dispatch(ViewSignal.PERSON_SELECTED, _selectedPerson);
+			}
+		}
+
+		public function get highlightedPerson():Person {
+			return _highlightedPerson;
+		}
+
+		public function set highlightedPerson(value:Person):void {
+			if(value != _highlightedPerson){
+				_highlightedPerson = value;
+				bus.dispatch(ViewSignal.PERSON_HIGHLIGHTED, _highlightedPerson);
 			}
 		}
 

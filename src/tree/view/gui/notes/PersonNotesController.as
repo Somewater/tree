@@ -19,6 +19,7 @@ package tree.view.gui.notes {
 			model.bus.addNamed(ViewSignal.DRAW_JOIN, onAddNoteSignal)
 			model.bus.addNamed(ViewSignal.REMOVE_JOIN, onRemoveNoteSignal)
 			model.bus.addNamed(ViewSignal.PERSON_SELECTED, onSelectNodeSignal);
+			model.bus.addNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);
 		}
 
 		override public function clear():void {
@@ -27,6 +28,7 @@ package tree.view.gui.notes {
 			model.bus.removeNamed(ViewSignal.DRAW_JOIN, onAddNoteSignal);
 			model.bus.removeNamed(ViewSignal.REMOVE_JOIN, onRemoveNoteSignal);
 			model.bus.removeNamed(ViewSignal.PERSON_SELECTED, onSelectNodeSignal);
+			model.bus.removeNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);
 			model = null;
 
 			super.clear();
@@ -146,8 +148,8 @@ package tree.view.gui.notes {
 				selectNote(note);
 
 			note.click.add(selectNote);
-			//note.over.add(selectNote);
-			//note.out.add(deselectNote);
+			note.over.add(onNoteOver);
+			note.out.add(onNoteOut);
 			note.dblClick.add(centreNote);
 			note.actionClick.add(openNote);
 		}
@@ -170,6 +172,20 @@ package tree.view.gui.notes {
 				return false;
 			} else
 				return true;
+		}
+
+
+		private function onPersonHighlighted(person:Person = null):void{
+			page.highlightNoteBy(person);
+		}
+
+		public function onNoteOver(node:PersonNoteItem):void{
+			bus.dispatch(ViewSignal.PERSON_HIGHLIGHTED, node.data.node.person)
+		}
+
+		public function onNoteOut(node:PersonNoteItem):void{
+			if(page.highlightedNote == node)
+				bus.dispatch(ViewSignal.PERSON_HIGHLIGHTED, null);
 		}
 	}
 }

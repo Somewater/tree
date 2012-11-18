@@ -37,12 +37,15 @@ package tree.view.gui.notes {
 		public var firstNote:PersonNoteItem;
 		private var _useFirstNote:Boolean = true;
 		public var notes:Array = [];
+		public var allNotesByUid:Array = [];
 		public var vbox:VBoxController;
 
 		public var selectedNote:PersonNoteItem;
 
 		public var searchField:SearchField;
 		public var scroller:ScrollPane;
+
+		public var highlightedNote:PersonNoteItem;
 
 		public function PersonNotesPage() {
 			searchField = new SearchField();
@@ -96,6 +99,7 @@ package tree.view.gui.notes {
 
 			selectedNote = null;
 			firstNote = null;
+			allNotesByUid = null;
 		}
 
 		override protected function refresh():void {
@@ -125,6 +129,10 @@ package tree.view.gui.notes {
 			var note:PersonNoteItem = new PersonNoteItem();
 
 			note.data = p;
+			if(Model.instance.highlightedPerson == p){
+				note.highlighted = true;
+				highlightedNote = note;
+			}
 			var noteName:String = p.fullname;
 
 			if(!firstNote && useFirstNote){
@@ -148,6 +156,7 @@ package tree.view.gui.notes {
 				vbox.addChildAt(note, index);
 			}
 
+			allNotesByUid[p.uid] = note;
 			onFirstNoteResized(null);
 			vbox.refresh();
 			fireResize();
@@ -198,6 +207,19 @@ package tree.view.gui.notes {
 			if(_useFirstNote != value){
 				_useFirstNote = value
 				scroller.y = searchField.y + searchField.height + 8 + (value ? PersonNotesPage.NOTE_HEIGHT : 0);
+			}
+		}
+
+		public function highlightNoteBy(person:Person):void {
+			if(highlightedNote)
+				highlightedNote.highlighted = false;
+			highlightedNote = null;
+			if(person){
+				var note:PersonNoteItem = allNotesByUid[person.uid];
+				if(note){
+					note.highlighted = true;
+					highlightedNote = note;
+				}
 			}
 		}
 	}

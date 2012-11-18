@@ -40,6 +40,7 @@ package tree.view.gui.notes {
 
 		private var bottomBorder:DisplayObject;
 		private var _selected:Boolean = false;
+		private var _highlighted:Boolean = false;
 		private var _opened:Boolean = false;
 		private var newItem:Boolean = true;
 		private var background:DisplayObject;
@@ -48,6 +49,8 @@ package tree.view.gui.notes {
 		private var menuMask:Shape;
 
 		public var actionClick:ISignal;
+
+		private var highlightBack:Shape;
 
 		public function PersonNoteItem() {
 			const nameTfMaxWidth:int = Config.GUI_WIDTH - 15;
@@ -87,6 +90,12 @@ package tree.view.gui.notes {
 			Shape(background).graphics.drawRect(0, 0, PersonNotesPage.NOTE_WIDTH, PersonNotesPage.NOTE_HEIGHT);
 			addChildAt(background, 0);
 			background.alpha = 0;
+
+			highlightBack = new Shape();
+			highlightBack.graphics.beginFill(0x00FF00, 0.1);
+			highlightBack.graphics.drawRect(0, 0, PersonNotesPage.NOTE_WIDTH, PersonNotesPage.NOTE_HEIGHT);
+			addChildAt(highlightBack, 0);
+			highlightBack.visible = _highlighted;
 
 			menu = new NoteContextMenu(this);
 			menu.y = PersonNotesPage.NOTE_ICON_Y;
@@ -156,13 +165,29 @@ package tree.view.gui.notes {
 		public function set selected(value:Boolean):void {
 			if(_selected != value){
 				_selected = value;
-				background.alpha = value ? 1 : 0;
 
 				if(!_selected && _opened)
 					this.opened = false;
 
 				this.buttonMode = this.useHandCursor = !value;
+				refreshBackground();
 			}
+		}
+
+		public function get highlighted():Boolean {
+			return _highlighted;
+		}
+
+		public function set highlighted(value:Boolean):void {
+			if(_highlighted != value){
+				_highlighted = value;
+				refreshBackground();
+			}
+		}
+
+		private function refreshBackground():void{
+			background.alpha = _selected ? 1 : 0;
+			highlightBack.visible = _highlighted && !_selected;
 		}
 
 		public function get opened():Boolean {

@@ -353,11 +353,16 @@ import tree.view.gui.Helper;
 				_highlighted = value;
 				femaleHighlight.visible = value && _data && _data.node.person.female;
 				maleHighlight.visible = value && _data && _data.node.person.male;
-				if(value)
-					showContextMenuBtn();
-				else
+				if(!value)
 					hideContextMenuBtn();
 			}
+		}
+
+		public function set contextMenuBtnVisibility(value:Boolean):void{
+			if(value)
+				showContextMenuBtn();
+			else
+				hideContextMenuBtn();
 		}
 
 		public function hideRollUnroll():void{

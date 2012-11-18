@@ -25,6 +25,8 @@ package tree.signal {
 
 		public static const PERSON_SELECTED:String = 'personSelected';// персона выбрана в GUI (person:Person)
 
+		public static const PERSON_HIGHLIGHTED:String = 'personHighlighted';// персона выбрана в GUI (person:Person = null)
+
 		public static const TREE_DESELECTED:String = 'treeDeselected';// с дерева снят выбор в GUI (tree:TreeModel)
 
 		public static const TREE_SELECTED:String = 'treeSelected';// дерево выбрана в GUI (tree:TreeModel)

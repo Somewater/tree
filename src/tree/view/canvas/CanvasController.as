@@ -49,6 +49,7 @@ public class CanvasController extends Actor{
 			bus.addNamed(ViewSignal.REFRESH_JOIN_LINES, refreshAllJoinLines);
 			bus.addNamed(ViewSignal.REFRESH_GENERATIONS, refreshAllGenerations);
 			bus.addNamed(ViewSignal.REDRAW_JOIN_LINES, refreshPersonJoinLines);
+			bus.addNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);
 		}
 
 		public function drawJoin(g:GenNode):void {
@@ -225,16 +226,19 @@ public class CanvasController extends Actor{
 
 		public function onNodeOver(node:NodeIcon):void{
 			if(!model.constructionInProcess){
-				canvas.highlightNode(node);
 				lineController.highlightPersonLines(node.data.node.person);
 				lineController.supressMouseMoveAction = true;
+				canvas.showActionBtnIfHighlight = true;
+				bus.dispatch(ViewSignal.PERSON_HIGHLIGHTED, node.data.node.person)
+				canvas.showActionBtnIfHighlight = false;
 			}
 		}
 
 		public function onNodeOut(node:NodeIcon):void{
 			lineController.clearHighlighted();
 			lineController.supressMouseMoveAction = false;
-			canvas.unhighlightNode(node);
+			if(canvas.highlightedNode == node)
+				bus.dispatch(ViewSignal.PERSON_HIGHLIGHTED, null);
 		}
 
 		public function onPersonSelected(person:Person):void {
@@ -400,6 +404,10 @@ public class CanvasController extends Actor{
 
 		private function onDeletePersonEditClick(p:Person):void{
 			new RemovePerson(p).execute();
+		}
+
+		private function onPersonHighlighted(person:Person = null):void{
+			canvas.highlightNode(person);
 		}
 	}
 }

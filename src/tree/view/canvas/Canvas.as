@@ -18,7 +18,8 @@ import flash.geom.Point;
 	import tree.model.Join;
 	import tree.model.Model;
 	import tree.model.Node;
-	import tree.view.gui.UIComponent;
+import tree.model.Person;
+import tree.view.gui.UIComponent;
 
 	public class Canvas extends UIComponent implements INodeViewCollection {
 
@@ -40,6 +41,7 @@ import flash.geom.Point;
 
 		private var selectedNode:NodeIcon;
 		public var highlightedNode:NodeIcon;
+		public var showActionBtnIfHighlight:Boolean = false;
 		public var arrowMenu:ContextMenu;
 
 		public function Canvas() {
@@ -178,7 +180,8 @@ import flash.geom.Point;
 			}
 		}
 
-		public function highlightNode(node:NodeIcon):void{
+		public function highlightNode(p:Person):void{
+			var node:NodeIcon = p != null ? getNodeIcon(p.uid) : null;
 			if(highlightedNode != node){
 				if(highlightedNode){
 					unhighlightNode(highlightedNode);
@@ -186,6 +189,8 @@ import flash.geom.Point;
 				highlightedNode = node;
 				if(node){
 					node.highlighted = true;
+					if(showActionBtnIfHighlight)
+						node.contextMenuBtnVisibility = true;
 				}
 			}
 		}
