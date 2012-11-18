@@ -22,7 +22,6 @@ package tree.command {
 					break;
 
 				default:
-					throw new Error('Unhandled response type \'' + response.type + '\'');
 					break;
 			}
 		}

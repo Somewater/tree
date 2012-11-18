@@ -12,7 +12,8 @@ package tree.command.edit {
 	import tree.model.TreeModel;
 	import tree.signal.ModelSignal;
 	import tree.signal.RequestSignal;
-	import tree.signal.ViewSignal;
+import tree.signal.ResponseSignal;
+import tree.signal.ViewSignal;
 
 	public class EditProfile extends Command{
 
@@ -28,7 +29,6 @@ package tree.command.edit {
 		}
 
 		override public function execute():void {
-			bus.loaderProgress.dispatch(0);
 			detain();
 
 			if(joinType && joinType.superType == JoinType.SUPER_TYPE_MARRY && (person.marry || from.marry))
@@ -40,27 +40,34 @@ package tree.command.edit {
 			request.person = person;
 			request.joinFrom = from;
 			request.joinType = joinType;
+			request.onSucces.add(onResponseSuccess)
+			request.onComplete.add(onComplete)
 
-			// todo: послать запрос на сервер и дождаться положительного ответа
 			call(request);
-
-			onResponseSuccess();
 		}
 
-		private function onResponseSuccess():void{
+		private function onResponseSuccess(response:ResponseSignal):void{
 			var tree:TreeModel = person.tree || (from ? from.tree : null);
 			var newTree:Boolean = false;
 			var newPerson:Boolean = false;
 			if(!tree){
 				newTree = true;
 				tree = model.trees.allocate();
-				tree.uid = person.uid;
-				model.trees.add(tree);
-				person.tree = tree;
 			}
 
 			if(!person.node){
 				newPerson = true;
+				// todo: присвоить персоне новый id
+				try{
+					person.uid = response.toXml().data.user_id.toString()
+				}catch (err:Error){
+					error(err);
+				}
+				if(newTree){
+					tree.uid = person.uid;
+					model.trees.add(tree);
+					person.tree = tree;
+				}
 				tree.nodes.add(tree.nodes.allocate(person));
 			}
 
@@ -142,9 +149,6 @@ package tree.command.edit {
 			else
 				bus.dispatch(ModelSignal.SHOW_NODE, join);
 
-			release();
-			bus.loaderProgress.dispatch();
-
 			bus.dispatch(ViewSignal.RECALCULATE_ROLL_UNROLL);
 		}
 
@@ -153,6 +157,10 @@ package tree.command.edit {
 			_from.node.add(j);
 			_to.node.add(_to.relation(_from));
 			return j
+		}
+
+		private function onComplete(response:ResponseSignal):void{
+			release();
 		}
 	}
 }

@@ -11,6 +11,7 @@ package tree.signal {
 		public var type:String;
 		public var data:*;
 		public var request:RequestSignal;
+		public var errorHandler:Boolean = false;
 
 		public function ResponseSignal(type:String, data:*, request:RequestSignal) {
 			this.type = type;
@@ -28,6 +29,10 @@ package tree.signal {
 
 		public function toBytes():ByteArray {
 			return ByteArray(data);
+		}
+
+		public function isError():Boolean{
+			return type != SUCCESS;
 		}
 	}
 }
