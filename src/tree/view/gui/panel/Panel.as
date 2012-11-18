@@ -47,9 +47,9 @@ package tree.view.gui.panel {
 
 			titleTF = new EmbededTextField(null, 0, 19, true);
 			titleTF.text = I18n.t('FAMILY');
-			addChild(titleTF);
+			//addChild(titleTF);
 
-			treeOwnerNameTF = new com.somewater.text.LinkLabel(null,0x2682c5, 19, true);
+			treeOwnerNameTF = new ChameleonLinkLabel();
 			addChild(treeOwnerNameTF);
 			treeOwnerNameTF.addEventListener(com.somewater.text.LinkLabel.LINK_CLICK, onLinkClicked);
 			ownerNameClick = new Signal();
@@ -76,6 +76,7 @@ package tree.view.gui.panel {
 			addChild(zoomSlider);
 
 			saveTreeButton = new BlueButton();
+			saveTreeButton.visible = true;
 			saveTreeButton.width = 160;
 			addChild(saveTreeButton);
 			saveTreeButton.label = I18n.t('SAVE_TREE');
@@ -132,7 +133,7 @@ package tree.view.gui.panel {
 		}
 
 		private function refreshOwnerName():void {
-			treeOwnerNameTF.x = titleTF.x + titleTF.width + 10;
+			treeOwnerNameTF.x = titleTF.x;// + titleTF.width + 10;
 			treeOwnerNameTF.y = titleTF.y;
 
 			treeOwnerMark.x = treeOwnerNameTF.x + treeOwnerNameTF.width + 10;
@@ -161,8 +162,15 @@ package tree.view.gui.panel {
 			Tweener.to(background, 0.3, {alpha: 1});
 			mouseOverPanel = false;
 		}
+
+		public function set treeOwnerNameTFLinked(linked:Boolean):void {
+			treeOwnerNameTF.linked = linked;
+			treeOwnerMark.visible = linked;
+		}
 	}
 }
+
+import com.somewater.text.LinkLabel;
 
 import flash.display.DisplayObject;
 import flash.display.MovieClip;
@@ -199,5 +207,16 @@ class ZoomSliderComponent extends ZoomSlider{
 		model.zoomCenter = canvas.globalToLocal(new Point(model.contentWidth * 0.5,
 															(Config.HEIGHT - Config.PANEL_HEIGHT) * 0.5));
 		model.zoom = value;
+	}
+}
+
+class ChameleonLinkLabel extends LinkLabel{
+	public function ChameleonLinkLabel(){
+		super(null, 0, 19, true);
+	}
+
+	override public function set linked(flag:Boolean):void {
+		super.linked = flag;
+		textField.color = flag ? 0x2682c5 : 0;
 	}
 }

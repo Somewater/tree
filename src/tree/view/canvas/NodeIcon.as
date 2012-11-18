@@ -136,8 +136,15 @@ import tree.view.gui.Helper;
 			//graphics.drawRect(0, 0, Canvas.ICON_WIDTH, Canvas.ICON_HEIGHT);
 		}
 
+		private var lastClickTick:uint = 0;
 		private function onClicked(event:MouseEvent):void {
 			click.dispatch(this);
+
+			// хак, чтобы дабл клик заработал
+			var newClickTick:uint = Config.ticker.getTimer;
+			if(newClickTick - lastClickTick < 250)
+				onDblCliced(event);
+			lastClickTick = newClickTick;
 		}
 
 		private function onDblCliced(event:MouseEvent):void {

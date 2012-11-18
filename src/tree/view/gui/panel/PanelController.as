@@ -14,7 +14,8 @@ package tree.view.gui.panel {
 	import tree.command.PrintTree;
 	import tree.command.view.DepthIndexChanged;
 	import tree.common.Config;
-	import tree.model.Person;
+import tree.model.Model;
+import tree.model.Person;
 	import tree.model.TreeModel;
 	import tree.signal.AppSignal;
 	import tree.signal.ModelSignal;
@@ -82,6 +83,7 @@ package tree.view.gui.panel {
 
 		private function onTreeSelected(_tree:TreeModel):void{
 			panel.setOwner(_tree.owner);
+			panel.treeOwnerNameTFLinked = Model.instance.trees.length > 1;
 		}
 
 		private function onDepthIndexChanged(index:int):void{
