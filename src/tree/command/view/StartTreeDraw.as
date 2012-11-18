@@ -60,7 +60,7 @@ package tree.command.view {
 
 			proc.clear();
 			model.joinsQueue = model.joinsQueue.concat(joinsForDraw);
-			model.animationQuality = model.trees.personQuantity > 100 ? (model.trees.personQuantity > 300 ? 0 : 1) : 2;
+			model.animationQuality = model.trees.personQuantity > model.options.animQualityMedium ? (model.trees.personQuantity > model.options.animQualityLow ? 0 : 1) : 2;
 			model.constructionInProcess = true;
 			bus.dispatch(ViewSignal.JOIN_QUEUE_STARTED)
 		}

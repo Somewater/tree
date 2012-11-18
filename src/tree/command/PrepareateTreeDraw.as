@@ -8,8 +8,8 @@ package tree.command {
 		}
 
 		override public function execute():void {
-			const maxTimeForAll:Number = model.treeViewConstructed ? 5 : (CONFIG::debug ? 1 : 10);
-			const maxTimeForOne:Number = 1;
+			const maxTimeForAll:Number = model.treeViewConstructed ? model.options.maxTreeConstructTime : model.options.maxTreeConstructTimeTreeUncompl;
+			const maxTimeForOne:Number = model.options.minNodeConstructTime;
 			var number:int = Math.max(1,model.joinsForDraw.length + model.joinsForRemove.length);
 			model.animationTime = Math.min(maxTimeForOne, maxTimeForAll / number);
 		}

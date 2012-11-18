@@ -4,8 +4,9 @@ package tree.view {
 
 	import tree.common.Config;
 	import tree.model.Model;
+import tree.model.Options;
 
-	/**
+/**
 	 * Обертка для обращений к твиннеру
 	 */
 	public class Tweener {
@@ -18,7 +19,9 @@ package tree.view {
 						   values:Object=null,
 						   props:Object=null):GTween {
 			var m:Model = Model.instance;
-			var minDuration:Number = m.animationQuality == 0 ? 10 : (m.animationQuality == 1 ? (m.constructionInProcess ? 0.4 : 0.1) : 0.05);
+			var o:Options = m.options
+			var minDuration:Number = m.animationQuality == 0 ? o.minAnimQuality0 :
+					(m.animationQuality == 1 ? (m.constructionInProcess ? o.minAnimQuality1TreeUncompl : o.minAnimQuality1) : o.minAnimQuality2);
 			if(duration < minDuration){
 				for(var propName:String in values)
 					target[propName] = values[propName];

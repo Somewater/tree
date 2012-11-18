@@ -53,9 +53,9 @@ package tree.model {
 
 		public var depthIndex:int = 0;
 
-		public var treesBorders:TreesBorders;
-
 		private var _descending:Boolean = true;// нисходящее дерево (дети ниже родителей)
+
+		public var options:Options = new Options();
 
 		public function Model(bus:Bus) {
 			if(instance)
@@ -66,7 +66,6 @@ package tree.model {
 			matrixes = new MatrixCollection();
 			generations = new GenerationsCollection(bus, matrixes);
 			editing = new ProfileEditingModel();
-			treesBorders = new TreesBorders(Config.loader.flashVars);
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 		}
@@ -86,7 +85,7 @@ package tree.model {
 
 		private var _zoomDispatchOrdered:Boolean = false;
 		public function set zoom(value:Number):void {
-			value = Math.max(0.1, Math.min(1, value));
+			value = Math.max(options.zoomMin, Math.min(options.zoomMax, value));
 			if(value != _zoom) {
 				_zoom = value;
 				if(!_zoomDispatchOrdered){
