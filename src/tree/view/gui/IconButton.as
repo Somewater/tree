@@ -16,7 +16,15 @@ public class IconButton extends Button{
 	}
 
 	override protected function refresh():void {
-		linkTextField.x = movie.width + 5;
+		if(!linkTextField) return;
+
+		var x:int = movie.x + movie.width + 5
+		for each(var nearX:int in [10,25,35,60,100])
+			if(nearX >= x){
+				x = nearX;
+				break;
+			}
+		linkTextField.x = x;
 		linkTextField.y = (movie.height - linkTextField.height) * 0.5;
 	}
 

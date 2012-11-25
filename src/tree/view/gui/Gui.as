@@ -78,10 +78,12 @@ import tree.view.gui.profile.PersonProfilePage;
 
 		public function setPage(name:String, ...args):void{
 			if(page){
-				if(controller)
-					controller.stop();
 				if(!(pageName && PAGES_CLASSES_BY_NAME[pageName] && PAGES_CLASSES_BY_NAME[pageName]['cachedPage']))
+				{
+					if(controller)
+						controller.stop();
 					page.clear();
+				}
 				pageHolder.removeChild(page);
 				controller = null;
 				page = null;
@@ -120,6 +122,11 @@ import tree.view.gui.profile.PersonProfilePage;
 				page.clear();
 				pageHolder.removeChild(page);
 				page = null;
+				if(controller)
+					controller.clear();
+				for each(var data:Object in PAGES_CLASSES_BY_NAME)
+					if(data['cachedPage'] is DisplayObject)
+						data['cachedPage'] = true;
 			}
 		}
 

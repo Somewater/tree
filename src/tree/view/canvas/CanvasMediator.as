@@ -65,6 +65,7 @@ package tree.view.canvas {
 			controller.centreOn();
 			model.treeViewConstructed = false;
 			model.constructionInProcess = true;
+			model.zoom = model.options.defaultZoom;
 			bus.dispatch(ViewSignal.CANVAS_READY_FOR_START);
 		}
 

@@ -7,7 +7,8 @@ package tree.view.canvas {
 
 	import tree.command.Actor;
 	import tree.command.Command;
-import tree.command.RemovePerson;
+import tree.command.GotoLinkCommand;
+import tree.command.edit.RemovePerson;
 import tree.common.Config;
 	import tree.common.Config;
 	import tree.model.GenNode;
@@ -399,7 +400,7 @@ public class CanvasController extends Actor{
 		}
 
 		private function onAddPhotoEditClick(p:Person):void{
-			new MessageWindow('TODO: не реализовано').open();
+			new GotoLinkCommand(GotoLinkCommand.GOTO_EDIT_PHOTO, model.selectedPerson).execute();
 		}
 
 		private function onDeletePersonEditClick(p:Person):void{

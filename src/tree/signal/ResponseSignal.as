@@ -34,5 +34,28 @@ package tree.signal {
 		public function isError():Boolean{
 			return type != SUCCESS;
 		}
+
+		public function getMessage():String{
+			var message:String = getErrorMessage();
+			if(message) return message;
+			var xml:XML = toXml();
+			if(xml){
+				if(xml.message && xml.message.toString().length > 0){
+					message = xml.message.toString();
+				}
+			}
+			return message;
+		}
+
+		public function getErrorMessage():String {
+			var message:String = null;
+			var xml:XML = toXml();
+			if(xml){
+				if(xml.error && xml.error.toString().length > 0){
+					message = xml.error.toString();
+				}
+			}
+			return message;
+		}
 	}
 }

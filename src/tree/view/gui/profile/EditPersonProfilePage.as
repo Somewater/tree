@@ -30,6 +30,7 @@ public class EditPersonProfilePage extends PageBase{
 		internal var saveProfileButton:Button;
 		private var saveProfileButtonGround:Shape;
 		internal var cancelEditLink:com.somewater.text.LinkLabel;
+		internal var extEditLink:com.somewater.text.LinkLabel;
 
 		public function EditPersonProfilePage() {
 			comboBox = new PersonComboBox();
@@ -50,6 +51,10 @@ public class EditPersonProfilePage extends PageBase{
 			cancelEditLink = new com.somewater.text.LinkLabel(null, 0x2881C6, 11, true);
 			cancelEditLink.text = I18n.t('CANCEL_EDIT');
 			addChild(cancelEditLink);
+
+			extEditLink = new com.somewater.text.LinkLabel(null, 0x2881C6, 11, true);
+			extEditLink.text = I18n.t('EXTENDED_EDIT');
+			addChild(extEditLink);
 		}
 
 		override public function get pageName():String {
@@ -61,6 +66,7 @@ public class EditPersonProfilePage extends PageBase{
 			editableInfo.clear();
 			saveProfileButton.clear();
 			cancelEditLink.clear();
+			extEditLink.clear();
 			editableInfo.removeEventListener(Event.RESIZE, onEditableInfoResized)
 			comboBox.clear();
 		}
@@ -120,7 +126,11 @@ public class EditPersonProfilePage extends PageBase{
 			saveProfileButtonGround.graphics.drawRoundRectComplex(-PADDING * .5, -PADDING * .5, saveProfileButton.width + PADDING, saveProfileButton.height + PADDING, 5,5,5,5);
 
 			cancelEditLink.x = (width - cancelEditLink.width)* 0.5;
-			setYPos(cancelEditLink, saveButtonY + saveProfileButton.height + 10, anim)
+			var canselLinkY:int = saveButtonY + saveProfileButton.height + 10;
+			setYPos(cancelEditLink, canselLinkY, anim)
+
+			extEditLink.x = (width - extEditLink.width) * 0.5;
+			setYPos(extEditLink, canselLinkY + cancelEditLink.textField.height + 10, anim);
 		}
 
 		private function setYPos(c:DisplayObject, posY:int, animated:Boolean):void{

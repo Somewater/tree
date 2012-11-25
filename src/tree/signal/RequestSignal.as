@@ -19,6 +19,8 @@ import tree.model.Person;
 
 		public static const EDIT_USER:String = 'editUser';
 
+		public static const ADD_RELATION:String = 'addRelation';
+
 		public var type:String
 
 		public var uid:int;

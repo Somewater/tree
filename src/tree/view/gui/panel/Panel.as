@@ -25,7 +25,7 @@ package tree.view.gui.panel {
 		private var background:Sprite;
 		public var titleTF:EmbededTextField;
 		public var treeOwnerNameTF:com.somewater.text.LinkLabel;
-		public var treeOwnerMark:DisplayObject;
+		public var treeOwnerMark:Sprite;
 		public var savePrintButton:DoubleButton;
 		public var centreRotateButton:DoubleButton;
 		public var optionsButton:Button;
@@ -55,6 +55,10 @@ package tree.view.gui.panel {
 			ownerNameClick = new Signal();
 			treeOwnerMark = Config.loader.createMc('assets.TriangleMarkLink');
 			treeOwnerMark.rotation = 180;
+			treeOwnerMark.addEventListener(MouseEvent.CLICK, onLinkClicked);
+			treeOwnerMark.useHandCursor = treeOwnerMark.buttonMode = true;
+			treeOwnerMark.graphics.beginFill(0,0);
+			treeOwnerMark.graphics.drawRect(-8,-8,16,16)
 			addChild(treeOwnerMark);
 
 			savePrintButton = new DoubleButton(Config.loader.createMc('assets.SaveButton'), Config.loader.createMc('assets.PrintButton'));
@@ -76,7 +80,7 @@ package tree.view.gui.panel {
 			addChild(zoomSlider);
 
 			saveTreeButton = new BlueButton();
-			saveTreeButton.visible = true;
+			saveTreeButton.visible = false;
 			saveTreeButton.width = 160;
 			addChild(saveTreeButton);
 			saveTreeButton.label = I18n.t('SAVE_TREE');
@@ -128,7 +132,7 @@ package tree.view.gui.panel {
 		}
 
 		public function setOwner(owner:Person = null):void {
-			treeOwnerNameTF.text = owner ? owner.name : '...';
+			treeOwnerNameTF.text = owner ? owner.tree.name : '...';
 			refreshOwnerName();
 		}
 

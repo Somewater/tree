@@ -1,19 +1,24 @@
 package tree.model {
 import tree.common.Config;
+import tree.view.gui.profile.PersonProfilePage;
 
 public class Options {
 
 	private var flashVars:Object;
+	private var serverValues:Object = {};
 
 	public function Options() {
 		flashVars = Config.loader.flashVars || {};
 	}
 
 	private function getProp(name:String, defaultVal:*):*{
-		if(flashVars[name] === undefined)
-			return defaultVal
-		else
+		if(serverValues[name] !== undefined)
+			return defaultVal is Number ? parseFloat(serverValues[name]) : serverValues[name];
+
+		if(flashVars[name] !== undefined)
 			return flashVars[name]
+
+		return defaultVal;
 	}
 
 	/**
@@ -53,6 +58,7 @@ public class Options {
 	 */
 	public function get zoomMin():Number { return getProp('zoomMin', 0.1); }
 	public function get zoomMax():Number { return getProp('zoomMax', 1); }
+	public function get defaultZoom():Number { return getProp('zoom', 1); }
 
 	/**
 	 * Параметры, отвечающие за отказ от построения части нод, если дерево излишне большое
@@ -60,5 +66,40 @@ public class Options {
 	public function get maxNodesQuantity():int { return getProp('maxNodesQuantity', 500); }// внутри одного отдельного дерева (т.е. у человека может быть несколько деревьев, все они усекаются до maxNodesQuantity вершин)
 	public function get maxGenerationsDepth():int { return getProp('maxGenerationsDepth', 10); }// от корня дерева вверх и вниз не более чем на maxGenerationsDepth поколений
 	public function get maxDepth():int { return getProp('maxDepth', 10); }// не рисовать ноды, отстоящие от центральной ноды дерева на расстояние, больше, чем maxDepth
+
+	// ассоциативный массив полей, которые следует показывать в профайле
+	public function get displayFields():Array{
+		var s:String = getProp('display_fields', PersonProfilePage.DEFAULT_DISPLAY_FIELDS);
+		var arr:Array = [];
+		for each(var pairs:String in s.split(',')){
+			var pair:Array = pairs.split('=');
+			arr[pair[0]] = pair[1];
+		}
+		return arr;
+	}
+
+	/**
+	 * Направление роста дерева по умолчанию
+	 */
+	public function get defaultOrderDesc():Boolean{ return getProp('mode', 'asc') == 'asc'; }// нисходящее (DESC) дерево по умолчанию (на сервере всё перепутали)
+
+	public function get animation():Boolean{return parseInt(getProp('animation', 1)) != 0;}
+
+	public function read(setup:XMLList):void {
+		var config:Array = [
+			{s: 'display_fields', n: 'display_fields'},
+			{s: 'zoom', n: 'zoom'},
+			{s: 'mode', n: 'mode'},
+			{s: 'animation', n: 'animation'},
+
+		];
+		for each(var c:Object in config){
+			var sData:String = String(setup.option.(@name == c.s));
+			if(c && sData.length > 0){
+				serverValues[c.n] = sData;
+			}
+		}
+
+	}
 }
 }

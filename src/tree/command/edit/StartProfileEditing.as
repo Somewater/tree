@@ -37,7 +37,7 @@ import tree.view.gui.profile.PersonProfilePage;
 					join.type = from.male ? joinType.associatedTypeForMale : joinType.associatedTypeForFemale;
 					join.associate = from;
 					join.from = person;
-					person.add(join)
+					//person.add(join)
 				}
 			}
 

@@ -14,7 +14,8 @@ package tree.command {
 	import tree.model.Person;
 	import tree.model.PersonsCollection;
 	import tree.model.TreeModel;
-	import tree.signal.ModelSignal;
+import tree.model.Urls;
+import tree.signal.ModelSignal;
 
 	/**
 	 * Создание структуры дерева (не считая параметров позиционирования, т.е.Nodes)
@@ -73,11 +74,16 @@ package tree.command {
 					treeModel = model.trees.allocate();
 					treeModel.uid = int(tree.@uid);
 					treeModel.level = int(tree.@level);
+					treeModel.name = tree.@name;
 					model.trees.add(treeModel);
 				}
 
 				xmlTrees.push(tree);
 			}
+
+			if(xml.setup)
+				model.options.read(xml.setup);
+			model.descending = model.options.defaultOrderDesc
 
 			treePosition = 0;
 			Config.ticker.callLater(createPersonsinXmlTree, STEP_FRAME_PADDING);
@@ -127,9 +133,10 @@ package tree.command {
 					{
 						personModel = treeModel.persons.allocate(treeModel);
 						personModel.uid = int(String(person.@uid))
-						personModel.photo = String(person.fields.field.(@name == "photo_small"));
 						treeModel.persons.add(personModel)
 					}
+					personModel.photoSmall = String(person.fields.field.(@name == "photo_small"));
+					personModel.photoBig = String(person.fields.field.(@name == "photo_big"));
 					personModel.male = String(person.fields.field.(@name == "sex")) == '1';
 					personModel.lastName = String(person.fields.field.(@name == "last_name"))
 					personModel.firstName = String(person.fields.field.(@name == "first_name"));
@@ -139,7 +146,11 @@ package tree.command {
 					personModel.deathday = databaseFormatToDate(person.fields.field.(@name == "deathday"));
 					personModel.post = String(person.fields.field.(@name == "rel_label"));
 					personModel.profileUrl = String(person.fields.field.(@name == "url"));
+					personModel.homePlace = String(person.fields.field.(@name == "home_place"));
+					personModel.birthPlace = String(person.fields.field.(@name == "birth_place"));
 					personModel.open = String(person.@open) == '1';
+
+					personModel.urls = new Urls(person);
 
 					nodeModel = treeModel.nodes.allocate(personModel) ;
 					treeModel.nodes.add(nodeModel);

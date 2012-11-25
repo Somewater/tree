@@ -35,8 +35,13 @@ import tree.signal.ViewSignal;
 				joinType = Join.joinBy(JoinType.SUPER_TYPE_EX_MARRY, person.male)
 
 
+			var requestType:String;
+			if(person.isNew)
+				requestType = RequestSignal.ADD_USER;
+			else
+				requestType = joinType != null && from != null ? RequestSignal.ADD_RELATION : RequestSignal.EDIT_USER;
 
-			var request:RequestSignal = new RequestSignal(person.isNew ? RequestSignal.ADD_USER : RequestSignal.EDIT_USER);
+			var request:RequestSignal = new RequestSignal(requestType);
 			request.person = person;
 			request.joinFrom = from;
 			request.joinType = joinType;
@@ -161,6 +166,7 @@ import tree.signal.ViewSignal;
 
 		private function onComplete(response:ResponseSignal):void{
 			release();
+			person.fireChange();
 		}
 	}
 }

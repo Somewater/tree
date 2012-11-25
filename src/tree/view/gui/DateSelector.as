@@ -16,7 +16,7 @@ import tree.view.gui.profile.PersonProfilePage;
 public class DateSelector extends TreeTextInput{
 
 	private var icon:DisplayObject;
-	private var core:DatePicker;
+	private var core:SafeDatePicker;
 
 	private var _date:Date;
 
@@ -30,7 +30,7 @@ public class DateSelector extends TreeTextInput{
 		buttonMode = useHandCursor = true;
 
 		// http://code.google.com/p/as3-date-picker/
-		core = new DatePicker();
+		core = new SafeDatePicker();
 		core.dateField.visible = false
 		core.icon = new Shape();
 		core.x = -80;
@@ -56,7 +56,7 @@ public class DateSelector extends TreeTextInput{
 	}
 
 	private function onClick(ev:Event):void{
-		if(this.enabled){
+		if(this.enabled && core.canShow){
 			core.selectedDate = _date;
 			core.showHideCalendar(ev);
 		}
@@ -71,4 +71,24 @@ public class DateSelector extends TreeTextInput{
 		text = PersonProfilePage.formattedBirthday(_date);
 	}
 }
+}
+
+import flash.events.Event;
+
+import nid.ui.controls.DatePicker;
+
+import tree.common.Config;
+
+class SafeDatePicker extends DatePicker{
+
+	public var invokeTime:uint;
+
+	override public function showHideCalendar(e:Event):void {
+		invokeTime = Config.ticker.getTimer;
+		super.showHideCalendar(e);
+	}
+
+	public function get canShow():Boolean{
+		return Config.ticker.getTimer - invokeTime > 5;
+	}
 }

@@ -1,16 +1,27 @@
 package tree.view {
-	import flash.display.Sprite;
+import flash.display.GradientType;
+import flash.display.Shape;
+import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+import flash.geom.Matrix;
 
-	import tree.common.IClear;
+import tree.common.IClear;
 
 	public class Window extends Sprite implements IWindow, IClear{
 
 		protected var _width:int = 400;
 		protected var _height:int = 200;
 
+		private var blackBack:Shape;
+		private var back:Shape;
+
 		public function Window() {
+			back = new Shape();
+			addChildAt(back, 0);
+			blackBack = new Shape();
+			addChildAt(blackBack, 0);
+
 			resize();
 		}
 
@@ -24,7 +35,7 @@ package tree.view {
 		}
 
 		public function get modal():Boolean {
-			return false;
+			return true;
 		}
 
 		public function get individual():Boolean {
@@ -63,13 +74,26 @@ package tree.view {
 		}
 
 		protected function resize():void {
-			graphics.clear();
+			back.graphics.clear();
+			blackBack.graphics.clear();
 
-			graphics.beginFill(0xCCCCCC);
-			graphics.drawRect(0, 0, _width, _height);
+			const RADIUS:int = 10;
+			back.graphics.beginFill(0xFFFFFF);
+			back.graphics.drawRoundRectComplex(0, 0, _width, _height, RADIUS, RADIUS, RADIUS, RADIUS);
+			back.graphics.endFill();
 
-			graphics.beginFill(0xFFFF88);
-			graphics.drawRect(0, 0, _width, 20);
+			const ELLIPSE_WIDTH:int = _width * 5;
+			const ELLIPSE_HEIGHT:int = _height * 5;
+			const ELL_DX:int = (ELLIPSE_WIDTH - _width) * 0.5
+			const ELL_DY:int = (ELLIPSE_HEIGHT - _height) * 0.5;
+			var mat:Matrix= new Matrix();
+			var colors:Array=[0x0,0xFFFFFF];
+			var alphas:Array=[0.5,0];
+			var ratios:Array=[0,255];
+			mat.createGradientBox(ELLIPSE_WIDTH, ELLIPSE_HEIGHT, 0, -ELL_DX, -ELL_DY);
+			blackBack.graphics.beginGradientFill(GradientType.RADIAL, colors, alphas, ratios, mat);
+			blackBack.graphics.drawEllipse(-ELL_DX,  -ELL_DY, ELLIPSE_WIDTH, ELLIPSE_HEIGHT);
+			blackBack.graphics.endFill();
 		}
 
 		public function clear():void{

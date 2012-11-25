@@ -49,9 +49,9 @@ import tree.common.Bus;
 			var wd:WindowsData;
 			var w:WindowsData = new WindowsData();
 			w.window = window;
-			w.modal = w.modal;
-			w.individual = w.individual;
-			w.priority = w.priority;
+			w.modal = window.modal;
+			w.individual = window.individual;
+			w.priority = window.priority;
 
 			if(w.individual)
 			{

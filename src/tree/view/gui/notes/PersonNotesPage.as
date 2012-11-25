@@ -124,8 +124,8 @@ package tree.view.gui.notes {
 			notes = [];
 		}
 
-		public function addNote(data:ModelBase):PersonNoteItem {
-			var p:Person = data is GenNode ? GenNode(data).join.associate : (data is Join ? Join(data).associate : data as Person);
+		public function addNote(data:Person):PersonNoteItem {
+			var p:Person = data;
 			var note:PersonNoteItem = new PersonNoteItem();
 
 			note.data = p;
@@ -165,7 +165,7 @@ package tree.view.gui.notes {
 			return note;
 		}
 
-		public function removeNote(data:ModelBase):PersonNoteItem {
+		public function removeNote(data:ModelBase):void {
 			var p:Person = data is GenNode ? GenNode(data).join.associate : (data is Join ? Join(data).associate : data as Person);
 			for (var i:int = 0; i < notes.length; i++) {
 				var note:PersonNoteItem = notes[i];
@@ -182,7 +182,6 @@ package tree.view.gui.notes {
 			vbox.refresh();
 			fireResize();
 			notesHolderEmptyLabel.visible = notes.length == 0 && !firstNote;
-			return note;
 		}
 
 		private function onSearchWordChanged(event:Event):void{

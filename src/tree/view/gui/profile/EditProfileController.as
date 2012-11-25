@@ -1,8 +1,15 @@
 package tree.view.gui.profile {
 import com.somewater.storage.I18n;
+import com.somewater.text.LinkLabel;
+
+import fl.core.UIComponent;
+
+import flash.events.Event;
 
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
+
+import tree.command.GotoLinkCommand;
 
 import tree.common.IClear;
 import tree.model.JoinType;
@@ -31,7 +38,7 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 			page.cancelEditLink.link.add(onCancelEditProfile);
 			page.saveProfileButton.click.add(onSaveEditedData);
 			page.comboBox.personChanged.add(onPersonChanged);
-		}
+			page.extEditLink.link.add(onExtEditionClicked);		}
 
 		private function onCreateNewProfile(...args):void {
 			bus.dispatch(ViewSignal.START_EDIT_PERSON, null, null, null);
@@ -105,6 +112,10 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 
 		private function onPersonChanged(item:DPItem = null):void{
 			page.editableInfo.enabled = item == null || item.newPerson;
+		}
+
+		private function onExtEditionClicked(l:LinkLabel):void{
+			new GotoLinkCommand(GotoLinkCommand.GOTO_EDIT_PROFILE, model.editing.edited).execute();
 		}
 	}
 }

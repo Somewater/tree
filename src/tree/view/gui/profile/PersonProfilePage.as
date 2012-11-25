@@ -1,30 +1,34 @@
 package tree.view.gui.profile {
-	import com.somewater.display.Photo;
-	import com.somewater.storage.I18n;
-	import com.somewater.storage.I18n;
-	import com.somewater.text.EmbededTextField;
-	import com.somewater.text.LinkLabel;
+import com.somewater.display.Photo;
+import com.somewater.storage.I18n;
+import com.somewater.text.EmbededTextField;
 
-	import flash.display.DisplayObject;
-	import flash.display.Shape;
+import flash.display.DisplayObject;
+import flash.events.Event;
 
-	import flash.events.Event;
-
-	import tree.common.Config;
-	import tree.model.JoinType;
-
-	import tree.model.Person;
-
-	import tree.signal.ViewSignal;
-
-	import tree.view.gui.Button;
-import tree.view.gui.IconButton;
-
+import tree.common.Config;
+import tree.model.Model;
+import tree.model.Person;
+import tree.view.gui.Button;
 import tree.view.gui.PageBase;
-	import tree.view.gui.StandartButton;
-	import tree.view.gui.UIComponent;
 
-	public class PersonProfilePage extends PageBase{
+public class PersonProfilePage extends PageBase{
+
+		public static const FIELD_BIRTHDAY:String = 'birthday_str';
+		public static const FIELD_DEATHDAY:String = 'deathday_str';
+		public static const FIELD_BIRTH_PLACE:String = 'birth_place';
+		public static const FIELD_LIVE_PLACE:String = 'home_place';
+		public static function get DEFAULT_DISPLAY_FIELDS():String {
+			var data:Object = {};
+			data[FIELD_BIRTHDAY] = I18n.t('FIELD_BIRTHDAY');
+			data[FIELD_DEATHDAY] = I18n.t('FIELD_DEATHDAY');
+			data[FIELD_BIRTH_PLACE] = I18n.t('FIELD_BIRTH_PLACE');
+			data[FIELD_LIVE_PLACE] = I18n.t('FIELD_LIVE_PLACE');
+			var s:String = ''
+			for(var k:String in data)
+				s += (s.length > 0 ? ',' : '') + k + '=' + data[k];
+			return s;
+		};
 
 		public static const NAME:String = 'PersonProfilePage';
 
@@ -46,11 +50,7 @@ import tree.view.gui.PageBase;
 
 		private var bornPlaceLabels:Labels;
 		private var livePlaceLabels:Labels;
-		private var ageLabels:Labels;
-
-		private var phoneLabels:Labels;
-		private var icqLabels:Labels;
-		private var skypeLabels:Labels;
+		//private var ageLabels:Labels;
 
 		public function PersonProfilePage() {
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 200, 200);
@@ -62,31 +62,31 @@ import tree.view.gui.PageBase;
 			postField = new EmbededTextField(null, 0, 15);
 			addChild(postField);
 
-			editProfile = new IconButton(Config.loader.createMc('assets.IconEdit'))
+			editProfile = new IconButtonCustom(Config.loader.createMc('assets.IconEdit'))
 			editProfile.label = I18n.t('EDIT_PROFILE');
 			addChild(editProfile);
 
-			viewTree = new IconButton(Config.loader.createMc('assets.IconTree'))
+			viewTree = new IconButtonCustom(Config.loader.createMc('assets.IconTree'))
 			viewTree.label = I18n.t('VIEW_TREE');
 			addChild(viewTree);
 
-			addPhoto = new IconButton(Config.loader.createMc('assets.IconAddPhoto'))
+			addPhoto = new IconButtonCustom(Config.loader.createMc('assets.IconAddPhoto'))
 			addPhoto.label = I18n.t('ADD_PHOTO');
 			addChild(addPhoto);
 
-			viewProfile = new IconButton(Config.loader.createMc('assets.IconProfile'))
+			viewProfile = new IconButtonCustom(Config.loader.createMc('assets.IconProfile'))
 			viewProfile.label = I18n.t('VIEW_PROFILE');
 			addChild(viewProfile);
 
-			deleteProfile = new IconButton(Config.loader.createMc('assets.IconDelete'))
+			deleteProfile = new IconButtonCustom(Config.loader.createMc('assets.IconDelete'))
 			deleteProfile.label = I18n.t('DELETE_PROFILE');
 			addChild(deleteProfile);
 
-			sendMessage = new IconButton(Config.loader.createMc('assets.IconMail'))
+			sendMessage = new IconButtonCustom(Config.loader.createMc('assets.IconMail'))
 			sendMessage.label = I18n.t('SEND_MESSAGE');
 			addChild(sendMessage);
 
-			invite = new IconButton(Config.loader.createMc('assets.IconInvite'))
+			invite = new IconButtonCustom(Config.loader.createMc('assets.IconInvite'))
 			invite.label = I18n.t('INVITE');
 			addChild(invite);
 
@@ -99,15 +99,8 @@ import tree.view.gui.PageBase;
 			addChild(bornPlaceLabels);
 			livePlaceLabels = new Labels();
 			addChild(livePlaceLabels);
-			ageLabels = new Labels();
-			addChild(ageLabels);
-
-			phoneLabels = new Labels();
-			addChild(phoneLabels);
-			icqLabels = new Labels();
-			addChild(icqLabels);
-			skypeLabels = new Labels();
-			addChild(skypeLabels);
+			//ageLabels = new Labels();
+			//addChild(ageLabels);
 		}
 
 		override public function get pageName():String {
@@ -145,12 +138,7 @@ import tree.view.gui.PageBase;
 					10,
 
 					bornPlaceLabels,
-					livePlaceLabels,
-					ageLabels,
-					10,
-					phoneLabels,
-					icqLabels,
-					skypeLabels
+					livePlaceLabels
 			];
 
 			nameField.width = _width - 2 * PADDING;
@@ -172,43 +160,45 @@ import tree.view.gui.PageBase;
 		}
 
 		internal function onPersonSelected(person:Person):void{
-			const SHOW_ALL_IF_DIE:Boolean = false;
+			var displayFields:Array = Model.instance.options.displayFields;
+			var showBirthday:String = displayFields[FIELD_BIRTHDAY] || '';
+			var showBirthPlace:String = displayFields[FIELD_BIRTH_PLACE] || '';
+			var showDeathdat:String = displayFields[FIELD_DEATHDAY] || '';
+			var showLivePlace:String = displayFields[FIELD_LIVE_PLACE] || '';
 
 			if(!person || !person.node) return;
-			photo.source = person.photo;
+			photo.source = person.photo(Person.PHOTO_BIG);
 			if(!photo.source) setDefaultPhoto(person.male);
 
-			editProfile.visible = deleteProfile.visible = person.open;
-			deleteProfile.visible = !(person.node.slaves && person.node.slaves.length)
+			editProfile.visible = person.editable;
+			deleteProfile.visible = !(person.node.slaves && person.node.slaves.length) && person.editable;
+			addPhoto.visible = person.urls.editPhotoUrl != null;
+			invite.visible = person.urls.inviteUrl != null;
+			sendMessage.visible = person.urls.messageUrl != null;
+			viewProfile.visible = person.profileUrl != null && person.profileUrl.length > 0;
 
 			nameField.text = formattedIfEmpty(person.fullname);
-			postField.visible = !!person.post || SHOW_ALL_IF_DIE;
+			postField.visible = !!person.post;
 			postField.text = formattedIfEmpty(person.post);
 
-			bornLabels.title = (person.male ? I18n.t('MALE_BORN_FROM') : I18n.t('FEMALE_BORN_FROM')) + ':';
+			bornLabels.visible = showBirthday && person.birthday && !isNaN(person.birthday.date);
+			bornLabels.title = showBirthday//(person.male ? I18n.t('MALE_BORN_FROM') : I18n.t('FEMALE_BORN_FROM')) + ':';
 			bornLabels.value = formattedBirthday(person.birthday);
 
-			diedLabels.visible = person.died || SHOW_ALL_IF_DIE;
-			diedLabels.title = (person.male ? I18n.t('MALE_DEAD') : I18n.t('FEMALE_DEAD')) + ':';
+			diedLabels.visible = showDeathdat && person.died;
+			diedLabels.title = showDeathdat//(person.male ? I18n.t('MALE_DEAD') : I18n.t('FEMALE_DEAD')) + ':';
 			diedLabels.value = formattedBirthday(person.deathday);
 
-			bornPlaceLabels.title = (person.male ? I18n.t('BORN_PLACE_MALE') : I18n.t('BORN_PLACE_FEMALE'));
-			bornPlaceLabels.value = formattedIfEmpty(null);
+			bornPlaceLabels.visible = showBirthPlace && person.birthPlace;
+			bornPlaceLabels.title = showBirthPlace//(person.male ? I18n.t('BORN_PLACE_MALE') : I18n.t('BORN_PLACE_FEMALE'));
+			bornPlaceLabels.value = formattedIfEmpty(person.birthPlace);
 
-			livePlaceLabels.title = person.died ? (person.male ? I18n.t('LIVED_PLACE_MALE') : I18n.t('LIVED_PLACE_FEMALE')) : (person.male ? I18n.t('LIVE_PLACE_MALE') : I18n.t('LIVE_PLACE_FEMALE'));
-			livePlaceLabels.value = formattedIfEmpty(null);
+			livePlaceLabels.visible = showLivePlace && person.homePlace;
+			livePlaceLabels.title = showLivePlace//person.died ? (person.male ? I18n.t('LIVED_PLACE_MALE') : I18n.t('LIVED_PLACE_FEMALE')) : (person.male ? I18n.t('LIVE_PLACE_MALE') : I18n.t('LIVE_PLACE_FEMALE'));
+			livePlaceLabels.value = formattedIfEmpty(person.homePlace);
 
-			ageLabels.title = (person.male ? I18n.t('AGE_MALE') : I18n.t('AGE_FEMALE'));
-			ageLabels.value = formattedIfEmpty(person.age > 0 ? person.age.toString() : null);
-
-			phoneLabels.title = I18n.t('MOBILE_PHONE');
-			phoneLabels.value = formattedIfEmpty(null);
-
-			icqLabels.title = I18n.t('ICQ');
-			icqLabels.value = formattedIfEmpty(null);
-
-			skypeLabels.title = I18n.t('SKYPE');
-			skypeLabels.value = formattedIfEmpty(null);
+			//ageLabels.title = (person.male ? I18n.t('AGE_MALE') : I18n.t('AGE_FEMALE'));
+			//ageLabels.value = formattedIfEmpty(person.age > 0 ? person.age.toString() : null);
 
 			refresh();
 		}
@@ -234,6 +224,9 @@ import tree.view.gui.PageBase;
 
 import com.somewater.text.EmbededTextField;
 
+import flash.display.MovieClip;
+
+import tree.view.gui.IconButton;
 import tree.view.gui.UIComponent;
 
 class Labels extends UIComponent{
@@ -244,7 +237,7 @@ class Labels extends UIComponent{
 	public function Labels(){
 		_label1_tf = new EmbededTextField(null, 0, 11, true);
 		addChild(_label1_tf);
-		_label2_tf = new EmbededTextField(null, 0, 11, false);
+		_label2_tf = new EmbededTextField(null, 0, 11, false, true);
 		addChild(_label2_tf);
 	}
 
@@ -268,5 +261,21 @@ class Labels extends UIComponent{
 			_label2_tf.x = _label1_tf.x + _label1_tf.width + 5;
 		else
 			_label2_tf.x = L1_WIDTH;
+		_label2_tf.width = _width - _label2_tf.x;
+	}
+}
+
+class IconButtonCustom extends IconButton{
+
+	function IconButtonCustom(icon:MovieClip) {
+		super(icon);
+	}
+
+	override public function set movie(value:MovieClip):void {
+		super.movie = value;
+		if(value){
+			value.x = (30 - value.width) * 0.5;
+			refresh();
+		}
 	}
 }

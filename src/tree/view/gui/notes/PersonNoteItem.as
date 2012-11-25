@@ -44,6 +44,7 @@ package tree.view.gui.notes {
 		private var _opened:Boolean = false;
 		private var newItem:Boolean = true;
 		private var background:DisplayObject;
+		private var deadMark:DisplayObject;
 
 		private var menu:NoteContextMenu;
 		private var menuMask:Shape;
@@ -123,6 +124,10 @@ package tree.view.gui.notes {
 			actionClick = new Signal(PersonNoteItem);
 			actionsTF.addEventListener(com.somewater.text.LinkLabel.LINK_CLICK, onActionClicked);
 
+			deadMark = Config.loader.createMc('assets.DeadMark');
+			deadMark.x = PersonNotesPage.NOTE_WIDTH - deadMark.width;
+			addChild(deadMark);
+
 			this.visible = false;
 			this.buttonMode = this.useHandCursor = !selected;
 		}
@@ -151,6 +156,7 @@ package tree.view.gui.notes {
 			_data = data;
 			nameTF.text = data.fullname;
 			postTF.text = data.post || '';
+			deadMark.visible = data.died;
 			refresh();
 		}
 

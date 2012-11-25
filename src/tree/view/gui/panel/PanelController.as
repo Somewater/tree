@@ -64,7 +64,7 @@ import tree.model.Person;
 				var owner:Person = model.owner;
 				for each(var t:TreeModel in model.trees.iterator)
 					if(t.owner.node.visible)
-						data.push(t.owner);
+						data.push(t);
 				panel.treeSelectorPopup.refreshData(data);
 				panel.treeSelectorPopup.show()
 				panel.treeOwnerMark.rotation = 0;

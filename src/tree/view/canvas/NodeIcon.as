@@ -47,7 +47,7 @@ import tree.view.gui.Helper;
 
 		protected var tmpPoint:Point;
 
-		private var debugTrace:TextField;
+		//private var debugTrace:TextField;
 
 		public var click:ISignal;
 		public var dblClick:ISignal;
@@ -93,18 +93,14 @@ import tree.view.gui.Helper;
 
 			tmpPoint = new Point();
 
-			CONFIG::debug{
-				debugTrace = new TextField();
-				debugTrace.wordWrap = debugTrace.multiline = true;
-				debugTrace.selectable = false;
-				debugTrace.width = Canvas.ICON_WIDTH;
-				debugTrace.filters = [new DropShadowFilter(1, 45, 0xFFFFFF, 1, 1, 1, 2)]
-				skin.addChild(debugTrace);
-
-				addEventListener(MouseEvent.CLICK, function(ev:Event):void{
-					refreshData();
-				})
-			}
+//			CONFIG::debug{
+//				debugTrace = new TextField();
+//				debugTrace.wordWrap = debugTrace.multiline = true;
+//				debugTrace.selectable = false;
+//				debugTrace.width = Canvas.ICON_WIDTH;
+//				debugTrace.filters = [new DropShadowFilter(1, 45, 0xFFFFFF, 1, 1, 1, 2)]
+//				skin.addChild(debugTrace);
+//			}
 
 			addEventListener(MouseEvent.CLICK, onClicked);
 			addEventListener(MouseEvent.DOUBLE_CLICK, onDblCliced);
@@ -171,10 +167,15 @@ import tree.view.gui.Helper;
 		public function set data(value:GenNode):void {
 			warn('New node: ' + value.node.person + ", time=" + Config.ticker.getTimer)
 			this._data = value;
+			_data.node.person.changed.add(onPerosonDataChanged)
 			refreshData();
 			value.node.visible = true;
 			value.node.rollChanged.add(refreshRollUnroll)
 			refreshRollUnroll(value.node);
+		}
+
+		private function onPerosonDataChanged(p:Person):void{
+			refreshData();
 		}
 
 		public function get data():GenNode {
@@ -183,19 +184,19 @@ import tree.view.gui.Helper;
 
 		protected function refreshData():void {
 			var p:Person = _data.node.person;
-			skin.getChildByName('male_back').visible = p.male;
-			skin.getChildByName('female_back').visible = !p.male;
+			skin.getChildByName('lock_back').visible = !p.open;
+			skin.getChildByName('male_back').visible = p.open && p.male;
+			skin.getChildByName('female_back').visible = p.open && !p.male;
 			(skin.getChildByName('name_tf') as TextField).text = p.name;
-			if(!p.open)
-				this.photo.source = Config.loader.createMc('assets.LockPhoto')
-			else if(p.photo)
-				Config.loader.serverHandler.download(p.photo, onPhotoDownloaded, trace, null);
+			(skin.getChildByName('dead_mark')).visible = p.died;
+			if(p.open && p.photo(Person.PHOTO_SMALL))
+				Config.loader.serverHandler.download(p.photo(Person.PHOTO_SMALL), onPhotoDownloaded, trace, null);
 			rollUnrollButton.male = _data.node.person.male;
-			CONFIG::debug{
-				debugTrace.text = p.node.id + "\nx=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
-						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
-						+ "\ndist=" + p.node.dist;
-			}
+//			CONFIG::debug{
+//				debugTrace.text = p.node.id + "\nx=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
+//						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
+//						+ "\ndist=" + p.node.dist;
+//			}
 			//draw();
 		}
 
@@ -233,6 +234,7 @@ import tree.view.gui.Helper;
 				_data.node.visible = false;
 				_data.node.rollChanged.remove(refreshRollUnroll);
 				_data.changed.remove(refreshPosition);
+				_data.join.associate.changed.remove(onPerosonDataChanged)
 				_data = null;
 			}
 			photo.clear();
@@ -351,8 +353,9 @@ import tree.view.gui.Helper;
 		public function set highlighted(value:Boolean):void {
 			if(_highlighted != value){
 				_highlighted = value;
-				femaleHighlight.visible = value && _data && _data.node.person.female;
-				maleHighlight.visible = value && _data && _data.node.person.male;
+				var p:Person = _data.node.person;
+				femaleHighlight.visible = value && _data && p.female && p.open;
+				maleHighlight.visible = value && _data && p.male && p.open;
 				if(!value)
 					hideContextMenuBtn();
 			}
@@ -400,7 +403,7 @@ import tree.view.gui.Helper;
 		public function set selected(value:Boolean):void {
 			if(_selected != value){
 				_selected = value;
-				if(value){
+				if(value && _data.node.person.open){
 					var male:Boolean = _data && _data.node.person.male;
 					filters = [new GlowFilter(male ? 0x51BBEC : 0xE79BA7, 1, 12, 12)];
 				} else {
@@ -410,6 +413,7 @@ import tree.view.gui.Helper;
 		}
 
 		private function showContextMenuBtn():void{
+			if(!data.join.associate.editable) return;
 			contextMenuBtn.visible = true;
 			Tweener.to(contextMenuBtn, 0.2, {alpha: 1}, {onComplete: onArrowShowed});
 		}

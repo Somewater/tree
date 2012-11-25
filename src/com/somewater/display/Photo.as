@@ -17,8 +17,10 @@ package com.somewater.display
 	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;
 
+import tree.view.Tweener;
 
-	[Event(name="resize", type="flash.events.Event")]
+
+[Event(name="resize", type="flash.events.Event")]
 	[Event(name="complete", type="flash.events.Event")]
 	[Event(name="render", type="flash.events.Event")]
 	
@@ -113,9 +115,9 @@ package com.somewater.display
 		
 		public var scaleType:uint = ORIENTED_CENTER;
 		
-		public var centerX:int;
-		public var centerY:int;
-		
+		private var centerX:int = int.MIN_VALUE;
+		private var centerY:int = int.MIN_VALUE;
+
 		public var pictureLoader:Loader;
 		public var image:DisplayObject;
 		public var imageMask:Shape;
@@ -125,15 +127,15 @@ package com.somewater.display
 		// показывать ли анимацию при появлении картинки (возрастание alpha от 0 до 1)
 		public var animatedShowing:Boolean = false;
 		
-		public function Photo(scaleType:int = 0, maxWidth:uint = 150, maxHeight:uint = 80, centerX:int = int.MIN_VALUE, centerY:int = int.MIN_VALUE)
+		public function Photo(scaleType:int = 0, maxWidth:uint = 150, maxHeight:uint = 80)
 		{
 			self = this;
 			
 			this.scaleType = scaleType;
 			this.maxWidth = maxWidth;
 			this.maxHeight = maxHeight;
-			this.centerX = centerX;
-			this.centerY = centerY;
+
+			imageMask = new Shape();
 		}
 		
 		public function clear():void{
@@ -310,7 +312,7 @@ package com.somewater.display
 			if (animatedShowing)
 			{
 				image.alpha = 0;
-				GTweener.to(image,  0.3,  { alpha: 1})
+				Tweener.to(image,  0.3,  { alpha: 1})
 			}
 			
 			dispatchComplete();
@@ -374,6 +376,11 @@ package com.somewater.display
 				else if(scaleType & ORIENT_VER_BOTTOM)
 					y = centerY + maxHeight * 5 - h;
 			}
+
+			if((scaleType & ORIENT_HOR_CENTER) == ORIENT_HOR_CENTER)
+				image.x = (maxWidth - image.width) * 0.5;
+			if((scaleType & ORIENT_VER_MIDDLE) == ORIENT_VER_MIDDLE)
+				image.y = (maxHeight - image.height) * 0.5;
 			
 			graphics.clear();
 			if (FILL_COLOR > -1){
@@ -388,6 +395,12 @@ package com.somewater.display
 				_width = w;
 				_height = h;
 			}
+
+			addChild(imageMask);
+			image.mask = imageMask;
+			imageMask.graphics.beginFill(0);
+			imageMask.graphics.drawRect(0,0,_width,_height);
+
 			dispatchEvent(new Event(Event.RESIZE));
 		}
 		

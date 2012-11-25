@@ -18,13 +18,9 @@ package tree.view.window {
 		public function MessageWindow(text:String) {
 			setSize(300, 120)
 
-			graphics.beginFill(0xFFFFFF);
-			graphics.lineStyle(1, 0x51BBEC);
-			graphics.drawRect(0, 0, width, height);
-
 			var tf:EmbededTextField = new EmbededTextField(null, 0, 14, false, true, true);
 			tf.text = text;
-			tf.width = width;
+			tf.width = width - 30;
 			tf.x = (width - tf.textWidth) * 0.5;
 			tf.y = (height - tf.height) * 0.5;
 			addChild(tf);

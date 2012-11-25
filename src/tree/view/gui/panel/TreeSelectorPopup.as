@@ -16,7 +16,8 @@ package tree.view.gui.panel {
 
 	import tree.common.Config;
 	import tree.model.Person;
-	import tree.view.Tweener;
+import tree.model.TreeModel;
+import tree.view.Tweener;
 	import tree.view.gui.IShowable;
 
 	import tree.view.gui.UIComponent;
@@ -49,7 +50,7 @@ package tree.view.gui.panel {
 			linkClick = new Signal(Person);
 		}
 
-		public function refreshData(data:Array):void {
+		public function refreshData(trees:Array):void {
 			var l:LinkLabel
 
 			while(labelsHolder.numChildren){
@@ -60,10 +61,10 @@ package tree.view.gui.panel {
 			}
 
 			var nextY:int = 0;
-			for each(var p:Person in data){
+			for each(var t:TreeModel in trees){
 				l = new LinkLabel(null, 0x2781C8, 13);
-				l.text = p.name;
-				l.data = p;
+				l.text = t.name;
+				l.data = t.owner;
 				l.y = nextY;
 				l.addEventListener(LinkLabel.LINK_CLICK, onLInkClicked);
 				nextY += 24//l.textField.textHeight + 5;

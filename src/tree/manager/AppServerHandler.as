@@ -1,5 +1,7 @@
 package tree.manager {
-	import tree.common.Bus;
+import com.somewater.storage.I18n;
+
+import tree.common.Bus;
 	import tree.common.Config;
 	import tree.model.Join;
 import tree.model.Model;
@@ -8,6 +10,7 @@ import tree.signal.RequestSignal;
 import tree.signal.ResponseSignal;
 import tree.signal.ResponseSignal;
 import tree.view.window.MessageWindow;
+import tree.view.window.TitleTextWindow;
 
 public class AppServerHandler {
 
@@ -96,6 +99,20 @@ public class AppServerHandler {
 					handler.call(deleteNullFields(data), onSuccess(request), onError(request), onProgress);
 				break;
 
+				case RequestSignal.ADD_RELATION:
+					bus.loaderProgress.dispatch(0);
+					request.onComplete.add(hideLoader);
+					data = {
+						'action': 'q_tree',
+						'uid': model.trees.first.owner.uid,
+						'taction': 'add_relative',
+						'from_id':request.joinFrom.uid,
+						'to_id':request.person.uid,
+						'rel_type':Join.typeToServer(request.joinType)
+					}
+					handler.call(deleteNullFields(data), onSuccess(request), onError(request), onProgress);
+					break;
+
 				default:
 					throw new Error('Undefined request type \'' + request.type+ '\'');
 				break;
@@ -108,8 +125,7 @@ public class AppServerHandler {
 				// проверить application error
 				var applicationError:Boolean = false;
 				try{
-					if(response.toXml().error.toString().length > 0){
-						response.data = response.toXml().error.toString();
+					if(response.getErrorMessage()){
 						response.type = ResponseSignal.ERROR;
 						applicationError = true;
 					}
@@ -123,6 +139,9 @@ public class AppServerHandler {
 					bus.dispatch(ResponseSignal.SIGNAL, response);
 					request.onComplete.dispatch(response);
 					request.clear();
+
+					if(response.getMessage())
+						new TitleTextWindow(I18n.t('SERVER_RESPONSE'), response.getMessage());
 				}
 			}
 		}
@@ -133,8 +152,8 @@ public class AppServerHandler {
 				request.onError.dispatch(response);
 				bus.dispatch(ResponseSignal.SIGNAL, response);
 				request.onComplete.dispatch(response);
-				if(data && !response.errorHandler)
-					new MessageWindow(data.toString()).open();
+				if(!response.errorHandler && response.getMessage())
+					new TitleTextWindow(I18n.t('SERVER_ERROR'), response.getMessage());
 				request.clear();
 			}
 		}

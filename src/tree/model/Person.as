@@ -12,9 +12,21 @@ package tree.model {
 	 */
 	public class Person extends JoinCollectionBase implements IModel, ICollection{
 
+		public static const PHOTO_SMALL:int = 0;
+		public static const PHOTO_BIG:int = 1;
+
 		public var male:Boolean;
 
-		public var photo:String;
+		public var photoSmall:String;
+		public var photoBig:String;
+		public function photo(size:int = 0):String{
+			if(size == 0){
+				return photoSmall ? photoSmall : photoBig;
+			}else if(size == 1){
+				return photoBig ? photoBig : photoSmall;
+			}
+			return null;
+		}
 
 		public var tree:TreeModel;
 
@@ -27,6 +39,11 @@ package tree.model {
 		public var email:String;
 		public var post:String;
 		public var profileUrl:String;
+
+		public var homePlace:String;
+		public var birthPlace:String;
+
+		public var urls:Urls = new Urls();
 
 		public  var open:Boolean = true;
 
@@ -62,7 +79,7 @@ package tree.model {
 		}
 
 		public function get died():Boolean{
-			return deathday != null;
+			return open && deathday != null && !isNaN(deathday.date);
 		}
 
 		public function set died(value:Boolean):void{
@@ -87,6 +104,10 @@ package tree.model {
 				return (d.time - birthday.time) / (1000 * 60 * 60 * 24 * 365);
 			}else
 				return -1;
+		}
+
+		public function get editable():Boolean{
+			return open && urls.editUrl != null;
 		}
 	}
 }

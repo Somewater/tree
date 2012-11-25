@@ -62,7 +62,7 @@ package tree.view.gui.notes {
 				page.removeAllNotes();
 				for each(j in model.joinsQueue){
 					if(j.associate.visible && !hasNote(j.associate))
-						addNote(j)
+						addNote(j.associate)
 				}
 			}
 		}
@@ -135,14 +135,16 @@ package tree.view.gui.notes {
 		}
 
 		private function onAddNoteSignal(g:GenNode):void{
-			addNote(g);
+			addNote(g.join.associate);
 		}
 
 		private function onRemoveNoteSignal(g:GenNode):void{
 			removeNote(g);
 		}
 
-		private function addNote(m:ModelBase):void{
+		private function addNote(m:Person):void{
+			if(!m.open) return;
+
 			var note:PersonNoteItem = page.addNote(m);
 			if(page.firstNote == note && !model.selectedPerson)
 				selectNote(note);

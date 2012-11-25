@@ -22,6 +22,7 @@ package tree.command.view {
 				model.selectedTree = join.associate.tree;
 
 			model.drawedNodesUids[join.uid] = true;
+			if(model.joinsQueue.indexOf(join) == -1) model.joinsQueue.push(join);
 
 			calculateRelativePosition(join);
 

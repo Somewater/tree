@@ -5,12 +5,14 @@ package tree.view.gui.profile {
 	import flash.net.navigateToURL;
 
 	import tree.command.Actor;
-import tree.command.RemovePerson;
+import tree.command.GotoLinkCommand;
+import tree.command.edit.RemovePerson;
 import tree.common.IClear;
 	import tree.model.JoinType;
 	import tree.model.Person;
 	import tree.model.TreeModel;
-	import tree.signal.ModelSignal;
+import tree.signal.AppSignal;
+import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
 	import tree.view.gui.GuiControllerBase;
 	import tree.view.gui.notes.PersonNotesPage;
@@ -39,19 +41,19 @@ import tree.common.IClear;
 		}
 
 		private function onEditPhotoClick(...args):void {
-			new MessageWindow('TODO: выбрать новый файл фотографии').open();
+			new GotoLinkCommand(GotoLinkCommand.GOTO_EDIT_PHOTO, model.selectedPerson).execute();
 		}
 
 		private function onProfileClick(...args):void {
-			navigateToURL(new URLRequest(model.selectedPerson.profileUrl))
+			new GotoLinkCommand(GotoLinkCommand.GOTO_PROFILE, model.selectedPerson).execute();
 		}
 
 		private function onFamilyTreeClick(...args):void{
-			new MessageWindow('TODO: открыть дерево относительно человека').open()
+			bus.dispatch(AppSignal.RELOAD_TREE, model.selectedPerson.uid);
 		}
 
 		private function onSendMessageClick(...args):void{
-			new MessageWindow('TODO: открыть страницу отсылки сообщения').open()
+			new GotoLinkCommand(GotoLinkCommand.GOTO_MESSAGE, model.selectedPerson).execute();
 		}
 
 		private function onDeleteProfileClick(...args):void{
@@ -59,7 +61,7 @@ import tree.common.IClear;
 		}
 
 		private function onInviteClick(...args):void{
-			new MessageWindow('TODO: пригласить в соц сеть').open()
+			new GotoLinkCommand(GotoLinkCommand.GOTO_INVITE, model.selectedPerson).execute();
 		}
 
 		override public function clear():void{

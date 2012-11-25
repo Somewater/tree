@@ -12,6 +12,7 @@ package tree.model {
 
 		public var uid:int;
 		public var level:int;
+		public var name:String;
 
 		public var persons:PersonsCollection;
 		public var nodes:NodesCollection;
