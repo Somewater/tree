@@ -34,11 +34,11 @@ package tree {
 
 	import tree.command.RecalculateNodes;
 	import tree.command.ReloadTree;
-	import tree.command.RemovePerson;
 
 	import tree.command.ResponseRouter;
 	import tree.command.edit.EditProfile;
-	import tree.command.edit.StartProfileEditing;
+import tree.command.edit.RemovePerson;
+import tree.command.edit.StartProfileEditing;
 	import tree.command.view.CalculateNextNodeRollUnroll;
 	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
