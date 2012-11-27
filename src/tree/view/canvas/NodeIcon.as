@@ -446,10 +446,13 @@ import tree.view.gui.Helper;
 			var rubVisible:Boolean = rollUnrollButton.visible;
 			contextMenuBtn.visible = false;
 			rollUnrollButton.visible = false;
-			var bmp:BitmapData = new BitmapData(this.width, this.height, true, 0);
+			var filters:Array = this.filters;
+			this.filters = [];
+			var bmp:BitmapData = new BitmapData(Canvas.ICON_WIDTH + 5, Canvas.ICON_HEIGHT + 5, true, 0);
 			bmp.draw(this);
 			contextMenuBtn.visible = cmbVicible;
 			rollUnrollButton.visible = rubVisible;
+			this.filters = filters;
 			return bmp;
 		}
 	}

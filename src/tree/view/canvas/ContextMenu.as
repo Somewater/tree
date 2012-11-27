@@ -1,5 +1,6 @@
 package tree.view.canvas {
-	import com.somewater.storage.I18n;
+import com.gskinner.motion.GTween;
+import com.somewater.storage.I18n;
 import com.somewater.text.EmbededTextField;
 import com.somewater.text.LinkLabel;
 
@@ -24,15 +25,18 @@ import tree.common.Bus;
 import tree.common.Config;
 
 	import tree.common.IClear;
-	import tree.model.Join;
+import tree.manager.ITick;
+import tree.model.Join;
 	import tree.model.JoinType;
+import tree.model.Model;
+import tree.model.Person;
 	import tree.model.Person;
-	import tree.model.Person;
+import tree.view.Tweener;
 import tree.view.gui.Button;
 import tree.view.gui.UIComponent;
 import tree.view.window.MessageWindow;
 
-public class ContextMenu extends UIComponent{
+public class ContextMenu extends UIComponent implements ITick{
 
 		private var background:Shape;
 		private var actionsHolder:Sprite;
@@ -174,6 +178,14 @@ public class ContextMenu extends UIComponent{
 
 			deleteAction.visible = !(p.node.slaves && p.node.slaves.length)
 
+			Tweener.to(Model.instance, 0.3, {zoom: 1});
+
+			refreshPosition();
+
+			Config.ticker.add(this)
+		}
+
+		public function tick(deltaMS:int):void{
 			refreshPosition();
 		}
 
@@ -182,7 +194,7 @@ public class ContextMenu extends UIComponent{
 			close()
 		}
 
-		public function refreshPosition():void{
+		public function refreshPosition(g:GTween = null):void{
 			var p:Point = globalToLocal(node.localToGlobal(new Point()));
 			if(!isNaN(p.x) && !isNaN(p.y)){
 				core.x = p.x;
@@ -191,6 +203,7 @@ public class ContextMenu extends UIComponent{
 		}
 
 		public function hide():void{
+			Config.ticker.remove(this);
 			this.visible = false;
 		}
 

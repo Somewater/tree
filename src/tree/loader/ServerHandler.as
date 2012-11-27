@@ -36,9 +36,9 @@ import flash.net.URLRequestMethod;
 			urlRequest.method = URLRequestMethod.GET;
 			for(var key:String in params)
 				urlRequest.data[key] = params[key];
-			urlRequest.requestHeaders.push(new URLRequestHeader('fs_login', 'mktsz@mail.ru'))
-			urlRequest.requestHeaders.push(new URLRequestHeader('fs_pass', '215d8f19dd19467e3132acda126a5c73'))
-			urlRequest.requestHeaders.push(new URLRequestHeader('user_id', '18985299'))
+			//urlRequest.requestHeaders.push(new URLRequestHeader('fs_login', 'mktsz@mail.ru'))
+			//urlRequest.requestHeaders.push(new URLRequestHeader('fs_pass', '215d8f19dd19467e3132acda126a5c73'))
+			//urlRequest.requestHeaders.push(new URLRequestHeader('user_id', '18985299'))
 			handle(urlRequest, onComplete, onError, onProgress, false);
 		}
 
