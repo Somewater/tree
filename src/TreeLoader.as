@@ -23,9 +23,9 @@ package {
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(event:Event):void{
 				swfAds.push(LoaderInfo(event.target).content.loaderInfo.applicationDomain);
 				var loader2:Loader = new Loader();
-				loader2.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadingComplete, false, 0, true);
+				loader2.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadingComplete);
 				loader2.loadBytes(new fonts());
-			}, false, 0, true);
+			});
 			loader.loadBytes(new assets());
 		}
 
