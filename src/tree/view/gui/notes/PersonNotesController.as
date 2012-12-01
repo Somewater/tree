@@ -160,20 +160,27 @@ package tree.view.gui.notes {
 			page.removeNote(m);
 		}
 
-		public static function filter(p:Person, search:String):Boolean{
+		public static function filter(p:Person, searchWords:String):Boolean{
 			var spaces:RegExp = /^\s+$/;
-			if(search && search.length && !spaces.test(search)){
-				if(p.firstName.toLowerCase().indexOf(search) != -1)
-					return true;
-				if(p.lastName.toLowerCase().indexOf(search) != -1)
-					return true;
-				if(p.post.toLowerCase().indexOf(search) != -1)
-					return true;
-				if(p.name.toLowerCase().indexOf(search) != -1)
-					return true;
-				return false;
-			} else
-				return true;
+			for each(var search:String in searchWords.split(/\s+/)) {
+				if(search && search.length && !spaces.test(search)){
+					if(p.firstName.toLowerCase().indexOf(search) != -1)
+						continue;
+					if(p.lastName.toLowerCase().indexOf(search) != -1)
+						continue;
+					if(p.middleName.toLowerCase().indexOf(search) != -1)
+						continue;
+					if(p.female && p.maidenName.toLowerCase().indexOf(search) != -1)
+						continue;
+					if(p.post.toLowerCase().indexOf(search) != -1)
+						continue;
+					if(p.name.toLowerCase().indexOf(search) != -1)
+						continue;
+					return false;
+				} else
+					continue;
+			}
+			return true;
 		}
 
 

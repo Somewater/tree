@@ -208,12 +208,15 @@ public class CanvasController extends Actor{
 		}
 
 		private function onNodeClicked(node:NodeIcon):void{
-			bus.dispatch(ViewSignal.PERSON_SELECTED, node.data.node.person);
+			if(node.data.node.person.open)
+				bus.dispatch(ViewSignal.PERSON_SELECTED, node.data.node.person);
 		}
 
 		private function onNodeBldClicked(node:NodeIcon):void{
-			bus.dispatch(ViewSignal.PERSON_SELECTED, node.data.node.person);
-			model.guiOpen = true;
+			if(node.data.node.person.open){
+				bus.dispatch(ViewSignal.PERSON_SELECTED, node.data.node.person);
+				model.guiOpen = true;
+			}
 		}
 
 		private function onNodeRolUnrollClicked(node:NodeIcon):void{

@@ -41,7 +41,9 @@ import tree.view.gui.profile.PersonProfilePage;
 
 		private var pageName:String;
 
-		public function Gui() {
+		private var guiShiled:GuiShield;
+
+		public function Gui(guiShiled:GuiShield) {
 			background = Config.loader.createMc('assets.GuiBack');
 			background.mouseEnabled = background.mouseChildren = false;
 			addChild(background);
@@ -63,6 +65,7 @@ import tree.view.gui.profile.PersonProfilePage;
 			addChild(fold);
 
 			cacheAsBitmap = true;
+			this.guiShiled = guiShiled;
 		}
 
 		public function setSize(w:int, h:int):void {
@@ -115,6 +118,7 @@ import tree.view.gui.profile.PersonProfilePage;
 			}
 
 			pageName = name;
+			this.guiShiled.visible = name == EditPersonProfilePage.NAME;
 		}
 
 		public function utilize():void {

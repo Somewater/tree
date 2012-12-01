@@ -56,9 +56,9 @@ public class Options {
 	/**
 	 * Минимальный и максимальный размер зума дерева
 	 */
-	public function get zoomMin():Number { return getProp('zoomMin', 0.1); }
-	public function get zoomMax():Number { return getProp('zoomMax', 1); }
-	public function get defaultZoom():Number { return getProp('zoom', 1); }
+	public function get zoomMin():Number { return parseFloat(getProp('zoomMin', 10)) * 0.01; }
+	public function get zoomMax():Number { return parseFloat(getProp('zoomMax', 100)) * 0.01; }
+	public function get defaultZoom():Number { return parseFloat(getProp('zoom', 100)) * 0.01; }
 
 	/**
 	 * Параметры, отвечающие за отказ от построения части нод, если дерево излишне большое
@@ -83,23 +83,27 @@ public class Options {
 	 */
 	public function get defaultOrderDesc():Boolean{ return getProp('mode', 'asc') == 'asc'; }// нисходящее (DESC) дерево по умолчанию (на сервере всё перепутали)
 
+	/**
+	 * Анимация построения (сворачивания-разворачивания, при редактировании и т.д.) работает
+	 */
 	public function get animation():Boolean{return parseInt(getProp('animation', 1)) != 0;}
 
+	/**
+	 * Путь до страницы настроек
+	 */
+	public function get setupUrl():String { return getProp('setup_url', null); }
+
+	/**
+	 * Путь до страницы сохранения
+	 */
+	public function get saveUrl():String { return getProp('save_url', null); }
+
 	public function read(setup:XMLList):void {
-		var config:Array = [
-			{s: 'display_fields', n: 'display_fields'},
-			{s: 'zoom', n: 'zoom'},
-			{s: 'mode', n: 'mode'},
-			{s: 'animation', n: 'animation'},
-
-		];
-		for each(var c:Object in config){
-			var sData:String = String(setup.option.(@name == c.s));
-			if(c && sData.length > 0){
-				serverValues[c.n] = sData;
-			}
+		for each(var option:XML in setup.*){
+			var oName:String = String(option.@name);
+			var oValue:String = option.toString();
+			serverValues[oName] = oValue;
 		}
-
 	}
 }
 }

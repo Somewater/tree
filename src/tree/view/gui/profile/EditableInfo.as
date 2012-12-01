@@ -166,14 +166,14 @@ import tree.view.gui.UIComponent;
 		override protected function refresh():void {
 			var controls:Array = [
 				(sexSelectorVisible ? [sexSelectorLabel, sexSelector] : null),
-				firstNameLabel, 
-				firstNameInput,
-				4,
-				lastNameLabel, 
+				lastNameLabel,
 				lastNameInput,
 				(maidenVisible? 4 : null),
 				(maidenVisible? maidenNameLabel : null),
 				(maidenVisible? maidenNameInput : null),
+				4,
+				firstNameLabel,
+				firstNameInput,
 				4,
 				middleNameLabel, 
 				middleNameInput,

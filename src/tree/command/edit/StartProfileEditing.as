@@ -28,6 +28,7 @@ import tree.view.gui.profile.PersonProfilePage;
 			if(!person){
 				//person = model.trees.first.persons.allocate(model.trees.first.nodes);
 				person = new Person(from ? from.tree : null);
+				person.isNew = true;
 				person.uid = Tree.instance.getTmpPersonUid()
 				person.tree = from ? from.tree : null;
 				// настроить

@@ -82,7 +82,8 @@ import tree.command.edit.StartProfileEditing;
 	import tree.view.Preloader;
 	import tree.view.WindowsManager;
 	import tree.view.gui.GuiMediator;
-	import tree.view.gui.panel.Panel;
+import tree.view.gui.GuiShield;
+import tree.view.gui.panel.Panel;
 	import tree.view.gui.panel.PanelMediator;
 
 	public class Tree extends Sprite{
@@ -96,6 +97,7 @@ import tree.command.edit.StartProfileEditing;
 
 		public var canvas:Canvas;
 		private var gui:Gui;
+		public var guiShiled:GuiShield;
 		private var panel:Panel;
 
 		public var mediators:Array = [];
@@ -191,8 +193,11 @@ import tree.command.edit.StartProfileEditing;
 			Config.content.addChild(panel = new Panel());
 			new PanelMediator(panel);
 
-			Config.content.addChild(gui = new Gui());
-			new GuiMediator(gui);
+			Config.content.addChild(guiShiled = new GuiShield());
+			guiShiled.visible = false;
+
+			Config.content.addChild(gui = new Gui(guiShiled));
+			new GuiMediator(gui, guiShiled);
 			Config.reject(Gui, gui);
 
 			//bus.sceneResize.add(onSceneResize);

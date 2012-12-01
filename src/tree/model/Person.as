@@ -19,6 +19,10 @@ package tree.model {
 
 		public var photoSmall:String;
 		public var photoBig:String;
+		public var isNew:Boolean = false;
+
+		private var _editable:Boolean = false;// флаг, который игнорируется, если false и форсированно используется, если true
+
 		public function photo(size:int = 0):String{
 			if(size == 0){
 				return photoSmall ? photoSmall : photoBig;
@@ -36,9 +40,12 @@ package tree.model {
 		public var maidenName:String;
 		public var birthday:Date = new Date();
 		public var deathday:Date;
+		private var _died:Boolean = false;
 		public var email:String;
 		public var post:String;
 		public var profileUrl:String;
+
+		private var _name:String = 'Undefined';// название ноды, если у него нет ФИО
 
 		public var homePlace:String;
 		public var birthPlace:String;
@@ -71,7 +78,14 @@ package tree.model {
 		}
 
 		public function get name():String {
-			return lastName || firstName ? lastName + ' ' + firstName : uid.toString();
+			return open ? lastName || firstName ? lastName + ' ' + firstName : uid.toString() : _name;
+		}
+
+		public function set name(value:String):void{
+			if(!open)
+				_name = value;
+			else
+				throw new Error("Cant't assign name for open node");
 		}
 
 		public function get fullname():String {
@@ -79,11 +93,16 @@ package tree.model {
 		}
 
 		public function get died():Boolean{
-			return open && deathday != null && !isNaN(deathday.date);
+			return open && (hasDeathdayDate || _died);
 		}
 
 		public function set died(value:Boolean):void{
-			deathday = value ? new Date() : null;
+			if(value){
+				_died = true;
+			}else{
+				_died = false;
+				deathday = null;
+			}
 		}
 
 		public function get readonly():Boolean{
@@ -92,10 +111,6 @@ package tree.model {
 
 		public function get visible():Boolean {
 			return node && node.visible;
-		}
-
-		public function get isNew():Boolean{
-			return !node
 		}
 
 		public function get age():int {
@@ -107,7 +122,19 @@ package tree.model {
 		}
 
 		public function get editable():Boolean{
-			return open && urls.editUrl != null;
+			return uid > 0 && open && _editable;
+		}
+
+		public function set editable(value:Boolean):void{
+			_editable = value;
+		}
+
+		public function get hasBirthdayDate():Boolean{
+			return birthday != null && !isNaN(birthday.time)
+		}
+
+		public function get hasDeathdayDate():Boolean{
+			return deathday != null && !isNaN(deathday.time)
 		}
 	}
 }

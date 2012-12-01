@@ -11,7 +11,8 @@ package tree.view.gui.panel {
 	import tree.Tree;
 
 	import tree.command.Actor;
-	import tree.command.PrintTree;
+import tree.command.GotoLinkCommand;
+import tree.command.PrintTree;
 	import tree.command.view.DepthIndexChanged;
 	import tree.common.Config;
 import tree.model.Model;
@@ -37,7 +38,9 @@ import tree.model.Person;
 			panel.centreRotateButton.left.click.add(onCentre);
 			panel.centreRotateButton.right.click.add(onRotateTree);
 			panel.depthSelector.indexChanged.add(onDepthIndexChanged);
+			panel.savePrintButton.left.click.add(onSaveClicked);
 			panel.savePrintButton.right.click.add(onPrintClicked)
+			panel.optionsButton.click.add(onOptionsClicked);
 		}
 
 		private function onNewOwnerClicked(person:Person):void {
@@ -100,6 +103,14 @@ import tree.model.Person;
 
 		private function onPrintClicked(b:Button):void{
 			new PrintTree().execute();
+		}
+
+		private function onSaveClicked(b:Button):void{
+			new GotoLinkCommand(GotoLinkCommand.LINK, null, model.options.saveUrl).execute();
+		}
+
+		private function onOptionsClicked(b:Button):void{
+			new GotoLinkCommand(GotoLinkCommand.LINK, null, model.options.setupUrl).execute();
 		}
 	}
 }

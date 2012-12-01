@@ -2,8 +2,9 @@ package tree.view.canvas {
 	import com.gskinner.motion.GTween;
 	import com.gskinner.motion.GTweener;
 	import com.somewater.display.Photo;
+import com.somewater.text.EmbededTextField;
 
-	import flash.display.Bitmap;
+import flash.display.Bitmap;
 
 	import flash.display.BitmapData;
 
@@ -40,6 +41,7 @@ import tree.view.gui.Helper;
 		protected var _data:GenNode;
 
 		private var skin:Sprite;
+		private var title:EmbededTextField;
 
 		private var photo:Photo;
 
@@ -112,10 +114,18 @@ import tree.view.gui.Helper;
 			rollUnrollButton = new RollUnrollButton();
 			rollUnrollButton.x = 90;
 			rollUnrollButton.y = 0;
+			rollUnrollButton.visible = false;
 			rollUnrollButton.addEventListener(MouseEvent.CLICK, onRollUnrollClicked);
 			addChild(rollUnrollButton);
 
-			Helper.stylizeText((skin.getChildByName('name_tf') as TextField));
+			EmbededTextField.getEmbededFormat((skin.getChildByName('name_tf') as TextField));
+			title = new EmbededTextField(null, 0xFFFFFF, 12, false, true, false, false, 'center');
+			title.x = skin.getChildByName('name_tf').x;
+			title.y = skin.getChildByName('name_tf').y;
+			title.width = skin.getChildByName('name_tf').width;
+			title.height = skin.getChildByName('name_tf').height;
+			skin.addChild(title);
+			skin.getChildByName('name_tf').parent.removeChild(skin.getChildByName('name_tf'));
 
 			showArrowMenu = new Signal(NodeIcon);
 			hideArrowMenu = new Signal();
@@ -187,7 +197,7 @@ import tree.view.gui.Helper;
 			skin.getChildByName('lock_back').visible = !p.open;
 			skin.getChildByName('male_back').visible = p.open && p.male;
 			skin.getChildByName('female_back').visible = p.open && !p.male;
-			(skin.getChildByName('name_tf') as TextField).text = p.name;
+			title.text = p.name;
 			(skin.getChildByName('dead_mark')).visible = p.died;
 			if(p.open && p.photo(Person.PHOTO_SMALL))
 				Config.loader.serverHandler.download(p.photo(Person.PHOTO_SMALL), onPhotoDownloaded, trace, null);
@@ -374,6 +384,7 @@ import tree.view.gui.Helper;
 		}
 
 		public function showRollUnroll():void{
+			if(!_data.join.associate.open) return;
 			rollUnrollButton.rollState = data.node.slavesUnrolled;
 			rollUnrollButtonSwitched = true;
 			if(!rollUnrollButton.rollState)
@@ -381,6 +392,7 @@ import tree.view.gui.Helper;
 		}
 
 		private function animateRollUnrollButton(show:Boolean):void{
+			if(!_data.join.associate.open) return;
 			if(rollUnrollButton.rollState){
 				if(!rollUnrollButton.visible){
 					rollUnrollButton.visible = true;

@@ -158,6 +158,10 @@ import tree.common.Bus;
 			if(preloader.parent)
 					Config.tooltips.removeChild(preloader);
 		}
+
+		public function get length():Number {
+			return windows.length;
+		}
 	}
 }
 

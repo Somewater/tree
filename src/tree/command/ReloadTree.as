@@ -7,9 +7,11 @@ package tree.command {
 	public class ReloadTree extends Command{
 
 		private var uid:int
+		private var filter:int;
 
-		public function ReloadTree(uid:int) {
+		public function ReloadTree(uid:int, filter:int = -1) {
 			this.uid = uid;
+			this.filter = filter;
 		}
 
 		override public function execute():void {

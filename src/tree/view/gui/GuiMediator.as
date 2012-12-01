@@ -7,10 +7,12 @@ package tree.view.gui {
 	public class GuiMediator extends Mediator{
 
 		private var gui:Gui;
+		public var guiShield:GuiShield;
 		private var controller:GuiController;
 
-		public function GuiMediator(gui:Gui) {
+		public function GuiMediator(gui:Gui, guiShield:GuiShield) {
 			this.gui = gui;
+			this.guiShield = guiShield;
 			this.controller = new GuiController(gui);
 			super(gui);
 

@@ -16,7 +16,9 @@ package tree.view.gui.panel {
 	public class DepthSelector extends UIComponent{
 
 		private static const LABELS:Array = ['DEPTH_ALL', 'DEPTH_PARENTS', 'DEPTH_BRO'];
-		private static const PADDING:int = 5;
+		private static const FIVE:int = 5;
+		private static const PADDING:int = 10;
+		private static const GAP:int = 20;
 
 		private var ground:DisplayObject;
 		private var thumb:Thumb;
@@ -46,13 +48,13 @@ package tree.view.gui.panel {
 				labelsHolder.addChild(l);
 				l.click.add(onLabelClicked);
 				l.x = nextX;
-				l.y = PADDING;
-				nextX += l.width + PADDING;
+				l.y = FIVE;
+				nextX += l.width + GAP;
 				index++;
 			}
 
-			ground.width = nextX + PADDING;
-			thumb.y = PADDING * 0.5;
+			ground.width = nextX + PADDING - GAP;
+			thumb.y = FIVE * 0.5;
 
 			_index = -1
 			this.index = Model.instance.depthIndex;

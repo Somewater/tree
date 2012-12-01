@@ -148,7 +148,7 @@ package tree.view.gui.panel {
 
 			treeSelectorPopupMask.graphics.clear();
 			treeSelectorPopupMask.graphics.beginFill(0);
-			treeSelectorPopupMask.graphics.drawRect(-10, -10, 300, Config.HEIGHT);
+			treeSelectorPopupMask.graphics.drawRect(-10, -10, Config.WIDTH, Config.HEIGHT);
 		}
 
 		public function utilize():void {

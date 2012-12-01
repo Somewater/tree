@@ -1,7 +1,9 @@
 package tree.view.canvas {
 	import flash.geom.Point;
 
-	import tree.command.Actor;
+import tree.Tree;
+
+import tree.command.Actor;
 	import tree.common.Config;
 	import tree.model.Join;
 	import tree.model.Node;
@@ -10,8 +12,10 @@ package tree.view.canvas {
 	import tree.model.lines.Line;
 	import tree.model.lines.LineMatrix;
 	import tree.model.lines.LineMatrixCollection;
+import tree.view.Window;
+import tree.view.WindowsManager;
 
-	public class LineHighlightController extends Actor{
+public class LineHighlightController extends Actor{
 
 		private var canvas:Canvas;
 		private var zoomedPosition:Point = new Point();
@@ -25,7 +29,8 @@ package tree.view.canvas {
 		}
 
 		public function onMouseMove(position:Point):void {
-			if(supressMouseMoveAction)
+			if(supressMouseMoveAction || WindowsManager.instance.length > 0 || canvas.arrowMenu.visible
+					|| Tree.instance.guiShiled.visible)
 				return;
 
 			zoomedPosition = canvas.globalToLocal(position);

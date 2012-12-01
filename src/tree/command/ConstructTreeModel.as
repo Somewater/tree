@@ -10,7 +10,7 @@ package tree.command {
 	import tree.model.JoinType;
 	import tree.model.Model;
 	import tree.model.ModelBase;
-	import tree.model.Node;
+import tree.model.Node;
 	import tree.model.Person;
 	import tree.model.PersonsCollection;
 	import tree.model.TreeModel;
@@ -81,8 +81,9 @@ import tree.signal.ModelSignal;
 				xmlTrees.push(tree);
 			}
 
-			if(xml.setup)
+			if(xml.setup){
 				model.options.read(xml.setup);
+			}
 			model.descending = model.options.defaultOrderDesc
 
 			treePosition = 0;
@@ -144,11 +145,16 @@ import tree.signal.ModelSignal;
 					personModel.maidenName = String(person.fields.field.(@name == "maiden_name"));
 					personModel.birthday = databaseFormatToDate(person.fields.field.(@name == "birthday"));
 					personModel.deathday = databaseFormatToDate(person.fields.field.(@name == "deathday"));
+					personModel.died = String(person.fields.field.(@name == "died")) == '1';
 					personModel.post = String(person.fields.field.(@name == "rel_label"));
 					personModel.profileUrl = String(person.fields.field.(@name == "url"));
 					personModel.homePlace = String(person.fields.field.(@name == "home_place"));
 					personModel.birthPlace = String(person.fields.field.(@name == "birth_place"));
 					personModel.open = String(person.@open) == '1';
+					personModel.editable = String(person.@edit_access) == '1';
+					if(!personModel.open){
+						personModel.name = String(person.@name);
+					}
 
 					personModel.urls = new Urls(person);
 

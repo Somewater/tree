@@ -103,6 +103,7 @@ public class EditPersonProfilePage extends PageBase{
 				comboBox.visible = false;
 
 			editableInfo.setPerson(person, joinType, from);
+			extEditLink.visible = person.urls.editUrl != null;
 			refresh();
 		}
 
@@ -126,11 +127,13 @@ public class EditPersonProfilePage extends PageBase{
 			saveProfileButtonGround.graphics.drawRoundRectComplex(-PADDING * .5, -PADDING * .5, saveProfileButton.width + PADDING, saveProfileButton.height + PADDING, 5,5,5,5);
 
 			cancelEditLink.x = (width - cancelEditLink.width)* 0.5;
-			var canselLinkY:int = saveButtonY + saveProfileButton.height + 10;
+			var canselLinkY:int = saveButtonY + saveProfileButton.height + 15;
 			setYPos(cancelEditLink, canselLinkY, anim)
 
-			extEditLink.x = (width - extEditLink.width) * 0.5;
-			setYPos(extEditLink, canselLinkY + cancelEditLink.textField.height + 10, anim);
+			if(extEditLink.visible){
+				extEditLink.x = (width - extEditLink.width) * 0.5;
+				setYPos(extEditLink, canselLinkY + cancelEditLink.textField.height + 10, anim);
+			}
 		}
 
 		private function setYPos(c:DisplayObject, posY:int, animated:Boolean):void{

@@ -61,6 +61,7 @@ import tree.view.Tweener;
 			}
 
 			var nextY:int = 0;
+			var maxWidth:int = 200;
 			for each(var t:TreeModel in trees){
 				l = new LinkLabel(null, 0x2781C8, 13);
 				l.text = t.name;
@@ -69,12 +70,13 @@ import tree.view.Tweener;
 				l.addEventListener(LinkLabel.LINK_CLICK, onLInkClicked);
 				nextY += 24//l.textField.textHeight + 5;
 				labelsHolder.addChild(l);
+				maxWidth = Math.max(maxWidth, scroller.x * 2 + l.width)
 			}
 
 			labelsHolder.graphics.beginFill(0,0);
 			labelsHolder.graphics.drawRect(0,0,200,nextY)
 
-			setSize(200, Math.min(nextY + scroller.y + 10, 500, Config.HEIGHT - this.y - 15))
+			setSize(Math.min(maxWidth, Config.WIDTH - this.x * 2 - Config.GUI_WIDTH), Math.min(nextY + scroller.y + 10, 500, Config.HEIGHT - this.y - 15))
 		}
 
 		override protected function refresh():void {

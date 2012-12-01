@@ -96,17 +96,17 @@ package tree.command {
 			else
 				calculate(response.node, null, false, false);
 
-			if((nearPersonCounterPerTree > model.options.maxNodesQuantity && currentTree == response.node.person.tree)
+			if(currentTree != response.node.person.tree){
+				currentTree = response.node.person.tree
+				nearPersonCounterPerTree = 0;
+			}
+
+			if((nearPersonCounterPerTree >= model.options.maxNodesQuantity)
 					|| response.node.dist > model.options.maxDepth
 					|| Math.abs(response.node.generation) > model.options.maxGenerationsDepth){
 				farPersonsForDelete.push(response.node.person);
 			}else
 				nearPersonCounterPerTree++;
-
-			if(currentTree != response.node.person.tree){
-				currentTree = response.node.person.tree
-				nearPersonCounterPerTree = 0;
-			}
 		}
 
 		public static function calculate(node:Node, source:Node, flatten:Boolean, breed:Boolean):void{

@@ -147,6 +147,9 @@ import tree.signal.ViewSignal;
 				RecalculateNodes.calculate(node, from.node, join.flatten, join.breed);
 			}
 
+			person.isNew = false;
+			person.editable = true;// можно редактировать, но неизвестна ссылка на расширенное редактирование, загрузку фото и т.д.
+
 			if(!newPerson)
 				bus.dispatch(ViewSignal.REDRAW_JOIN_LINES, person);
 			else if(newTree)

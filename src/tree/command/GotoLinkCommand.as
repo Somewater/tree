@@ -16,20 +16,30 @@ public class GotoLinkCommand extends Command{
 
 	public static const GOTO_EDIT_PHOTO:String = 'gotoEditPhoto';
 
+	public static const LINK:String = 'link';
+
 	public var person:Person;
 	public var type:String;
+	public var invokedLink:String;
 
 
 
-	public function GotoLinkCommand(type:String, person:Person) {
+	public function GotoLinkCommand(type:String, person:Person = null, link:String = null) {
 		this.type = type;
 		this.person = person;
+		this.invokedLink = link;
+		if((person && link) || (!person && !link))
+			throw new Error("Wrong params type. Must be only one: person or link");
 	}
 
 	override public function execute():void {
-		var link:String;
+		var link:String = null;
 
 		switch (type){
+			case LINK:
+				link = invokedLink;
+				break;
+
 			case GOTO_PROFILE:
 				link = person.profileUrl;
 				break;

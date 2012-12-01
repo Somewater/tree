@@ -52,6 +52,8 @@ public class PersonProfilePage extends PageBase{
 		private var livePlaceLabels:Labels;
 		//private var ageLabels:Labels;
 
+		private var deadMark:DisplayObject;
+
 		public function PersonProfilePage() {
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 200, 200);
 			addChild(photo);
@@ -101,6 +103,9 @@ public class PersonProfilePage extends PageBase{
 			addChild(livePlaceLabels);
 			//ageLabels = new Labels();
 			//addChild(ageLabels);
+
+			deadMark = Config.loader.createMc('assets.DeadMark');
+			addChild(deadMark);
 		}
 
 		override public function get pageName():String {
@@ -157,6 +162,10 @@ public class PersonProfilePage extends PageBase{
 			}
 
 			super.refresh();
+
+			deadMark.x = photo.x + photo.width - deadMark.width;
+			deadMark.y = photo.y - 1;
+			addChild(deadMark);
 		}
 
 		internal function onPersonSelected(person:Person):void{
@@ -181,13 +190,15 @@ public class PersonProfilePage extends PageBase{
 			postField.visible = !!person.post;
 			postField.text = formattedIfEmpty(person.post);
 
-			bornLabels.visible = showBirthday && person.birthday && !isNaN(person.birthday.date);
+			bornLabels.visible = showBirthday && person.hasBirthdayDate
 			bornLabels.title = showBirthday//(person.male ? I18n.t('MALE_BORN_FROM') : I18n.t('FEMALE_BORN_FROM')) + ':';
 			bornLabels.value = formattedBirthday(person.birthday);
 
-			diedLabels.visible = showDeathdat && person.died;
+			diedLabels.visible = showDeathdat && person.died && person.hasDeathdayDate;
 			diedLabels.title = showDeathdat//(person.male ? I18n.t('MALE_DEAD') : I18n.t('FEMALE_DEAD')) + ':';
 			diedLabels.value = formattedBirthday(person.deathday);
+
+			deadMark.visible = person.died;
 
 			bornPlaceLabels.visible = showBirthPlace && person.birthPlace;
 			bornPlaceLabels.title = showBirthPlace//(person.male ? I18n.t('BORN_PLACE_MALE') : I18n.t('BORN_PLACE_FEMALE'));

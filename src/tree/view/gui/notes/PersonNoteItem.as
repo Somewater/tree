@@ -272,10 +272,13 @@ import flash.display.DisplayObject;
 import flash.display.Sprite;
 import flash.events.Event;
 
+import tree.command.GotoLinkCommand;
+
 import tree.common.Config;
 
 import tree.common.IClear;
 import tree.model.Model;
+import tree.signal.AppSignal;
 import tree.signal.ViewSignal;
 import tree.view.Tweener;
 
@@ -288,15 +291,15 @@ class NoteContextMenu extends Sprite implements IClear{
 	private var background:DisplayObject;
 	private var actionsHolder:Sprite;
 
-	private static const ACTIONS:Array = [
-		{text: "SEND_MESSAGE"}
+	private var ACTIONS:Object = {
+		message: {text: "SEND_MESSAGE", action: gotoSendMessage }
 		,
-		{text: "FOCUSING", action: "centreOnNode"}
+		focus: {text: "FOCUSING", action: centreOnNode }
 		,
-		{text: "GOTO_PAGE"}
+		page: {text: "GOTO_PAGE", action: gotoPage}
 		,
-		{text: "GOTO_FAMILY_LIST"}
-	];
+		familyTree: {text: "GOTO_FAMILY_LIST", action: gotoFamilyList}
+	};
 
 	public function NoteContextMenu(note:PersonNoteItem){
 		this.note = note;
@@ -336,9 +339,15 @@ class NoteContextMenu extends Sprite implements IClear{
 
 	private function constructLabels():void{
 		clearActions();
+
+		ACTIONS['message'].disabled = !note.data.urls.messageUrl;
+		ACTIONS['page'].disabled = !note.data.profileUrl;
+
 		var l:LinkLabel;
 		var nextY:int;
-		for each(var data:Object in ACTIONS){
+		for each(var data:Object in ACTIONS)
+		{
+			if(!data || data.disabled) continue;
 			l = new LinkLabel(null, 0x2881C6, 11);
 			actionsHolder.addChild(l);
 			l.x = 14;
@@ -362,11 +371,23 @@ class NoteContextMenu extends Sprite implements IClear{
 	private function onAction(event:Event):void {
 		var l:LinkLabel = event.currentTarget as LinkLabel;
 		var data:Object = l.data;
-		if(data && data.action && this.hasOwnProperty(data.action))
-			this[data.action]();
+		if(data && data.action && data.action is Function)
+			data.action();
 	}
 
 	private function centreOnNode():void{
 		Model.instance.bus.dispatch(ViewSignal.PERSON_CENTERED, note.data);
+	}
+
+	private function gotoSendMessage():void{
+		new GotoLinkCommand(GotoLinkCommand.GOTO_MESSAGE, note.data).execute();
+	}
+
+	private function gotoPage():void{
+		new GotoLinkCommand(GotoLinkCommand.GOTO_PROFILE, note.data).execute();
+	}
+
+	private function gotoFamilyList():void{
+		Model.instance.bus.dispatch(AppSignal.RELOAD_TREE, note.data.uid);
 	}
 }
