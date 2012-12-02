@@ -18,11 +18,14 @@ package tree.loader {
 	import flash.text.TextFormat;
 	import flash.utils.getDefinitionByName;
 
-	public class Preloader extends MovieClip{
+import preloader.LeafPreloaderAnimation;
+
+public class Preloader extends MovieClip{
 
 		public var loaderName:String = 'TreeLoader';
-		private var textField:TextField;
-		private var progressbar:Shape;
+		//private var textField:TextField;
+		//private var progressbar:Shape;
+		private var movie:MovieClip;
 
 		public function Preloader() {
 			if(stage)
@@ -40,7 +43,7 @@ package tree.loader {
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 
-			progressbar = new Shape();
+/*			progressbar = new Shape();
 			addChild(progressbar);
 
 			textField = new TextField();
@@ -57,7 +60,12 @@ package tree.loader {
 			textField.text = '0%';
 
 			progressbar.x = textField.x + textField.width * 0.5;
-			progressbar.y = textField.y + textField.height * 0.5 + 30;
+			progressbar.y = textField.y + textField.height * 0.5 + 30;*/
+
+			movie = new LeafPreloaderAnimation();
+			addChild(movie);
+			movie.x = (stage.stageWidth - movie.width) * 0.5;
+			movie.y = (stage.stageHeight - movie.height) * 0.5;
 
 			updateProgress();
 			addEventListener(Event.ENTER_FRAME, updateProgress);
@@ -70,7 +78,9 @@ package tree.loader {
 			else
 			{
 				var value:Number = (loaderInfo.bytesLoaded / loaderInfo.bytesTotal);
-				textField.text = int(int(value * 1000) * 0.1) + '%';
+
+
+				/*textField.text = int(int(value * 1000) * 0.1) + '%';
 
 				var w:int = 100;
 				var h:int = 40;
@@ -90,13 +100,18 @@ package tree.loader {
 						i++;
 					else
 						this.removeChildAt(i);
-				}
+				}*/
+
+				if(isNaN(value)) value = 0
+				movie.gotoAndStop(int(movie.totalFrames * Math.min(value, 0.999)) + 1)
 			}
 		}
 
 		private function onComplete(event:Event = null):void
 		{
 			removeEventListener(Event.ENTER_FRAME, updateProgress);
+			if(movie.hasOwnProperty('clear'))
+				movie.clear();
 			this.stop();
 			start();
 		}
