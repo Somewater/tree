@@ -5,7 +5,7 @@ FAMILY=Семья
 RELATIVES=Родственники
 OK=OK
 SERVER_ERROR=Ошибка
-SERVER_RESPONSE=Ответ сервера
+SERVER_RESPONSE=Семейное дерево
 # родстченник для
 RELATIVE_BY={relative} для {name}
 PROFILE=Профиль
