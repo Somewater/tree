@@ -157,6 +157,7 @@ import tree.signal.ModelSignal;
 					}
 
 					personModel.urls = new Urls(person);
+					personModel.fields.read(person.fields);
 
 					nodeModel = treeModel.nodes.allocate(personModel) ;
 					treeModel.nodes.add(nodeModel);

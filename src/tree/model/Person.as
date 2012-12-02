@@ -54,6 +54,8 @@ package tree.model {
 
 		public  var open:Boolean = true;
 
+		public var fields:PersonFields = new PersonFields();
+
 		public function Person(tree:TreeModel) {
 			this.tree = tree;
 		}

@@ -1,7 +1,8 @@
 package tree.view.gui {
 	import com.somewater.display.CorrectSizeDefinerSprite;
+import com.somewater.text.Hint;
 
-	import flash.display.Sprite;
+import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 
@@ -23,6 +24,8 @@ package tree.view.gui {
 		protected var _height:Number;
 
 		private var clickFlag:Boolean = false;
+
+		private var _hint:String;
 
 		public function UIComponent() {
 			over = new Signal(UIComponent);
@@ -120,6 +123,19 @@ package tree.view.gui {
 
 		override public function set height(value:Number):void {
 			setSize(this.width, value);
+		}
+
+
+		public function get hint():String {
+			return _hint;
+		}
+
+		public function set hint(value:String):void {
+			_hint = value;
+			if(value)
+				Hint.bind(this, _hint);
+			else
+				Hint.removeHint(this);
 		}
 	}
 }

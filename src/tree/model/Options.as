@@ -70,8 +70,12 @@ public class Options {
 	// ассоциативный массив полей, которые следует показывать в профайле
 	public function get displayFields():Array{
 		var s:String = getProp('display_fields', PersonProfilePage.DEFAULT_DISPLAY_FIELDS);
+		return parseDisplayFields(s);
+	}
+
+	public function parseDisplayFields(str:String):Array{
 		var arr:Array = [];
-		for each(var pairs:String in s.split(',')){
+		for each(var pairs:String in str.split(',')){
 			var pair:Array = pairs.split('=');
 			arr[pair[0]] = pair[1];
 		}

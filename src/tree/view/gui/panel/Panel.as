@@ -97,6 +97,16 @@ package tree.view.gui.panel {
 
 			this.addEventListener(MouseEvent.ROLL_OVER, onMouseOver);
 			this.addEventListener(MouseEvent.ROLL_OUT, onMouseOut);
+
+			savePrintButton.left.hint = I18n.t('HINT_SAVE_BTN')
+			savePrintButton.right.hint = I18n.t('HINT_PRINT_BTN')
+
+			centreRotateButton.left.hint = I18n.t('HINT_CENTRE_BTN')
+			centreRotateButton.right.hint = I18n.t('HINT_ROTATE_BTN')
+
+			optionsButton.hint = I18n.t('HINT_OPTIONS_BTN')
+			fullscreenButton.hint = I18n.t('HINT_FULLSCREEN_BTN')
+			saveTreeButton.hint = I18n.t('HINT_SAVE_TREE_BTN')
 		}
 
 		private function onLinkClicked(event:Event):void {

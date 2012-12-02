@@ -30,6 +30,9 @@ public class PersonProfilePage extends PageBase{
 			return s;
 		};
 
+		public static const LABELS_PADDING_X:int = 20;
+		public static const PADDING:int = 10;
+
 		public static const NAME:String = 'PersonProfilePage';
 
 		private var photo:Photo;
@@ -51,6 +54,8 @@ public class PersonProfilePage extends PageBase{
 		private var bornPlaceLabels:Labels;
 		private var livePlaceLabels:Labels;
 		//private var ageLabels:Labels;
+
+		private var optionalLabels:OptionalLabels;
 
 		private var deadMark:DisplayObject;
 
@@ -106,6 +111,9 @@ public class PersonProfilePage extends PageBase{
 
 			deadMark = Config.loader.createMc('assets.DeadMark');
 			addChild(deadMark);
+
+			optionalLabels = new OptionalLabels();
+			addChild(optionalLabels);
 		}
 
 		override public function get pageName():String {
@@ -118,11 +126,10 @@ public class PersonProfilePage extends PageBase{
 			editProfile.clear();
 			viewProfile.clear();
 			viewTree.clear();
+			optionalLabels.clear();
 		}
 
 		override protected function refresh():void {
-			const PADDING:int = 10;
-
 			var elements:Array = [
 					nameField,
 					editProfile,
@@ -146,14 +153,15 @@ public class PersonProfilePage extends PageBase{
 					livePlaceLabels
 			];
 
+			if(!optionalLabels.empty) elements.push(optionalLabels);
+
 			nameField.width = _width - 2 * PADDING;
 
 			var nextY:int = 0;
-			var paddingX:int = 20;
 			for each(var elem:Object in elements){
 				if(elem is DisplayObject){
 					if(!DisplayObject(elem).visible) continue;
-					DisplayObject(elem).x = paddingX;
+					DisplayObject(elem).x = LABELS_PADDING_X;
 					DisplayObject(elem).y = nextY;
 					nextY += DisplayObject(elem).height + PADDING;
 					addChild(elem as DisplayObject);
@@ -211,6 +219,8 @@ public class PersonProfilePage extends PageBase{
 			//ageLabels.title = (person.male ? I18n.t('AGE_MALE') : I18n.t('AGE_FEMALE'));
 			//ageLabels.value = formattedIfEmpty(person.age > 0 ? person.age.toString() : null);
 
+			optionalLabels.setData(person);
+
 			refresh();
 		}
 
@@ -235,21 +245,56 @@ public class PersonProfilePage extends PageBase{
 
 import com.somewater.text.EmbededTextField;
 
+import flash.display.GradientType;
+
 import flash.display.MovieClip;
+import flash.display.Shape;
+import flash.display.Sprite;
+import flash.geom.Matrix;
+
+import tree.common.Config;
+import tree.common.IClear;
+import tree.model.Model;
+import tree.model.Person;
 
 import tree.view.gui.IconButton;
 import tree.view.gui.UIComponent;
+import tree.view.gui.profile.PersonProfilePage;
 
 class Labels extends UIComponent{
 
 	private var _label1_tf:EmbededTextField;
 	private var _label2_tf:EmbededTextField;
+	private var shadowMask:Shape;
 
 	public function Labels(){
+		var holder:Sprite = new Sprite();
 		_label1_tf = new EmbededTextField(null, 0, 11, true);
-		addChild(_label1_tf);
-		_label2_tf = new EmbededTextField(null, 0, 11, false, true);
-		addChild(_label2_tf);
+		holder.addChild(_label1_tf);
+		_label2_tf = new EmbededTextField(null, 0, 11, false);
+		_label2_tf.autoSize = 'left';
+		holder.addChild(_label2_tf);
+		addChild(holder);
+
+		var maskWidth:int = Config.GUI_WIDTH - PersonProfilePage.LABELS_PADDING_X * 1.5;
+		var maskHeight:int = 100;
+		shadowMask = new Shape();
+		addChild(shadowMask);
+		var mat:Matrix= new Matrix();
+		var colors:Array=[0,0];
+		var alphas:Array=[1,0];
+		var ratios:Array=[230,255];
+		mat.createGradientBox(maskWidth, maskHeight);
+		shadowMask.graphics.lineStyle();
+		shadowMask.graphics.beginGradientFill(GradientType.LINEAR,colors,alphas,ratios,mat);
+		shadowMask.graphics.drawRect(0,0,maskWidth, maskHeight);
+		shadowMask.graphics.endFill();
+		holder.mask = shadowMask;
+		shadowMask.cacheAsBitmap = holder.cacheAsBitmap = true;
+
+		_width = maskWidth;
+		graphics.beginFill(0,0)
+		graphics.drawRect(0,0,_width,20)
 	}
 
 	public function set title(v:String):void{
@@ -260,6 +305,10 @@ class Labels extends UIComponent{
 	public function set value(v:String):void{
 		_label2_tf.text = v;
 		refresh();
+		if(_label2_tf.x + _label2_tf.width > _width + 5)
+			hint = _label2_tf.text;
+		else
+			hint = null;
 	}
 
 	public function get title():String {return _label1_tf.text;}
@@ -272,7 +321,11 @@ class Labels extends UIComponent{
 			_label2_tf.x = _label1_tf.x + _label1_tf.width + 5;
 		else
 			_label2_tf.x = L1_WIDTH;
-		_label2_tf.width = _width - _label2_tf.x;
+		//_label2_tf.width = _width - _label2_tf.x;
+	}
+
+	override public function get height():Number {
+		return Math.max(_label1_tf.height, _label2_tf.height);
 	}
 }
 
@@ -285,8 +338,54 @@ class IconButtonCustom extends IconButton{
 	override public function set movie(value:MovieClip):void {
 		super.movie = value;
 		if(value){
-			value.x = (30 - value.width) * 0.5;
+			value.x = (17 - value.width) * 0.5;
 			refresh();
 		}
+	}
+}
+
+class OptionalLabels extends UIComponent implements IClear{
+
+	private var labels:Array = [];
+
+	public function OptionalLabels(){
+
+	}
+
+	override public function clear():void{
+		super.clear();
+		removeLabels();
+	}
+
+	private function removeLabels():void{
+		for each(var l:Labels in labels){
+			if(l.parent) l.parent.removeChild(l);
+			l.clear();
+		}
+		labels = [];
+	}
+
+	public function setData(person:Person):void{
+		removeLabels();
+
+		var nextY:int = 0;
+
+		var m:Model = Model.instance;
+		var standartFields:Array = m.options.parseDisplayFields(PersonProfilePage.DEFAULT_DISPLAY_FIELDS);
+		var allFeilds:Array = m.options.displayFields;
+		for(var fieldName:String in allFeilds)
+			if(!standartFields[fieldName] && person.fields.has(fieldName)){
+				var l:Labels = new Labels();
+				l.title = allFeilds[fieldName];
+				l.value = person.fields.get(fieldName);
+				addChild(l);
+				l.y = nextY;
+				nextY += l.height + PersonProfilePage.PADDING;
+				labels.push(l);
+			}
+	}
+
+	public function get empty():Boolean {
+		return labels.length == 0;
 	}
 }

@@ -114,3 +114,11 @@ FIELD_LIVE_PLACE=Место проживания
 FIELD_DEATHDAY=Дата смерти
 #
 DELETE_PERSON_ACCEPT=Вы действительно хотите удалить "{name}" из семейного дерева?
+# HINTS
+HINT_SAVE_BTN=Сохранить
+HINT_PRINT_BTN=Распечатать дерево
+HINT_CENTRE_BTN=Центрировать дерево
+HINT_ROTATE_BTN=Перевернуть дерево
+HINT_OPTIONS_BTN=Настройки
+HINT_FULLSCREEN_BTN=Развернуть на весь экран
+HINT_SAVE_TREE_BTN=Сохранить дерево

@@ -9,8 +9,9 @@ package com.somewater.text
 {
 	import com.gskinner.motion.GTween;
 	import com.gskinner.motion.GTweener;
+import com.somewater.display.CorrectSizeDefinerSprite;
 
-	import flash.display.DisplayObject;
+import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.display.Sprite;
@@ -20,8 +21,9 @@ package com.somewater.text
 	import flash.utils.Dictionary;
 
 	import tree.common.Config;
+import tree.view.ShadeGround;
 
-	public class Hint extends Sprite
+public class Hint extends CorrectSizeDefinerSprite
 	{
 		public static var PADDING:int = 5;// сколько пикселей от края есть всегда
 		public static var HORIZONTAL_PADDING:int = 20;// отступ от мышки (чтобы курсор не загораживал подсказку)
@@ -44,9 +46,7 @@ package com.somewater.text
 			else
 				_instance = this;
 			
-			ground = new Sprite();//Lib.createMC("interface.HintGround");
-			ground.graphics.beginFill(0xFFFFFF);
-			ground.graphics.drawRect(0,0,100,100);
+			ground = new ShadeGround(1.7);//Lib.createMC("interface.HintGround");
 			addChild(ground);
 			
 			textField = new EmbededTextField(null,0x124D18,14,true,true,false,false,"center");
