@@ -122,3 +122,7 @@ HINT_ROTATE_BTN=Перевернуть дерево
 HINT_OPTIONS_BTN=Настройки
 HINT_FULLSCREEN_BTN=Развернуть на весь экран
 HINT_SAVE_TREE_BTN=Сохранить дерево
+# PRINT DIAG WND
+PRINT_WND_TEXT=Выберите, какое дерево нужно распечатать: обычное, как Вы его видите, или красиво оформленное специально для печати
+PRINT_WND_NORMAL=Обычное
+PRINT_WND_EXTERNAL=Оформленное для печати

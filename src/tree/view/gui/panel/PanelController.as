@@ -1,8 +1,9 @@
 package tree.view.gui.panel {
 	import com.gskinner.motion.GTween;
 	import com.gskinner.motion.GTweener;
+import com.somewater.storage.I18n;
 
-	import flash.display.DisplayObject;
+import flash.display.DisplayObject;
 
 	import flash.events.MouseEvent;
 
@@ -23,8 +24,11 @@ import tree.model.Person;
 	import tree.signal.ViewSignal;
 	import tree.view.Tweener;
 	import tree.view.gui.Button;
+import tree.view.window.AcceptWindow;
+import tree.view.window.TitleTextWindow;
+import tree.view.window.TitleTextWindow;
 
-	public class PanelController extends Actor{
+public class PanelController extends Actor{
 
 		private var panel:Panel;
 
@@ -102,7 +106,17 @@ import tree.model.Person;
 		}
 
 		private function onPrintClicked(b:Button):void{
-			new PrintTree().execute();
+			var w:AcceptWindow = new AcceptWindow(I18n.t('ATTENTION'), I18n.t('PRINT_WND_TEXT'), function():void{
+				// обычное
+				new PrintTree().execute();
+			}, function():void{
+				// внешнее
+				new GotoLinkCommand(GotoLinkCommand.GOTO_PRINT_EXTERNAL, model.owner).execute();
+			});
+			w.yesButton.label = I18n.t('PRINT_WND_NORMAL');
+			w.noButton.label = I18n.t('PRINT_WND_EXTERNAL');
+			w.noButton.width = 180;
+			w.open();
 		}
 
 		private function onSaveClicked(b:Button):void{

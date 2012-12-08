@@ -13,6 +13,8 @@ import nid.ui.controls.datePicker.iconSprite;
 import org.osflash.signals.ISignal;
 import org.osflash.signals.Signal;
 
+import tree.Tree;
+
 import tree.model.Join;
 
 import tree.model.JoinType;
@@ -20,6 +22,7 @@ import tree.model.Model;
 import tree.model.Node;
 
 import tree.model.Person;
+import tree.model.TreeModel;
 
 import tree.view.gui.TreeComboBox;
 import tree.view.gui.UIComponent;
@@ -91,7 +94,14 @@ public class PersonComboBox extends UIComponent{
 	public function setPerson(person:Person, joinType:JoinType, from:Person):void {
 		personItems = [new DPItem(person, true)];
 		var fromNode:Node = from.node;
-		for each(var p:Person in from.tree.persons.iterator)
+		var all:Array = [];
+		var p:Person;
+
+		for each(var t:TreeModel in Model.instance.trees.iterator)
+			for each(p in t.persons.iterator)
+				all.push(p);
+
+		for each(p in all)
 			if(p != from && !from.relation(p)){
 				var canAdd:Boolean = false;
 

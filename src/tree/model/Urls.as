@@ -6,6 +6,8 @@ public class Urls {
 	public var messageUrl:String;
 	public var inviteUrl:String;
 
+	private var uid:int;
+
 	public function Urls(person:XML = null) {
 		if(person){
 			editUrl = person.fields.field.(@name == "edit_url");
@@ -18,7 +20,13 @@ public class Urls {
 			if(!editPhotoUrl) editPhotoUrl = null;
 			if(!messageUrl) messageUrl = null;
 			if(!inviteUrl) inviteUrl = null;
+
+			this.uid = person.@uid;
 		}
+	}
+
+	public function get printUrl():String{
+		return "http://www.familyspace.ru/print_tree/" + uid;
 	}
 }
 }

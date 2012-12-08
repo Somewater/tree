@@ -164,6 +164,8 @@ import tree.view.gui.panel.Panel;
 			bus.initialLoadingProgress.add(onInitialLoadingProgress);
 
 			Join.initializeConstants();
+
+			Config.debug = Config.loader.flashVars['debug'] && String(Config.loader.flashVars['debug']) != '0' && String(Config.loader.flashVars['debug']) != 'false';
 		}
 
 		private function configurateView():void {

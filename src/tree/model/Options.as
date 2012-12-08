@@ -11,16 +11,6 @@ public class Options {
 		flashVars = Config.loader.flashVars || {};
 	}
 
-	private function getProp(name:String, defaultVal:*):*{
-		if(serverValues[name] !== undefined)
-			return defaultVal is Number ? parseFloat(serverValues[name]) : serverValues[name];
-
-		if(flashVars[name] !== undefined)
-			return flashVars[name]
-
-		return defaultVal;
-	}
-
 	/**
 	 * Минимальная продолжительность анимации, при которой работает твинер
 	 * Т.е. анимация, требующее временную величину меньше указанной,  происходит "мгновенно"
@@ -55,10 +45,13 @@ public class Options {
 
 	/**
 	 * Минимальный и максимальный размер зума дерева
+	 * Размер, выставляемый по умолчанию при старте флешки
+	 * При каком минимальном размере всё еще отображать кнопку "Действия"
 	 */
 	public function get zoomMin():Number { return parseFloat(getProp('zoomMin', 10)) * 0.01; }
 	public function get zoomMax():Number { return parseFloat(getProp('zoomMax', 100)) * 0.01; }
 	public function get defaultZoom():Number { return parseFloat(getProp('zoom', 100)) * 0.01; }
+	public function get actionBtnZoomSeparator():Number { return parseFloat(getProp('actionBtnZoomSeparator', 80)) * 0.01; }
 
 	/**
 	 * Параметры, отвечающие за отказ от построения части нод, если дерево излишне большое
@@ -85,7 +78,7 @@ public class Options {
 	/**
 	 * Направление роста дерева по умолчанию
 	 */
-	public function get defaultOrderDesc():Boolean{ return getProp('mode', 'asc') == 'asc'; }// нисходящее (DESC) дерево по умолчанию (на сервере всё перепутали)
+	public function get defaultOrderDesc():Boolean{ return getProp('mode', 'asc') == 'asc'; }// изначально препутал, defaultOrderDesc=true на самом деле рисует восходящее дерево, учитываю эту багу
 
 	/**
 	 * Анимация построения (сворачивания-разворачивания, при редактировании и т.д.) работает
@@ -108,6 +101,16 @@ public class Options {
 			var oValue:String = option.toString();
 			serverValues[oName] = oValue;
 		}
+	}
+
+	private function getProp(name:String, defaultVal:*):*{
+		if(serverValues[name] !== undefined)
+			return defaultVal is Number ? parseFloat(serverValues[name]) : serverValues[name];
+
+		if(flashVars[name] !== undefined)
+			return flashVars[name]
+
+		return defaultVal;
 	}
 }
 }

@@ -49,7 +49,7 @@ import tree.view.gui.Helper;
 
 		protected var tmpPoint:Point;
 
-		//private var debugTrace:TextField;
+		private var debugTrace:TextField;
 
 		public var click:ISignal;
 		public var dblClick:ISignal;
@@ -95,14 +95,14 @@ import tree.view.gui.Helper;
 
 			tmpPoint = new Point();
 
-//			CONFIG::debug{
-//				debugTrace = new TextField();
-//				debugTrace.wordWrap = debugTrace.multiline = true;
-//				debugTrace.selectable = false;
-//				debugTrace.width = Canvas.ICON_WIDTH;
-//				debugTrace.filters = [new DropShadowFilter(1, 45, 0xFFFFFF, 1, 1, 1, 2)]
-//				skin.addChild(debugTrace);
-//			}
+			if(Config.debug){
+				debugTrace = new TextField();
+				debugTrace.wordWrap = debugTrace.multiline = true;
+				debugTrace.selectable = false;
+				debugTrace.width = Canvas.ICON_WIDTH;
+				debugTrace.filters = [new DropShadowFilter(1, 45, 0xFFFFFF, 1, 1, 1, 2)]
+				skin.addChild(debugTrace);
+			}
 
 			addEventListener(MouseEvent.CLICK, onClicked);
 			addEventListener(MouseEvent.DOUBLE_CLICK, onDblCliced);
@@ -138,8 +138,6 @@ import tree.view.gui.Helper;
 			addChild(contextMenuBtn);
 
 			cacheAsBitmap = true;
-			//graphics.beginFill(0xFF0000);
-			//graphics.drawRect(0, 0, Canvas.ICON_WIDTH, Canvas.ICON_HEIGHT);
 		}
 
 		private var lastClickTick:uint = 0;
@@ -202,12 +200,11 @@ import tree.view.gui.Helper;
 			if(p.open && p.photo(Person.PHOTO_SMALL))
 				Config.loader.serverHandler.download(p.photo(Person.PHOTO_SMALL), onPhotoDownloaded, trace, null);
 			rollUnrollButton.male = _data.node.person.male;
-//			CONFIG::debug{
-//				debugTrace.text = p.node.id + "\nx=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
-//						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
-//						+ "\ndist=" + p.node.dist;
-//			}
-			//draw();
+			if(Config.debug){
+				debugTrace.text = p.node.id + "\nx=" + p.node.x + " y=" + p.node.y + "\nv=" + p.node.vector + " vc="
+						+ p.node.vectCount + "\nlvl=" + p.node.level + " gen=" + p.node.generation
+						+ "\ndist=" + p.node.dist;
+			}
 		}
 
 		private function onPhotoDownloaded(photo:*):void {
@@ -426,6 +423,7 @@ import tree.view.gui.Helper;
 
 		private function showContextMenuBtn():void{
 			if(!data.join.associate.editable) return;
+			if(Model.instance.zoom < Model.instance.options.actionBtnZoomSeparator) return;
 			contextMenuBtn.visible = true;
 			Tweener.to(contextMenuBtn, 0.2, {alpha: 1}, {onComplete: onArrowShowed});
 		}

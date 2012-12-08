@@ -68,5 +68,13 @@ public class AcceptWindow extends TitleTextWindow{
 		cancelButton.x = okButton.x + okButton.width + 15;
 		cancelButton.y = okButton.y;
 	}
+
+	public function get yesButton():Button{
+		return okButton;
+	}
+
+	public function get noButton():Button{
+		return cancelButton;
+	}
 }
 }

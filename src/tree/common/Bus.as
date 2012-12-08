@@ -74,6 +74,7 @@ package tree.common {
 
 			mouseUp = new BusSignal(this, 'mouseUp');
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			stage.addEventListener(Event.MOUSE_LEAVE, onMouseUp);
 
 			mouseMove = new BusSignal(this, 'mouseMove');
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -122,12 +123,10 @@ package tree.common {
 			}
 		}
 
-		private function onMouseUp(event:MouseEvent):void {
-			if(Tree.instance.mouseOnCanvas()){
-				tmpPoint.x =  Tree.instance.mouseX;
-				tmpPoint.y =  Tree.instance.mouseY;
-				mouseUp.dispatch(tmpPoint);
-			}
+		private function onMouseUp(event:Event):void {
+			tmpPoint.x =  Tree.instance.mouseX;
+			tmpPoint.y =  Tree.instance.mouseY;
+			mouseUp.dispatch(tmpPoint);
 		}
 
 		private function onMouseMove(event:MouseEvent):void {

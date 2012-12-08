@@ -26,6 +26,8 @@ package tree.common {
 		public static var stage:Stage;
 		public static var ticker:ITicker;
 
+		public static var debug:Boolean = false;
+
 		public static function reject(clazz:Class, singletone:Object):void {
 			singletones[clazz] = singletone;
 		}

@@ -16,6 +16,8 @@ public class GotoLinkCommand extends Command{
 
 	public static const GOTO_EDIT_PHOTO:String = 'gotoEditPhoto';
 
+	public static const GOTO_PRINT_EXTERNAL:String = 'gotoPrintExternal';
+
 	public static const LINK:String = 'link';
 
 	public var person:Person;
@@ -58,6 +60,10 @@ public class GotoLinkCommand extends Command{
 
 			case GOTO_EDIT_PHOTO:
 				link = person.urls.editPhotoUrl;
+				break;
+
+			case GOTO_PRINT_EXTERNAL:
+				link = person.urls.printUrl;
 				break;
 		}
 
