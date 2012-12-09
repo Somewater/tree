@@ -47,6 +47,8 @@ package tree.signal {
 
 		public static const REDRAW_JOIN_LINES:String = 'RedrawJoinLines';// обновить линии связей отдельной ноды callback(p:Person)
 
+		public static const HAND_CHANGED:String = 'handChanged';// изменился тип расстановки нод (автоматический/ручной)
+
 
 
 

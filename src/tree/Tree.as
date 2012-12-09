@@ -278,6 +278,7 @@ import tree.view.gui.panel.Panel;
 
 		public function utilize():void {
 			canvas.utilize();
+			(Config.inject(CanvasController) as CanvasController).utilize();
 			gui.utilize();
 			panel.utilize();
 		}

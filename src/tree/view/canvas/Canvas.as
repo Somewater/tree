@@ -44,6 +44,8 @@ import tree.view.gui.UIComponent;
 		public var showActionBtnIfHighlight:Boolean = false;
 		public var arrowMenu:ContextMenu;
 
+		public var canDrag:Boolean = true;
+
 		public function Canvas() {
 			generationsHolder = new Sprite();
 			addChild(generationsHolder);
@@ -366,6 +368,10 @@ import tree.view.gui.UIComponent;
 
 		public function getPrintSize(area:Sprite):Rectangle{
 			return new Rectangle(-1000, -1000, 1000, 1000);
+		}
+
+		public function bringToFront(n:NodeIcon):void {
+			nodesHolder.addChild(n);
 		}
 	}
 }

@@ -5,13 +5,16 @@ package tree.view.canvas {
 	import flash.events.Event;
 	import flash.geom.Point;
 
-	import tree.command.Actor;
+import nid.ui.controls.datePicker.iconSprite;
+
+import tree.command.Actor;
 	import tree.command.Command;
 import tree.command.GotoLinkCommand;
 import tree.command.edit.RemovePerson;
 import tree.common.Config;
 	import tree.common.Config;
-	import tree.model.GenNode;
+import tree.manager.ITick;
+import tree.model.GenNode;
 	import tree.model.Generation;
 	import tree.model.Generation;
 	import tree.model.Join;
@@ -20,7 +23,8 @@ import tree.common.Config;
 	import tree.model.Model;
 	import tree.model.Node;
 	import tree.model.Person;
-	import tree.signal.ModelSignal;
+import tree.signal.DragSignal;
+import tree.signal.ModelSignal;
 	import tree.signal.ViewSignal;
 import tree.view.Tweener;
 import tree.view.canvas.JoinLine;
@@ -31,6 +35,9 @@ public class CanvasController extends Actor{
 
 		private var canvas:Canvas;
 		private var lineController:LineHighlightController;
+
+		private var handDragNode:NodeIcon;
+		private var handDragNodeStartPos:Point = new Point();
 
 		public function CanvasController(canvas:Canvas) {
 			this.canvas = canvas;
@@ -63,6 +70,7 @@ public class CanvasController extends Actor{
 				n.rollUnrollClick.add(onNodeRolUnrollClicked);
 				n.over.add(onNodeOver);
 				n.out.add(onNodeOut);
+				n.mouseDownChange.add(onDragChanged);
 				n.showArrowMenu.add(onShowArrowMenu);
 				n.hideArrowMenu.add(onHideArrowMenu);
 			}
@@ -413,7 +421,63 @@ public class CanvasController extends Actor{
 		private function onPersonHighlighted(person:Person = null):void{
 			canvas.highlightNode(person);
 		}
-	}
+
+		// без параметров -  отмена драга
+		private function onDragChanged(n:NodeIcon = null):void{
+			if(model.hand){
+				if(n && n.mouseDown){
+					canvas.canDrag = false;
+					canvas.bringToFront(n);
+					bus.drag.add(onNodeDragged);
+					handDragNode = n;
+					n.calcDirectPosition = true;
+					handDragNodeStartPos.x = n.x;
+					handDragNodeStartPos.y = n.y;
+				}else{
+					canvas.canDrag = true;
+					bus.drag.remove(onNodeDragged);
+					if(n && n == handDragNode){
+						n.calcDirectPosition = false;
+						checkHandMovement(n, handDragNodeStartPos);
+					}
+					handDragNode = null;
+				}
+			}
+		}
+
+		private function onNodeDragged(signal:DragSignal):void{
+			handDragNode.x += signal.delta.x;
+			handDragNode.y += signal.delta.y;
+			var n:Node = handDragNode.data.node;
+			refreshNodeLines(n);
+		}
+
+		public function utilize():void {
+			handDragNode = null;
+			onDragChanged();
+		}
+
+		private function checkHandMovement(node:NodeIcon, startPos:Point):void{
+			var n:Node = node.data.node;
+			node.calcDirectPosition = true;
+			Tweener.to(node, 0.3, {x: startPos.x,  y: startPos.y}, {onChange: function(g:GTween = null):void{
+				refreshNodeLines(n);
+			}, onComplete: function(g:GTween = null):void{
+				refreshNodeLines(n);
+				node.calcDirectPosition = false;
+			}})
+		}
+
+		private function refreshNodeLines(n:Node):void{
+			// обновить конфигурацию линиц ноды (без анимации)
+			for each(var j:Join in n.iterator){
+				var l:JoinLine = canvas.getJoinLine(j.from.uid, j.associate.uid);
+				if(l != null){
+					l.show(false);
+				}
+			}
+		}
+}
 }
 class Rect{
 			public var x:Number = 0;

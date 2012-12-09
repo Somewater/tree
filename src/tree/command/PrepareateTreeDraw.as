@@ -15,6 +15,9 @@ package tree.command {
 				model.animationTime = Math.min(maxTimeForOne, maxTimeForAll / number);
 			else
 				model.animationTime = 0;
+			if(!model.owner.editable || !model.options.handPermitted)
+				model.hand = false;
+			model.handLog.clear();
 		}
 	}
 }

@@ -17,6 +17,8 @@ package tree.view.canvas {
 	 */
 	public class LineBase extends Sprite implements IClear{
 
+		public static const MOVE_TO_FLAG:String = 'mtf';
+
 		protected var _progress:Number = -1;
 		protected var fromStart:Boolean = true;
 		protected var dashed:Boolean = false;
@@ -120,14 +122,23 @@ package tree.view.canvas {
 			var shiftX:int = this.shiftX * SHIFT_MULTIPLIER;
 			var shiftY:int;
 			var linlen:int = line.length - 2;
+			var moveToFlag:Boolean = false;
 			while(i <= linlen && l < length) {
+				if(line[i] == MOVE_TO_FLAG){
+					moveToFlag = true;
+					i += 1
+					continue;
+				}
 				x = line[i];
 				y = line[i + 1];
 				var dist:int = 0;
 				shiftY = i == 0 || i == linlen ? 0 : this.shiftY * SHIFT_MULTIPLIER;
-				if(i == 0){
-					graphics.clear();
-					configurateLine();
+				if(i == 0 || moveToFlag){
+					if(i == 0){
+						graphics.clear();
+						configurateLine();
+					}else
+						moveToFlag = false;
 					graphics.moveTo(x + shiftX, y + shiftY);
 				}else{
 					var dx:int = x - lastX;

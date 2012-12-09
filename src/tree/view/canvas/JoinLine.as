@@ -31,6 +31,9 @@ import tree.model.lines.LineMatrixCollection;
 
 		private var animationHash:String;// hash ранее построенной геометрии линии
 
+		private var lastAddedLineX:int;
+		private var lastAddedLineY:int;
+
 
 		public function JoinLine(collection:INodeViewCollection) {
 			this.collection = collection;
@@ -118,18 +121,21 @@ import tree.model.lines.LineMatrixCollection;
 			var node1:Person = n1.data.join.associate;
 			var node2:Person = n2.data.join.associate;
 			lineMask = 0;
+			lastAddedLineX = int.MAX_VALUE;
+			lastAddedLineY = int.MAX_VALUE;
 
 			var joinSuperType:String = _data.type.superType;
 			if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
 				p1 = node1.male ? n1.husbandPoint() : n1.wifePoint();
 				p2 = node2.male ? n2.husbandPoint() : n2.wifePoint();
-				if(p1.y != p2.y || (node1.male && p1.x > p2.x) || (node2.male && p2.x > p1.x)){
+				if(Math.abs(p1.y - p2.y) > Canvas.ICON_HEIGHT * 0.4 || (node1.male && p1.x > p2.x) || (node2.male && p2.x > p1.x)){
 					addExMarryLine(n1,  n2);
 				}else{
 					addToLines(p1);
 					p1.x = (p1.x + p2.x) * 0.5 + shiftX;
 					addToLines(p1);
-					addToLines(p2);
+					p1.x = p2.x;
+					addToLines(p1);
 				}
 			}else if(joinSuperType == JoinType.SUPER_TYPE_PARENT || joinSuperType == JoinType.SUPER_TYPE_BREED){
 				var p2IsParent:Boolean = (int(this.fromStart) ^ int(joinSuperType == JoinType.SUPER_TYPE_PARENT)) == 0;
@@ -192,6 +198,11 @@ import tree.model.lines.LineMatrixCollection;
 		private function addToLines(p:Point):void{
 			var x:int = p.x;
 			var y:int = p.y;
+			if(x == lastAddedLineX && y == lastAddedLineY) return
+			else{
+				lastAddedLineX = x;
+				lastAddedLineY = y;
+			}
 			var l:int = lines.length;
 			if(l)
 				linesLength += Math.sqrt(Math.pow(x - lines[l - 2], 2) + Math.pow(y - lines[l - 1], 2));
@@ -205,12 +216,18 @@ import tree.model.lines.LineMatrixCollection;
 		}
 
 		override protected function drawLine(line:Array, length:int):void {
+			const iconHalfSize:int = 6.5;
+			var iconX:int;
+			var x1:int;
+			var x2:int;
+			var y:int;
+			const SHIFT_MULTIPLIER:int = 5;
+
 			if(drawIcon){
-				var x1:int = line[0];
-				var x2:int = line[4];
-				var y:int = line[1];
-				var iconX:int = line[2];
-				const iconHalfSize:int = 6.5;
+				x1 = line[0];
+				x2 = line[4];
+				y = line[1];
+				iconX = line[2];
 
 				graphics.clear();
 				configurateLine();
@@ -241,8 +258,8 @@ import tree.model.lines.LineMatrixCollection;
 						}
 						icon.visible = true;
 					}
-					icon.x = iconX;
-					icon.y = y;
+					icon.x = iconX + this.shiftX * SHIFT_MULTIPLIER;
+					icon.y = y //+ this.shiftY * SHIFT_MULTIPLIER;// KLUDGE
 					lineModelCollection.addIcon(data, iconX, y);
 				}else{
 					// иконка должна быть скрыта
@@ -250,8 +267,33 @@ import tree.model.lines.LineMatrixCollection;
 						icon.visible = false;
 					lineModelCollection.removeIcon(data);
 				}
-			}else
+			}else{
+				if(icon && icon.visible){
+					if((line.length == 8) || (line.length == 6)){
+						// иконка уже создана, нужно ее отпозиционировать, а также "порвать" среднюю линию посередине
+						if(line.length == 6) line.splice(2,2);// вырезаем среднюю (из трех) точку, т.к. она лежит посередине
+						var pos:int = line.length == 8 ? 4 : 2;// позиция более дальней точки из двух, внутри которых лежит точка иконки
+						x1 = line[pos - 2];
+						x2 = line[pos];
+						y = line[pos - 1];
+						iconX = Math.min(x1, x2) + Math.abs(x1 - x2) * 0.5;
+						icon.x = iconX + this.shiftX * SHIFT_MULTIPLIER;
+						icon.y = y //+ this.shiftX * SHIFT_MULTIPLIER; // KLUDGE
+
+						// пробелы около сердца
+						if(x1 < x2){
+							x1 = iconX - iconHalfSize;
+							x2 = iconX + iconHalfSize;
+						}else{
+							x1 = iconX + iconHalfSize;
+							x2 = iconX - iconHalfSize;
+						}
+						line.splice(pos, 0, x1, y, LineBase.MOVE_TO_FLAG, x2, y);
+
+					}
+				}
 				super.drawLine(line, length);
+			}
 		}
 
 		public function setShift(shiftX:int, shiftY:int = 0):void{

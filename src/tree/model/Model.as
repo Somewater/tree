@@ -58,6 +58,9 @@ package tree.model {
 
 		public var options:Options = new Options();
 
+		private var _hand:Boolean = false;
+		public var handLog:HandMovingLog = new HandMovingLog();
+
 		public function Model(bus:Bus) {
 			if(instance)
 				throw new Error('Must be only one');
@@ -235,6 +238,17 @@ package tree.model {
 
 		public function get descendingInt():int{
 			return _descending ? 1 : -1
+		}
+
+		public function get hand():Boolean {
+			return _hand;
+		}
+
+		public function set hand(value:Boolean):void {
+			if(_hand != value){
+				_hand = value;
+				bus.dispatch(ViewSignal.HAND_CHANGED);
+			}
 		}
 	}
 }

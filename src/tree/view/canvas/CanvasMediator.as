@@ -111,13 +111,15 @@ package tree.view.canvas {
 		}
 
 		private function onDrag(signal:DragSignal):void {
+			if(!canvas.canDrag) return;
 			canvas.x += signal.delta.x;
 			canvas.y += signal.delta.y;
 			controller.onCanvasDragged();
 			canvas.refreshNodesVisibility();
 		}
 
-		private function onStopDrag(signal:DragSignal):void{
+		public function onStopDrag(signal:DragSignal):void{
+			if(!canvas.canDrag) return;
 			controller.align();
 		}
 

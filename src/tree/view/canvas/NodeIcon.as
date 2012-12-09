@@ -55,6 +55,11 @@ import tree.view.gui.Helper;
 		public var dblClick:ISignal;
 		public var over:ISignal;
 		public var out:ISignal;
+		public var down:ISignal;
+		public var up:ISignal;
+		public var mouseDown:Boolean = false;
+		public var mouseDownChange:ISignal;
+		public var calcDirectPosition:Boolean = false;// в расчетах ф-ции position() не высчитывать желаемую, а выдавать фактическую
 
 		public var rollUnrollClick:ISignal;
 		private var rollUnrollButton:RollUnrollButton;
@@ -92,6 +97,9 @@ import tree.view.gui.Helper;
 			dblClick = new Signal(NodeIcon);
 			over = new Signal(NodeIcon);
 			out = new Signal(NodeIcon);
+			up = new Signal(NodeIcon);
+			down = new Signal(NodeIcon);
+			mouseDownChange = new Signal(NodeIcon);
 
 			tmpPoint = new Point();
 
@@ -105,6 +113,8 @@ import tree.view.gui.Helper;
 			}
 
 			addEventListener(MouseEvent.CLICK, onClicked);
+			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			addEventListener(MouseEvent.DOUBLE_CLICK, onDblCliced);
 			this.doubleClickEnabled = true;
 			addEventListener(MouseEvent.MOUSE_OVER, onOver);
@@ -167,6 +177,9 @@ import tree.view.gui.Helper;
 				return;
 
 			out.dispatch(this);
+			if(mouseDown){
+				onMouseUp()
+			}
 			if(rollUnrollButtonSwitched && rollUnrollButton.rollState){
 				rollUnrollButton.visible = false;
 			}
@@ -249,6 +262,8 @@ import tree.view.gui.Helper;
 			removeEventListener(MouseEvent.DOUBLE_CLICK, onDblCliced);
 			removeEventListener(MouseEvent.MOUSE_OVER, onOver);
 			removeEventListener(MouseEvent.MOUSE_OUT, onOut);
+			removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			rollUnrollButton.clear();
 			rollUnrollButton.removeEventListener(MouseEvent.CLICK, onRollUnrollClicked);
 			click.removeAll();
@@ -257,6 +272,9 @@ import tree.view.gui.Helper;
 			rollUnrollClick.removeAll()
 			over.removeAll();
 			out.removeAll();
+			up.removeAll();
+			down.removeAll();
+			mouseDownChange.removeAll();
 			showArrowMenu.removeAll();
 			hideArrowMenu.removeAll();
 			contextMenuBtn.clear();
@@ -337,10 +355,15 @@ import tree.view.gui.Helper;
 		}
 
 		public function position():Point {
+			if(calcDirectPosition){
+				tmpPoint.x = this.x;
+				tmpPoint.y = this.y;
+			}else{
 			var node:Node = this._data.node;
 			var generation:Generation = this._data.generation;
 			tmpPoint.x = (node.x + node.person.tree.shiftX) * Canvas.ICON_WIDTH_SPACE;
 			tmpPoint.y = (generation.getY(Model.instance.descending) + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
+			}
 			return tmpPoint;
 		}
 
@@ -464,6 +487,22 @@ import tree.view.gui.Helper;
 			rollUnrollButton.visible = rubVisible;
 			this.filters = filters;
 			return bmp;
+		}
+
+		public function onMouseDown(event:Event):void{
+			if(!mouseDown){
+				mouseDown = true;
+				down.dispatch(this);
+				mouseDownChange.dispatch(this);
+			}
+		}
+
+		public function onMouseUp(event:Event = null):void{
+			if(mouseDown){
+				mouseDown = false;
+				up.dispatch(this);
+				mouseDownChange.dispatch(this);
+			}
 		}
 	}
 }

@@ -95,6 +95,8 @@ public class Options {
 	 */
 	public function get saveUrl():String { return getProp('save_url', null); }
 
+	public function get handPermitted():Boolean { var val:String = String(getProp('handPermitted', 'true')); return val != '0' && val != 'false'; }
+
 	public function read(setup:XMLList):void {
 		for each(var option:XML in setup.*){
 			var oName:String = String(option.@name);

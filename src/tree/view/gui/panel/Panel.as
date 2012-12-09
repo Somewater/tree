@@ -18,7 +18,8 @@ package tree.view.gui.panel {
 	import tree.view.Tweener;
 
 	import tree.view.gui.Button;
-	import tree.view.gui.UIComponent;
+import tree.view.gui.StandartButton;
+import tree.view.gui.UIComponent;
 
 	public class Panel extends Sprite{
 
@@ -33,6 +34,7 @@ package tree.view.gui.panel {
 		public var depthSelector:DepthSelector;
 		public var zoomSlider:ZoomSlider;
 		public var saveTreeButton:BlueButton;
+		public var changeHand:Button;
 
 		public var ownerNameClick:ISignal;
 		public var treeSelectorPopup:TreeSelectorPopup;
@@ -85,6 +87,11 @@ package tree.view.gui.panel {
 			addChild(saveTreeButton);
 			saveTreeButton.label = I18n.t('SAVE_TREE');
 
+			changeHand = new StandartButton();
+			changeHand.visible = false;
+			changeHand.width = 160;
+			addChild(changeHand);
+
 			treeSelectorPopup = new TreeSelectorPopup();
 			Config.tooltips.addChild(treeSelectorPopup);
 			treeSelectorPopup.visible = false;
@@ -124,6 +131,9 @@ package tree.view.gui.panel {
 
 			saveTreeButton.x = w - 30 - saveTreeButton.width;
 			saveTreeButton.y = 15;
+
+			changeHand.x = saveTreeButton.x - 30 - changeHand.width;
+			changeHand.y =  saveTreeButton.y;
 
 			var nextX:int = 30;
 			var nextY:int = 50;

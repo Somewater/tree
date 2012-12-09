@@ -36,6 +36,7 @@ public class PanelController extends Actor{
 			this.panel = panel;
 
 			bus.addNamed(ViewSignal.TREE_SELECTED, onTreeSelected);
+			bus.addNamed(ViewSignal.HAND_CHANGED, onHandChanged);
 			Config.stage.addEventListener(MouseEvent.CLICK, onMouseDown);
 			panel.ownerNameClick.add(onOwnerNameClicked);
 			panel.treeSelectorPopup.linkClick.add(onNewOwnerClicked);
@@ -45,6 +46,10 @@ public class PanelController extends Actor{
 			panel.savePrintButton.left.click.add(onSaveClicked);
 			panel.savePrintButton.right.click.add(onPrintClicked)
 			panel.optionsButton.click.add(onOptionsClicked);
+			panel.changeHand.click.add(onChangeHandClick);
+
+			panel.saveTreeButton.visible = false;
+			panel.changeHand.visible = false;
 		}
 
 		private function onNewOwnerClicked(person:Person):void {
@@ -91,6 +96,18 @@ public class PanelController extends Actor{
 		private function onTreeSelected(_tree:TreeModel):void{
 			panel.setOwner(_tree.owner);
 			panel.treeOwnerNameTFLinked = Model.instance.trees.length > 1;
+			onHandChanged();
+		}
+
+		private function onHandChanged():void{
+			if(model.owner.editable){
+				panel.saveTreeButton.visible = model.hand;
+				panel.changeHand.visible = model.options.handPermitted;
+				panel.changeHand.label = model.hand ? I18n.t('HAND_MODE') : I18n.t('AUTO_MODE');
+			}else{
+				panel.saveTreeButton.visible = false;
+				panel.changeHand.visible = false;
+			}
 		}
 
 		private function onDepthIndexChanged(index:int):void{
@@ -125,6 +142,10 @@ public class PanelController extends Actor{
 
 		private function onOptionsClicked(b:Button):void{
 			new GotoLinkCommand(GotoLinkCommand.LINK, null, model.options.setupUrl).execute();
+		}
+
+		private function onChangeHandClick(b:Button):void{
+			model.hand = !model.hand;
 		}
 	}
 }
