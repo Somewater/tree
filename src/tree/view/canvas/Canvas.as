@@ -1,7 +1,8 @@
 package tree.view.canvas {
-	import com.gskinner.motion.GTweener;
+import com.gskinner.motion.GTween;
+import com.gskinner.motion.GTweener;
 
-	import flash.display.Bitmap;
+import flash.display.Bitmap;
 
 	import flash.display.BitmapData;
 
@@ -12,26 +13,26 @@ import flash.geom.Matrix;
 import flash.geom.Point;
 	import flash.geom.Rectangle;
 
-	import tree.common.Config;
+import tree.common.Config;
 
 	import tree.model.GenNode;
 	import tree.model.Join;
 	import tree.model.Model;
 	import tree.model.Node;
 import tree.model.Person;
+import tree.view.Tweener;
 import tree.view.gui.UIComponent;
 
 	public class Canvas extends UIComponent implements INodeViewCollection {
 
 		public static const ICON_WIDTH:int = 90;
 		public static const ICON_HEIGHT:int = 125;
+		public static const HEIGHT_SPACE:int = 50;
 		public static const ICON_WIDTH_SPACE:int = (ICON_WIDTH + 50) * 0.5;
-		public static const ICON_HEIGHT_SPACE:int = 50;
 		public static const LEVEL_HEIGHT:int = ICON_HEIGHT + HEIGHT_SPACE;
 		public static const JOIN_BREED_STICK:int = 20;
 		public static const JOIN_STICK:int = 8;
 
-		public static const HEIGHT_SPACE:int = 50;
 		private var nodesByUid:Array = [];
 		private var joindByUid:Array = [];
 		private var nodesHolder:Sprite;
@@ -46,6 +47,8 @@ import tree.view.gui.UIComponent;
 
 		public var canDrag:Boolean = true;
 
+		private var canvasRules:CanvasRules;
+
 		public function Canvas() {
 			generationsHolder = new Sprite();
 			addChild(generationsHolder);
@@ -57,6 +60,8 @@ import tree.view.gui.UIComponent;
 			addChild(nodesHolder);
 
 			arrowMenu = new ContextMenu();
+
+			canvasRules = new CanvasRules();
 		}
 
 		override public function setSize(w:int, h:int):void {
@@ -308,7 +313,11 @@ import tree.view.gui.UIComponent;
 		}
 
 		public function refreshAllJoinLines():void {
-			for each(var j:JoinLine  in joindByUid)
+			var j:JoinLine
+			for each(j  in joindByUid)
+				j.removeFromLineMatrix();
+
+			for each(j  in joindByUid)
 				j.show(false)
 		}
 
@@ -372,6 +381,60 @@ import tree.view.gui.UIComponent;
 
 		public function bringToFront(n:NodeIcon):void {
 			nodesHolder.addChild(n);
+		}
+
+		/**
+		 * @return Массив нод, которые пересекает текущая нода
+		 */
+		private function checkNodePositionCollide(n:NodeIcon):Array{
+			var result:Array = [];
+			for each(var node:NodeIcon in nodesByUid){
+				if(node != n){
+
+				}
+			}
+			return result;
+		}
+
+		public function set rulesVisibility(visible:Boolean):void{
+			if(visible){
+				if(!canvasRules.parent){
+					addChildAt(canvasRules, this.getChildIndex(generationsHolder) + 1);
+					refreshRules();
+
+					canvasRules.alpha = 0;
+					Tweener.to(canvasRules, 0.3, {alpha:1})
+				}
+			}else{
+				if(canvasRules.parent){
+					Tweener.to(canvasRules, 0.3, {alpha: 0}, {onComplete: detachCanvasRules})
+				}
+			}
+		}
+
+		private function detachCanvasRules(g:GTween = null):void{
+			canvasRules.parent.removeChild(canvasRules);
+		}
+
+		public function refreshRules():void{
+			var scale:Number = this.scaleX;
+			var minX:int = -this.x / scale;
+			var minY:int = -this.y / scale;
+			var maxX:int = minX + Model.instance.contentWidth / scale;
+			var maxY:int = minY + Config.HEIGHT / scale;
+
+			minX -= Canvas.ICON_WIDTH;
+			minY -= Canvas.ICON_HEIGHT;
+
+			// привзка к ближайшим линиям сетки
+			const xStep:int = Canvas.ICON_WIDTH_SPACE;
+			const yStep:int = Canvas.LEVEL_HEIGHT;
+			minX = int(minX / xStep) * xStep;
+			maxX = int(maxX / xStep) * xStep;
+			minY = int(minY / yStep) * yStep;
+			maxY = int(maxY / yStep) * yStep;
+
+			canvasRules.refresh(minX, minY, maxX, maxY, xStep, yStep);
 		}
 	}
 }

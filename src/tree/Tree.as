@@ -42,7 +42,8 @@ import tree.command.edit.StartProfileEditing;
 	import tree.command.view.CalculateNextNodeRollUnroll;
 	import tree.command.view.CompleteTreeDraw;
 	import tree.command.view.ContinueTreeDraw;
-	import tree.command.view.RecalculateNodeRollUnroll;
+import tree.command.view.HandChangeViewRefresh;
+import tree.command.view.RecalculateNodeRollUnroll;
 	import tree.command.view.RefreshNodePositions;
 	import tree.command.view.ShowNode;
 	import tree.command.view.HideNode;
@@ -242,6 +243,8 @@ import tree.view.gui.panel.Panel;
 			bus.addCommand(ModelSignal.EDIT_PROFILE, EditProfile);
 			bus.addCommand(ViewSignal.START_EDIT_PERSON, StartProfileEditing);
 			bus.addCommand(ViewSignal.DESCENDING_CHANGED, RefreshNodePositions);
+
+			bus.addCommand(ViewSignal.HAND_CHANGED, HandChangeViewRefresh);
 		}
 
 

@@ -3,7 +3,8 @@ package tree.view.canvas {
 	import com.gskinner.motion.GTweener;
 
 	import flash.events.Event;
-	import flash.geom.Point;
+import flash.geom.Point;
+import flash.geom.Point;
 
 import nid.ui.controls.datePicker.iconSprite;
 
@@ -11,6 +12,7 @@ import tree.command.Actor;
 	import tree.command.Command;
 import tree.command.GotoLinkCommand;
 import tree.command.edit.RemovePerson;
+import tree.command.view.RefreshTrees;
 import tree.common.Config;
 	import tree.common.Config;
 import tree.manager.ITick;
@@ -37,7 +39,10 @@ public class CanvasController extends Actor{
 		private var lineController:LineHighlightController;
 
 		private var handDragNode:NodeIcon;
-		private var handDragNodeStartPos:Point = new Point();
+		private var handDragNodeStartPos:Point = new Point();// координаты в пикселах
+		private var handDragNodeStartCoords:Point = new Point();// координаты в handX, handY
+		private var errorHighlightedNode:NodeIcon;
+		private var tmpPoint:Point = new Point();
 
 		public function CanvasController(canvas:Canvas) {
 			this.canvas = canvas;
@@ -192,6 +197,9 @@ public class CanvasController extends Actor{
 							linetToRefresh.push(l)
 					}
 			}
+
+			for each(l in linetToRefresh)
+				l.removeFromLineMatrix();
 
 			for each(l in linetToRefresh){
 				if(l.nodesIsDead()) l.hide()
@@ -433,23 +441,103 @@ public class CanvasController extends Actor{
 					n.calcDirectPosition = true;
 					handDragNodeStartPos.x = n.x;
 					handDragNodeStartPos.y = n.y;
+					handDragNodeStartCoords.x = n.data.node.handX;
+					handDragNodeStartCoords.y = n.data.node.handY;
+					canvas.rulesVisibility = true;
 				}else{
 					canvas.canDrag = true;
 					bus.drag.remove(onNodeDragged);
 					if(n && n == handDragNode){
 						n.calcDirectPosition = false;
-						checkHandMovement(n, handDragNodeStartPos);
+						if(checkNodePositionCollide(n.data.node) != null)
+							setHandPosByMovement(n, handDragNodeStartCoords.x, handDragNodeStartCoords.y);// откатиться до стартовой
+						else
+							setHandPosByMovement(n, n.data.node.handX, n.data.node.handY);// коректная позиция
+
 					}
+					if(errorHighlightedNode) errorHighlightedNode.errorHighlight = false;
+					errorHighlightedNode = null;
+					handDragNode.errorHighlight = false;
 					handDragNode = null;
+					canvas.rulesVisibility = false;
 				}
 			}
 		}
 
+		/**
+		 * Массив нод, которые пересекает текущая нода
+		 * @return
+		 */
+		private function checkNodePositionCollide(n:Node):Node{
+			var hand:Boolean = Model.instance.hand
+			var nPos:Point = n.position(hand);
+			// todo: итерация по нодам поколения, а не всем подряд
+			for each(var p:Person in model.trees.iteratorForAllPersons()){
+				var n2:Node = p.node;
+				if(n2 != n && n.generation == n2.generation){
+					var n2Pos:Point = n2.position(hand);
+					var dx:int = n2Pos.x - nPos.x;
+					var dy:int = n2Pos.y - nPos.y;
+					if((dx < 0 ? -dx : dx) < 2 && (dy < 0 ? -dy : dy) < 1)
+						return n2;
+				}
+			}
+			return null;
+		}
+
 		private function onNodeDragged(signal:DragSignal):void{
-			handDragNode.x += signal.delta.x;
-			handDragNode.y += signal.delta.y;
-			var n:Node = handDragNode.data.node;
-			refreshNodeLines(n);
+			var dx:Number = signal.totalDelta.x;
+			var dy:Number = signal.totalDelta.y;
+			var posChanged:Boolean = false;
+			var node:Node = handDragNode.data.node;
+			var p:Point;
+
+			if(dx * dx + dy * dy > 10 * 10){
+				handDragNode.x = handDragNodeStartPos.x - signal.totalDelta.x;
+				handDragNode.y = handDragNodeStartPos.y - signal.totalDelta.y;
+
+				tmpPoint.x = Math.round(handDragNode.x / Canvas.ICON_WIDTH_SPACE) * Canvas.ICON_WIDTH_SPACE;
+				tmpPoint.y = Math.round(handDragNode.y / Canvas.LEVEL_HEIGHT) * Canvas.LEVEL_HEIGHT;
+
+				// привзка
+				dx = handDragNode.x - tmpPoint.x;
+				dy = handDragNode.y - tmpPoint.y;
+				if((dx < 0 ? -dx : dx) < 5) handDragNode.x = tmpPoint.x;
+				if((dy < 0 ? -dy : dy) < 5) handDragNode.y = tmpPoint.y;
+
+				p = handDragNode.coordsByPosition(tmpPoint);
+				node.handX = p.x;
+				node.handY = p.y;
+				posChanged = true;
+			}else if(handDragNode.x != handDragNodeStartPos.x || handDragNode.y != handDragNodeStartPos.y){
+				handDragNode.x = handDragNodeStartPos.x;
+				handDragNode.y = handDragNodeStartPos.y;
+				node.handX = handDragNodeStartCoords.x;
+				node.handY = handDragNodeStartCoords.y;
+				posChanged = true;
+			}
+
+			if(posChanged){
+				new RefreshTrees().execute();
+				refreshNodeLines(handDragNode.data.node);
+				var errorNode:Node = checkNodePositionCollide(node);
+				var errorNodeIcon:NodeIcon;
+				if(errorNode)
+					errorNodeIcon = canvas.getNodeIcon(errorNode.uid);
+				handDragNode.errorHighlight = errorNode != null;
+				if(errorNodeIcon){
+					if(errorHighlightedNode != errorNodeIcon){
+						if(errorHighlightedNode)errorHighlightedNode.errorHighlight = false;
+						errorHighlightedNode = errorNodeIcon;
+						errorHighlightedNode.errorHighlight = true;
+					}
+				}else{
+					if(errorHighlightedNode){
+						errorHighlightedNode.errorHighlight = false;
+						errorHighlightedNode = null;
+					}
+				}
+			}
 		}
 
 		public function utilize():void {
@@ -457,10 +545,19 @@ public class CanvasController extends Actor{
 			onDragChanged();
 		}
 
-		private function checkHandMovement(node:NodeIcon, startPos:Point):void{
+		private function setHandPosByMovement(node:NodeIcon, newHandX:int, newHandY:int):void{
 			var n:Node = node.data.node;
-			node.calcDirectPosition = true;
-			Tweener.to(node, 0.3, {x: startPos.x,  y: startPos.y}, {onChange: function(g:GTween = null):void{
+
+			// параметры деревьев и поколений
+			n.handX = newHandX;
+			n.handY = newHandY;
+			new RefreshTrees().execute();
+
+			node.calcDirectPosition = false;
+			var nodeIconPos:Point = node.position();
+
+			Tweener.to(node, 0.3, {x: nodeIconPos.x,  y: nodeIconPos.y}, {onChange: function(g:GTween = null):void{
+				node.calcDirectPosition = true;// для плавной анимации линий
 				refreshNodeLines(n);
 			}, onComplete: function(g:GTween = null):void{
 				refreshNodeLines(n);
@@ -470,12 +567,31 @@ public class CanvasController extends Actor{
 
 		private function refreshNodeLines(n:Node):void{
 			// обновить конфигурацию линиц ноды (без анимации)
-			for each(var j:Join in n.iterator){
-				var l:JoinLine = canvas.getJoinLine(j.from.uid, j.associate.uid);
+			var joinsForRefresh:Array = [];
+			var j:Join;
+			for each(j in n.iterator){
+				joinsForRefresh.push(j);
+			}
+			var marry:Person = n.marry;
+			if(marry && marry.node){ // связи с детьми строятся только от однго из родиетелей, поэтому их нужнов ычислить и также обновить
+				var legitimBreed:Array = n.person.legitimateBreed;
+				for each(j in marry.node.iterator)
+					if(j.type.superType == JoinType.SUPER_TYPE_BREED && legitimBreed.indexOf(j.associate) != -1)
+						joinsForRefresh.push(j);
+			}
+
+			var joinLinesForRefresh:Array = [];
+			var l:JoinLine;
+			for each(j in joinsForRefresh){
+				l = canvas.getJoinLine(j.from.uid, j.associate.uid);
 				if(l != null){
-					l.show(false);
+					joinLinesForRefresh.push(l);
+					l.removeFromLineMatrix();
 				}
 			}
+
+			for each(l in joinLinesForRefresh)
+				l.show(false);
 		}
 }
 }

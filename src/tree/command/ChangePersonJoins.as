@@ -1,5 +1,6 @@
 package tree.command {
-	import tree.model.Join;
+import tree.manager.Logic;
+import tree.model.Join;
 	import tree.model.Person;
 
 	public class ChangePersonJoins extends Command{
@@ -34,7 +35,7 @@ package tree.command {
 				join = selectedJoins[0];
 			}
 
-			RecalculateNodes.calculate(person.node, join.associate.node, join.flatten, !join.breed);// инвертируем breed т.к. нам требуется джоин к node а не от нее
+			Logic.calculateNode(person.node, join.associate.node, join.flatten, !join.breed);// инвертируем breed т.к. нам требуется джоин к node а не от нее
 		}
 	}
 }

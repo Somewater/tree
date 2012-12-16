@@ -15,7 +15,7 @@ import tree.model.Person;
 import tree.model.lines.LineMatrixCollection;
 	import tree.model.Node;
 
-	public class JoinLine extends LineBase{
+	public class JoinLine extends JoinLineBase{
 
 		private var _data:Join;
 		private var collection:INodeViewCollection
@@ -33,6 +33,8 @@ import tree.model.lines.LineMatrixCollection;
 
 		private var lastAddedLineX:int;
 		private var lastAddedLineY:int;
+
+		private var tmpPoint:Point = new Point();
 
 
 		public function JoinLine(collection:INodeViewCollection) {
@@ -288,12 +290,20 @@ import tree.model.lines.LineMatrixCollection;
 							x1 = iconX + iconHalfSize;
 							x2 = iconX - iconHalfSize;
 						}
-						line.splice(pos, 0, x1, y, LineBase.MOVE_TO_FLAG, x2, y);
+						line.splice(pos, 0, x1, y, JoinLineBase.MOVE_TO_FLAG, x2, y);
 
 					}
 				}
 				super.drawLine(line, length);
 			}
+		}
+
+		public function get iconPosition():Point{
+			if(icon && icon.visible){
+				tmpPoint.x = icon.x;
+				tmpPoint.y = icon.y;
+				return tmpPoint;
+			}else return null;
 		}
 
 		public function setShift(shiftX:int, shiftY:int = 0):void{
@@ -302,7 +312,7 @@ import tree.model.lines.LineMatrixCollection;
 			show(false);
 		}
 
-		private function removeFromLineMatrix():void{
+		public function removeFromLineMatrix():void{
 			if(lines.length){
 				lineModelCollection.utilize(lines, _data, lineMask);
 				lines = [];

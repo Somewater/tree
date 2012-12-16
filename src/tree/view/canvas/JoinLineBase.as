@@ -15,7 +15,7 @@ package tree.view.canvas {
 	/**
 	 * Умеет анимированно строить ломаную линию
 	 */
-	public class LineBase extends Sprite implements IClear{
+	public class JoinLineBase extends Sprite implements IClear{
 
 		public static const MOVE_TO_FLAG:String = 'mtf';
 
@@ -30,9 +30,9 @@ package tree.view.canvas {
 
 		private var playComplete:Boolean = false;// ф-я play была запущена и отыграла (любая линия связи появляется только так)
 
-		public function LineBase() {
-			complete = new Signal(LineBase);
-			hided = new Signal(LineBase);
+		public function JoinLineBase() {
+			complete = new Signal(JoinLineBase);
+			hided = new Signal(JoinLineBase);
 		}
 
 		public function clear():void {

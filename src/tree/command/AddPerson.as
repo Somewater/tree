@@ -1,5 +1,6 @@
 package tree.command {
-	import tree.model.Join;
+import tree.manager.Logic;
+import tree.model.Join;
 	import tree.model.Node;
 	import tree.model.TreeModel;
 	import tree.signal.ModelSignal;
@@ -33,7 +34,7 @@ package tree.command {
 			request.person = join.associate;
 			call(request);
 
-			RecalculateNodes.calculate(node, join.associate.node, join.flatten, join.breed);
+			Logic.calculateNode(node, join.associate.node, join.flatten, join.breed);
 
 			bus.dispatch(ModelSignal.SHOW_NODE, join);
 		}

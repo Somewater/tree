@@ -59,50 +59,67 @@ package tree.model {
 				n.positionChanged.remove(onNodePositionChanged);
 			}
 
-			const PADDING:int = 2;// если 0, то на самом деле будет наложение, поэтому никак не меньше 1
-
 			if(changed){
 				t.visible = true;
 				t.dirty = false;
-				var t2:TreeModel
-				var maxX:int = 0;
-				var minX:int = 0;
-				var forChange:Array = [];
-				for(var i:int = 0;i<array.length;i++){
-					t2 = array[i];
-					if(!t2.visible)
-						continue;
-					changed = false;
+				refresTreesShifts();
+			}
+		}
 
-					if(i != 0){
-						if(i % 2 == 0){
-							// right (positive) shift
-							if(t2.shiftX != maxX + PADDING - t2.minX){
-								t2.shiftX = maxX + PADDING - t2.minX
-								changed = true;
-							}
-						}else{
-							if(t2.shiftX != minX - PADDING - t2.maxX){
-								t2.shiftX = minX - PADDING - t2.maxX
-								changed = true;
-							}
+		public function recalculateTreesBounds():void{
+			for each(var t:TreeModel in array){
+				for each(var n:Node in t.nodes.iterator){
+					if(n.visible && n != n){
+						if(t.maxX < n.x)
+							t.maxX = n.x;
+						if(t.minX > n.x)
+							t.minX = n.x;
+					}
+				}
+			}
+		}
+
+		public function refresTreesShifts():void{
+			const PADDING:int = 2;// если 0, то на самом деле будет наложение, поэтому никак не меньше 1
+			var changed:Boolean = true;
+			var t2:TreeModel
+			var maxX:int = 0;
+			var minX:int = 0;
+			var forChange:Array = [];
+			for(var i:int = 0;i<array.length;i++){
+				t2 = array[i];
+				if(!t2.visible)
+					continue;
+				changed = false;
+
+				if(i != 0){
+					if(i % 2 == 0){
+						// right (positive) shift
+						if(t2.shiftX != maxX + PADDING - t2.minX){
+							t2.shiftX = maxX + PADDING - t2.minX
+							changed = true;
+						}
+					}else{
+						if(t2.shiftX != minX - PADDING - t2.maxX){
+							t2.shiftX = minX - PADDING - t2.maxX
+							changed = true;
 						}
 					}
-
-					if(maxX < t2.maxX + t2.shiftX)
-						maxX = t2.maxX + t2.shiftX;
-					if(minX > t2.minX + t2.shiftX)
-						minX = t2.minX + t2.shiftX;
-
-					if(changed) forChange.push(t2);
 				}
 
-				for each(t2 in forChange){
-					for each(var p:Person in t2.persons.iterator)
-						if(p.node.visible)
-							p.node.firePositionChange();
-							// TODO: сделать мгновеннуюn пересноановку нод и джоин-лайнов (т.к. данная команда делает анимацию)
-				}
+				if(maxX < t2.maxX + t2.shiftX)
+					maxX = t2.maxX + t2.shiftX;
+				if(minX > t2.minX + t2.shiftX)
+					minX = t2.minX + t2.shiftX;
+
+				if(changed) forChange.push(t2);
+			}
+
+			for each(t2 in forChange){
+				for each(var p:Person in t2.persons.iterator)
+					if(p.node.visible)
+						p.node.firePositionChange();
+				// TODO: сделать мгновеннуюn пересноановку нод и джоин-лайнов (т.к. данная команда делает анимацию)
 			}
 		}
 

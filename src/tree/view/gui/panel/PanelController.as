@@ -36,7 +36,7 @@ public class PanelController extends Actor{
 			this.panel = panel;
 
 			bus.addNamed(ViewSignal.TREE_SELECTED, onTreeSelected);
-			bus.addNamed(ViewSignal.HAND_CHANGED, onHandChanged);
+			bus.hand.addWithPriority(onHandChanged);
 			Config.stage.addEventListener(MouseEvent.CLICK, onMouseDown);
 			panel.ownerNameClick.add(onOwnerNameClicked);
 			panel.treeSelectorPopup.linkClick.add(onNewOwnerClicked);

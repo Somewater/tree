@@ -248,6 +248,7 @@ package tree.model {
 			if(_hand != value){
 				_hand = value;
 				bus.dispatch(ViewSignal.HAND_CHANGED);
+				bus.hand.dispatch();
 			}
 		}
 	}

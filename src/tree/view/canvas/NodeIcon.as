@@ -15,7 +15,9 @@ import flash.display.Bitmap;
 	import flash.events.MouseEvent;
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
-	import flash.geom.Point;
+import flash.geom.ColorTransform;
+import flash.geom.Point;
+import flash.geom.Point;
 	import flash.text.TextField;
 
 	import org.osflash.signals.ISignal;
@@ -27,7 +29,8 @@ import tree.loader.Lib;
 import tree.model.GenNode;
 	import tree.model.Generation;
 	import tree.model.Join;
-	import tree.model.Model;
+import tree.model.Model;
+import tree.model.Model;
 
 	import tree.model.Node;
 	import tree.model.Person;
@@ -73,6 +76,7 @@ import tree.view.gui.Helper;
 
 		private var _highlighted:Boolean = false;// рамка (при наведении мышкой)
 		private var _selected:Boolean = false;// glow (при выборе в GUI)
+		private var _errorHighlight:Boolean = false;
 
 		private var bitmap:Bitmap;
 		private var bitmapData:BitmapData;
@@ -324,9 +328,17 @@ import tree.view.gui.Helper;
 			position();
 			if(fullParent(forBreed))
 			{
-				var halfSpase:int = (Canvas.ICON_WIDTH_SPACE * 2 - Canvas.ICON_WIDTH) * 0.5;
-				tmpPoint.x += (_data.node.person.male ? halfSpase + Canvas.ICON_WIDTH: -halfSpase);
-				tmpPoint.y += Canvas.ICON_HEIGHT * 0.5 + (Model.instance.descending ? 6.5 : -6.5 );//  поправка на полуразмер сердечка
+				var coll:INodeViewCollection = Config.inject(INodeViewCollection);
+				var jl:JoinLine = coll.getJoinLine(_data.node.marry.uid, _data.node.uid);
+				var jlIcon:Point;
+				if(jl && (jlIcon = jl.iconPosition)){
+					tmpPoint.x = jlIcon.x;
+					tmpPoint.y = jlIcon.y + (Model.instance.descending ? 6 : -6 );// поправка на полувысоту сердечка
+				}else{
+					var halfSpase:int = (Canvas.ICON_WIDTH_SPACE * 2 - Canvas.ICON_WIDTH) * 0.5;
+					tmpPoint.x += (_data.node.person.male ? halfSpase + Canvas.ICON_WIDTH: -halfSpase);
+					tmpPoint.y += Canvas.ICON_HEIGHT * 0.5 + (Model.instance.descending ? 6.5 : -6.5 );//  поправка на полуразмер сердечка
+				}
 			}else{
 				tmpPoint.x += Canvas.ICON_WIDTH * 0.5;
 				tmpPoint.y += Model.instance.descending ? Canvas.ICON_HEIGHT : 0;
@@ -359,12 +371,21 @@ import tree.view.gui.Helper;
 				tmpPoint.x = this.x;
 				tmpPoint.y = this.y;
 			}else{
-			var node:Node = this._data.node;
-			var generation:Generation = this._data.generation;
-			tmpPoint.x = (node.x + node.person.tree.shiftX) * Canvas.ICON_WIDTH_SPACE;
-			tmpPoint.y = (generation.getY(Model.instance.descending) + generation.normalize(node.level)) * (Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE);
+				var nodePoint:Point = this._data.node.position(Model.instance.hand);
+				tmpPoint.x = nodePoint.x;
+				tmpPoint.y = nodePoint.y;
+				tmpPoint.x *= Canvas.ICON_WIDTH_SPACE;
+				tmpPoint.y *= Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE;
 			}
 			return tmpPoint;
+		}
+
+		public function coordsByPosition(pos:Point = null):Point{
+			var x:Number = pos ? pos.x : this.x;
+			var y:Number = pos ? pos.y : this.y;
+			x /= Canvas.ICON_WIDTH_SPACE;
+			y /= Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE;
+			return this._data.node.paramsByPosition(Model.instance.hand, x, y);
 		}
 
 		public function positionIsDirty():Boolean{
@@ -435,12 +456,7 @@ import tree.view.gui.Helper;
 		public function set selected(value:Boolean):void {
 			if(_selected != value){
 				_selected = value;
-				if(value && _data.node.person.open){
-					var male:Boolean = _data && _data.node.person.male;
-					filters = [new GlowFilter(male ? 0x51BBEC : 0xE79BA7, 1, 12, 12)];
-				} else {
-					filters = [];
-				}
+				refreshFilters();
 			}
 		}
 
@@ -503,6 +519,24 @@ import tree.view.gui.Helper;
 				up.dispatch(this);
 				mouseDownChange.dispatch(this);
 			}
+		}
+
+		public function set errorHighlight(highlight:Boolean):void {
+			if(highlight != _errorHighlight){
+				_errorHighlight = highlight;
+				var redOffset:Number = highlight ? 255 : 0;
+				this.transform.colorTransform = new ColorTransform(1,1,1,1,redOffset);
+			}
+
+		}
+
+		private function refreshFilters():void{
+			var fltrs:Array = [];
+			if(_selected && _data.node.person.open){
+				var male:Boolean = _data && _data.node.person.male;
+				fltrs.push(new GlowFilter(male ? 0x51BBEC : 0xE79BA7, 1, 12, 12));
+			}
+			this.filters = fltrs;
 		}
 	}
 }

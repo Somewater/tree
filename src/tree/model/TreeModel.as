@@ -21,9 +21,7 @@ package tree.model {
 		public var number:int = 0;
 
 		public var minX:int = 0;
-		public var minGen:int = 0;
 		public var maxX:int = 0;
-		public var maxGen:int = 0;
 
 		public var shiftX:int = 0;
 		public var dirty:Boolean;// одна из нод изменила размеры дерева

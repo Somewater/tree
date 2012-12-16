@@ -1,5 +1,7 @@
 package tree.model {
-	import org.osflash.signals.ISignal;
+import flash.geom.Point;
+
+import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
 
 	import tree.model.base.ICollection;
@@ -22,6 +24,9 @@ package tree.model {
 		public var oddX:Boolean = true;
 		public var y:Number = 0;
 
+		public var handX:int = int.MAX_VALUE;
+		public var handY:int = int.MAX_VALUE;
+
 		public var dist:int = 0;// кратчайшее расстояние до центра дерева
 		public var vector:int = 0;// растёт для последующего потомства
 		public var vectCount:int = 0;
@@ -31,6 +36,8 @@ package tree.model {
 
 		public var positionChanged:ISignal;
 		public var rollChanged:ISignal;
+
+		private var tmpPoint:Point = new Point();
 
 		/**
 		 * Массив Node-в, сворачиваемых-разворачиваемых текущей
@@ -102,6 +109,52 @@ package tree.model {
 					if(lord2 != this && !slavesHash[lord2.uid] && !lordsHash[lord2.uid])
 						return false;// это не единоличный "лорд" "раба" n
 			return true;
+		}
+
+		public function get handCoords():Boolean{
+			return handX != int.MAX_VALUE && handY != int.MAX_VALUE;
+		}
+
+		/**
+		 *
+		 * @param hand
+		 * @param relative X относительно центра дерева, Y отнсительно верхушки Generation
+		 * @return
+		 */
+		public function position(hand:Boolean):Point{
+			var gen:Generation = Model.instance.generations.get(this.generation);
+
+			tmpPoint.x = person.tree.shiftX;
+			tmpPoint.y = gen.getY(Model.instance.descending);
+
+			if(hand){
+				tmpPoint.x += this.handX;
+				tmpPoint.y += gen.normalize(this.handY);
+			}else{
+				tmpPoint.x += this.x;
+				tmpPoint.y += gen.normalize(this.level);
+			}
+			return tmpPoint;
+		}
+
+		/**
+		 * на основе x, y (глобальные координаты ноды) определить относительные координаты ноды и level/handY
+		 */
+		public function paramsByPosition(hand:Boolean, x:int, y:int):Point {
+			var gen:Generation = Model.instance.generations.get(this.generation);
+			x -= person.tree.shiftX;
+			y -= gen.getY(Model.instance.descending);
+
+			// на данный момент одинаково независимо от hand, но может измениться
+			if(hand){
+				y = gen.denormalize(y);
+			}else{
+				y = gen.denormalize(y);
+			}
+
+			tmpPoint.x = x;
+			tmpPoint.y = y;
+			return tmpPoint;
 		}
 	}
 }

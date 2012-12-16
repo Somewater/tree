@@ -33,5 +33,13 @@ package tree.model {
 		private function onGenerationChanged(g:Generation):void {
 			generationChanged.dispatch(g);
 		}
+
+		public function get iterateAllGenNodes():Array{
+			var genNodes:Array = [];
+			for each(var g:Generation in this.iterator)
+				for each(var gn:GenNode in g.iterator)
+					genNodes.push(gn);
+			return genNodes;
+		}
 	}
 }

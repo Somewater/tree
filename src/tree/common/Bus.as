@@ -55,6 +55,8 @@ package tree.common {
 
 		public var guiChanged:ISignal;// callback(open:Boolean)
 
+		public var hand:IPrioritySignal;
+
 		public function Bus(stage:Stage) {
 			super(null, '');
 			this.stage = stage;
@@ -95,6 +97,8 @@ package tree.common {
 			constructionInProcess = new Signal();
 
 			guiChanged = new Signal();
+
+			hand = new PrioritySignal();
 		}
 
 		public function onResize(event:Event):void {

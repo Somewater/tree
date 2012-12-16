@@ -20,6 +20,8 @@ package tree.model {
 
 		private var _levelNum:int = 0;
 		private var levelNumbers:Array = [];
+		private var minLevelNumber:int;
+		private var maxLevelNumber:int;
 
 		public function Generation(collection:GenerationsCollection, generation:int, bus:Bus, matrixes:MatrixCollection) {
 			super();
@@ -103,15 +105,17 @@ package tree.model {
 			remove(model);
 		}
 
-		protected function recalculate():void {
+		public function recalculate():void {
 			var newLevelNum:int = 0;
 			var levelsHash:Array = [];
 			var levels:Array = [];
+			var hand:Boolean = Model.instance.hand;
 			for each(var icon:GenNode in array) {
-				if(!levelsHash[icon.node.level])
+				var value:int = hand ? icon.node.handY : icon.node.level;
+				if((!hand || value != int.MAX_VALUE) && !levelsHash[value])
 				{
-					levelsHash[icon.node.level] = true;
-					levels.push(icon.node.level);
+					levelsHash[value] = true;
+					levels.push(value);
 					newLevelNum++;
 				}
 			}
@@ -121,8 +125,13 @@ package tree.model {
 				levelNumbers = [];
 				levels.sort(Array.NUMERIC);
 				var j:int;
-				for each(var i:int in levels)
+				maxLevelNumber = int.MIN_VALUE;
+				minLevelNumber = int.MAX_VALUE;
+				for each(var i:int in levels){
 					levelNumbers[i] = j++;
+					if(maxLevelNumber < i) maxLevelNumber = i;
+					if(minLevelNumber > 0) minLevelNumber = i;
+				}
 				fireChange();
 			}
 		}
@@ -162,7 +171,29 @@ package tree.model {
 		 * где 0 соответствует наименьшему левелу из всех нод, содержащихся в Generation
 		 */
 		public function normalize(level:int):int {
-			return levelNumbers[level];
+			var value:* = levelNumbers[level];
+			if(value === undefined){
+				if(level > maxLevelNumber)
+					return levelNumbers[maxLevelNumber] + (level - maxLevelNumber);
+				else
+					return 0;
+			}
+			return value;
+		}
+
+		public function denormalize(y:int):int {
+			for(var key:String in levelNumbers){
+				var value:int = levelNumbers[key];
+				if(value == y)
+					return parseInt(key);
+			}
+			var diff:int = levelNumbers[maxLevelNumber] - y;
+			if(diff < 0)
+				return maxLevelNumber + Math.abs(diff);
+			else{
+				diff = y - levelNumbers[minLevelNumber];
+				return minLevelNumber + y;
+			}
 		}
 	}
 }

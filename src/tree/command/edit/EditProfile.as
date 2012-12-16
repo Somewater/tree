@@ -3,7 +3,8 @@ package tree.command.edit {
 	import tree.command.ConstructTreeModel;
 	import tree.command.RecalculateNodes;
 	import tree.common.Config;
-	import tree.model.Join;
+import tree.manager.Logic;
+import tree.model.Join;
 	import tree.model.Join;
 	import tree.model.JoinCollectionBase;
 	import tree.model.JoinType;
@@ -144,7 +145,7 @@ import tree.signal.ViewSignal;
 			}
 
 			if(join && newPerson){
-				RecalculateNodes.calculate(node, from.node, join.flatten, join.breed);
+				Logic.calculateNode(node, from.node, join.flatten, join.breed);
 			}
 
 			person.isNew = false;
