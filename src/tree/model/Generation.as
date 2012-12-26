@@ -176,7 +176,7 @@ package tree.model {
 				if(level > maxLevelNumber)
 					return levelNumbers[maxLevelNumber] + (level - maxLevelNumber);
 				else
-					return 0;
+					return levelNumbers[minLevelNumber] + (level - minLevelNumber);
 			}
 			return value;
 		}

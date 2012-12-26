@@ -95,7 +95,15 @@ public class Options {
 	 */
 	public function get saveUrl():String { return getProp('save_url', null); }
 
-	public function get handPermitted():Boolean { var val:String = String(getProp('handPermitted', 'true')); return val != '0' && val != 'false'; }
+	/**
+	 * Ручной режим работосопсобен, если просматривается дерево с правами редактирования
+	 */
+	public function get handPermitted():Boolean {return getBoolProp('handPermitted', true);  }
+
+	/**
+	 * Переход между деревьями в виде 3D куба
+	 */
+	public function get cube3d():Boolean{return getBoolProp('cube3d', true);}
 
 	public function read(setup:XMLList):void {
 		for each(var option:XML in setup.*){
@@ -113,6 +121,11 @@ public class Options {
 			return flashVars[name]
 
 		return defaultVal;
+	}
+
+	private function getBoolProp(name:String, defaultVal:Boolean):Boolean{
+		var val:String = String(getProp(name, defaultVal));
+		return val != '0' && val != 'false';
 	}
 }
 }

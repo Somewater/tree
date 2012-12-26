@@ -1,5 +1,6 @@
 package tree.command {
-	import flash.display.DisplayObject;
+import flash.display.Bitmap;
+import flash.display.DisplayObject;
 	import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -38,7 +39,10 @@ public class PrintTree extends Command{
 		}
 
 		private function getPrintAreal():Sprite{
-			return Tree.instance.canvas.getPrintArea();
+			var b:Bitmap = Tree.instance.canvas.getPrintArea();
+			var s:Sprite = new Sprite();
+			s.addChild(b);
+			return s;
 		}
 	}
 }

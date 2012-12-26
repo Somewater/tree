@@ -9,6 +9,7 @@ import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -49,6 +50,9 @@ import tree.view.gui.UIComponent;
 
 		private var canvasRules:CanvasRules;
 
+		private var cube3d:Cube3D;
+		private var firstNode:Boolean = true;
+
 		public function Canvas() {
 			generationsHolder = new Sprite();
 			addChild(generationsHolder);
@@ -62,6 +66,9 @@ import tree.view.gui.UIComponent;
 			arrowMenu = new ContextMenu();
 
 			canvasRules = new CanvasRules();
+
+			cube3d = new Cube3D(this);
+			addChild(cube3d);
 		}
 
 		override public function setSize(w:int, h:int):void {
@@ -92,6 +99,12 @@ import tree.view.gui.UIComponent;
 
 				n.visible = false;
 				refreshNodeVisibility(n);
+
+				if(firstNode){
+					firstNode = false;
+					if(Model.instance.options.cube3d)
+						cube3d.activate();
+				}
 			}
 			return n;
 		}
@@ -167,7 +180,10 @@ import tree.view.gui.UIComponent;
 		}
 
 		public function fireComplete():void{
-			dispatchEvent(new Event(Event.COMPLETE));
+			if(cube3d.active){
+				cube3d.play()
+			}else
+				dispatchEvent(new Event(Event.COMPLETE));
 		}
 
 		public function get iterator():*{
@@ -216,6 +232,9 @@ import tree.view.gui.UIComponent;
 		}
 
 		public function utilize():void {
+			if(Model.instance.options.cube3d)
+				cube3d.start();
+
 			for each(var n:NodeIcon in nodesByUid)
 				if(n)
 					n.clear();
@@ -238,6 +257,8 @@ import tree.view.gui.UIComponent;
 			highlightedNode = null;
 			arrowMenu.visible = false;
 			GTweener.removeTweens(this);
+
+			firstNode = true;
 		}
 
 		private var callRefreshVisibilityDelayed:uint = 0;
@@ -326,7 +347,7 @@ import tree.view.gui.UIComponent;
 				h.refresh();
 		}
 
-		public function getPrintArea():Sprite{
+		public function getPrintArea():Bitmap{
 			var minX:int = int.MAX_VALUE;
 			var minY:int = int.MAX_VALUE;
 			var maxX:int = int.MIN_VALUE;
@@ -348,7 +369,6 @@ import tree.view.gui.UIComponent;
 			maxX += PADDING; maxY += PADDING;
 			minX -= PADDING; minY -=PADDING;
 
-			var s:Sprite = new Sprite();
 			var w:int = (maxX - minX);
 			var h:int = (maxY - minY);
 			var landscape:Boolean = w > h;
@@ -367,12 +387,28 @@ import tree.view.gui.UIComponent;
 			//generationsHolder.visible = true;
 
 			var b:Bitmap = new Bitmap(bmp);
-			s.addChild(b);
 			if(!landscape){
 				b.rotation = 90;
 				b.x = b.width;
 			}
-			return s;
+			return b;
+		}
+
+		public function getCube3DArea():BitmapData{
+			var w:int = Config.WIDTH - (Model.instance.guiOpen ? Config.GUI_WIDTH : 0);
+			var h:int = Config.HEIGHT - Config.PANEL_HEIGHT;
+			var startX:int = -this.x;
+			var startY:int = Config.PANEL_HEIGHT - this.y;
+			var scale:Number = 1;
+			w *= scale; h *= scale;
+			var bmp:BitmapData = new BitmapData(w, h, false, 0xFFFFFFFF);
+
+			cube3d.visible = false;
+			var m:Matrix = new Matrix(scale, 0, 0, scale, -startX * scale,  -startY * scale)
+			bmp.draw(this, m, null, null, new Rectangle(0, 0, w, h));
+			//bmp.colorTransform(bmp.rect, new ColorTransform(0.4, 0.4, 0.4))
+			cube3d.visible = true;
+			return bmp;
 		}
 
 		public function getPrintSize(area:Sprite):Rectangle{
