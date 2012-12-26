@@ -98,12 +98,12 @@ public class Options {
 	/**
 	 * Ручной режим работосопсобен, если просматривается дерево с правами редактирования
 	 */
-	public function get handPermitted():Boolean {return getBoolProp('handPermitted', true);  }
+	public function get handPermitted():Boolean {return getBoolProp('handPermitted', false);  }
 
 	/**
 	 * Переход между деревьями в виде 3D куба
 	 */
-	public function get cube3d():Boolean{return getBoolProp('cube3d', true);}
+	public function get cube3d():Boolean{return getBoolProp('cube3d', false);}
 
 	public function read(setup:XMLList):void {
 		for each(var option:XML in setup.*){
