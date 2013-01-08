@@ -83,6 +83,8 @@ import tree.view.gui.Helper;
 
 		private var contextMenuBtn:ContextMenuBtn;
 
+		private var positionAnimation:Boolean = false;// активна анимация смены позиции (твинер)
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			maleHighlight = skin.getChildByName('male_back_hl');
@@ -235,6 +237,7 @@ import tree.view.gui.Helper;
 			if(animated){
 				GTweener.removeTweens(this);
 				this.alpha = 1;
+				positionAnimation = true;
 				Tweener.to(this, Model.instance.animationTime * 0.5, {'x':p.x, 'y':p.y}, {onComplete: dispatchOnComplete });
 			}else{
 				this.x = p.x;
@@ -250,6 +253,7 @@ import tree.view.gui.Helper;
 		}
 
 		private function dispatchOnComplete(g:GTween = null):void {
+			positionAnimation = false;
 			complete.dispatch(this);
 		}
 
@@ -389,6 +393,7 @@ import tree.view.gui.Helper;
 		}
 
 		public function positionIsDirty():Boolean{
+			if(positionAnimation) return true;// правка баги, когда позиция в данный момент корректна, но активен твинер, переносящий ноду в уже устаревшую позицию
 			var p:Point = this.position();
 			return int(x) != int(p.x) || int(y) != int(p.y);
 		}
