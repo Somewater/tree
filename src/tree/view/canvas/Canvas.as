@@ -365,7 +365,7 @@ import tree.view.gui.UIComponent;
 				}
 			}
 
-			const PADDING:int = 5;
+			const PADDING:int = 20;
 			maxX += PADDING; maxY += PADDING;
 			minX -= PADDING; minY -=PADDING;
 

@@ -1,4 +1,6 @@
 package tree.command {
+import com.junkbyte.console.Cc;
+
 import flash.display.Bitmap;
 import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -25,7 +27,11 @@ public class PrintTree extends Command{
 					var pjo:PrintJobOptions = new PrintJobOptions(false);
 					if(pj.orientation == PrintJobOrientation.PORTRAIT)
 						area.rotation = -90;
-					area.scaleX = area.scaleY = Math.min(pj.paperWidth / area.width, pj.paperHeight / area.height)
+					area.scaleX = area.scaleY = Math.min(pj.pageWidth / area.width, pj.pageHeight / area.height)
+
+					Cc.log("[PRINT]\narea=" + area.width + "x" + area.height + " (" + area.scaleX + ")\nPJ=" + pj.pageWidth + "x" + pj.pageHeight + "\nPAPER=" + pj.paperWidth + "x" + pj.paperHeight);
+
+					addPrintDataToStage(area);
 					pj.addPage(area, null, pjo);
 				}catch(err:Error){
 					error(err.toString());
@@ -43,6 +49,20 @@ public class PrintTree extends Command{
 			var s:Sprite = new Sprite();
 			s.addChild(b);
 			return s;
+		}
+
+		private function addPrintDataToStage(area:Sprite):void{
+			detain();
+			Config.ticker.callLater(releasePrintData, 50, [area]);
+			area.x = -100000;
+			area.y = -100000;
+			Config.stage.addChild(area);
+		}
+
+		private function releasePrintData(area:Sprite):void{
+			if(area.parent)
+				area.parent.removeChild(area);
+			release();
 		}
 	}
 }
