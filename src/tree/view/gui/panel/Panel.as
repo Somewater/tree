@@ -129,11 +129,11 @@ import tree.view.gui.UIComponent;
 			titleTF.y = 15;
 			refreshOwnerName();
 
-			saveTreeButton.x = w - 30 - saveTreeButton.width;
-			saveTreeButton.y = 15;
+			changeHand.x = w - 30 - changeHand.width;
+			changeHand.y = 15;
 
-			changeHand.x = saveTreeButton.x - 30 - changeHand.width;
-			changeHand.y =  saveTreeButton.y;
+			saveTreeButton.x = changeHand.x - 30 - saveTreeButton.width;
+			saveTreeButton.y =  changeHand.y;
 
 			var nextX:int = 30;
 			var nextY:int = 50;

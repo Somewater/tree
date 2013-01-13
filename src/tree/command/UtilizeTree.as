@@ -9,6 +9,7 @@ package tree.command {
 		}
 
 		override public function execute():void {
+			model.hand = false;
 			Tree.instance.utilize();
 			model.utilize();
 		}

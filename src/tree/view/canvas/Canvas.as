@@ -472,5 +472,14 @@ import tree.view.gui.UIComponent;
 
 			canvasRules.refresh(minX, minY, maxX, maxY, xStep, yStep);
 		}
+
+		public function showAvailableCoords(availableCoords:Array):void {
+			canvasRules.removeAvailableCoords();
+			for each(var p:Point in availableCoords){
+				p.x *= Canvas.ICON_WIDTH_SPACE;
+				p.y *= Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE;
+				canvasRules.drawAvailableCoord(p.x, p.y);
+			}
+		}
 	}
 }

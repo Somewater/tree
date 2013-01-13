@@ -530,7 +530,8 @@ import tree.view.gui.Helper;
 			if(highlight != _errorHighlight){
 				_errorHighlight = highlight;
 				var redOffset:Number = highlight ? 255 : 0;
-				this.transform.colorTransform = new ColorTransform(1,1,1,1,redOffset);
+				var multi:Number = highlight ? 0.7 : 1;
+				this.transform.colorTransform = new ColorTransform(1,multi,multi,1,redOffset);
 			}
 
 		}

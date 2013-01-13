@@ -1,9 +1,15 @@
 package tree.view.canvas {
 import flash.display.Graphics;
 import flash.display.Shape;
+import flash.display.Sprite;
 
-public class CanvasRules extends Shape{
+public class CanvasRules extends Sprite{
+
+	private var availableCoordsHolder:Shape
+
 	public function CanvasRules() {
+		availableCoordsHolder = new Shape();
+		addChild(availableCoordsHolder)
 	}
 
 	public function refresh(minX:int, minY:int, maxX:int, maxY:int, xStep:int, yStep:int):void {
@@ -22,6 +28,15 @@ public class CanvasRules extends Shape{
 			g.moveTo(minX, i);
 			g.lineTo(maxX, i);
 		}
+	}
+
+	public function removeAvailableCoords():void {
+		availableCoordsHolder.graphics.clear();
+		availableCoordsHolder.graphics.beginFill(0x0000FF, 0.1);
+	}
+
+	public function drawAvailableCoord(x:int, y:int):void {
+		availableCoordsHolder.graphics.drawRect(x, y, Canvas.ICON_WIDTH_SPACE, Canvas.LEVEL_HEIGHT);
 	}
 }
 }

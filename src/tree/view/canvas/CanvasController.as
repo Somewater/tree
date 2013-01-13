@@ -43,6 +43,7 @@ public class CanvasController extends Actor{
 		private var handDragNodeStartCoords:Point = new Point();// координаты в handX, handY
 		private var errorHighlightedNode:NodeIcon;
 		private var tmpPoint:Point = new Point();
+		private var tmpAvailableCoords:Array = [new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()];
 
 		public function CanvasController(canvas:Canvas) {
 			this.canvas = canvas;
@@ -444,6 +445,7 @@ public class CanvasController extends Actor{
 					handDragNodeStartCoords.x = n.data.node.handX;
 					handDragNodeStartCoords.y = n.data.node.handY;
 					canvas.rulesVisibility = true;
+					showAvailableRegionsFor(n.data.node);
 				}else{
 					canvas.canDrag = true;
 					bus.drag.remove(onNodeDragged);
@@ -486,15 +488,15 @@ public class CanvasController extends Actor{
 		}
 
 		private function onNodeDragged(signal:DragSignal):void{
-			var dx:Number = signal.totalDelta.x;
-			var dy:Number = signal.totalDelta.y;
+			var dx:Number = signal.totalDelta.x / model.zoom;
+			var dy:Number = signal.totalDelta.y / model.zoom;
 			var posChanged:Boolean = false;
 			var node:Node = handDragNode.data.node;
 			var p:Point;
 
 			if(dx * dx + dy * dy > 10 * 10){
-				handDragNode.x = handDragNodeStartPos.x - signal.totalDelta.x;
-				handDragNode.y = handDragNodeStartPos.y - signal.totalDelta.y;
+				handDragNode.x = handDragNodeStartPos.x - signal.totalDelta.x / model.zoom;
+				handDragNode.y = handDragNodeStartPos.y - signal.totalDelta.y / model.zoom;
 
 				tmpPoint.x = Math.round(handDragNode.x / Canvas.ICON_WIDTH_SPACE) * Canvas.ICON_WIDTH_SPACE;
 				tmpPoint.y = Math.round(handDragNode.y / Canvas.LEVEL_HEIGHT) * Canvas.LEVEL_HEIGHT;
@@ -520,6 +522,7 @@ public class CanvasController extends Actor{
 			if(posChanged){
 				new RefreshTrees().execute();
 				refreshNodeLines(handDragNode.data.node);
+				showAvailableRegionsFor(handDragNode.data.node);
 				var errorNode:Node = checkNodePositionCollide(node);
 				var errorNodeIcon:NodeIcon;
 				if(errorNode)
@@ -592,6 +595,45 @@ public class CanvasController extends Actor{
 
 			for each(l in joinLinesForRefresh)
 				l.show(false);
+		}
+
+		private function showAvailableRegionsFor(node:Node):void{
+			var hand:Boolean = Model.instance.hand
+			var nPos:Point = node.position(hand);
+
+			// предположительно доступные 8 координат
+			var availableCoords:Array = tmpAvailableCoords.slice();
+			var i:int = 0;
+			var p:Point;
+			for(var xi:int = -1; xi <= 1; xi++)
+				for(var yi:int = -1; yi <= 1; yi++)
+					if(xi || yi){// если одна из координат ненулевая
+				p = availableCoords[i];
+				p.x = nPos.x + xi;
+				p.y = nPos.y + yi;
+				i++
+			}
+
+			for each(var person:Person in model.trees.iteratorForAllPersons()){
+				var n2:Node = person.node;
+				if(n2 != node && node.generation == n2.generation){
+					var n2Pos:Point = n2.position(hand);
+					i = 0;
+					while(i < availableCoords.length){
+						p = availableCoords[i];
+						var dx:int = n2Pos.x - p.x;
+						var dy:int = n2Pos.y - p.y;
+						if((dx < 0 ? -dx : dx) < 2 && (dy < 0 ? -dy : dy) < 1){
+							availableCoords.splice(i, 1);
+						}else
+							i++;
+					}
+
+					if(availableCoords.length == 0) break;
+				}
+			}
+
+			canvas.showAvailableCoords(availableCoords);
 		}
 }
 }
