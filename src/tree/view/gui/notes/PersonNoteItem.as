@@ -284,6 +284,7 @@ import tree.view.Tweener;
 
 import tree.view.gui.notes.PersonNoteItem;
 import tree.view.gui.notes.PersonNotesPage;
+import tree.view.window.SaveTreeAcceptWindow;
 
 class NoteContextMenu extends Sprite implements IClear{
 
@@ -388,6 +389,8 @@ class NoteContextMenu extends Sprite implements IClear{
 	}
 
 	private function gotoFamilyList():void{
-		Model.instance.bus.dispatch(AppSignal.RELOAD_TREE, note.data.uid);
+		SaveTreeAcceptWindow.check(function():void{
+			Model.instance.bus.dispatch(AppSignal.RELOAD_TREE, note.data.uid);
+		})
 	}
 }

@@ -1,4 +1,6 @@
 package tree.model {
+import org.osflash.signals.ISignal;
+import org.osflash.signals.Signal;
 
 /**
  * Записывает все ручные перемещения
@@ -7,35 +9,39 @@ public class HandMovingLog {
 
 	private var log:Array = [];
 
+	public var changed:ISignal;
+
 	public function HandMovingLog() {
+		changed = new Signal();
 	}
 
-	public function add(uid:int, toX:int, toY:int, fromX:int, fromY:int):void{
-		var e:LogEntry = new LogEntry();
-		e.uid = uid;
-		e.fromX = fromX;
-		e.fromY = fromY;
-		e.toX = toX;
-		e.toY = toY
-
-		log.push(e);
+	public function add(node:Node):void{
+		if(log.indexOf(node) == -1){
+			var l:int = log.length;
+			log.push(node);
+			if(l == 0)
+				changed.dispatch();
+		}
 	}
 
 	public function clear():void{
+		var l:int = log.length;
 		log = [];
+		if(l > 0)
+			changed.dispatch();
 	}
 
 	public function empty():Boolean{
 		return log.length == 0;
 	}
-}
-}
 
-class LogEntry{
-	public var uid:int;
-
-	public var fromX:int;
-	public var fromY:int;
-	public var toX:int;
-	public var toY:int;
+	public function formatPrint():String {
+		var s:String = '';
+		for each(var n:Node in log){
+			if(s.length) s += ';'
+			s += n.uid + '=' + n.handX + ',' + n.handY;
+		}
+		return s;
+	}
+}
 }

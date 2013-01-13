@@ -70,6 +70,7 @@ public class HandChangeViewRefresh extends Command{
 						n.handX = n.x;
 						n.handY = n.level;
 					}
+					model.handLog.add(n);
 				}
 			}
 		}else{
@@ -77,6 +78,7 @@ public class HandChangeViewRefresh extends Command{
 				n = p.node;
 				n.handX = n.x;
 				n.handY = n.level;
+				model.handLog.add(n);
 			}
 		}
 

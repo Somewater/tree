@@ -17,8 +17,9 @@ import tree.signal.ModelSignal;
 	import tree.view.gui.GuiControllerBase;
 	import tree.view.gui.notes.PersonNotesPage;
 	import tree.view.window.MessageWindow;
+import tree.view.window.SaveTreeAcceptWindow;
 
-	public class ProfileController extends GuiControllerBase implements IClear{
+public class ProfileController extends GuiControllerBase implements IClear{
 
 		private var page:PersonProfilePage;
 
@@ -49,7 +50,9 @@ import tree.signal.ModelSignal;
 		}
 
 		private function onFamilyTreeClick(...args):void{
-			bus.dispatch(AppSignal.RELOAD_TREE, model.selectedPerson.uid);
+			SaveTreeAcceptWindow.check(function():void{
+				bus.dispatch(AppSignal.RELOAD_TREE, model.selectedPerson.uid);
+			});
 		}
 
 		private function onSendMessageClick(...args):void{

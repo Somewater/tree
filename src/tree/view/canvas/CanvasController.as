@@ -447,8 +447,6 @@ public class CanvasController extends Actor{
 					canvas.rulesVisibility = true;
 					showAvailableRegionsFor(n.data.node);
 				}else{
-					new RefreshTrees().execute();
-
 					canvas.canDrag = true;
 					bus.drag.remove(onNodeDragged);
 					if(n && n == handDragNode){
@@ -542,6 +540,7 @@ public class CanvasController extends Actor{
 						errorHighlightedNode = null;
 					}
 				}
+				model.handLog.add(node);
 			}
 		}
 
@@ -556,6 +555,7 @@ public class CanvasController extends Actor{
 			// параметры деревьев и поколений
 			n.handX = newHandX;
 			n.handY = newHandY;
+			model.handLog.add(n);
 			new RefreshTrees().execute();
 
 			node.calcDirectPosition = false;

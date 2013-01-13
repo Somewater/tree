@@ -21,6 +21,8 @@ import tree.model.Person;
 
 		public static const ADD_RELATION:String = 'addRelation';
 
+		public static const SAVE_TREE:String = 'saveTree';
+
 		public var type:String
 
 		public var uid:int;

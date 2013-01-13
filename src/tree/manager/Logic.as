@@ -1,6 +1,7 @@
 package tree.manager {
 import tree.model.Join;
 import tree.model.JoinType;
+import tree.model.Model;
 import tree.model.Node;
 import tree.model.Person;
 
@@ -48,11 +49,13 @@ public class Logic {
 
 		var node:Node = join.associate.node;
 		var hasLegitimateBreed:Boolean;
+		var handCoordChanged:Boolean = false;
 
 		switch(join.type ? join.type.superType : null) {
 			case JoinType.SUPER_TYPE_MARRY:
 				if(hand){
 					node.handX = sourceNode.handX + (join.type == Join.WIFE ? 2 : -2);
+					handCoordChanged = true;
 				}else{
 					node.x = sourceNode.x + (join.type == Join.WIFE ? 2 : -2);
 					node.oddX = sourceNode.oddX;
@@ -62,6 +65,7 @@ public class Logic {
 				hasLegitimateBreed = sourceNode.person.hasLegitimateBreed()
 				if(hand){
 					node.handX = sourceNode.handX + (hasLegitimateBreed ? (sourceNode.person.male ? 1 : -1) : 0);
+					handCoordChanged = true;
 				}else{
 					node.x = sourceNode.x + (hasLegitimateBreed ? (sourceNode.person.male ? 1 : -1) : 0);
 					node.oddX = hasLegitimateBreed ? !sourceNode.oddX : sourceNode.oddX;
@@ -71,6 +75,7 @@ public class Logic {
 				hasLegitimateBreed = node.person.hasLegitimateBreed()
 				if(hand){
 					node.handX = sourceNode.handX + (hasLegitimateBreed ? (node.person.male ? -1 : 1) : 0);
+					handCoordChanged = true;
 				}else{
 					node.x = sourceNode.x + (hasLegitimateBreed ? (node.person.male ? -1 : 1) : 0);
 					node.oddX = hasLegitimateBreed ? !sourceNode.oddX : sourceNode.oddX;
@@ -80,6 +85,7 @@ public class Logic {
 			case JoinType.SUPER_TYPE_EX_MARRY:
 				if(hand){
 					node.handX = sourceNode.handX + (source.male ? -2 : 2);
+					handCoordChanged = true;
 				}else{
 					node.x = sourceNode.x + (source.male ? -2 : 2);
 					node.oddX = sourceNode.oddX;
@@ -93,6 +99,9 @@ public class Logic {
 				node.x = 0;
 				node.oddX = true;
 		}
+
+		if(handCoordChanged)
+			Model.instance.handLog.add(node);
 	}
 }
 }

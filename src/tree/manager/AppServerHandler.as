@@ -113,6 +113,18 @@ public class AppServerHandler {
 					handler.call(deleteNullFields(data), onSuccess(request), onError(request), onProgress);
 					break;
 
+				case RequestSignal.SAVE_TREE:
+					bus.loaderProgress.dispatch(0);
+					request.onComplete.add(hideLoader);
+					data = {
+						'action': 'q_tree',
+						'uid': model.trees.first.owner.uid,
+						'taction': 'save',
+						'data': model.handLog.formatPrint()
+					};
+					handler.call(deleteNullFields(data), onSuccess(request), onError(request), onProgress);
+					break;
+
 				default:
 					throw new Error('Undefined request type \'' + request.type+ '\'');
 				break;

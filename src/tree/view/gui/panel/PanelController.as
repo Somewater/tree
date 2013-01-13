@@ -14,7 +14,8 @@ import flash.display.DisplayObject;
 	import tree.command.Actor;
 import tree.command.GotoLinkCommand;
 import tree.command.PrintTree;
-	import tree.command.view.DepthIndexChanged;
+import tree.command.SaveTree;
+import tree.command.view.DepthIndexChanged;
 	import tree.common.Config;
 import tree.model.Model;
 import tree.model.Person;
@@ -47,9 +48,12 @@ public class PanelController extends Actor{
 			panel.savePrintButton.right.click.add(onPrintClicked)
 			panel.optionsButton.click.add(onOptionsClicked);
 			panel.changeHand.click.add(onChangeHandClick);
+			panel.saveTreeButton.click.add(onSaveTreeClick);
 
 			panel.saveTreeButton.visible = false;
 			panel.changeHand.visible = false;
+
+			model.handLog.changed.add(refreshSaveTreeButtonVisibility);
 		}
 
 		private function onNewOwnerClicked(person:Person):void {
@@ -101,7 +105,7 @@ public class PanelController extends Actor{
 
 		private function onHandChanged():void{
 			if(model.owner.editable){
-				panel.saveTreeButton.visible = model.hand;
+				refreshSaveTreeButtonVisibility();
 				panel.changeHand.visible = model.options.handPermitted;
 				panel.changeHand.label = model.hand ? I18n.t('HAND_MODE') : I18n.t('AUTO_MODE');
 			}else{
@@ -146,6 +150,14 @@ public class PanelController extends Actor{
 
 		private function onChangeHandClick(b:Button):void{
 			model.hand = !model.hand;
+		}
+
+		private function refreshSaveTreeButtonVisibility():void{
+			panel.saveTreeButton.visible = model.hand && !model.handLog.empty();
+		}
+
+		private function onSaveTreeClick(b:Button):void{
+			new SaveTree().execute();
 		}
 	}
 }
