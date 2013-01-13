@@ -447,6 +447,8 @@ public class CanvasController extends Actor{
 					canvas.rulesVisibility = true;
 					showAvailableRegionsFor(n.data.node);
 				}else{
+					new RefreshTrees().execute();
+
 					canvas.canDrag = true;
 					bus.drag.remove(onNodeDragged);
 					if(n && n == handDragNode){
@@ -520,7 +522,7 @@ public class CanvasController extends Actor{
 			}
 
 			if(posChanged){
-				new RefreshTrees().execute();
+				//new RefreshTrees().execute();
 				refreshNodeLines(handDragNode.data.node);
 				showAvailableRegionsFor(handDragNode.data.node);
 				var errorNode:Node = checkNodePositionCollide(node);

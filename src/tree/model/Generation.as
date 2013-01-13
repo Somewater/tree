@@ -18,8 +18,6 @@ package tree.model {
 		protected var matrixes:MatrixCollection;
 
 
-		private var _levelNum:int = 0;
-		private var levelNumbers:Array = [];
 		private var minLevelNumber:int;
 		private var maxLevelNumber:int;
 
@@ -110,6 +108,8 @@ package tree.model {
 			var levelsHash:Array = [];
 			var levels:Array = [];
 			var hand:Boolean = Model.instance.hand;
+			var newMaxLevel:int = int.MIN_VALUE;
+			var newMinLevel:int = int.MAX_VALUE;
 			for each(var icon:GenNode in array) {
 				var value:int = hand ? icon.node.handY : icon.node.level;
 				if((!hand || value != int.MAX_VALUE) && !levelsHash[value])
@@ -117,27 +117,20 @@ package tree.model {
 					levelsHash[value] = true;
 					levels.push(value);
 					newLevelNum++;
+					if(newMaxLevel < value) newMaxLevel = value;
+					if(newMinLevel > value) newMinLevel = value;
 				}
 			}
 
-			if(_levelNum != newLevelNum){
-				_levelNum = newLevelNum;
-				levelNumbers = [];
-				levels.sort(Array.NUMERIC);
-				var j:int;
-				maxLevelNumber = int.MIN_VALUE;
-				minLevelNumber = int.MAX_VALUE;
-				for each(var i:int in levels){
-					levelNumbers[i] = j++;
-					if(maxLevelNumber < i) maxLevelNumber = i;
-					if(minLevelNumber > 0) minLevelNumber = i;
-				}
+			if(newMaxLevel != maxLevelNumber || newMinLevel != minLevelNumber){
+				maxLevelNumber = newMaxLevel;
+				minLevelNumber = newMinLevel;
 				fireChange();
 			}
 		}
 
 		public function get levelNum():int {
-			return _levelNum;
+			return 1 + maxLevelNumber - minLevelNumber;
 		}
 
 		public function getY(desc:Boolean):int {
@@ -146,21 +139,21 @@ package tree.model {
 			var vector:int;
 			var i:int;
 			if(desc){
-				value = generation > 0 ? collection.get(0)._levelNum : 0;
+				value = generation > 0 ? collection.get(0).levelNum : 0;
 				vector = value > 0 ? -1 : 1;
 				for (i = generation < 0 ? generation : generation - 1;
 					 i != 0;
 					 i += vector) {
-					value += collection.get(i)._levelNum;
+					value += collection.get(i).levelNum;
 				}
 				return generation < 0 ? -value : value;
 			}else{
-				value = generation < 0 ? collection.get(0)._levelNum : 0;
+				value = generation < 0 ? collection.get(0).levelNum : 0;
 				vector = value > 0 ? 1 : -1;
 				for (i = generation < 0 ? generation + 1 : generation;
 					 i != 0;
 					 i += vector) {
-					value += collection.get(i)._levelNum;
+					value += collection.get(i).levelNum;
 				}
 				return generation > 0 ? -value : value;
 			}
@@ -171,29 +164,11 @@ package tree.model {
 		 * где 0 соответствует наименьшему левелу из всех нод, содержащихся в Generation
 		 */
 		public function normalize(level:int):int {
-			var value:* = levelNumbers[level];
-			if(value === undefined){
-				if(level > maxLevelNumber)
-					return levelNumbers[maxLevelNumber] + (level - maxLevelNumber);
-				else
-					return levelNumbers[minLevelNumber] + (level - minLevelNumber);
-			}
-			return value;
+			return level - minLevelNumber;
 		}
 
 		public function denormalize(y:int):int {
-			for(var key:String in levelNumbers){
-				var value:int = levelNumbers[key];
-				if(value == y)
-					return parseInt(key);
-			}
-			var diff:int = levelNumbers[maxLevelNumber] - y;
-			if(diff < 0)
-				return maxLevelNumber + Math.abs(diff);
-			else{
-				diff = y - levelNumbers[minLevelNumber];
-				return minLevelNumber + y;
-			}
+			return y + minLevelNumber;
 		}
 	}
 }

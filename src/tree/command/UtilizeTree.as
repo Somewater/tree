@@ -10,6 +10,7 @@ package tree.command {
 
 		override public function execute():void {
 			model.hand = false;
+			model.handLog.clear();
 			Tree.instance.utilize();
 			model.utilize();
 		}
