@@ -8,7 +8,7 @@ package tree.view.gui {
 		}
 
 		public static function stylizeText(tf:DisplayObject):void{
-			tf.filters = [new DropShadowFilter(1, 90, 0, 0.3, 3, 3)];
+			//tf.filters = [new DropShadowFilter(1, 90, 0, 0.3, 3, 3)];
 		}
 	}
 }
