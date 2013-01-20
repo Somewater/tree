@@ -183,9 +183,9 @@ import tree.view.gui.Helper;
 				return;
 
 			out.dispatch(this);
-			if(mouseDown){
-				onMouseUp()
-			}
+//			if(mouseDown){  // иначе слетает драгш, если в ручной расстановке быстро двинуть мышкой и за один тик произойдёт смещение с иконки
+//				onMouseUp()
+//			}
 			if(rollUnrollButtonSwitched && rollUnrollButton.rollState){
 				rollUnrollButton.visible = false;
 			}
