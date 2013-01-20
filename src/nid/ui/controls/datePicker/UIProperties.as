@@ -64,8 +64,8 @@ import tree.view.gui.TreeTextInput;
 		protected var day_bg			:MovieClip;
 		protected var hit				:Sprite;
 		protected var day_txt			:EmbededTextField;
-		protected var _startDay			:String = "sunday";
-		protected var _startID			:int = 1;
+		protected var _startDay			:String = "monday";
+		protected var _startID			:int = 0;
 		protected var todayDateBox		:MovieClip;
 		
 		/*
