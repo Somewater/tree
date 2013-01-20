@@ -44,6 +44,7 @@ public class HandChangeViewRefresh extends Command{
 
 		var p:Person
 		var n:Node;
+		var n2:Node;
 		var hasNodeWithHandPos:Boolean = false;
 		var allPersons:Array = model.trees.iteratorForAllPersons();
 		var pos:Point;
@@ -56,6 +57,7 @@ public class HandChangeViewRefresh extends Command{
 		}
 
 		var checkIntersection:Array = [];// массив нод, которые могут пересекаться друг с другим или другими нодами. Двигать можно только их (вверх-вниз)
+		var nonIntersectedNodes:Array = [];
 
 		if(hasNodeWithHandPos){
 			for each(var g:GenNode in model.generations.iterateAllGenNodes){
@@ -69,9 +71,11 @@ public class HandChangeViewRefresh extends Command{
 						// стартовая нода дерева
 						n.handX = n.x;
 						n.handY = n.level;
+						nonIntersectedNodes.push(n);
 					}
 					model.handLog.add(n);
-				}
+				}else
+					nonIntersectedNodes.push(n);
 			}
 		}else{
 			for each(p in allPersons){
@@ -82,7 +86,22 @@ public class HandChangeViewRefresh extends Command{
 			}
 		}
 
-		// todo: проверить checkIntersection
+		for each(n in checkIntersection){
+			var startX:int = n.handX;
+			var i:int = 0;
+			var intersection:Boolean = true;
+			while(intersection){
+				intersection = false;
+				n.handX = startX + 2 * Math.ceil(i / 2) * (i % 2 == 0 ? -1 : 1);
+				i++;
+				for each(n2 in nonIntersectedNodes)
+					if(n2.handY == n.handY && Math.abs(n2.handX - n.handX) < 2){// полное пересечение, либо расстояние между нодами по x меньше 2
+						intersection = true;
+						break;
+					}
+			}
+			nonIntersectedNodes.push(n);
+		}
 	}
 }
 }
