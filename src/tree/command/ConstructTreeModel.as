@@ -160,9 +160,9 @@ import tree.signal.ModelSignal;
 					personModel.fields.read(person.fields);
 
 					nodeModel = treeModel.nodes.allocate(personModel) ;
-					if(person.fields.field.(@name == "hand_x").length > 0)
+					if(String(person.fields.field.(@name == "hand_x")).length > 0)
 						nodeModel.handX = parseInt(person.fields.field.(@name == "hand_x"));
-					if(person.fields.field.(@name == "hand_y").length > 0)
+					if(String(person.fields.field.(@name == "hand_y")).length > 0)
 						nodeModel.handY = parseInt(person.fields.field.(@name == "hand_y"));
 					treeModel.nodes.add(nodeModel);
 
