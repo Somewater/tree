@@ -171,7 +171,7 @@ import tree.view.gui.TreeTextInput;
 			Calendar.addChild(currentDateLabel);
 
 			var nextX:int = 8;
-			for each(var dName:String in weekdisplay[_startID]){
+			for each(var dName:String in [I18n.arr('WEEK_DAYS_SINCE_MON'),I18n.arr('WEEK_DAYS_SINCE_SON')][_startID]){
 				var w:EmbededTextField = new EmbededTextField(null, 0, WeekNameFontSize, true);
 				w.setAbstractFormatField('letterSpacing', letterSpacing)
 				w.x = nextX;
