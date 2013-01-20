@@ -130,7 +130,7 @@ import tree.model.lines.LineMatrixCollection;
 			if(joinSuperType == JoinType.SUPER_TYPE_MARRY){
 				p1 = node1.male ? n1.husbandPoint() : n1.wifePoint();
 				p2 = node2.male ? n2.husbandPoint() : n2.wifePoint();
-				if(Math.abs(p1.y - p2.y) > Canvas.ICON_HEIGHT * 0.4 || (node1.male && p1.x > p2.x) || (node2.male && p2.x > p1.x)){
+				if(Math.abs(p1.y - p2.y) > Canvas.ICON_HEIGHT * 0.4 /*|| (node1.male && p1.x > p2.x) || (node2.male && p2.x > p1.x)*/){
 					addExMarryLine(n1,  n2);
 				}else{
 					addToLines(p1);
