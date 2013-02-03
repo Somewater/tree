@@ -35,6 +35,7 @@ import tree.model.Person;
 		public var onSucces:ISignal = new Signal(ResponseSignal);// callback(response:ResponseSignal)
 		public var onError:ISignal = new Signal(ResponseSignal);// callback(response:ResponseSignal)
 		public var onComplete:ISignal = new Signal(ResponseSignal);// callback(response:ResponseSignal)  // произошло завершение запроса, неважно, успешное или неудачное
+		public var silent:Boolean = false;
 
 		public function RequestSignal(type:String) {
 			this.type = type;

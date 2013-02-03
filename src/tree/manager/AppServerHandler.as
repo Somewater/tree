@@ -152,7 +152,7 @@ public class AppServerHandler {
 					request.onComplete.dispatch(response);
 					request.clear();
 
-					if(response.getMessage())
+					if(response.getMessage() && !response.silent())
 						new TitleTextWindow(I18n.t('SERVER_RESPONSE'), response.getMessage());
 				}
 			}

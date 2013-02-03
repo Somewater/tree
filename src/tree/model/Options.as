@@ -105,6 +105,11 @@ public class Options {
 	 */
 	public function get cube3d():Boolean{return getBoolProp('cube3d', true);}
 
+	/**
+	 * Интервал (секунды) между автосохранениями расстановки в ручном режиме
+	 */
+	public function get autoSaveHandMode():int{return getProp('autoSaveHandMode', 30);}
+
 	public function read(setup:XMLList):void {
 		for each(var option:XML in setup.*){
 			var oName:String = String(option.@name);

@@ -57,5 +57,12 @@ package tree.signal {
 			}
 			return message;
 		}
+
+		/**
+		 * Запрос, при положительном ответе на который не следует выводить сообщение
+		 */
+		public function silent():Boolean {
+			return request ? request.silent : false;
+		}
 	}
 }

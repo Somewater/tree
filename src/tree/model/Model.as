@@ -59,7 +59,7 @@ package tree.model {
 		public var options:Options = new Options();
 
 		private var _hand:Boolean = false;
-		public var handLog:HandMovingLog = new HandMovingLog();
+		public var handLog:HandMovingLog;
 
 		public function Model(bus:Bus) {
 			if(instance)
@@ -70,6 +70,7 @@ package tree.model {
 			matrixes = new MatrixCollection();
 			generations = new GenerationsCollection(bus, matrixes);
 			editing = new ProfileEditingModel();
+			handLog = new HandMovingLog();
 
 			bus.addNamed(ViewSignal.PERSON_SELECTED, onPersonSelected);
 			bus.addNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);

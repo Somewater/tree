@@ -2,6 +2,10 @@ package tree.model {
 import org.osflash.signals.ISignal;
 import org.osflash.signals.Signal;
 
+import tree.command.SaveTree;
+
+import tree.common.Config;
+
 /**
  * Записывает все ручные перемещения
  */
@@ -13,6 +17,16 @@ public class HandMovingLog {
 
 	public function HandMovingLog() {
 		changed = new Signal();
+
+		autosaveIfNeed();
+	}
+
+	private function autosaveIfNeed():void{
+		Config.ticker.defer(autosaveIfNeed, Model.instance.options.autoSaveHandMode * 1000);
+
+		if(!empty()){
+			new SaveTree(true).execute();
+		}
 	}
 
 	public function add(node:Node):void{
