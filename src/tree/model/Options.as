@@ -115,6 +115,14 @@ public class Options {
 	public function get currentYear():int{return getProp('current_year', 0);}
 	public function get currentTime():Number{return parseFloat(getProp('current_time', 0.0));}// unixtime, секунды
 
+	public function get defaultMalePhoto():String {
+		return getProp('male_photo', 'http://static.familyspace.ru/i/system/users/u2_nophoto1.png');
+	}
+
+	public function get defaultFemalePhoto():String {
+		return getProp('female_photo', 'http://static.familyspace.ru/i/system/users/u2_nophoto0.png');
+	}
+
 	public function read(setup:XMLList):void {
 		for each(var option:XML in setup.*){
 			var oName:String = String(option.@name);

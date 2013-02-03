@@ -2,8 +2,9 @@ package tree.model {
 	import org.osflash.signals.ISignal;
 
 	import tree.Tree;
+import tree.common.Config;
 
-	import tree.model.base.ICollection;
+import tree.model.base.ICollection;
 	import tree.model.base.IModel;
 	import tree.model.base.ModelCollection;
 
@@ -24,12 +25,16 @@ package tree.model {
 		private var _editable:Boolean = false;// флаг, который игнорируется, если false и форсированно используется, если true
 
 		public function photo(size:int = 0):String{
+			var value:String;
 			if(size == 0){
-				return photoSmall ? photoSmall : photoBig;
+				value = photoSmall ? photoSmall : photoBig;
 			}else if(size == 1){
-				return photoBig ? photoBig : photoSmall;
+				value = photoBig ? photoBig : photoSmall;
 			}
-			return null;
+			if(value && value.length > 0)
+				return value;
+			else
+				return male ? Model.instance.options.defaultMalePhoto : Model.instance.options.defaultFemalePhoto;
 		}
 
 		public var tree:TreeModel;
@@ -137,6 +142,17 @@ package tree.model {
 
 		public function get hasDeathdayDate():Boolean{
 			return deathday != null && !isNaN(deathday.time)
+		}
+
+		/**
+		 * Установить дефолтные данные, после того, как с сервера присвоен uid
+		 */
+		public function assignDefaultData():void {
+			urls.editUrl = "http://www.familyspace.ru/edit_profile/" + uid;
+			urls.editPhotoUrl = "http://www.familyspace.ru/edit_profile/photo/" + uid;
+			//urls.messageUrl = "http://www.familyspace.ru/messages/chat/18985299" + uid;
+			urls.inviteUrl = "http://www.familyspace.ru/profile/invite/" + uid;
+			profileUrl = "http://www.familyspace.ru/user" + uid;
 		}
 	}
 }

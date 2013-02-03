@@ -65,7 +65,8 @@ import tree.signal.ViewSignal;
 				newPerson = true;
 				// todo: присвоить персоне новый id
 				try{
-					person.uid = response.toXml().data.user_id.toString()
+					person.uid = response.toXml().data.user_id.toString();
+					person.assignDefaultData();
 				}catch (err:Error){
 					error(err);
 				}
