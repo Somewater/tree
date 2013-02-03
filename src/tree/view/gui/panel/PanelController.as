@@ -106,7 +106,7 @@ public class PanelController extends Actor{
 		private function onHandChanged():void{
 			if(model.owner.editable){
 				refreshSaveTreeButtonVisibility();
-				panel.changeHand.visible = model.options.handPermitted;
+				panel.changeHand.visible = model.options.handPermitted && model.isUserOwedTree;
 				panel.changeHand.label = model.hand ?  I18n.t('AUTO_MODE') : I18n.t('HAND_MODE');// на кнопке нажпись того состояния, которое включится при нажатии на нее
 			}else{
 				panel.saveTreeButton.visible = false;
@@ -153,7 +153,7 @@ public class PanelController extends Actor{
 		}
 
 		private function refreshSaveTreeButtonVisibility():void{
-			panel.saveTreeButton.visible = model.hand && !model.handLog.empty();
+			panel.saveTreeButton.visible = model.hand && !model.handLog.empty() && model.isUserOwedTree;
 		}
 
 		private function onSaveTreeClick(b:Button):void{

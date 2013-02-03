@@ -1,4 +1,6 @@
 package tree.model {
+import flash.net.URLVariables;
+
 import tree.common.Config;
 import tree.view.gui.profile.PersonProfilePage;
 
@@ -131,6 +133,17 @@ public class Options {
 	private function getBoolProp(name:String, defaultVal:Boolean):Boolean{
 		var val:String = String(getProp(name, defaultVal));
 		return val != '0' && val != 'false';
+	}
+
+	public function get userId():int {
+		var get:String = flashVars['get'];
+		var uid:int = 0;
+		if(get && get.length)
+		{
+			var v:URLVariables = new URLVariables(get);
+			uid = v.uid;
+		}
+		return uid;
 	}
 }
 }

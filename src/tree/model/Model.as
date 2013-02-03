@@ -61,6 +61,10 @@ package tree.model {
 		private var _hand:Boolean = false;
 		public var handLog:HandMovingLog;
 
+		CONFIG::debug{
+			public static const DEFAULT_UID:int = 18985299;
+		}
+
 		public function Model(bus:Bus) {
 			if(instance)
 				throw new Error('Must be only one');
@@ -81,8 +85,19 @@ package tree.model {
 		 * @return
 		 */
 		public function get user():Person {
-			return null;
+			if(!_user){
+				_user = new Person(null);
+				_user.uid = options.userId;
+				CONFIG::debug{
+					_user.uid ||= DEFAULT_UID;
+				}
+			}
+			if(owner && owner.uid == _user.uid && _user != owner){
+				_user = owner;
+			}
+			return _user;
 		}
+		private var _user:Person;
 
 		public function get zoom():Number {
 			return _zoom;
@@ -143,7 +158,7 @@ package tree.model {
 		}
 
 		public function get owner():Person {
-			return trees.first.owner;
+			return trees && trees.first ? trees.first.owner : null;
 		}
 
 		public function utilize():void{
@@ -251,6 +266,13 @@ package tree.model {
 				bus.dispatch(ViewSignal.HAND_CHANGED);
 				bus.hand.dispatch();
 			}
+		}
+
+		/**
+		 * Просматриваемое в данный момент дерево строится относительно авторизованного пользователя
+		 */
+		public function get isUserOwedTree():Boolean {
+			return user && owner ? user.uid == owner.uid : false;
 		}
 	}
 }
