@@ -37,6 +37,7 @@ import tree.view.gui.TreeTextInput;
 		public var DayFontSize			:Number = 10;
 		public var hideOnFocusOut		:Boolean = true;
 		public var _alwaysShowCalendar	:Boolean = false;
+		public var maxDate:Date = new Date();
 		
 		protected var _prompt			:String;
 		protected var _prompt_bkp		:String = "Select Date";
@@ -78,6 +79,7 @@ import tree.view.gui.TreeTextInput;
 		protected var buttonColor				:int	=	0;
 		protected var disabledCellColor			:int	=	0xc5cbb1;
 		protected var enabledCellColor			:int	=	0x719404;
+		protected var futureCellColor			:int	=	0x899466;
 		protected var TodayCellColor			:int	=	0x3a8ac0;
 		protected var mouseOverCellColor		:int	=	0x0099FF;
 		protected var entryTextColor			:int	=	0xffffff;

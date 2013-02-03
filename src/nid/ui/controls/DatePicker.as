@@ -94,7 +94,6 @@ import tree.view.Tweener;
 		private function updateUI(e:Event):void 
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, updateUI);
-			addCustomMenuItems();
 			Construct();
 			update(null);
 		}
@@ -268,31 +267,6 @@ import tree.view.Tweener;
 			Calendar.x = pt.x;
 			Calendar.y = pt.y;
 		}
-		/*
-		 *	CONTEXT MENU 
-		 * 
-		 */
-        private function addCustomMenuItems():void {
-			
-			myMenu = new ContextMenu();
-            myMenu.hideBuiltInItems();
-            var menu1:ContextMenuItem;
-			var menu2:ContextMenuItem;
-            menu1 = null;
-			menu1 = new ContextMenuItem("An iGi Lab Production");
-            menu2 = new ContextMenuItem("Follow us");			
-            menu1.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, navigateToSite);
-			menu2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, navigateToSite);
-            myMenu.customItems.push(menu1);
-			myMenu.customItems.push(menu2);
-            this.contextMenu = myMenu;
-            return;
-        }	
-        private function navigateToSite(e:ContextMenuEvent):void
-        {
-           	navigateToURL(new URLRequest("http://www.infogroupindia.com/blog"), "_blank");
-            return;
-        }
 		/**
 		 *  Click Handler
 		 */
@@ -352,7 +326,7 @@ import tree.view.Tweener;
 		public function onOver(e:Event):void {
 			if(!isHidden){
 			if(e.target.name == "hit"){
-				if(!e.target.parent.hitted)
+				if(!e.target.parent.hitted && !e.target.parent.disabled)
 				changeColor(e.target.parent,mouseOverCellColor);
 			}else{
 				return;
@@ -372,6 +346,7 @@ import tree.view.Tweener;
 		public function onClick(e:Event):void {
 			if(!isHidden){
 				if(e.target.name == "hit"){
+					if(e.target.parent.disabled) return;
 					e.target.parent.hitted		=	true;
 					isHitted.status 			=	true;
 					isHitted.num				=	e.target.parent.serial;

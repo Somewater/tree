@@ -274,5 +274,15 @@ package tree.model {
 		public function get isUserOwedTree():Boolean {
 			return user && owner ? user.uid == owner.uid : false;
 		}
+
+		/**
+		 * Время на сервере
+		 */
+		public function get serverTime():Date{
+			var time:Number = options.currentTime * 1000;
+			if(time == 0)
+				time = new Date().time;
+			return new Date(time);
+		}
 	}
 }

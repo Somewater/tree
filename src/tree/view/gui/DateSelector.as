@@ -10,6 +10,7 @@ import flash.events.MouseEvent;
 import nid.ui.controls.DatePicker;
 
 import tree.common.Config;
+import tree.model.Model;
 
 import tree.view.gui.profile.PersonProfilePage;
 
@@ -31,6 +32,7 @@ public class DateSelector extends TreeTextInput{
 
 		// http://code.google.com/p/as3-date-picker/
 		core = new SafeDatePicker();
+		core.maxDate = Model.instance.serverTime;
 		core.dateField.visible = false
 		core.icon = new Shape();
 		core.x = -80;

@@ -112,6 +112,9 @@ public class Options {
 	 */
 	public function get autoSaveHandMode():int{return getProp('autoSaveHandMode', 30);}
 
+	public function get currentYear():int{return getProp('current_year', 0);}
+	public function get currentTime():Number{return parseFloat(getProp('current_time', 0.0));}// unixtime, секунды
+
 	public function read(setup:XMLList):void {
 		for each(var option:XML in setup.*){
 			var oName:String = String(option.@name);

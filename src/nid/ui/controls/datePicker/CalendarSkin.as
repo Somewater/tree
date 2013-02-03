@@ -409,13 +409,22 @@ import tree.view.gui.TreeTextInput;
 							dateBox 		= 	Construct_Date_Element(mouseOverCellColor,entryNum,true);
 							dateBox.hitted	=	true;
 						}else{*/
-							dateBox 		= 	Construct_Date_Element(enabledCellColor,entryNum,true);
+							var date:Date = new Date(currentyear,currentmonth,entryNum);
+							var disabled:Boolean = false;
+							if(maxDate.time - date.time < 0){
+								if(date.time - maxDate.time > 86400000)
+									disabled = true;
+								else if(maxDate.date < date.date || maxDate.month < date.month)
+									disabled = true;
+							}
+							dateBox 		= 	Construct_Date_Element(disabled ? futureCellColor : enabledCellColor,entryNum,true, disabled);
 							dateBox.hitted	=	false;
+							dateBox.disabled = disabled;
 						//}						
-						dateBox.id 		= 	enabledCellColor;
+						dateBox.id 		= 	disabled ? futureCellColor : enabledCellColor;
 						
 						dateBox.serial	=	restNum;
-						dateBox.date	=	new Date(currentyear,currentmonth,entryNum);
+						dateBox.date	=	date;
 						dateBox.isToday	=	false;
 					}
 				} else {
@@ -454,7 +463,7 @@ import tree.view.gui.TreeTextInput;
 		/*
 		 *	DATE CELL CONSTRUCTOR FUNCTION [RETURNS MOVIECLIP] 
 		 */
-		public function Construct_Date_Element(cellColor:int,day:int,isEntry:Boolean):MovieClip {
+		public function Construct_Date_Element(cellColor:int,day:int,isEntry:Boolean, disabled:Boolean = false):MovieClip {
 				day_bg			= 	new MovieClip();
 				hit				= 	new Sprite();
 				day_txt			=	new EmbededTextField();
@@ -501,7 +510,7 @@ import tree.view.gui.TreeTextInput;
 			if(isEntry){
 				day_txt.text 				=	String(day);
 				hit.name 	 				= 	"hit";
-				hit.buttonMode 				=	true;
+				hit.buttonMode 				=	!disabled;
 			}
 			
 			day_bg.addChild(day_txt);
