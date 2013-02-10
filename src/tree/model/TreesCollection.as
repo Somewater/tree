@@ -67,13 +67,21 @@ package tree.model {
 		}
 
 		public function recalculateTreesBounds():void{
+			var hand:Boolean = Model.instance.hand
 			for each(var t:TreeModel in array){
 				for each(var n:Node in t.nodes.iterator){
-					if(n.visible && n != n){
-						if(t.maxX < n.x)
-							t.maxX = n.x;
-						if(t.minX > n.x)
-							t.minX = n.x;
+					if(n.visible){
+						if(hand){
+							if(t.maxX < n.handX)
+								t.maxX = n.handX;
+							if(t.minX > n.handX)
+								t.minX = n.handX;
+						}else{
+							if(t.maxX < n.x)
+								t.maxX = n.x;
+							if(t.minX > n.x)
+								t.minX = n.x;
+						}
 					}
 				}
 			}

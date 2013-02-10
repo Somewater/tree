@@ -14,24 +14,16 @@ public class RefreshTrees extends Command{
 
 	override public function execute():void {
 		ModelBase.radioSilence = true;
-		refreshGenerations();
-		refreshTrees();
+		for each(var g:Generation in model.generations.iterator)
+			g.recalculate();
+		model.trees.recalculateTreesBounds();
+		model.trees.refresTreesShifts();
 
 		ModelBase.radioSilence = false;
 
 		bus.dispatch(ViewSignal.REFRESH_GENERATIONS);
 		for each(var p:Person in model.trees.iteratorForAllPersons())
 			p.node.firePositionChange();
-	}
-
-	private function refreshGenerations():void{
-		for each(var g:Generation in model.generations.iterator)
-			g.recalculate();
-	}
-
-	private function refreshTrees():void{
-		model.trees.recalculateTreesBounds();
-		model.trees.refresTreesShifts();
 	}
 }
 }
