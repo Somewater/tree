@@ -123,6 +123,17 @@ public class Options {
 		return getProp('female_photo', 'http://static.familyspace.ru/i/system/users/u2_nophoto0.png');
 	}
 
+	/**
+	 * Цветовые параметры подсветки при перемещении персон в ручном режиме
+	 * snap - квадратная сетка
+	 * available - прямоугольник-выделение области, куда можно поместить персону
+	 * Если выставить alpha="0" любой из частей подсветки, то она исчезнет и расчеты, связанные с ней, производиться не будут
+	 */
+	public function get handHighlightSnapColor():uint{return getProp('hand_highlight_snap_color', 0xCCCCCC)}
+	public function get handHighlightSnapAlpha():Number{return getProp('hand_highlight_snap_alpha', 1)}
+	public function get handHighlightAvailableColor():uint{return getProp('hand_highlight_available_color', 0x0000FF)}
+	public function get handHighlightAvailableAlpha():Number{return getProp('hand_highlight_available_alpha', 0.1)}
+
 	public function read(setup:XMLList):void {
 		for each(var option:XML in setup.*){
 			var oName:String = String(option.@name);
