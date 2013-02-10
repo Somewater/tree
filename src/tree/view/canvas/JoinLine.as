@@ -300,6 +300,30 @@ import tree.model.lines.LineMatrixCollection;
 
 		public function get iconPosition():Point{
 			if(icon && icon.visible){
+				if(_data.type.superType == JoinType.SUPER_TYPE_MARRY){
+					var n1:NodeIcon = collection.getNodeIcon(_data.from.uid);
+					var n2:NodeIcon = collection.getNodeIcon(_data.uid);
+					var p1:Point;
+					var p2:Point;
+					if(!this.fromStart){
+						var tmpN:NodeIcon = n1;
+						n1 = n2;
+						n2 = tmpN;
+					}
+
+					var node1:Person = n1.data.join.associate;
+					var node2:Person = n2.data.join.associate;
+
+					p1 = node1.male ? n1.husbandPoint() : n1.wifePoint();
+					p2 = node2.male ? n2.husbandPoint() : n2.wifePoint();
+					if(!(Math.abs(p1.y - p2.y) > Canvas.ICON_HEIGHT * 0.4 /*|| (node1.male && p1.x > p2.x) || (node2.male && p2.x > p1.x)*/)){
+						p1.x = (p1.x + p2.x) * 0.5 + shiftX;
+						tmpPoint.x = p1.x;
+						tmpPoint.y = p1.y;
+						return tmpPoint;
+					}
+				}
+
 				tmpPoint.x = icon.x;
 				tmpPoint.y = icon.y;
 				return tmpPoint;
