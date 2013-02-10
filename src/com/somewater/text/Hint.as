@@ -12,18 +12,23 @@ package com.somewater.text
 import com.somewater.display.CorrectSizeDefinerSprite;
 
 import flash.display.DisplayObject;
+
+import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	import flash.text.TextFieldAutoSize;
+import flash.geom.Rectangle;
+import flash.text.TextFieldAutoSize;
 	import flash.utils.Dictionary;
 
 	import tree.common.Config;
+import tree.manager.ITick;
 import tree.view.ShadeGround;
+import tree.view.canvas.Canvas;
 
-public class Hint extends CorrectSizeDefinerSprite
+public class Hint extends CorrectSizeDefinerSprite implements ITick
 	{
 		public static var PADDING:int = 5;// сколько пикселей от края есть всегда
 		public static var HORIZONTAL_PADDING:int = 20;// отступ от мышки (чтобы курсор не загораживал подсказку)
@@ -97,41 +102,40 @@ public class Hint extends CorrectSizeDefinerSprite
 			textField.width = Math.min(170,textField.text.length*10 + 20);
 			moving();
 			//resize();
-			e.currentTarget.addEventListener(MouseEvent.ROLL_OUT, stopHint);
-			e.currentTarget.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);//начинаем следить мышь
 			// включаем таймер на автоскрытие
 			currentControl = e.currentTarget as DisplayObject;
 			// обеспечить появление не сразу. а спустя "время удержания"
 			alpha = 0;
 			GTweener.to(this,0.2,{alpha:1});
 			Config.ticker.defer(onAutoStop, (Math.max(2,hint.length * 0.2) + 2)*1000, [currentControl]);
+			Config.ticker.add(this);
 		}
 
 		private function onAutoStop(control:DisplayObject):void {
 			if(currentControl == control)
 				stopHint();
 		}
+
+		public function tick(deltaMS:int):void{
+			if(!currentControl) return;
+			var r:Rectangle = currentControl.getBounds(currentControl);
+			if(r.contains(currentControl.mouseX, currentControl.mouseY))
+				moving();
+			else
+				stopHint();
+		}
 		
 		private function stopHint(e:MouseEvent = null):void{
+			Config.ticker.remove(this);
 			if (e != null){
 				if(e.relatedObject && (e.relatedObject == this || e.relatedObject == ground || e.relatedObject.parent == this)) {moving();return;}
-				deleteListeners(e.currentTarget as DisplayObject);
 			}else
 				if(currentControl)
-					deleteListeners(currentControl as DisplayObject);
-			
+
 			currentControl = null;
 			
 			if(application.contains(this))
 				application.removeChild(this);
-			function deleteListeners(obj:DisplayObject):void{
-				obj.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
-				obj.removeEventListener(MouseEvent.ROLL_OUT, stopHint);	
-			}
-		}
-		
-		private function mouseMove(e:MouseEvent):void{
-			moving();
 		}
 		
 		private function moving():void
