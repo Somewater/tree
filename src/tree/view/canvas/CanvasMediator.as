@@ -116,6 +116,7 @@ package tree.view.canvas {
 			canvas.y += signal.delta.y;
 			controller.onCanvasDragged();
 			canvas.refreshNodesVisibility();
+			model.canvasMovingCounter++;
 		}
 
 		public function onStopDrag(signal:DragSignal):void{

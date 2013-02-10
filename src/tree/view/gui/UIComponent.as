@@ -9,9 +9,12 @@ import flash.display.Sprite;
 	import org.osflash.signals.ISignal;
 	import org.osflash.signals.Signal;
 
-	import tree.common.IClear;
+import tree.common.Config;
 
-	public class UIComponent extends CorrectSizeDefinerSprite implements IClear, ISize{
+import tree.common.IClear;
+import tree.model.Model;
+
+public class UIComponent extends CorrectSizeDefinerSprite implements IClear, ISize{
 
 		public var over:ISignal;
 		public var out:ISignal;
@@ -23,7 +26,7 @@ import flash.display.Sprite;
 		protected var _width:Number;
 		protected var _height:Number;
 
-		private var clickFlag:Boolean = false;
+		private var clickFlag:uint = 0;
 
 		private var _hint:String;
 
@@ -67,7 +70,7 @@ import flash.display.Sprite;
 			if(event.relatedObject && this.contains(event.relatedObject))
 				return;
 			out.dispatch(this);
-			clickFlag = false;
+			clickFlag = 0;
 		}
 
 		private function _onDblClick(event:MouseEvent):void {
@@ -76,15 +79,20 @@ import flash.display.Sprite;
 
 		private function _onDown(event:MouseEvent):void {
 			down.dispatch(this);
-			clickFlag = true;
+			clickFlag = getClickHash();
 		}
 
 		private function _onUp(event:MouseEvent):void {
 			up.dispatch(this);
 			if(clickFlag){
-				clickFlag = false;
-				click.dispatch(this)
+				if(clickFlag == getClickHash())
+					click.dispatch(this)
+				clickFlag = 0;
 			}
+		}
+
+		private function getClickHash():uint{
+			return Model.instance.canvasMovingCounter;
 		}
 
 		public function fireResize():void{

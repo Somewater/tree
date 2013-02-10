@@ -61,6 +61,8 @@ package tree.model {
 		private var _hand:Boolean = false;
 		public var handLog:HandMovingLog;
 
+		public var canvasMovingCounter:int = 1;
+
 		CONFIG::debug{
 			public static const DEFAULT_UID:int = 18985299;
 		}
