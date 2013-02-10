@@ -25,6 +25,7 @@ package tree.view.gui {
 			addChildAt(ground, 0);
 
 			open = Model.instance.guiOpen;
+			tabEnabled = false;
 		}
 
 		override protected function refresh():void {

@@ -25,6 +25,7 @@ package tree.view.gui {
 			up.add(onUp);
 
 			useHandCursor = buttonMode = true;
+			tabEnabled = false;
 		}
 
 		public function get movie():MovieClip {

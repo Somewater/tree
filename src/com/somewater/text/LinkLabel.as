@@ -36,6 +36,7 @@ package com.somewater.text
 			linked = true;
 			Helper.stylizeText(this);
 			link = new Signal(LinkLabel);
+			tabEnabled = false;
 		}
 		
 		public function clear():void{

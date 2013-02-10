@@ -114,6 +114,7 @@ import tree.view.gui.UIComponent;
 			optionsButton.hint = I18n.t('HINT_OPTIONS_BTN')
 			fullscreenButton.hint = I18n.t('HINT_FULLSCREEN_BTN')
 			saveTreeButton.hint = I18n.t('HINT_SAVE_TREE_BTN')
+			tabEnabled = false;
 		}
 
 		private function onLinkClicked(event:Event):void {

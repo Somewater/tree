@@ -65,7 +65,6 @@ import tree.view.gui.UIComponent;
 
 			firstNameInput = new TreeTextInput();
 			firstNameInput.height = 28;
-			addChild(firstNameInput)
 
 			lastNameLabel = new EmbededTextField(null, 0x000000, 12, true);
 			lastNameLabel.text = I18n.t('LAST_NAME')
@@ -73,7 +72,6 @@ import tree.view.gui.UIComponent;
 
 			lastNameInput = new TreeTextInput();
 			lastNameInput.height = 28;
-			addChild(lastNameInput);
 
 			middleNameLabel = new EmbededTextField(null, 0x000000, 12, true);
 			middleNameLabel.text = I18n.t('MIDDLE_NAME');
@@ -81,7 +79,6 @@ import tree.view.gui.UIComponent;
 
 			middleNameInput = new TreeTextInput();
 			middleNameInput.height = 28;
-			addChild(middleNameInput);
 
 			maidenNameLabel = new EmbededTextField(null, 0x000000, 12, true);
 			maidenNameLabel.text = I18n.t('MAIDEN_NAME');
@@ -89,7 +86,11 @@ import tree.view.gui.UIComponent;
 
 			maidenNameInput = new TreeTextInput();
 			maidenNameInput.height = 28;
+
+			addChild(lastNameInput);
 			addChild(maidenNameInput);
+			addChild(firstNameInput)
+			addChild(middleNameInput);
 
 			birthdayLabel = new EmbededTextField(null, 0x000000, 12, true);
 			birthdayLabel.text = I18n.t('MALE_DEAD_QUESTION');
@@ -102,6 +103,7 @@ import tree.view.gui.UIComponent;
 			died = new CheckBox();
 			died.addEventListener(Event.CHANGE, onDiedChanged)
 			died.label = I18n.t('MALE_DEAD_QUESTION');
+			died.tabEnabled = false;
 			addChild(died);
 
 			deathDayLabel = new EmbededTextField(null, 0x000000, 12, true);

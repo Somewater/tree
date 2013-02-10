@@ -40,6 +40,7 @@ public class DateSelector extends TreeTextInput{
 		addChild(core);
 		addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
 		core.addEventListener(Event.CHANGE, onDataChanged);
+		tabEnabled = false;
 	}
 
 	public function get date():Date {
