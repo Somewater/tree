@@ -112,7 +112,7 @@ import org.osflash.signals.ISignal;
 		}
 
 		public function get handCoords():Boolean{
-			return handX != int.MAX_VALUE && handY != int.MAX_VALUE;
+			return handX != int.MAX_VALUE && handX != int.MIN_VALUE && handY != int.MAX_VALUE && handY != int.MIN_VALUE;
 		}
 
 		/**
