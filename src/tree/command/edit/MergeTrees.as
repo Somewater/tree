@@ -1,4 +1,6 @@
 package tree.command.edit {
+import flash.display.JointStyle;
+
 import tree.command.AddPerson;
 import tree.command.Command;
 import tree.command.RecalculateNodes;
@@ -91,8 +93,12 @@ public class MergeTrees extends Command{
 
 		for each(j in joinsQueue.slice()){
 			var j2:Join = j;
-			if(j2.type == JoinType.FIRST_JOIN){
+			if(j2.associate == person){
 				j2 = this.joinFrom;
+				joinsQueue[joinsQueue.indexOf(j)] = j2;
+			}else if(j2.type == JoinType.FIRST_JOIN){
+				j2 = j.associate.joins[0];// выбрать произвольную
+				j2 = j2.associate.relation(j.associate)// todo работаетм с alter (которая от j.assoc)
 				joinsQueue[joinsQueue.indexOf(j)] = j2;
 			}
 

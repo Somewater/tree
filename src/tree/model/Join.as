@@ -54,10 +54,8 @@ package tree.model {
 
 		public var visible:Boolean = false;
 
-		private var persons:PersonsCollection;
 
 		public function Join(persons:PersonsCollection) {
-			this.persons = persons;
 		}
 
 		override public function get id():String {
