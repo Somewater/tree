@@ -131,5 +131,9 @@ package tree.model {
 
 			throw new Error('Can`t find this model ' + g);
 		}
+
+		public function clear():void {
+			spatial = null;
+		}
 	}
 }

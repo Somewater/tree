@@ -6,6 +6,9 @@ package tree.model {
 	public class TreesCollection extends ModelCollection{
 		private var bus:Bus;
 
+		private static var numberCounter:int = 0;
+		private static var orientationCounter:int = 0;
+
 		public function TreesCollection(bus:Bus) {
 			this.bus = bus;
 		}
@@ -27,7 +30,8 @@ package tree.model {
 			var t:TreeModel = model as TreeModel;
 			if(!t)
 				throw new Error('TreesCollection should contains only trees');
-			t.number = array.length;
+			t.number = numberCounter++;
+			t.left = ((orientationCounter++) % 2) == 0;
 			super.add(model);
 		}
 
@@ -103,7 +107,7 @@ package tree.model {
 				changed = false;
 
 				if(i != 0){
-					if(i % 2 == 0){
+					if(!t2.left){
 						// right (positive) shift
 						if(t2.shiftX != maxX + PADDING - t2.minX){
 							t2.shiftX = maxX + PADDING - t2.minX

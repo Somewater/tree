@@ -25,6 +25,8 @@ package tree.model {
 
 		public var shiftX:int = 0;
 		public var dirty:Boolean;// одна из нод изменила размеры дерева
+		public var left:Boolean = true;// поддерево располагается слева или справа от главного
+
 
 
 		public function TreeModel(bus:Bus) {

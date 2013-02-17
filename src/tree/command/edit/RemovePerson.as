@@ -83,6 +83,11 @@ public class RemovePerson extends Command{
 						n.slaves.splice(idx, 1);
 				}
 			}
+
+			if(tree.persons.length == 0){
+				// уничтожить всё дерево
+				new RemoveTree(tree).execute();
+			}
 		}
 
 		private function onComplete(response:ResponseSignal):void{

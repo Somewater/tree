@@ -110,8 +110,10 @@ public class CanvasController extends Actor{
 			n.complete.addOnce(onNodeHidedOnce);
 			n.hide();
 
-			var l:JoinLine = canvas.getJoinLine(g.join.from.uid, g.node.uid);
-			if(l) l.hide();
+			if(g.join.from){
+				var l:JoinLine = canvas.getJoinLine(g.join.from.uid, g.node.uid);
+				if(l) l.hide();
+			}
 		}
 
 		private function onNodePositionChanged(node:Node):void {
@@ -152,9 +154,11 @@ public class CanvasController extends Actor{
 		}
 
 		private function onNodeHidedOnce(n:NodeIcon):void{
-			var line:JoinLine = canvas.getJoinLine(n.data.join.from.uid, n.data.node.uid);
+			if(n.data.join.from){
+				var line:JoinLine = canvas.getJoinLine(n.data.join.from.uid, n.data.node.uid);
+				canvas.destroyLine(line);
+			}
 			var node:Node = n.data.node;
-			canvas.destroyLine(line);
 			canvas.destroyNode(n);
 			canvas.fireComplete();
 
@@ -191,7 +195,7 @@ public class CanvasController extends Actor{
 
 			// если рассматриваемая нода имеет супруга, обновить джоин-лайны детей
 			var m:Person = node.marry;
-			if(m && m.node.visible){
+			if(m && m.node && m.node.visible){
 				for each(j in m.node.iterator)
 					if(j.type.superType == JoinType.SUPER_TYPE_BREED){
 						l = canvas.getJoinLine(j.from.uid, j.uid);
