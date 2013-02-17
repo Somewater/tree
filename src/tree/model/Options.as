@@ -129,9 +129,9 @@ public class Options {
 	 * available - прямоугольник-выделение области, куда можно поместить персону
 	 * Если выставить alpha="0" любой из частей подсветки, то она исчезнет и расчеты, связанные с ней, производиться не будут
 	 */
-	public function get handHighlightSnapColor():uint{return getProp('hand_highlight_snap_color', 0xCCCCCC)}
+	public function get handHighlightSnapColor():uint{return getColor('hand_highlight_snap_color', '#CCCCCC')}
 	public function get handHighlightSnapAlpha():Number{return getProp('hand_highlight_snap_alpha', 1)}
-	public function get handHighlightAvailableColor():uint{return getProp('hand_highlight_available_color', 0x0000FF)}
+	public function get handHighlightAvailableColor():uint{return getColor('hand_highlight_available_color', '#0000FF')}
 	public function get handHighlightAvailableAlpha():Number{return getProp('hand_highlight_available_alpha', 0.1)}
 
 	public function read(setup:XMLList):void {
@@ -155,6 +155,12 @@ public class Options {
 	private function getBoolProp(name:String, defaultVal:Boolean):Boolean{
 		var val:String = String(getProp(name, defaultVal));
 		return val != '0' && val != 'false';
+	}
+
+	private function getColor(name:String, defaultVal:String):uint{
+		var val:String = String(getProp(name, defaultVal));
+		if(val.charAt(0) == '#') val = val.substr(1);
+		return parseInt(val, 16);
 	}
 
 	public function get userId():int {

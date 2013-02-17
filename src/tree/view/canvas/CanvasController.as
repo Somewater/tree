@@ -64,6 +64,7 @@ public class CanvasController extends Actor{
 			bus.addNamed(ViewSignal.REFRESH_GENERATIONS, refreshAllGenerations);
 			bus.addNamed(ViewSignal.REDRAW_JOIN_LINES, refreshPersonJoinLines);
 			bus.addNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);
+			Config.ticker.defer(refreshNodesVisibility, 5000);
 		}
 
 		public function drawJoin(g:GenNode):void {
@@ -459,8 +460,10 @@ public class CanvasController extends Actor{
 					}
 					if(errorHighlightedNode) errorHighlightedNode.errorHighlight = false;
 					errorHighlightedNode = null;
-					handDragNode.errorHighlight = false;
-					handDragNode = null;
+					if(handDragNode){
+						handDragNode.errorHighlight = false;
+						handDragNode = null;
+					}
 					canvas.rulesVisibility = false;
 				}
 			}
@@ -474,7 +477,7 @@ public class CanvasController extends Actor{
 			var hand:Boolean = Model.instance.hand
 			var nPos:Point = n.position(hand);
 			// todo: итерация по нодам поколения, а не всем подряд
-			for each(var p:Person in model.trees.iteratorForAllPersons()){
+			for each(var p:Person in n.person.tree.persons.iterator){
 				var n2:Node = p.node;
 				if(n2 != n && n.generation == n2.generation){
 					var n2Pos:Point = n2.position(hand);
@@ -616,7 +619,7 @@ public class CanvasController extends Actor{
 				i++
 			}
 
-			for each(var person:Person in model.trees.iteratorForAllPersons()){
+			for each(var person:Person in node.person.tree.persons.iterator){
 				var n2:Node = person.node;
 				if(n2 != node && node.generation == n2.generation){
 					var n2Pos:Point = n2.position(hand);
@@ -637,6 +640,18 @@ public class CanvasController extends Actor{
 
 			canvas.showAvailableCoords(availableCoords);
 		}
+
+	/**
+	 * Убедиться, что нет нод, считающих себя "нажатыми". Если таковые имеются, "разжать" их, послав соответствующий сигнал
+	 */
+	public function mouseUpAllNodes():void {
+		canvas.mouseUpAllNodes();
+	}
+
+	private function refreshNodesVisibility():void{
+		canvas.refreshNodesVisibility();
+		Config.ticker.defer(refreshNodesVisibility, 1000);
+	}
 }
 }
 class Rect{

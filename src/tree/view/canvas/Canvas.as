@@ -267,7 +267,7 @@ import tree.view.gui.UIComponent;
 				if(callRefreshVisibilityDelayed != Config.ticker.getTimer){
 					if(callRefreshVisibilityDelayed)
 						Config.ticker.removeByCallback(refreshNodesVisibility);
-					Config.ticker.callLater(refreshNodesVisibility, 2, [true]);
+					Config.ticker.callLater(refreshNodesVisibility, 10, [true]);
 					callRefreshVisibilityDelayed = Config.ticker.getTimer;
 				}
 				return;
@@ -479,6 +479,12 @@ import tree.view.gui.UIComponent;
 				p.x *= Canvas.ICON_WIDTH_SPACE;
 				p.y *= Canvas.ICON_HEIGHT + Canvas.HEIGHT_SPACE;
 				canvasRules.drawAvailableCoord(p.x, p.y);
+			}
+		}
+
+		public function mouseUpAllNodes():void {
+			for each(var n:NodeIcon in nodesByUid){
+				n.onMouseUp();
 			}
 		}
 	}

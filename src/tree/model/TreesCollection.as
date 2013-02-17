@@ -69,6 +69,8 @@ package tree.model {
 		public function recalculateTreesBounds():void{
 			var hand:Boolean = Model.instance.hand
 			for each(var t:TreeModel in array){
+				t.maxX = int.MIN_VALUE;
+				t.minX = int.MAX_VALUE;
 				for each(var n:Node in t.nodes.iterator){
 					if(n.visible){
 						if(hand){

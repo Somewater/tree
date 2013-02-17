@@ -14,10 +14,12 @@ package tree.common {
 	import org.osflash.signals.Signal;
 
 	import tree.Tree;
-	import tree.model.Model;
+import tree.common.Config;
+import tree.model.Model;
 	import tree.signal.DragSignal;
+import tree.view.canvas.CanvasController;
 
-	public class Bus extends NamedSignal{
+public class Bus extends NamedSignal{
 
 		public var sceneResize:IPrioritySignal;// callback(point:Point)
 		private var tmpPoint:Point;
@@ -127,7 +129,7 @@ package tree.common {
 			}
 		}
 
-		private function onMouseUp(event:Event):void {
+		private function onMouseUp(event:Event = null):void {
 			tmpPoint.x =  Tree.instance.mouseX;
 			tmpPoint.y =  Tree.instance.mouseY;
 			mouseUp.dispatch(tmpPoint);
@@ -138,6 +140,10 @@ package tree.common {
 				tmpPoint.x =  Tree.instance.mouseX;
 				tmpPoint.y =  Tree.instance.mouseY;
 				mouseMove.dispatch(tmpPoint);
+			}else{
+				onMouseUp();
+				// если есть ноды, считающие себя нажатыми, разубедить их в этом досадном факте
+				(Config.inject(CanvasController) as CanvasController).mouseUpAllNodes();
 			}
 		}
 
