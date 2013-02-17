@@ -5,6 +5,7 @@ import tree.command.*;
 import tree.common.Config;
 import tree.model.Join;
 import tree.model.JoinCollectionBase;
+import tree.model.Model;
 import tree.model.Node;
 import tree.model.Person;
 	import tree.model.TreeModel;
@@ -56,12 +57,7 @@ public class RemovePerson extends Command{
 
 			bus.dispatch(ModelSignal.HIDE_NODE, join);
 
-			if(model.selectedPerson == person)
-				model.selectedPerson = model.trees.first.owner;
-			if(model.editing.editEnabled && model.editing.edited == person){
-				model.editing.editEnabled = false;
-				(Config.inject(Gui) as Gui).setPage(PersonProfilePage.NAME);
-			}
+			removeModelFields(person);
 
 			detain();
 			Config.ticker.callLater(removePersonFromModel, 100);
@@ -69,6 +65,13 @@ public class RemovePerson extends Command{
 
 		private function removePersonFromModel():void{
 			release();
+			removeModelFields(person);
+			removeFromModel(person);
+		}
+
+		public static function removeFromModel(person:Person):void{
+			var model:Model = Model.instance;
+			removeModelFields(person);
 
 			var tree:TreeModel = person.tree;
 			var node:Node = person.node;
@@ -87,6 +90,16 @@ public class RemovePerson extends Command{
 			if(tree.persons.length == 0){
 				// уничтожить всё дерево
 				new RemoveTree(tree).execute();
+			}
+		}
+
+		private static function removeModelFields(person:Person):void{
+			var model:Model = Model.instance;
+			if(model.selectedPerson == person)
+				model.selectedPerson = model.trees.first.owner;
+			if(model.editing.editEnabled && model.editing.edited == person){
+				model.editing.editEnabled = false;
+				(Config.inject(Gui) as Gui).setPage(PersonProfilePage.NAME);
 			}
 		}
 

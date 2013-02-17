@@ -1,8 +1,10 @@
 package tree.command.edit {
-	import tree.command.Command;
+import tree.command.AddPerson;
+import tree.command.Command;
 	import tree.command.ConstructTreeModel;
 	import tree.command.RecalculateNodes;
-	import tree.common.Config;
+import tree.command.view.StartTreeDraw;
+import tree.common.Config;
 import tree.manager.Logic;
 import tree.model.Join;
 	import tree.model.Join;
@@ -51,6 +53,12 @@ import tree.signal.ViewSignal;
 			request.onSucces.add(onResponseSuccess)
 			request.onComplete.add(onComplete)
 
+			if(false && CONFIG::debug){
+				var response:ResponseSignal = new ResponseSignal('', {}, request);
+				onComplete(response);
+				onResponseSuccess(response);
+				return;
+			}
 			call(request);
 		}
 
@@ -156,7 +164,11 @@ import tree.signal.ViewSignal;
 			person.isNew = false;
 			person.editable = true;// можно редактировать, но неизвестна ссылка на расширенное редактирование, загрузку фото и т.д.
 
-			if(!newPerson)
+			if(!newPerson && from && person.tree != from.tree){
+				// персону из одного поддерева связали с персоной из другого
+				new MergeTrees(person, from, join).execute();
+				return;
+			}else if(!newPerson)
 				bus.dispatch(ViewSignal.REDRAW_JOIN_LINES, person);
 			else if(newTree)
 				bus.dispatch(ModelSignal.TREE_NEED_CONSTRUCT, person.tree);

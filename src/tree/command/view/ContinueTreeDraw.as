@@ -21,17 +21,19 @@ package tree.command.view {
 
 		override public function execute():void {
 			model.constructionInProcess = true;
-			var join:Join = model.joinsForDraw.shift();
-			if(join)
-			{
-				bus.dispatch(ModelSignal.SHOW_NODE, join);
-				return;
-			}
+			var join:Join
 
 			join = model.joinsForRemove.shift();
 			if(join)
 			{
 				bus.dispatch(ModelSignal.HIDE_NODE, join);
+				return;
+			}
+
+			join = model.joinsForDraw.shift();
+			if(join)
+			{
+				bus.dispatch(ModelSignal.SHOW_NODE, join);
 				return;
 			}
 

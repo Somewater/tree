@@ -15,9 +15,20 @@ import tree.model.Join;
 		}
 
 		override public function execute():void {
+			addToModel(join);
+
+			var request:RequestSignal = new RequestSignal(RequestSignal.ADD_USER);
+			request.person = join.associate;
+			call(request);
+
+			bus.dispatch(ModelSignal.SHOW_NODE, join);
+		}
+
+		public static function addToModel(join:Join):void {
 			var tree:TreeModel = join.from.tree;
 			join.associate.tree = tree;
 			var node:Node = tree.nodes.allocate(join.associate);
+			node.join = join;
 			tree.persons.add(join.associate);
 			tree.nodes.add(node);
 
@@ -30,13 +41,7 @@ import tree.model.Join;
 			join.associate.add(alterJoin);
 			join.from.add(join);
 
-			var request:RequestSignal = new RequestSignal(RequestSignal.ADD_USER);
-			request.person = join.associate;
-			call(request);
-
 			Logic.calculateNode(node, join.associate.node, join.flatten, join.breed);
-
-			bus.dispatch(ModelSignal.SHOW_NODE, join);
 		}
 	}
 }

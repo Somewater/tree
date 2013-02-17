@@ -106,12 +106,17 @@ public class PersonComboBox extends UIComponent{
 				var canAdd:Boolean = false;
 
 				//  проверяем поколение
-				if(joinType.flatten){
-					canAdd = p.node.generation == fromNode.generation;
-				}else if(joinType.breed){
-					canAdd = (p.node.generation - fromNode.generation) == 1;
-				}else if(!joinType.breed){
-					canAdd = (p.node.generation - fromNode.generation) == -1;
+				if(from.tree == p.tree){
+					if(joinType.flatten){
+						canAdd = p.node.generation == fromNode.generation;
+					}else if(joinType.breed){
+						canAdd = (p.node.generation - fromNode.generation) == 1;
+					}else if(!joinType.breed){
+						canAdd = (p.node.generation - fromNode.generation) == -1;
+					}
+				}else{
+					canAdd = !p.tree.root();// персоны из других деревьев могут не подходить по поколению, но достоверно это не известно
+					// но нельзя добавлять в другое подерево персон из root поддерева
 				}
 
 				// проверяем пол
@@ -134,12 +139,21 @@ public class PersonComboBox extends UIComponent{
 				}
 
 				if(canAdd)
-					personItems.push(new DPItem(p));
+					personItems.push(new DPItem(p, false, from.tree == p.tree));
 			}
 
 		var dataProvider:DataProvider = new DataProvider(filteredPersons(personItems));
+		dataProvider.sort(sortFunc);
 		comboBox.dataProvider = dataProvider;
 
+	}
+
+	private function sortFunc(a:DPItem, b:DPItem):int{
+		if(a.newPerson) return -1;
+		if(b.newPerson) return 1;
+		if(a.sameTree && !b.sameTree) return -1;
+		if(b.sameTree && !a.sameTree) return 1;
+		return a.person.name < b.person.name ? -1 : 1;
 	}
 
 	public function get enabled():Boolean{

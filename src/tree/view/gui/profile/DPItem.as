@@ -9,10 +9,12 @@ internal class DPItem{
 
 	public var person:Person;
 	public var newPerson:Boolean;
+	public var sameTree:Boolean;
 
-	public function DPItem(person:Person, newPerson:Boolean = false){
+	public function DPItem(person:Person, newPerson:Boolean = false, sameTree:Boolean = true){
 		this.person = person;
 		this.newPerson = newPerson;
+		this.sameTree = sameTree;
 	}
 
 	public function get label():String{

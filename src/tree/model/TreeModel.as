@@ -45,5 +45,9 @@ package tree.model {
 		public function clear():void{
 
 		}
+
+		public function root():Boolean{
+			return number == 0;// корневое поддерево (его корнем является owner просматриваемых поддеревьев)
+		}
 	}
 }
