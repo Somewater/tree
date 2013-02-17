@@ -18,6 +18,8 @@ import tree.signal.ViewSignal;
 
 	public class EditProfile extends Command{
 
+		private static const SMART_CHECK:Boolean = false;
+
 		private var person:Person;
 		private var joinType:JoinType;
 		private var join:Join;
@@ -85,49 +87,51 @@ import tree.signal.ViewSignal;
 				join.from = from;
 				var p:Person;
 
-				// если добаляется ребенок, актоматически делать ребенком 2-х родитеелй
-				if(joinType.superType == JoinType.SUPER_TYPE_BREED){
-					var bros:Array = [];
-					if(from.marry){
-						createJoin(joinType, from.marry, person);
-						bros = from.legitimateBreed;
-					}else
-						bros = from.breeds;
-					// сделать детей этих родителей его братьями и сестрами
-					for each(p in bros)
-						createJoin(Join.joinBy(JoinType.SUPER_TYPE_BRO, person.male), p, person);
-				}
-
-				// если добавляется родитель, автоматически делать родителем братьев и сестер
-				if(joinType.superType == JoinType.SUPER_TYPE_PARENT){
-					var commonParent:Person;
-					var hasCommonParent:Boolean = true;
-				    for each(p in from.bros){
-						if(hasCommonParent){
-							var parents:Array = p.parents;
-							if(parents.length == 1 && (commonParent == null || parents[0] == commonParent))
-								commonParent = parents[0];
-							else{
-								hasCommonParent = false;
-								commonParent = null;
-							}
-						}
-						createJoin(Join.joinBy(JoinType.SUPER_TYPE_PARENT, person.male), p, person)
+				if(SMART_CHECK){
+					// если добаляется ребенок, актоматически делать ребенком 2-х родитеелй
+					if(joinType.superType == JoinType.SUPER_TYPE_BREED){
+						var bros:Array = [];
+						if(from.marry){
+							createJoin(joinType, from.marry, person);
+							bros = from.legitimateBreed;
+						}else
+							bros = from.breeds;
+						// сделать детей этих родителей его братьями и сестрами
+						for each(p in bros)
+							createJoin(Join.joinBy(JoinType.SUPER_TYPE_BRO, person.male), p, person);
 					}
-					// "поженить" на общем родителе детей
-					if(commonParent)
-						createJoin(Join.joinBy(JoinType.SUPER_TYPE_MARRY, person.male), commonParent, person)
+
+					// если добавляется родитель, автоматически делать родителем братьев и сестер
+					if(joinType.superType == JoinType.SUPER_TYPE_PARENT){
+						var commonParent:Person;
+						var hasCommonParent:Boolean = true;
+						for each(p in from.bros){
+							if(hasCommonParent){
+								var parents:Array = p.parents;
+								if(parents.length == 1 && (commonParent == null || parents[0] == commonParent))
+									commonParent = parents[0];
+								else{
+									hasCommonParent = false;
+									commonParent = null;
+								}
+							}
+							createJoin(Join.joinBy(JoinType.SUPER_TYPE_PARENT, person.male), p, person)
+						}
+						// "поженить" на общем родителе детей
+						if(commonParent)
+							createJoin(Join.joinBy(JoinType.SUPER_TYPE_MARRY, person.male), commonParent, person)
+					}
+
+					// если добавляется супруг, детей автоматически делать общими
+					if(joinType.superType == JoinType.SUPER_TYPE_MARRY)
+						for each(p in from.breeds)
+							createJoin(Join.joinBy(JoinType.SUPER_TYPE_PARENT, person.male), p, person)
+
+					// если добавляется bro, сделать родителей общими (если у bro их нет)
+					if(joinType.superType == JoinType.SUPER_TYPE_BRO && person.parents.length == 0)
+						for each(p in from.parents)
+							createJoin(Join.joinBy(JoinType.SUPER_TYPE_PARENT, p.male), person, p)
 				}
-
-				// если добавляется супруг, детей автоматически делать общими
-				if(joinType.superType == JoinType.SUPER_TYPE_MARRY)
-				    for each(p in from.breeds)
-						createJoin(Join.joinBy(JoinType.SUPER_TYPE_PARENT, person.male), p, person)
-
-				// если добавляется bro, сделать родителей общими (если у bro их нет)
-				if(joinType.superType == JoinType.SUPER_TYPE_BRO && person.parents.length == 0)
-					for each(p in from.parents)
-						createJoin(Join.joinBy(JoinType.SUPER_TYPE_PARENT, p.male), person, p)
 			}
 
 			var node:Node = person.node;
