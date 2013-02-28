@@ -41,8 +41,8 @@ public class Options {
 	 * Используется минимум от величин: Math.min(maxTimeForOne, maxTimeForAll / number)
 	 * Время измеряется в тактах работы приложения,  1 такт = 1/30 секунды
 	 */
-	public function get maxTreeConstructTime():int { return getProp('maxTreeConstructTime', 5); }
-	public function get maxTreeConstructTimeTreeUncompl():int { return getProp('maxTreeConstructTimeTreeUncompl', 10); }// при условии, что дерево еще не до конца достроено
+	public function get maxTreeConstructTime():int { return getProp('maxTreeConstructTime', 2); }
+	public function get maxTreeConstructTimeTreeUncompl():int { return getProp('maxTreeConstructTimeTreeUncompl', 3); }// при условии, что дерево еще не до конца достроено
 	public function get minNodeConstructTime():int { return getProp('minNodeConstructTime', 1); }
 
 	/**
