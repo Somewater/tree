@@ -41,12 +41,22 @@ package tree.model {
 			var changed:Boolean = !t.visible || !added || t.dirty;// т.е. если это первая нода, то изменения в любом случае
 
 			if(added){
-				if(n.x > t.maxX){
-					t.maxX = n.x;
-					changed = true;
-				}else if(n.x < t.minX){
-					t.minX = n.x;
-					changed = true;
+				if(Model.instance.hand){
+					if(n.handX > t.maxX){
+						t.maxX = n.handX;
+						changed = true;
+					}else if(n.handX < t.minX){
+						t.minX = n.handX;
+						changed = true;
+					}
+				}else{
+					if(n.x > t.maxX){
+						t.maxX = n.x;
+						changed = true;
+					}else if(n.x < t.minX){
+						t.minX = n.x;
+						changed = true;
+					}
 				}
 				n.positionChanged.add(onNodePositionChanged);
 			}else{
@@ -139,12 +149,22 @@ package tree.model {
 
 		private function onNodePositionChanged(n:Node):void {
 			var t:TreeModel = n.person.tree;
-			if(n.x > t.maxX){
-				t.maxX = n.x;
-				t.dirty = true;
-			}else if(n.x < t.minX){
-				t.minX = n.x;
-				t.dirty = true;
+			if(Model.instance.hand){
+				if(n.handX > t.maxX){
+					t.maxX = n.handX;
+					t.dirty = true;
+				}else if(n.handX < t.minX){
+					t.minX = n.handX;
+					t.dirty = true;
+				}
+			}else{
+				if(n.x > t.maxX){
+					t.maxX = n.x;
+					t.dirty = true;
+				}else if(n.x < t.minX){
+					t.minX = n.x;
+					t.dirty = true;
+				}
 			}
 		}
 

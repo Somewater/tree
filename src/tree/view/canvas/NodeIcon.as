@@ -85,6 +85,9 @@ import tree.view.gui.Helper;
 
 		private var positionAnimation:Boolean = false;// активна анимация смены позиции (твинер)
 
+		public var requiredPosX:int = 0;
+		public var requiredPosY:int = 0;
+
 		public function NodeIcon() {
 			skin = Config.loader.createMc('assets.NodeAsset');
 			maleHighlight = skin.getChildByName('male_back_hl');
@@ -238,10 +241,12 @@ import tree.view.gui.Helper;
 				GTweener.removeTweens(this);
 				this.alpha = 1;
 				positionAnimation = true;
+				requiredPosX = p.x;
+				requiredPosY = p.y;
 				Tweener.to(this, Model.instance.animationTime * 0.5, {'x':p.x, 'y':p.y}, {onComplete: dispatchOnComplete });
 			}else{
-				this.x = p.x;
-				this.y = p.y;
+				this.x = requiredPosX = p.x;
+				this.y = requiredPosY = p.y;
 			}
 		}
 

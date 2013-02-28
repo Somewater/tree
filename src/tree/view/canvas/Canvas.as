@@ -284,8 +284,8 @@ import tree.view.gui.UIComponent;
 			minY -= Canvas.ICON_HEIGHT;
 
 			for each(var n:NodeIcon in nodesByUid){
-				var nx:int = n.x;
-				var ny:int = n.y;
+				var nx:int = n.requiredPosX;
+				var ny:int = n.requiredPosY;
 				var nv:Boolean = nx < maxX && nx > minX && ny < maxY && ny > minY;
 				if(nv){
 					if(!n.visible){
