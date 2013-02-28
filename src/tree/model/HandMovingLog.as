@@ -24,7 +24,7 @@ public class HandMovingLog {
 	private function autosaveIfNeed():void{
 		Config.ticker.defer(autosaveIfNeed, Model.instance.options.autoSaveHandMode * 1000);
 
-		if(!empty()){
+		if(!empty() && Model.instance.hand){
 			new SaveTree(true).execute();
 		}
 	}

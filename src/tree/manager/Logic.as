@@ -1,4 +1,5 @@
 package tree.manager {
+import tree.model.GenNode;
 import tree.model.Join;
 import tree.model.JoinType;
 import tree.model.Model;
@@ -100,8 +101,35 @@ public class Logic {
 				node.oddX = true;
 		}
 
+		if(hand){
+			node.handY = node.level;
+			handCoordChanged = true;
+		}
+
 		if(handCoordChanged)
 			Model.instance.handLog.add(node);
+	}
+
+	public static function checkIntersections(node:Node):void{
+		var startX:int = node.handX;
+		var i:int = 0;
+		var intersection:Boolean = true;
+		var nonIntersectedNodes:Array = [];
+		for each(var g:GenNode in Model.instance.generations.iterateAllGenNodes){
+			if(g.node != node)
+				nonIntersectedNodes.push(g.node)
+		}
+		while(intersection){
+			intersection = false;
+			node.handX = startX + 2 * Math.ceil(i / 2) * (i % 2 == 0 ? -1 : 1);
+			i++;
+			for each(var n2:Node in nonIntersectedNodes)
+				if(node.person.tree == n2.person.tree)
+					if(n2.handY == node.handY && Math.abs(n2.handX - node.handX) < 2){// полное пересечение, либо расстояние между нодами по x меньше 2
+						intersection = true;
+						break;
+					}
+		}
 	}
 }
 }

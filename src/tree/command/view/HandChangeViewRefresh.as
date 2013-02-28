@@ -95,10 +95,11 @@ public class HandChangeViewRefresh extends Command{
 				n.handX = startX + 2 * Math.ceil(i / 2) * (i % 2 == 0 ? -1 : 1);
 				i++;
 				for each(n2 in nonIntersectedNodes)
-					if(n2.handY == n.handY && Math.abs(n2.handX - n.handX) < 2){// полное пересечение, либо расстояние между нодами по x меньше 2
-						intersection = true;
-						break;
-					}
+					if(n.person.tree == n2.person.tree)
+						if(n2.handY == n.handY && Math.abs(n2.handX - n.handX) < 2){// полное пересечение, либо расстояние между нодами по x меньше 2
+							intersection = true;
+							break;
+						}
 			}
 			nonIntersectedNodes.push(n);
 		}

@@ -1,5 +1,7 @@
 package tree.command.view {
-	import tree.command.Command;
+import com.junkbyte.console.vos.Log;
+
+import tree.command.Command;
 import tree.manager.Logic;
 import tree.model.GenNode;
 	import tree.model.Join;
@@ -26,6 +28,10 @@ import tree.model.GenNode;
 			if(model.joinsQueue.indexOf(join) == -1) model.joinsQueue.push(join);
 
 			Logic.calculateRelativePosition(join);
+			if(join.from && !join.associate.node.handCoords){
+				Logic.calculateRelativePosition(join, true);
+				Logic.checkIntersections(join.associate.node);
+			}
 
 			var g:GenNode = model.generations.get(join.associate.node.generation).addWithJoin(join);
 
