@@ -60,7 +60,7 @@ public class RemovePerson extends Command{
 			removeModelFields(person);
 
 			detain();
-			Config.ticker.callLater(removePersonFromModel, 100);
+			Config.ticker.callLater(removePersonFromModel, 5);
 		}
 
 		private function removePersonFromModel():void{
