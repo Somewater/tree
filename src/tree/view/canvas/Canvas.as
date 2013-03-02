@@ -267,7 +267,7 @@ import tree.view.gui.UIComponent;
 				if(callRefreshVisibilityDelayed != Config.ticker.getTimer){
 					if(callRefreshVisibilityDelayed)
 						Config.ticker.removeByCallback(refreshNodesVisibility);
-					Config.ticker.callLater(refreshNodesVisibility, 10, [true]);
+					Config.ticker.callLater(refreshNodesVisibility, Model.instance.refrNodesVisibDelay, [true]);
 					callRefreshVisibilityDelayed = Config.ticker.getTimer;
 				}
 				return;

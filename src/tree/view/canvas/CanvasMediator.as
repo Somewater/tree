@@ -46,6 +46,7 @@ package tree.view.canvas {
 			bus.stopDrag.add(onStopDrag);
 			bus.sceneResize.add(onResize);
 			bus.addNamed(ViewSignal.NEED_CENTRE_CANVAS, onNeedCentreCanvas)
+			bus.guiChanged.add(onGuiChanged);
 		}
 
 		override public function clear():void {
@@ -58,6 +59,10 @@ package tree.view.canvas {
 
 		private function onResize(size:Point):void{
 			canvas.setSize(model.contentWidth, Config.HEIGHT - Config.PANEL_HEIGHT);
+		}
+
+		private function onGuiChanged(open:Boolean):void{
+			canvas.refreshNodesVisibility(true);
 		}
 
 		private function onModelChanged():void {
