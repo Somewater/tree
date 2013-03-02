@@ -43,7 +43,7 @@ import tree.model.base.ICollection;
 		public var lastName:String = '';
 		public var middleName:String = '';
 		public var maidenName:String;
-		public var birthday:Date = new Date();
+		public var birthday:Date;
 		public var deathday:Date;
 		private var _died:Boolean = false;
 		public var email:String;
