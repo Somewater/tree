@@ -104,6 +104,7 @@ public class PersonComboBox extends UIComponent{
 		for each(p in all)
 			if(p != from && !from.relation(p)){
 				var canAdd:Boolean = false;
+				var reverseRoot:Boolean = false;
 
 				//  проверяем поколение
 				if(from.tree == p.tree){
@@ -115,7 +116,8 @@ public class PersonComboBox extends UIComponent{
 						canAdd = (p.node.generation - fromNode.generation) == -1;
 					}
 				}else{
-					canAdd = !p.tree.root();// персоны из других деревьев могут не подходить по поколению, но достоверно это не известно
+					reverseRoot = p.tree.root();
+					canAdd = true//!p.tree.root();// персоны из других деревьев могут не подходить по поколению, но достоверно это не известно
 					// но нельзя добавлять в другое подерево персон из root поддерева
 				}
 
@@ -139,7 +141,7 @@ public class PersonComboBox extends UIComponent{
 				}
 
 				if(canAdd)
-					personItems.push(new DPItem(p, false, from.tree == p.tree));
+					personItems.push(new DPItem(p, false, from.tree == p.tree, reverseRoot));
 			}
 
 		var dataProvider:DataProvider = new DataProvider(filteredPersons(personItems));

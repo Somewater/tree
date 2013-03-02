@@ -149,5 +149,9 @@ public class EditPersonProfilePage extends PageBase{
 			}else
 				return null;
 		}
+
+	public function reverseRoot():Boolean {
+		return comboBox.selectedItem is DPItem && DPItem(comboBox.selectedItem).reverseRoot;
+	}
 }
 }

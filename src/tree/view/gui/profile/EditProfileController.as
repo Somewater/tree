@@ -77,7 +77,14 @@ public class EditProfileController extends GuiControllerBase implements IClear{
 			}
 			var selected:Person = page.getSelectedFromCombo();
 			if(selected){
-				bus.dispatch(ModelSignal.EDIT_PROFILE, selected, model.editing.joinType, model.editing.from);
+				if(page.reverseRoot())
+					bus.dispatch(ModelSignal.EDIT_PROFILE,
+									model.editing.from, model.editing.from.male ?
+									model.editing.joinType.associatedTypeForMale :
+									model.editing.joinType.associatedTypeForFemale,
+									selected);
+				else
+					bus.dispatch(ModelSignal.EDIT_PROFILE, selected, model.editing.joinType, model.editing.from);
 			}else{
 				page.editableInfo.updatePersonProperties(model.editing.edited)
 				bus.dispatch(ModelSignal.EDIT_PROFILE, model.editing.edited, model.editing.joinType, model.editing.from);
