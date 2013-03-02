@@ -6,15 +6,18 @@ import flash.display.DisplayObject;
 import flash.display.Shape;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 
 import nid.ui.controls.DatePicker;
 
 import tree.common.Config;
+import tree.common.IClear;
 import tree.model.Model;
 
 import tree.view.gui.profile.PersonProfilePage;
 
-public class DateSelector extends TreeTextInput{
+public class DateSelector extends TreeTextInput implements IClear{
 
 	private var icon:DisplayObject;
 	private var core:SafeDatePicker;
@@ -41,6 +44,13 @@ public class DateSelector extends TreeTextInput{
 		addEventListener(MouseEvent.CLICK, onClick, false, 0, true);
 		core.addEventListener(Event.CHANGE, onDataChanged);
 		tabEnabled = false;
+
+		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false ,0 ,true);
+	}
+
+	private function onAddedToStage(e:Event):void{
+		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
 	}
 
 	public function get date():Date {
@@ -72,6 +82,20 @@ public class DateSelector extends TreeTextInput{
 
 	private function refreshTextField():void{
 		text = PersonProfilePage.formattedBirthday(_date);
+	}
+
+	public function clear():void {
+		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		if(stage)
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp)
+	}
+
+	private function onMouseUp(e:MouseEvent):void{
+		var p:Point = core.localToGlobal(new Point(80));
+		var bounds:Rectangle = new Rectangle(p.x, p.y, 165, 210)
+		p = new Point(e.stageX, e.stageY);
+		if(!bounds.containsPoint(p) && !core.isHidden)
+			core.showHideCalendar(e);
 	}
 }
 }

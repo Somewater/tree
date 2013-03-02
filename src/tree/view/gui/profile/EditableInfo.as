@@ -134,6 +134,8 @@ import tree.view.gui.UIComponent;
 			sexChange.removeAll();
 			sexSelector.clear();
 			died.removeEventListener(Event.CHANGE, onDiedChanged)
+			birthdayInput.clear();
+			deathDayInput.clear();
 		}
 
 		public function setPerson(person:Person, joinType:JoinType = null, from:Person = null):void {

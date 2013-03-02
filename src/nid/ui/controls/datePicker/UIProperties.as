@@ -35,7 +35,7 @@ import tree.view.gui.TreeTextInput;
 		public var MonthAndYearFontSize	:Number = 12;
 		public var WeekNameFontSize		:Number = 11;
 		public var DayFontSize			:Number = 10;
-		public var hideOnFocusOut		:Boolean = true;
+		public var hideOnFocusOut		:Boolean = false;
 		public var _alwaysShowCalendar	:Boolean = false;
 		public var maxDate:Date = new Date();
 		
