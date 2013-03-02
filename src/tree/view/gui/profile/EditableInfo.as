@@ -142,6 +142,7 @@ import tree.view.gui.UIComponent;
 			firstNameInput.text = person.firstName;
 			lastNameInput.text = person.lastName;
 			middleNameInput.text = person.middleName;
+			maidenNameInput.text = person.maidenName;
 			birthdayInput.date = person.birthday;
 			deathDayInput.date = person.deathday;
 			died.selected = person.died;
