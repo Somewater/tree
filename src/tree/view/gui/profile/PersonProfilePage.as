@@ -4,6 +4,7 @@ import com.somewater.storage.I18n;
 import com.somewater.text.EmbededTextField;
 
 import flash.display.DisplayObject;
+import flash.display.Shape;
 import flash.events.Event;
 
 import tree.common.Config;
@@ -36,6 +37,7 @@ public class PersonProfilePage extends PageBase{
 		public static const NAME:String = 'PersonProfilePage';
 
 		private var photo:Photo;
+		private var photoMask:Shape;
 
 		private var nameField:EmbededTextField;
 		private var postField:EmbededTextField;
@@ -62,6 +64,11 @@ public class PersonProfilePage extends PageBase{
 		public function PersonProfilePage() {
 			photo = new Photo(Photo.SIZE_MAX | Photo.ORIENTED_CENTER, 200, 200);
 			addChild(photo);
+			photoMask = new Shape();
+			addChild(photoMask);
+			photo.mask = photoMask;
+			photoMask.graphics.beginFill(0);
+			photoMask.graphics.drawRoundRectComplex(0, 0, 200, 200, 5,5,5,5)
 
 			nameField = new EmbededTextField(null, 0, 17, true, true);
 			addChild(nameField);
@@ -174,6 +181,9 @@ public class PersonProfilePage extends PageBase{
 			deadMark.x = photo.x + photo.width - deadMark.width;
 			deadMark.y = photo.y - 1;
 			addChild(deadMark);
+
+			photoMask.x = photo.x;
+			photoMask.y = photo.y;
 		}
 
 		internal function onPersonSelected(person:Person):void{
