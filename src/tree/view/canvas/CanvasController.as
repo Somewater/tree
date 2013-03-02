@@ -38,6 +38,8 @@ public class CanvasController extends Actor{
 		private var canvas:Canvas;
 		private var lineController:LineHighlightController;
 
+		private var centreTweener:GTween;
+
 		private var handDragNode:NodeIcon;
 		private var handDragNodeStartPos:Point = new Point();// координаты в пикселах
 		private var handDragNodeStartCoords:Point = new Point();// координаты в handX, handY
@@ -168,6 +170,8 @@ public class CanvasController extends Actor{
 		private function onNodeCompleteOnce(n:NodeIcon):void {
 			refreshNodeJoinLines(n.data.node);
 			canvas.fireComplete();
+			if(model.centreOwnerNode)
+				bus.dispatch(ViewSignal.PERSON_CENTERED, model.selectedTree.owner);
 		}
 
 		private function refreshPersonJoinLines(person:Person):void{
@@ -283,7 +287,7 @@ public class CanvasController extends Actor{
 				}
 			}
 			if(animated){
-				Tweener.to(canvas, 0.3, {x:x, y:y}, {onComplete: onCentreOnCompleted, onChange: onChangeForCentre});
+				centreTweener = Tweener.to(canvas, 0.3, {x:x, y:y}, {onComplete: onCentreOnCompleted, onChange: onChangeForCentre});
 			}else{
 				canvas.x = x;
 				canvas.y = y;
@@ -554,6 +558,11 @@ public class CanvasController extends Actor{
 		public function utilize():void {
 			handDragNode = null;
 			onDragChanged();
+		}
+
+		public function stopCentering():void{
+			if(centreTweener)
+				GTweener.remove(centreTweener);
 		}
 
 		private function setHandPosByMovement(node:NodeIcon, newHandX:int, newHandY:int):void{

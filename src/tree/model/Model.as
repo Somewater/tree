@@ -34,6 +34,7 @@ package tree.model {
 		public var animationTime:Number = 1;// время, отводимое на анимацию появления-скрытия отдельной ноды
 		private var _treeViewConstructed:Boolean = false;// первоначальное построение дерева завершено
 		private var _constructionInProcess:Boolean = false;// произвоится анимация (построение дерева или сворачивание-разворачивание)
+		public var centreOwnerNode:Boolean = true;// центрировать офнера дерева в процессе построения дерева
 		private var _selectedPerson:Person;
 		private var _highlightedPerson:Person;
 		private var _selectedTree:TreeModel;
@@ -144,6 +145,7 @@ package tree.model {
 		public function set treeViewConstructed(value:Boolean):void {
 			if(_treeViewConstructed != value){
 				_treeViewConstructed = value;
+				if(value) centreOwnerNode = false
 				bus.treeViewConstructed.dispatch();
 			}
 		}

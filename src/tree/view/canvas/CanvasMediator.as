@@ -43,6 +43,7 @@ package tree.view.canvas {
 			bus.zoom.add(onZoom);
 			bus.mouseWheel.add(onMouseWheel);
 			bus.drag.add(onDrag);
+			bus.startDrag.add(onStartDrag);
 			bus.stopDrag.add(onStopDrag);
 			bus.sceneResize.add(onResize);
 			bus.addNamed(ViewSignal.NEED_CENTRE_CANVAS, onNeedCentreCanvas)
@@ -67,6 +68,7 @@ package tree.view.canvas {
 
 		private function onModelChanged():void {
 			// todo: провести анимацию перехода, если уже было построено какое-то дерево
+			model.centreOwnerNode = true;
 			controller.centreOn();
 			model.treeViewConstructed = false;
 			model.constructionInProcess = true;
@@ -115,6 +117,10 @@ package tree.view.canvas {
 			controller.onCanvasDeselect();
 		}
 
+		private function onStartDrag(d:DragSignal):void{
+			(Config.inject(CanvasController) as CanvasController).stopCentering();
+		}
+
 		private function onDrag(signal:DragSignal):void {
 			if(!canvas.canDrag) return;
 			canvas.x += signal.delta.x;
@@ -122,6 +128,7 @@ package tree.view.canvas {
 			controller.onCanvasDragged();
 			canvas.refreshNodesVisibility();
 			model.canvasMovingCounter++;
+			model.centreOwnerNode = false;
 		}
 
 		public function onStopDrag(signal:DragSignal):void{
