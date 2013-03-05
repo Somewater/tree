@@ -2,6 +2,7 @@
 {
 
 import com.gskinner.motion.GTween;
+import com.gskinner.motion.GTweener;
 
 import fl.core.InvalidationType;
 
@@ -290,12 +291,14 @@ import tree.view.Tweener;
 				}
 				ConstructCalendar();
 				stage.addChild(Calendar);
+				GTweener.removeTweens(Calendar);
 				Tweener.to(Calendar, 0.3, {alpha: 1});
 				isHidden	=	false;
 				try{
 					if (hideOnFocusOut) stage.addEventListener(MouseEvent.MOUSE_UP, showHideCalendar);
 				}catch (e:Error) {}
 			}else {
+				GTweener.removeTweens(Calendar);
 				Tweener.to(Calendar, 0.2, {alpha: 0}, {onComplete:onAlhphaHideComplete});
 				isHidden	=	true;
 				try{
@@ -313,6 +316,7 @@ import tree.view.Tweener;
 			{
 				isHidden	=	false;
 				if (stage != null) stage.addChild(Calendar);
+				GTweener.removeTweens(Calendar);
 				Tweener.to(Calendar, 0.3, {alpha: 1});
 			}
 			else if(!value && !isHidden)
