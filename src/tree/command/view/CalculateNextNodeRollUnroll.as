@@ -25,7 +25,7 @@ package tree.command.view {
 
 		override public function execute():void {
 			joins = model.joinsQueue.slice().filter(function(j:Join,...args):Boolean{
-				return j.associate.node;
+				return j.associate.node != null;
 			});
 
 			tick.command = this;

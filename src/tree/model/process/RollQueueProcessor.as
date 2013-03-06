@@ -42,7 +42,7 @@ package tree.model.process {
 
 		override protected function sortJoins(joins:Array):Array {
 			return super.sortJoins(joins).filter(function(j:Join,...args):Boolean{
-				return j.associate.node;
+				return j.associate.node != null;
 			});
 		}
 	}
