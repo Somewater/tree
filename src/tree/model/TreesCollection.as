@@ -1,5 +1,5 @@
 package tree.model {
-	import tree.common.Bus;
+import tree.common.Bus;
 	import tree.model.base.IModel;
 	import tree.model.base.ModelCollection;
 
@@ -61,15 +61,7 @@ package tree.model {
 				n.positionChanged.add(onNodePositionChanged);
 			}else{
 				// придется перебрать всех, чтобы найти границы
-				t.maxX = 0; t.minX = 0;
-				for each(var _n:Node in t.nodes.iterator){
-					if(_n.visible && _n != n){
-						if(t.maxX < _n.x)
-							t.maxX = _n.x;
-						if(t.minX > _n.x)
-							t.minX = _n.x;
-					}
-				}
+				recalculateTreeBounds(t, n);
 				n.positionChanged.remove(onNodePositionChanged);
 			}
 
@@ -81,26 +73,32 @@ package tree.model {
 		}
 
 		public function recalculateTreesBounds():void{
-			var hand:Boolean = Model.instance.hand
 			for each(var t:TreeModel in array){
-				t.maxX = int.MIN_VALUE;
-				t.minX = int.MAX_VALUE;
-				for each(var n:Node in t.nodes.iterator){
-					if(n.visible){
-						if(hand){
-							if(t.maxX < n.handX)
-								t.maxX = n.handX;
-							if(t.minX > n.handX)
-								t.minX = n.handX;
-						}else{
-							if(t.maxX < n.x)
-								t.maxX = n.x;
-							if(t.minX > n.x)
-								t.minX = n.x;
-						}
+				recalculateTreeBounds(t);
+			}
+		}
+
+		private function recalculateTreeBounds(t:TreeModel, excluded:Node = null):void {
+			var hand:Boolean = Model.instance.hand
+			t.maxX = int.MIN_VALUE;
+			t.minX = int.MAX_VALUE;
+			for each(var n:Node in t.nodes.iterator){
+				if(n.visible && (!excluded || excluded != n)){
+					if(hand){
+						if(t.maxX < n.handX)
+							t.maxX = n.handX;
+						if(t.minX > n.handX)
+							t.minX = n.handX;
+					}else{
+						if(t.maxX < n.x)
+							t.maxX = n.x;
+						if(t.minX > n.x)
+							t.minX = n.x;
 					}
 				}
 			}
+			if(t.maxX == int.MIN_VALUE && t.minX == int.MAX_VALUE)
+				t.minX = t.maxX = 0;
 		}
 
 		public function refresTreesShifts():void{
