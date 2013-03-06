@@ -65,7 +65,7 @@ public class HandChangeViewRefresh extends Command{
 				if(!n.handCoords){
 					if(g.join.from){
 						Logic.calculateRelativePosition(g.join, true);// рассчет handX
-						n.handY = n.level;// может быть пересечение
+						Logic.setNodeHandY(n);
 						checkIntersection.push(n);
 					}else{
 						// стартовая нода дерева

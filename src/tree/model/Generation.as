@@ -21,6 +21,9 @@ package tree.model {
 		private var minLevelNumber:int;
 		private var maxLevelNumber:int;
 
+		public var minHandY:int;
+		public var maxHandY:int;
+
 		public function Generation(collection:GenerationsCollection, generation:int, bus:Bus, matrixes:MatrixCollection) {
 			super();
 			this.collection = collection;
@@ -112,7 +115,7 @@ package tree.model {
 			var newMinLevel:int = int.MAX_VALUE;
 			for each(var icon:GenNode in array) {
 				var value:int = hand ? icon.node.handY : icon.node.level;
-				if((!hand || value != int.MAX_VALUE) && !levelsHash[value])
+				if((!hand || Math.abs(value) < int.MAX_VALUE - 100) && !levelsHash[value])
 				{
 					levelsHash[value] = true;
 					levels.push(value);
@@ -122,11 +125,29 @@ package tree.model {
 				}
 			}
 
+			recalculateHandYMinimax();
+
 			if(newMaxLevel != maxLevelNumber || newMinLevel != minLevelNumber){
 				maxLevelNumber = newMaxLevel;
 				minLevelNumber = newMinLevel;
 				fireChange();
 			}
+		}
+
+		private function recalculateHandYMinimax():void {
+			minHandY = int.MAX_VALUE;
+			maxHandY = int.MIN_VALUE;
+			for each(var icon:GenNode in array) {
+				var handY:int = icon.node.handY;
+				if(Math.abs(handY) < int.MAX_VALUE - 100){
+					if(handY < minHandY)
+						minHandY = handY;
+					if(handY > maxHandY)
+						maxHandY = handY;
+				}
+			}
+			if(minHandY == int.MAX_VALUE && maxHandY == int.MIN_VALUE)
+				minHandY = maxHandY = 0;
 		}
 
 		public function get levelNum():int {

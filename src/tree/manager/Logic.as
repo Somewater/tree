@@ -1,5 +1,6 @@
 package tree.manager {
 import tree.model.GenNode;
+import tree.model.Generation;
 import tree.model.Join;
 import tree.model.JoinType;
 import tree.model.Model;
@@ -102,7 +103,7 @@ public class Logic {
 		}
 
 		if(hand){
-			node.handY = node.level;
+			setNodeHandY(node);
 			handCoordChanged = true;
 		}
 
@@ -129,6 +130,17 @@ public class Logic {
 						intersection = true;
 						break;
 					}
+		}
+	}
+
+	public static function setNodeHandY(node:Node):void {
+		node.handY = node.level;
+		var model:Model = Model.instance;
+		if(node.person && node.person.tree){
+			var g:Generation = model.generations.get(node.generation);
+			if(g){
+				node.handY = Math.max(g.minHandY, Math.min(g.maxHandY, node.handY));
+			}
 		}
 	}
 }
