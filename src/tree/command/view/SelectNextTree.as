@@ -24,6 +24,7 @@ package tree.command.view {
 			}else{
 				if(!model.treeViewConstructed)
 					bus.dispatch(ViewSignal.ALL_TREES_COMPLETED)
+				bus.dispatch(ViewSignal.RECALCULATE_ROLL_UNROLL);
 			}
 		}
 	}

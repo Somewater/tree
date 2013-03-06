@@ -2,6 +2,7 @@ package tree.command.edit {
 import com.somewater.storage.I18n;
 
 import tree.command.*;
+import tree.common.Bus;
 import tree.common.Config;
 import tree.model.Join;
 import tree.model.JoinCollectionBase;
@@ -12,6 +13,7 @@ import tree.model.Person;
 	import tree.signal.ModelSignal;
 	import tree.signal.RequestSignal;
 import tree.signal.ResponseSignal;
+import tree.signal.ViewSignal;
 import tree.view.gui.Gui;
 import tree.view.gui.profile.PersonProfilePage;
 import tree.view.window.AcceptWindow;
@@ -91,6 +93,7 @@ public class RemovePerson extends Command{
 				// уничтожить всё дерево
 				new RemoveTree(tree).execute();
 			}
+			(Config.inject(Bus) as Bus).dispatch(ViewSignal.RECALCULATE_ROLL_UNROLL);
 		}
 
 		private static function removeModelFields(person:Person):void{

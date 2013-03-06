@@ -39,5 +39,11 @@ package tree.model.process {
 		private function checkJoin(join:Join):Boolean{
 			return join.associate.node.dist > node.dist;
 		}
+
+		override protected function sortJoins(joins:Array):Array {
+			return super.sortJoins(joins).filter(function(j:Join,...args):Boolean{
+				return j.associate.node;
+			});
+		}
 	}
 }
