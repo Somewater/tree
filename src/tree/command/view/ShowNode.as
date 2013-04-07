@@ -28,9 +28,15 @@ import tree.model.GenNode;
 			if(model.joinsQueue.indexOf(join) == -1) model.joinsQueue.push(join);
 
 			Logic.calculateRelativePosition(join);
-			if(join.from && !join.associate.node.handCoords){
-				Logic.calculateRelativePosition(join, true);
-				Logic.checkIntersections(join.associate.node);
+			if(model.hand && !join.associate.node.handCoords){
+				if(join.from){
+					Logic.calculateRelativePosition(join, true);
+					Logic.checkIntersections(join.associate.node);
+				}else{ // для случая join.from != null присвоение по Y внутри Logic.calculateRelativePosition
+					join.associate.node.handX = join.associate.node.x;
+					Logic.setNodeHandY(join.associate.node);
+				}
+				model.handLog.add(join.associate.node);
 			}
 
 			var g:GenNode = model.generations.get(join.associate.node.generation).addWithJoin(join);

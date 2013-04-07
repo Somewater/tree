@@ -149,7 +149,8 @@ public class PanelController extends Actor{
 		}
 
 		private function onChangeHandClick(b:Button):void{
-			model.hand = !model.hand;
+			if(!model.constructionInProcess)
+				model.hand = !model.hand;
 		}
 
 		private function refreshSaveTreeButtonVisibility():void{

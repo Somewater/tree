@@ -30,6 +30,7 @@ public class HandChangeViewRefresh extends Command{
 	}
 
 	private function onHandOn():void {
+		new RefreshTrees().execute();
 		initializeHandPositions();
 	}
 
@@ -70,7 +71,7 @@ public class HandChangeViewRefresh extends Command{
 					}else{
 						// стартовая нода дерева
 						n.handX = n.x;
-						n.handY = n.level;
+						Logic.setNodeHandY(n);
 						nonIntersectedNodes.push(n);
 					}
 					model.handLog.add(n);
