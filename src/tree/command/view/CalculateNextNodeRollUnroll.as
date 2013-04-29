@@ -1,5 +1,7 @@
 package tree.command.view {
-	import tree.command.Command;
+import com.junkbyte.console.Cc;
+
+import tree.command.Command;
 	import tree.common.Config;
 	import tree.model.Join;
 	import tree.model.Node;
@@ -33,17 +35,21 @@ package tree.command.view {
 			detain()
 		}
 
-		public function calculate():void{
+		public function calculate():int{
 			if(index < joins.length){
 				var join:Join = joins[index];
 				new RollQueueProcessor(join.associate.tree, join.associate, onCalculated);
+				return 3;
 			}else{
 				if(queueForRollUnrollRefresh.length > 0){
+					model.rollUnrollAvailable = true;
 					var n:Node = queueForRollUnrollRefresh.shift();
 					n.fireRollChange();
+					return 1
 				}else{
 					tick.stop();
 					release();
+					return 1000;
 				}
 			}
 		}
@@ -81,16 +87,21 @@ import tree.manager.ITick;
 class Tick implements ITick{
 
 	public var command:CalculateNextNodeRollUnroll;
+	private var active:Boolean = false;
 
 	public function tick(deltaMS:int):void {
-		command.calculate();
+		var i:int = 10;
+		while( i >= 0 && active)
+			i -= command.calculate();
 	}
 
 	public function start():void{
+		active = true;
 		Config.ticker.add(this);
 	}
 
 	public function stop():void{
+		active = false;
 		Config.ticker.remove(this);
 		command = null;
 	}

@@ -43,6 +43,7 @@ package tree.model {
 		public var refrNodesVisibDelay:int = 10;
 
 		public var joinsQueue:Array = [];
+		public var rollUnrollAvailable:Boolean = false;// можно сворачивать-разворачивать ноды, т.к. инфа по ним пересчитана
 
 		/**
 		 * соединения, которые уже были нарисованы
@@ -66,7 +67,7 @@ package tree.model {
 		public var canvasMovingCounter:int = 1;
 
 		CONFIG::debug{
-			public static const DEFAULT_UID:int = 18985299;
+			public static const DEFAULT_UID:int = 12178709//18985299;
 		}
 
 		public function Model(bus:Bus) {

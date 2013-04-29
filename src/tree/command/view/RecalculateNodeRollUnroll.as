@@ -18,10 +18,11 @@ package tree.command.view {
 				node.hideRollUnroll();
 				node.data.node.slaves = null;
 				node.data.node.lords = null;
-				node.data.node.slavesUnrolled = true;
+				//node.data.node.slavesUnrolled = true;
 				node.data.node.fireRollChange();
 			}
 
+			model.rollUnrollAvailable = false;
 			if(model.depthIndex == 0)
 				bus.dispatch(ViewSignal.CALCULATE_NEXT_ROLL_UNROLL);
 		}

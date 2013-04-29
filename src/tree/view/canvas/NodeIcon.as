@@ -251,7 +251,7 @@ import tree.view.gui.Helper;
 		}
 
 		private function refreshRollUnroll(n:Node):void{
-			if(n.isLord())
+			if(n.isLord() && Model.instance.rollUnrollAvailable)
 				showRollUnroll();
 			else
 				hideRollUnroll();
