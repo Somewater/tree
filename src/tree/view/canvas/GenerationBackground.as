@@ -31,12 +31,13 @@ package tree.view.canvas {
 		}
 
 		public function refresh():void {
-			this.y = generation.getY(Model.instance.descending) * Canvas.LEVEL_HEIGHT;
+			var hand:Boolean = Model.instance.hand;
+			this.y = generation.getY(Model.instance.descending, hand) * Canvas.LEVEL_HEIGHT;
 			graphics.clear();
 			//graphics.beginFill(generation.generation == 0 ? 0xccFFcc: 0xCCCCCC + this.generation.generation * 0x111111)
 			graphics.beginFill(odd ? 0xFBFFFB : 0xFAFAE0);
 
-			graphics.drawRect(Config.WIDTH * -200, 0, Config.WIDTH * 400, generation.levelNum * Canvas.LEVEL_HEIGHT);
+			graphics.drawRect(Config.WIDTH * -200, 0, Config.WIDTH * 400, generation.levelNum(hand) * Canvas.LEVEL_HEIGHT);
 		}
 	}
 }

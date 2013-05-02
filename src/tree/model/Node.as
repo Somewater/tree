@@ -125,14 +125,14 @@ import org.osflash.signals.ISignal;
 			var gen:Generation = Model.instance.generations.get(this.generation);
 
 			tmpPoint.x = person.tree.shiftX;
-			tmpPoint.y = gen.getY(Model.instance.descending);
+			tmpPoint.y = gen.getY(Model.instance.descending, hand);
 
 			if(hand){
 				tmpPoint.x += this.handX;
-				tmpPoint.y += gen.normalize(this.handY);
+				tmpPoint.y += gen.normalize(this.handY, hand);
 			}else{
 				tmpPoint.x += this.x;
-				tmpPoint.y += gen.normalize(this.level);
+				tmpPoint.y += gen.normalize(this.level, hand);
 			}
 			return tmpPoint;
 		}
@@ -143,13 +143,13 @@ import org.osflash.signals.ISignal;
 		public function paramsByPosition(hand:Boolean, x:int, y:int):Point {
 			var gen:Generation = Model.instance.generations.get(this.generation);
 			x -= person.tree.shiftX;
-			y -= gen.getY(Model.instance.descending);
+			y -= gen.getY(Model.instance.descending, hand);
 
 			// на данный момент одинаково независимо от hand, но может измениться
 			if(hand){
-				y = gen.denormalize(y);
+				y = gen.denormalize(y, hand);
 			}else{
-				y = gen.denormalize(y);
+				y = gen.denormalize(y, hand);
 			}
 
 			tmpPoint.x = x;
