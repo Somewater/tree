@@ -33,7 +33,7 @@ import tree.view.canvas.JoinLine;
 	import tree.view.canvas.NodeIcon;
 import tree.view.window.MessageWindow;
 
-public class CanvasController extends Actor{
+public class CanvasController extends Actor implements ITick{
 
 		private var canvas:Canvas;
 		private var lineController:LineHighlightController;
@@ -46,6 +46,7 @@ public class CanvasController extends Actor{
 		private var errorHighlightedNode:NodeIcon;
 		private var tmpPoint:Point = new Point();
 		private var tmpAvailableCoords:Array = [new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()];
+		private var tickAge:uint = 0;
 
 		public function CanvasController(canvas:Canvas) {
 			this.canvas = canvas;
@@ -66,7 +67,7 @@ public class CanvasController extends Actor{
 			bus.addNamed(ViewSignal.REFRESH_GENERATIONS, refreshAllGenerations);
 			bus.addNamed(ViewSignal.REDRAW_JOIN_LINES, refreshPersonJoinLines);
 			bus.addNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);
-			Config.ticker.defer(refreshNodesVisibility, 5000);
+			Config.ticker.add(this);
 		}
 
 		public function drawJoin(g:GenNode):void {
@@ -661,9 +662,9 @@ public class CanvasController extends Actor{
 		canvas.mouseUpAllNodes();
 	}
 
-	private function refreshNodesVisibility():void{
-		canvas.refreshNodesVisibility();
-		Config.ticker.defer(refreshNodesVisibility, 1000);
+	public function tick(deltaMS:int):void {
+		if(tickAge++ % model.refrNodesVisibForceDelay == 0)
+			canvas.refreshNodesVisibility(true);
 	}
 }
 }

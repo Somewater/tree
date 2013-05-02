@@ -79,7 +79,7 @@ public class PanelController extends Actor{
 				var data:Array = [];
 				var owner:Person = model.owner;
 				for each(var t:TreeModel in model.trees.iterator)
-					if(t.owner.node.visible)
+					if(t.owner.visible)
 						data.push(t);
 				panel.treeSelectorPopup.refreshData(data);
 				panel.treeSelectorPopup.show()

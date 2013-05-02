@@ -64,7 +64,7 @@ import tree.view.gui.profile.PersonProfilePage;
 			fold = new Fold();
 			addChild(fold);
 
-			cacheAsBitmap = true;
+			//cacheAsBitmap = true;
 			this.guiShiled = guiShiled;
 		}
 

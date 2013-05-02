@@ -62,6 +62,7 @@ package tree.command.view {
 			model.joinsQueue = model.joinsQueue.concat(joinsForDraw);
 			model.animationQuality = model.trees.personQuantity > model.options.animQualityMedium ? (model.trees.personQuantity > model.options.animQualityLow ? 0 : 1) : 2;
 			model.refrNodesVisibDelay = [10, 5, 3][model.animationQuality];
+			model.refrNodesVisibForceDelay = [300, 120, 30][model.animationQuality];
 			model.constructionInProcess = true;
 			bus.dispatch(ViewSignal.JOIN_QUEUE_STARTED)
 		}

@@ -39,7 +39,7 @@ import tree.model.lines.LineMatrixCollection;
 
 		public function JoinLine(collection:INodeViewCollection) {
 			this.collection = collection;
-			cacheAsBitmap = true;
+			//cacheAsBitmap = true;
 		}
 
 		override public function clear():void {

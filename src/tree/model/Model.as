@@ -41,6 +41,7 @@ package tree.model {
 
 		public var animationQuality:int = 2;// "0" - без анимации, "2" - полная анимация, "1" - зарезервировано
 		public var refrNodesVisibDelay:int = 10;
+		public var refrNodesVisibForceDelay:int = 10;
 
 		public var joinsQueue:Array = [];
 		public var rollUnrollAvailable:Boolean = false;// можно сворачивать-разворачивать ноды, т.к. инфа по ним пересчитана

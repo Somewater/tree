@@ -156,7 +156,7 @@ import tree.view.gui.Helper;
 			contextMenuBtn.visible = false;
 			addChild(contextMenuBtn);
 
-			cacheAsBitmap = true;
+			//cacheAsBitmap = true;
 		}
 
 		private var lastClickTick:uint = 0;
@@ -357,7 +357,7 @@ import tree.view.gui.Helper;
 
 		public function fullParent(forBreed:Person):Boolean{
 			var m:Person = _data.node.marry;
-			if(m && m.node.visible)
+			if(m && m.visible)
 				return m.breeds.indexOf(forBreed) != -1;
 			else
 				return false;

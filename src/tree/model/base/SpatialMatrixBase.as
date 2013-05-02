@@ -108,7 +108,7 @@ package tree.model.base {
 					return false;// смещение противоречит правилам
 
 				var m:Person;
-				if(!important && (m = g.node.marry) && m.node.visible && Math.abs(m.node.x - x - vector * 2) > 1)
+				if(!important && (m = g.node.marry) && m.visible && Math.abs(m.node.x - x - vector * 2) > 1)
 					return false;// проверка, что смещение разделяет супругов
 
 				if(!shift(shifted, g, x + vector * 2, y,  vector, important))
