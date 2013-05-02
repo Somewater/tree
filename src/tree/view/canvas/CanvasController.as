@@ -67,6 +67,7 @@ public class CanvasController extends Actor implements ITick{
 			bus.addNamed(ViewSignal.REFRESH_GENERATIONS, refreshAllGenerations);
 			bus.addNamed(ViewSignal.REDRAW_JOIN_LINES, refreshPersonJoinLines);
 			bus.addNamed(ViewSignal.PERSON_HIGHLIGHTED, onPersonHighlighted);
+			bus.stopDrag.add(onStopDrag);
 			Config.ticker.add(this);
 		}
 
@@ -106,6 +107,11 @@ public class CanvasController extends Actor implements ITick{
 
 			g.node.positionChanged.add(onNodePositionChanged);
 			g.generation.changed.add(onGenerationChanged);
+		}
+
+		private function onStopDrag(s:DragSignal):void {
+			if(handDragNode)
+				handDragNode.onMouseUp()
 		}
 
 		public function removeJoin(g:GenNode):void{

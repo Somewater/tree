@@ -46,8 +46,8 @@ package tree.manager {
 			}
 
 			counter = 0;
-			while(i < deferredCallbacksByMS.length) {
-				dc = deferredCallbacksByMS[i];
+			var deferredCallbacksByMSCopy:Vector.<DC> = deferredCallbacksByMS.slice();
+			for each(dc in deferredCallbacksByMSCopy) {
 				dc.ms -= delta;
 				if(dc.ms <= 0)
 				{
@@ -55,10 +55,8 @@ package tree.manager {
 						dc.callback();
 					else
 						dc.callback.apply(null, dc.args);
-					deferredCallbacksByMS.splice(i, 1);
+					deferredCallbacksByMS.splice(deferredCallbacksByMS.indexOf(dc), 1);
 				}
-				else
-					i++;
 				if(counter++ > 300)
 					break;
 			}
