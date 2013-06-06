@@ -33,7 +33,6 @@ compile()
 	-benchmark=true \
 	-optimize=true \
 	-source-path+=src \
-	-source-path+=signals \
 	-library-path+=libs \
 	-output=bin-debug/$CLASSNAME.swf src/$CLASSNAME.as
 }
