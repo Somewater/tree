@@ -1,10 +1,11 @@
-MXMLC=mxmlc
 CLASSNAME=TreeLoader
 COMMAND=compile
 
-
-if [ -o $USE_MXMLC  ] && [ `which fcshctl-mxmlc` ]; then
-	MXMLC=fcshctl-mxmlc
+if [ -o $MXMLC ]; then
+	MXMLC=mxmlc
+	if [ -o $USE_MXMLC  ] && [ `which fcshctl-mxmlc` ]; then
+		MXMLC=fcshctl-mxmlc
+	fi
 fi
 
 if [ -o $DEBUG ]; then
